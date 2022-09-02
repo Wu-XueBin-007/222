@@ -62,22 +62,23 @@
 			</view>
 			<!-- 分类 -->
 			<view class="" style="position: relative;margin-top: 20upx;">
-				<scroll-view scroll-x="true" style="display: flex;white-space: nowrap;width: 84%;height: 80upx;margin: 0 0 0 12upx;box-sizing: border-box;overflow: scroll;">
+				<scroll-view scroll-x="true"
+					style="display: flex;white-space: nowrap;width: 84%;height: 80upx;margin: 0 0 0 12upx;box-sizing: border-box;overflow: scroll;">
 					<view class="district-item2" v-for="(item,index) in classList" :key="index"
 						@click="onTargetGoodsLists(item.category_id)">
 						<view :class="['district-text',index==0?'active':'']">{{item.name}}</view>
 					</view>
-					
+
 				</scroll-view>
 				<view class="classification-conter">
-					
+
 				</view>
 				<view class="classification" @click="getClass">
 					<image src="../../static/icon/icon_fl.png" mode=""></image>
 					<text>分类</text>
 				</view>
 			</view>
-			
+
 		</view>
 		<view class="newMain">
 			<!-- 轮播图 -->
@@ -116,8 +117,8 @@
 					</view>
 					<view class="point-text">高奢名品</view>
 				</view>
-				
-				
+
+
 				<view class="point-item" v-if="commonL.blindbox_switch==1" @click="btn_blindbox">
 					<view class="point-img">
 						<image src="../../static/home/blindbox.png"></image>
@@ -142,7 +143,7 @@
 					</view>
 					<view class="point-text">导购专区</view>
 				</view>
-				
+
 				<view class="point-item" v-if="bigVip.big_vip_switch==1" @click="btn_bigber">
 					<view class="point-img">
 						<image src="../../static/home/bigber.png"></image>
@@ -161,7 +162,7 @@
 					</view>
 					<view class="point-text">免费试用</view>
 				</view> -->
-				
+
 				<view class="point-item" @click="btn_boutique">
 					<view class="point-img">
 						<image src="../../static/home/boutique.png"></image>
@@ -234,13 +235,13 @@
 					</swiper-item>
 					
 				</swiper> -->
-				
-				
+
+
 			</view>
 			<!-- 金刚区 end-->
 		</view>
-		
-		
+
+
 		<!-- <swiper :indicator-dots="false" :autoplay="false" class="cateBox" :style="{'height':(classList1.length>0&&classList1[0].length>4) ? '336rpx' : '190rpx'}">
 			<swiper-item v-for="(item,index) in classList1" :key="index" class="cateWrap">
 				<view class="swiper-item cateItems" v-for="(pitem,pindex) in item" :key="pindex" @click="onTargetGoodsLists(pitem.category_id)">
@@ -249,8 +250,8 @@
 				</view>
 			</swiper-item>
 		</swiper> -->
-		
-		
+
+
 		<!-- 轮播图 -->
 		<!-- <view class="home-lunb2">
 			<swiper class="swiper2" indicator-dots="false" indicator-active-color="#d7b262" indicator-color="#FFFFFF"
@@ -260,17 +261,17 @@
 				</swiper-item>
 			</swiper>
 		</view> -->
-		
+
 		<!-- 通证信息 -->
 		<view class="pass">
 			<view class="passL">
-					<view class="passMessageL">
-						<image src="../../static/home/pass.png"></image>
-					</view>
-					<view class="passMessageR">
-						<!-- {{passMessage.name}} -->
-						BLCXF
-					</view>
+				<view class="passMessageL">
+					<image src="../../static/home/pass.png"></image>
+				</view>
+				<view class="passMessageR">
+					<!-- {{passMessage.name}} -->
+					BLCXF
+				</view>
 				<view class="passData" v-if="passMessage.token_price">
 					￥{{passMessage.token_price}}
 				</view>
@@ -284,12 +285,12 @@
 			</view>
 		</view>
 		<!-- 通证信息 end -->
-		
+
 		<!-- 购票入口 -->
 		<view class="addCon" v-if="commonL.ticketImage&&commonL.MobileRechargeImage">
 			<view class="ticket" v-if="commonL.ticketImage&&commonL.MobileRechargeImage">
 				<view class="ticket-left" @click="getTicket">
-					
+
 					<view class="ticket-img">
 						<image :src="commonL.ticketImage.preview_url" mode=""></image>
 					</view>
@@ -322,7 +323,7 @@
 					</view> -->
 				</view>
 			</view>
-			
+
 		</view>
 		<!-- 秒杀 -->
 		<view class="home-seckill" @click="btn_seckill" v-if="seckillGoodsBanner.length>0">
@@ -330,13 +331,17 @@
 				<view class="seckill-headerL" style="display: flex;align-items: center;">
 					<image src="../../static/icon/seckill.png" mode=""></image>
 				</view>
-				<view class="seckillMore">查看更多 <image src="../../static/icon/icon_right.png" mode=""></image> </view>
+				<view class="seckillMore">查看更多 <image src="../../static/icon/icon_right.png" mode=""></image>
+				</view>
 			</view>
 			<view class="seckillConWrap">
-				<scroll-view scroll-x="true" style="display: flex;white-space: nowrap;width: 100%;box-sizing: border-box;overflow: scroll;">
+				<scroll-view scroll-x="true"
+					style="display: flex;white-space: nowrap;width: 100%;box-sizing: border-box;overflow: scroll;">
 					<view class="seckillCon">
-						<view class="seckillItem" v-for="(pitem,pindex) in seckillGoodsBanner" :key="pindex" v-if="pitem.seckill_price!=null">
-							<view class="seckillItemT" :style="{'background-image': 'url('+pitem.images[0].file.preview_url+')'}"></view>
+						<view class="seckillItem" v-for="(pitem,pindex) in seckillGoodsBanner" :key="pindex"
+							v-if="pitem.seckill_price!=null">
+							<view class="seckillItemT"
+								:style="{'background-image': 'url('+pitem.images[0].file.preview_url+')'}"></view>
 							<view class="seckillItemB">
 								<view class="seckillItemBT">￥{{pitem.seckill_price}}</view>
 								<view class="seckillItemBB">￥{{pitem.goods_price_min}}</view>
@@ -389,8 +394,8 @@
 				</view>
 			</view>
 		</view> -->
-		
-		
+
+
 		<!-- 公告 -->
 		<!-- <view class="homepage-lantern">
 			<view class="homepage-lantern-icon1">
@@ -408,7 +413,8 @@
 			</view>
 		</view> -->
 		<view class="adverImg" v-if="setting.ActivityTopicsImageId">
-			<image :src="setting.ActivityTopicsImageId.preview_url" :data-url="setting.activity_topics_url" @click="btn_tourl"></image>
+			<image :src="setting.ActivityTopicsImageId.preview_url" :data-url="setting.activity_topics_url"
+				@click="btn_tourl"></image>
 		</view>
 		<!-- 特价 -->
 		<!-- <view class="home-district">
@@ -496,8 +502,8 @@
 				</view>
 			</view>
 		</view> -->
-		
-		
+
+
 		<!-- 首页推荐 -->
 		<view class="home-recommend">
 			<!-- <view class="recommend-header">
@@ -531,13 +537,13 @@
 			</view> -->
 			<zero-waterfall :list="JgoodsList" v-if="JgoodsList.length>0">
 				<!--  #ifdef  MP-WEIXIN -->
-				<view v-for="(item, index) of JgoodsList" :key="index" slot="slot{{item.goods_id}}" >
+				<view v-for="(item, index) of JgoodsList" :key="index" slot="slot{{item.goods_id}}">
 					<view class="cnt">
 						<view class="text">{{ item.extra }}</view>
 					</view>
 				</view>
 				<!--  #endif -->
-	
+
 				<!-- #ifndef  MP-WEIXIN -->
 				<template v-slot:default="item">
 					<view class="cnt">
@@ -547,7 +553,7 @@
 				<!-- #endif -->
 			</zero-waterfall>
 			<uni-load-more bg-color="rgb(240, 240, 240)" :status="loadStatus" @clickLoadMore='loadMore'></uni-load-more>
-			    
+
 		</view>
 		<!--弹出框  -->
 		<view class="home-popup" v-if="showModalStatus&&false" catchtouchmove="true">
@@ -582,7 +588,7 @@
 				<image src="../../static/home/icon_close.png" mode=""></image>
 			</view>
 		</view>
-		
+
 		<view v-if="showModalStatus&&false"
 			style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: rgba(0,0,0,.5);z-index: 999;"
 			catchtouchmove="true"></view>
@@ -596,29 +602,30 @@
 				<image src="../../static/home/icon_close.png" mode=""></image>
 			</view>
 		</view>
-		
+
 		<view v-if="showModalStatus3"
 			style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: rgba(0,0,0,.5);z-index: 999;"
 			catchtouchmove="true"></view>
 		<!-- 充值卡 end-->
-			<!--弹出框  -->
-			<view class="popup-kf" v-if="showModalStatus2" catchtouchmove="true">
-				<view class="popup-kf-img">
-					<image :src="setting.CustomerServiceImage.preview_url" mode=""></image>
-				</view>
+		<!--弹出框  -->
+		<view class="popup-kf" v-if="showModalStatus2" catchtouchmove="true">
+			<view class="popup-kf-img">
+				<image :src="setting.CustomerServiceImage.preview_url" mode=""></image>
 			</view>
-			
-			<view v-if="showModalStatus2"
-				style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: rgba(0,0,0,.5);z-index: 999;"
-				catchtouchmove="true" @click="btn_cose"></view>
-		
-	<!-- #ifdef MP-WEIXIN -->
+		</view>
+
+		<view v-if="showModalStatus2"
+			style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: rgba(0,0,0,.5);z-index: 999;"
+			catchtouchmove="true" @click="btn_cose"></view>
+
+		<!-- #ifdef MP-WEIXIN -->
 		<button open-type="contact" style="opacity: 1;">
 			<view class="home-kf">
 				<image src="../../static/home/icon_kfb.png" mode=""></image>
 			</view>
 		</button>
-		<!-- #endif -->	<!-- <button @click="but_kf">
+		<!-- #endif -->
+		<!-- <button @click="but_kf">
 			<view class="home-kf">
 				<image src="../../static/home/icon_kfb.png" mode=""></image>
 			</view>
@@ -644,7 +651,10 @@
 	import * as settingApi from '@/api/ticket/setting'
 	import * as teledcardApi from '@/api/teledcard/index.js'
 	import * as seckillApi from '@/api/seckill/seckill.js'
-	import {detail,blockChina} from "@/api/common.js"
+	import {
+		detail,
+		blockChina
+	} from "@/api/common.js"
 	import store from '@/store'
 	import {
 		nativeCommon
@@ -658,7 +668,7 @@
 		},
 		data() {
 			return {
-				secIndex:0,
+				secIndex: 0,
 				imgList: {},
 				Imgurl: '',
 				notice_click_lst: {},
@@ -675,8 +685,8 @@
 				// 页面元素
 				items: [],
 				showModalStatus: false,
-				showModalStatus2:false,
-				showModalStatus3:false,
+				showModalStatus2: false,
+				showModalStatus3: false,
 				// 系统设置
 				setting: {},
 				//特价商品
@@ -691,28 +701,28 @@
 				articleList: [],
 				classList: [],
 				commonL: {},
-				classList1:[],
-				oneObj:{},
-				twoObj:{},
-				threeObj:{},
-				fourObj:{},
-				fiveObj:{},
-				sixObj:{},
-				sevenObj:{},
-				eightObj:{},
-				seckillGoodsBanner:[],
+				classList1: [],
+				oneObj: {},
+				twoObj: {},
+				threeObj: {},
+				fourObj: {},
+				fiveObj: {},
+				sixObj: {},
+				sevenObj: {},
+				eightObj: {},
+				seckillGoodsBanner: [],
 				loading: false,
 				dataList: [],
 				loadStatus: 'more',
-				page:1,
-				limit:15,
-				bottomFlag:true,
-				topFlag:true,
+				page: 1,
+				limit: 15,
+				bottomFlag: true,
+				topFlag: true,
 				back: false,
-			    windowHeight:[],
-				bigVip:{},
-				passMessage:{},
-				showPass:false
+				windowHeight: [],
+				bigVip: {},
+				passMessage: {},
+				showPass: false
 				// vajraDistrict:[
 				// 	{name:"",url:"",icon:"",index:0},
 				// 	]
@@ -740,6 +750,22 @@
 			// },1000)
 			this.getRandomList();
 			this.getPass();
+		},
+		watch: {
+			classList: function(val) {
+				let time = null;
+				if (uni.getSystemInfoSync().platform == "ios") {
+					time = setInterval(() => {
+						console.log(111);
+						if (val.length == 0) {
+							this.onLoad();
+							this.onShow()
+						} else {
+							clearInterval(time)
+						}
+					}, 500)
+				}
+			}
 		},
 
 		/**
@@ -783,8 +809,7 @@
 			this.getbigVip()
 			this.setStorage()
 		},
-		created() {
-		},
+		created() {},
 		onPullDownRefresh() {
 			// 下拉
 			this.getPageData(() => {
@@ -809,7 +834,7 @@
 			// 	}, 1000)
 			// }
 			// 触底
-			if(!this.bottomFlag){
+			if (!this.bottomFlag) {
 				return false;
 			}
 			this.page = this.page + 1;
@@ -819,28 +844,28 @@
 
 		},
 		onPageScroll(e) {
-				// 获取页面高度
-				uni.getSystemInfo({
-					success:res=>{
-						this.windowHeight=res.windowHeight
-					}
-				})
-				if (e.scrollTop >= this.windowHeight) {
-					this.back = true;
-				} else {
-					this.back = false;
+			// 获取页面高度
+			uni.getSystemInfo({
+				success: res => {
+					this.windowHeight = res.windowHeight
 				}
-			},
+			})
+			if (e.scrollTop >= this.windowHeight) {
+				this.back = true;
+			} else {
+				this.back = false;
+			}
+		},
 		methods: {
-			 // 模拟数据加载
+			// 模拟数据加载
 			loadMore() {
-				console.log(this.dataList,this.JgoodsList)
+				console.log(this.dataList, this.JgoodsList)
 				this.loadStatus = 'loading';
 				this.page++
 				this.dataList = this.dataList.concat(this.JgoodsList.slice(this.dataList.length, this.page * this.limit))
 			},
-			getRandomList(){
-				seckillApi.randomList().then(res=>{
+			getRandomList() {
+				seckillApi.randomList().then(res => {
 					console.log(res)
 					let arr = res.data.list;
 					// arr.splice(0,2);
@@ -873,83 +898,83 @@
 					this.seckillGoodsBanner = arr;
 				})
 			},
-			changeSecKill(e){
+			changeSecKill(e) {
 				// console.log(e)
 				this.secIndex = e.detail.current;
 			},
-			toMyCollage(){
+			toMyCollage() {
 				// uni.navigateTo({
 				// 	url:"/pages/collageDetail/collageDetail"
 				// })
 			},
 			//客服
-			but_kf(){
-				this.showModalStatus2=true;
+			but_kf() {
+				this.showModalStatus2 = true;
 			},
-			btn_top(){
+			btn_top() {
 				uni.pageScrollTo({
 					scrollTop: 0
 				});
 			},
-			btn_cose(){
-				this.showModalStatus2=false;
+			btn_cose() {
+				this.showModalStatus2 = false;
 			},
 			// 领取充值卡
 			getLq() {
-				if(this.$store.getters.token){
+				if (this.$store.getters.token) {
 					teledcardApi.add()
 						.then(res => {
 							console.log(res)
-							if(res.message=="领取成功"){
-								this.showModalStatus3=false
+							if (res.message == "领取成功") {
+								this.showModalStatus3 = false
 							}
 						})
-				}else{
+				} else {
 					uni.showModal({
-					  title: '温馨提示',
-					  content: '此时此刻需要您登录喔~',
-					  confirmText: "去登录",
-					  cancelText: "再逛会",
-					  success: res => {
-					    if (res.confirm) {
-					      uni.navigateTo({
-					        url: "/pages/login/index"
-					      })
-					    }
-					  }
+						title: '温馨提示',
+						content: '此时此刻需要您登录喔~',
+						confirmText: "去登录",
+						cancelText: "再逛会",
+						success: res => {
+							if (res.confirm) {
+								uni.navigateTo({
+									url: "/pages/login/index"
+								})
+							}
+						}
 					})
 				}
-				
+
 			},
 			toPrepaid() {
-				
-				if(this.$store.getters.token){
+
+				if (this.$store.getters.token) {
 					detail()
-						.then(res=>{
+						.then(res => {
 							// this.$navTo("pages/prepaidRefill/prepaidRefill")
-							if(res.data.detail.if_switch == 1){
+							if (res.data.detail.if_switch == 1) {
 								this.$navTo("pages/prepaidRefill/prepaidRefill")
-							}else{
+							} else {
 								uni.showToast({
-								    title: res.data.detail.mobile_tips,
-									icon:"none",
-								    duration: 2000
+									title: res.data.detail.mobile_tips,
+									icon: "none",
+									duration: 2000
 								});
 							}
 						})
-				}else{
+				} else {
 					uni.showModal({
-					  title: '温馨提示',
-					  content: '此时此刻需要您登录喔~',
-					  confirmText: "去登录",
-					  cancelText: "再逛会",
-					  success: res => {
-					    if (res.confirm) {
-					      uni.navigateTo({
-					        url: "/pages/login/index"
-					      })
-					    }
-					  }
+						title: '温馨提示',
+						content: '此时此刻需要您登录喔~',
+						confirmText: "去登录",
+						cancelText: "再逛会",
+						success: res => {
+							if (res.confirm) {
+								uni.navigateTo({
+									url: "/pages/login/index"
+								})
+							}
+						}
 					})
 				}
 			},
@@ -993,173 +1018,173 @@
 			btn_tourl(e) {
 				let url = e.currentTarget.dataset.url || e.target.dataset.url;
 				console.log(url)
-				var reg=/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
-				if(!reg.test(url)){
+				var reg = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+				if (!reg.test(url)) {
 					uni.navigateTo({
 						url: url
 					})
 					// console.log('这网址不是以http://https://开头，或者不是网址')
-				}else{
-					if(this.$store.getters.token){
-						let url=this.commonL.blc_url;
+				} else {
+					if (this.$store.getters.token) {
+						let url = this.commonL.blc_url;
 						// let url='https://walletc.rhchainos.com/#/?id='+this.$store.getters.userId;
-						if(this.commonL.pass_cert_switch==1){
+						if (this.commonL.pass_cert_switch == 1) {
 							uni.navigateTo({
-							  url:'/pages/showhfive/showhfive?url='+url
+								url: '/pages/showhfive/showhfive?url=' + url
 							})
 						}
-						
+
 						// window.location.href='http://47.114.119.227?id='+this.$store.getters.userId
 						// this.$store.getters.userId
-					}else{
+					} else {
 						uni.showModal({
-						  title: '温馨提示',
-						  content: '此时此刻需要您登录喔~',
-						  confirmText: "去登录",
-						  cancelText: "再逛会",
-						  success: res => {
-						    if (res.confirm) {
-						      uni.navigateTo({
-						        url: "/pages/login/index"
-						      })
-						    }
-						  }
+							title: '温馨提示',
+							content: '此时此刻需要您登录喔~',
+							confirmText: "去登录",
+							cancelText: "再逛会",
+							success: res => {
+								if (res.confirm) {
+									uni.navigateTo({
+										url: "/pages/login/index"
+									})
+								}
+							}
 						})
 					}
 				}
-				
+
 			},
 			getTicket() {
-				if(this.$store.getters.token){
+				if (this.$store.getters.token) {
 					detail()
-						.then(res=>{
-							if(res.data.detail.is_open_ticket == 1){
+						.then(res => {
+							if (res.data.detail.is_open_ticket == 1) {
 								this.$navTo('pages/ticket/stationType/stationType')
 								// this.$navTo('pageTicket/ticket/stationType/stationType')
-							}else{
+							} else {
 								uni.showToast({
-								    title: res.data.detail.ticket_tips,
-									icon:"none",
-								    duration: 2000
+									title: res.data.detail.ticket_tips,
+									icon: "none",
+									duration: 2000
 								});
 							}
 						})
-				}else{
+				} else {
 					uni.showModal({
-					  title: '温馨提示',
-					  content: '此时此刻需要您登录喔~',
-					  confirmText: "去登录",
-					  cancelText: "再逛会",
-					  success: res => {
-					    if (res.confirm) {
-					      uni.navigateTo({
-					        url: "/pages/login/index"
-					      })
-					    }
-					  }
+						title: '温馨提示',
+						content: '此时此刻需要您登录喔~',
+						confirmText: "去登录",
+						cancelText: "再逛会",
+						success: res => {
+							if (res.confirm) {
+								uni.navigateTo({
+									url: "/pages/login/index"
+								})
+							}
+						}
 					})
 				}
-				
+
 				// this.$navTo('pages/ticket/index')
 			},
-			btn_invitation(){
-				if(this.$store.getters.token){
+			btn_invitation() {
+				if (this.$store.getters.token) {
 					detail()
-						.then(res=>{
+						.then(res => {
 							this.$navTo('pageHome/code/index')
 						})
-				}else{
+				} else {
 					uni.showModal({
-					  title: '温馨提示',
-					  content: '此时此刻需要您登录喔~',
-					  confirmText: "去登录",
-					  cancelText: "再逛会",
-					  success: res => {
-					    if (res.confirm) {
-					      uni.navigateTo({
-					        url: "/pages/login/index"
-					      })
-					    }
-					  }
+						title: '温馨提示',
+						content: '此时此刻需要您登录喔~',
+						confirmText: "去登录",
+						cancelText: "再逛会",
+						success: res => {
+							if (res.confirm) {
+								uni.navigateTo({
+									url: "/pages/login/index"
+								})
+							}
+						}
 					})
 				}
 			},
-			btn_collage(){
-				if(this.commonL.group_switch==1){
+			btn_collage() {
+				if (this.commonL.group_switch == 1) {
 					uni.navigateTo({
-						url:"/pages/groupGoodList/groupGoodList"
+						url: "/pages/groupGoodList/groupGoodList"
 					})
-				}else{
+				} else {
 					uni.showToast({
-					    title: '此功能暂未开放，敬请期待',
-						icon:"none",
-					    duration: 2000
+						title: '此功能暂未开放，敬请期待',
+						icon: "none",
+						duration: 2000
 					});
 				}
-				
+
 			},
-			btn_brand(){
+			btn_brand() {
 				uni.showToast({
-				    title: '此功能暂未开放，敬请期待',
-					icon:"none",
-				    duration: 2000
+					title: '此功能暂未开放，敬请期待',
+					icon: "none",
+					duration: 2000
 				});
 			},
-			btn_seckill(){
-				if(this.commonL.seckill_switch==1){
+			btn_seckill() {
+				if (this.commonL.seckill_switch == 1) {
 					uni.navigateTo({
-						url:"/pageSecKill/seckillList/seckillList"
+						url: "/pageSecKill/seckillList/seckillList"
 					})
-				}else{
+				} else {
 					uni.showToast({
-					    title: '此功能暂未开放，敬请期待',
-						icon:"none",
-					    duration: 2000
+						title: '此功能暂未开放，敬请期待',
+						icon: "none",
+						duration: 2000
 					});
 				}
-				
+
 			},
-			btn_boutique(){
+			btn_boutique() {
 				uni.showToast({
-				    title: '此功能暂未开放，敬请期待',
-					icon:"none",
-				    duration: 2000
+					title: '此功能暂未开放，敬请期待',
+					icon: "none",
+					duration: 2000
 				});
 			},
 			// 免费专区
-			btn_welfare(){
+			btn_welfare() {
 				uni.showToast({
-				    title: '此功能暂未开放，敬请期待',
-					icon:"none",
-				    duration: 2000
+					title: '此功能暂未开放，敬请期待',
+					icon: "none",
+					duration: 2000
 				});
 				// uni.navigateTo({
 				// 	url:"/blindbox/pages/index/index"
 				// })
 			},
 			//高奢名品
-			btn_LuxuryGoods(){
-				let type="is_luxury_goods"
-				if(this.commonL.luxury_goods_switch==1){
+			btn_LuxuryGoods() {
+				let type = "is_luxury_goods"
+				if (this.commonL.luxury_goods_switch == 1) {
 					// this.$navTo('pageLuxury/pages/index/index', { type })
 					this.$navTo('pageLuxury/pages/index/index')
 					// this.$navTo('pages/goods/luxuryList', { type })
-				}else{
+				} else {
 					uni.showToast({
-					    title: '此功能暂未开放，敬请期待',
-						icon:"none",
-					    duration: 2000
+						title: '此功能暂未开放，敬请期待',
+						icon: "none",
+						duration: 2000
 					});
 				}
 			},
-			btn_groupBuying(){
+			btn_groupBuying() {
 				uni.showToast({
-				    title: '此功能暂未开放，敬请期待',
-					icon:"none",
-				    duration: 2000
+					title: '此功能暂未开放，敬请期待',
+					icon: "none",
+					duration: 2000
 				});
 			},
-			btn_give(){
+			btn_give() {
 				// uni.showToast({
 				//     title: '此功能暂未开放，敬请期待',
 				// 	icon:"none",
@@ -1168,35 +1193,35 @@
 				// uni.navigateTo({
 				// 	url:"/pageGive/pages/index/index"
 				// })
-				if(this.commonL.lucky_free_activity_switch==1){
+				if (this.commonL.lucky_free_activity_switch == 1) {
 					uni.navigateTo({
-						url:"/pageGive/pages/index/index"
+						url: "/pageGive/pages/index/index"
 					})
-				}else{
+				} else {
 					uni.showToast({
-					    title: '此功能暂未开放，敬请期待',
-						icon:"none",
-					    duration: 2000
+						title: '此功能暂未开放，敬请期待',
+						icon: "none",
+						duration: 2000
 					});
 				}
 			},
-			btn_shoppingGuide(){
+			btn_shoppingGuide() {
 				uni.showToast({
-				    title: '此功能暂未开放，敬请期待',
-					icon:"none",
-				    duration: 2000
+					title: '此功能暂未开放，敬请期待',
+					icon: "none",
+					duration: 2000
 				});
 			},
-			btn_advertisement(){
-				if(this.commonL.advert_switch==1){
+			btn_advertisement() {
+				if (this.commonL.advert_switch == 1) {
 					uni.navigateTo({
-						url:"/pageTask/pages/index/index"
+						url: "/pageTask/pages/index/index"
 					})
-				}else{
+				} else {
 					uni.showToast({
-					    title: '此功能暂未开放，敬请期待',
-						icon:"none",
-					    duration: 2000
+						title: '此功能暂未开放，敬请期待',
+						icon: "none",
+						duration: 2000
 					});
 				}
 				// uni.showToast({
@@ -1208,16 +1233,16 @@
 				// 	url:"/pageTask/pages/index/index"
 				// })
 			},
-			btn_blindbox(){
-				if(this.commonL.blindbox_switch==1){
+			btn_blindbox() {
+				if (this.commonL.blindbox_switch == 1) {
 					uni.navigateTo({
-						url:"/blindbox/pages/index/index"
+						url: "/blindbox/pages/index/index"
 					})
-				}else{
+				} else {
 					uni.showToast({
-					    title: '此功能暂未开放，敬请期待',
-						icon:"none",
-					    duration: 2000
+						title: '此功能暂未开放，敬请期待',
+						icon: "none",
+						duration: 2000
 					});
 				}
 				// uni.navigateTo({
@@ -1225,16 +1250,16 @@
 				// })
 			},
 			// 大会员
-			btn_bigber(){
-				if(this.bigVip.big_vip_switch==1){
+			btn_bigber() {
+				if (this.bigVip.big_vip_switch == 1) {
 					uni.navigateTo({
-						url:'/pageMember/pages/index/index'
+						url: '/pageMember/pages/index/index'
 					})
-				}else{
+				} else {
 					uni.showToast({
-					    title: '此功能暂未开放，敬请期待',
-						icon:"none",
-					    duration: 2000
+						title: '此功能暂未开放，敬请期待',
+						icon: "none",
+						duration: 2000
 					});
 				}
 			},
@@ -1278,10 +1303,11 @@
 			getPageData(callback) {
 				const app = this
 				app.isLoading = true
-				app.page=1;
-				app.JgoodsList=[];
-				Promise.all([app.getrotation(), app.getSetting(), app.getTgoodslist(), app.getRgoodslist(), app.getCategory(), app.getCommon(),
-				app.getJgoodslist(true)
+				app.page = 1;
+				app.JgoodsList = [];
+				Promise.all([app.getrotation(), app.getSetting(), app.getTgoodslist(), app.getRgoodslist(), app
+						.getCategory(), app.getCommon(),
+						app.getJgoodslist(true)
 					])
 					.then(result => {
 						app.isLoading = false;
@@ -1318,10 +1344,10 @@
 					}).catch(reject)
 				})
 			},
-			getbigVip(){
-				Rapi.big_vip().then(res=>{
+			getbigVip() {
+				Rapi.big_vip().then(res => {
 					console.log(res)
-					this.bigVip=res.data.values
+					this.bigVip = res.data.values
 				})
 			},
 			//分类
@@ -1336,22 +1362,22 @@
 						let ind = 1;
 						let arr = [];
 						let arr1 = [];
-						for(let i=0;i<app.classList.length;i++){
-							if(app.classList[i].category_id == 10037){
+						for (let i = 0; i < app.classList.length; i++) {
+							if (app.classList[i].category_id == 10037) {
 								app.oneObj = app.classList[i];
-							}else if(app.classList[i].category_id == 10028){
+							} else if (app.classList[i].category_id == 10028) {
 								app.twoObj = app.classList[i];
-							}else if(app.classList[i].category_id == 10039){
+							} else if (app.classList[i].category_id == 10039) {
 								app.threeObj = app.classList[i];
-							}else if(app.classList[i].category_id == 10038){
+							} else if (app.classList[i].category_id == 10038) {
 								app.fourObj = app.classList[i];
-							}else if(app.classList[i].category_id == 10026){
+							} else if (app.classList[i].category_id == 10026) {
 								app.fiveObj = app.classList[i];
-							}else if(app.classList[i].category_id == 10010){
+							} else if (app.classList[i].category_id == 10010) {
 								app.sixObj = app.classList[i];
-							}else if(app.classList[i].category_id == 10040){
+							} else if (app.classList[i].category_id == 10040) {
 								app.sevenObj = app.classList[i];
-							}else if(app.classList[i].category_id == 10023){
+							} else if (app.classList[i].category_id == 10023) {
 								app.eightObj = app.classList[i];
 							}
 							// if(i<8*ind){
@@ -1416,36 +1442,37 @@
 			// 		}).catch(reject)
 			// 	})
 			// },
-			getJgoodslist(flag){
-			  var _that = this;
-			  var obj={};
-			  obj.page=this.page;
-			  obj.limit=this.limit;
-			  obj.if_selected=1;
-			  goodsApi.list(obj).then(res=>{
-				console.log(res)
-				if(res.status==200){
-					// this.JgoodsList=res.data.list.data;
-					if(flag){
-						this.topFlag = true;
-						this.bottomFlag = true;
-						uni.stopPullDownRefresh()
+			getJgoodslist(flag) {
+				var _that = this;
+				var obj = {};
+				obj.page = this.page;
+				obj.limit = this.limit;
+				obj.if_selected = 1;
+				goodsApi.list(obj).then(res => {
+					console.log(res)
+					if (res.status == 200) {
+						// this.JgoodsList=res.data.list.data;
+						if (flag) {
+							this.topFlag = true;
+							this.bottomFlag = true;
+							uni.stopPullDownRefresh()
+						}
+						if (Math.ceil(res.data.list.total / _that.limit) != this.page && res.data.list.last_page >
+							0) {
+							this.bottomFlag = true;
+							this.status = "loadmore";
+						} else {
+							this.status = "normal";
+						}
+						if (this.page != 1) {
+							this.JgoodsList = this.JgoodsList.concat(res.data.list.data);
+
+						} else {
+							this.JgoodsList = res.data.list.data;
+						}
+
 					}
-					if(Math.ceil(res.data.list.total/_that.limit)!=this.page&&res.data.list.last_page>0){
-						this.bottomFlag = true;
-						this.status = "loadmore";
-					}else{
-						this.status = "normal";
-					}
-					if(this.page != 1){
-						this.JgoodsList = this.JgoodsList.concat(res.data.list.data);
-						
-					}else{
-						this.JgoodsList = res.data.list.data;
-					}
-					
-				}
-			  })
+				})
 			},
 			// 获取签到积分赠送规则
 			getCheckrules() {
@@ -1509,12 +1536,12 @@
 				return new Promise((resolve, reject) => {
 					teledcardApi.isFreeCollection().then(res => {
 						res.data.data
-						if(res.data.data==0){
+						if (res.data.data == 0) {
 							app.showModalStatus3 = true;
-						}else if(res.data.data==1){
+						} else if (res.data.data == 1) {
 							app.showModalStatus3 = false;
 						}
-						
+
 						resolve(res)
 					}).catch(reject)
 				})
@@ -1572,7 +1599,7 @@
 					categoryId
 				})
 			},
-			getClass(){
+			getClass() {
 				this.$navTo('pages/category/index')
 			},
 			/**
@@ -1607,31 +1634,31 @@
 					backgroundColor: page.style.titleBackgroundColor
 				})
 			},
-           getPass(){
-			   blockChina().then(res=>{
-				   console.log(res,121)
-				   this.passMessage = res.data.data
-				   this.showPass = true
-			   })
-			   .catch(err=>{
-				   if(err.status == 500){
-					   
-				   }
-				   this.showPass = true
-			   })
-			   .finally(res=>{
-				   this.showPass = true
-			   })
-		   },
-		   setStorage(){
-			   uni.setStorage({
-			   	 key:'storage_key',
-				 data:'passMessage',
-				 success(res) {
-				 	console.log(res,55)
-				 }
-			   })
-		   }
+			getPass() {
+				blockChina().then(res => {
+						console.log(res, 121)
+						this.passMessage = res.data.data
+						this.showPass = true
+					})
+					.catch(err => {
+						if (err.status == 500) {
+
+						}
+						this.showPass = true
+					})
+					.finally(res => {
+						this.showPass = true
+					})
+			},
+			setStorage() {
+				uni.setStorage({
+					key: 'storage_key',
+					data: 'passMessage',
+					success(res) {
+						console.log(res, 55)
+					}
+				})
+			}
 		},
 
 		/**
@@ -1686,46 +1713,53 @@
 		background: transparent;
 		color: transparent;
 	}
-	.indoctor{
+
+	.indoctor {
 		position: absolute;
 		bottom: -44rpx;
 		left: 50%;
 		transform: translateX(-50%);
 		display: flex;
 		align-items: center;
-		
+
 	}
-	.indoctorItem{
+
+	.indoctorItem {
 		width: 10rpx;
 		height: 10rpx;
 		border-radius: 50%;
 		background: rgba(255, 95, 96, .5);
 		margin-right: 12rpx;
 	}
-	.indoctorItem:last-child{
+
+	.indoctorItem:last-child {
 		margin-right: 0;
 	}
-	.indoctorItem.indoctorItemActive{
+
+	.indoctorItem.indoctorItemActive {
 		background: #FF5F60;
 	}
-	
-	
-	.seckillConWrap{
+
+
+	.seckillConWrap {
 		position: relative;
 		// width: 702rpx;
 		margin: 20rpx auto 0;
 	}
-	.seckillCon{
+
+	.seckillCon {
 		width: 100%;
 		display: flex;
 		// justify-content: space-around;
 	}
-	.seckillItem{
+
+	.seckillItem {
 		width: 160rpx;
 		margin: 0 8upx 0 20upx;
 		// height: 214rpx;
 	}
-	.seckillItemT{
+
+	.seckillItemT {
 		width: 160rpx;
 		height: 160rpx;
 		// background: #E7E6E6;
@@ -1734,11 +1768,13 @@
 		background-size: cover;
 		background-position: center;
 	}
-	.seckillItemB{
+
+	.seckillItemB {
 		margin-top: 20rpx;
 		// display: flex;
 	}
-	.seckillItemBT{
+
+	.seckillItemBT {
 		font-size: 28rpx;
 		// line-height: 20rpx;
 		color: #EF343D;
@@ -1749,7 +1785,8 @@
 		white-space: nowrap;
 		font-weight: 700;
 	}
-	.seckillItemBB{
+
+	.seckillItemBB {
 		font-size: 20rpx;
 		// line-height: 20rpx;
 		color: #999999;
@@ -1759,7 +1796,8 @@
 		white-space: nowrap;
 		text-decoration: line-through;
 	}
-	.header{
+
+	.header {
 		position: fixed;
 		width: 100%;
 		top: 0;
@@ -1768,8 +1806,8 @@
 		background-color: #EF343D;
 		// padding-bottom: 20upx;
 	}
-	
-	.subject{
+
+	.subject {
 		// position: fixed;
 		// width: 100%;
 		// top: 0;
@@ -1783,7 +1821,8 @@
 		// background-size: 750upx 560upx;
 		background-color: #EF343D;
 	}
-	.subject-img{
+
+	.subject-img {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -1791,17 +1830,21 @@
 		// height: 560upx;
 		// z-index: -1;
 	}
-	.subject-img image{
+
+	.subject-img image {
 		width: 100%;
 		height: 100%;
 	}
-	.typeTwo{
+
+	.typeTwo {
 		margin-top: 18upx;
 		display: flex;
 		width: 100%;
 		justify-content: space-between;
 	}
-	.typeTwoL,.typeTwoR{
+
+	.typeTwoL,
+	.typeTwoR {
 		width: 342upx;
 		height: 120upx;
 		border-radius: 8upx;
@@ -1817,14 +1860,16 @@
 		font-weight: bold;
 		letter-spacing: 2rpx;
 	}
-	.typeOne{
+
+	.typeOne {
 		width: 100%;
 		display: flex;
 		margin-top: 18upx;
 		justify-content: space-between;
 		// height: 250upx;
 	}
-	.typeOneL{
+
+	.typeOneL {
 		width: 262upx;
 		height: 258upx;
 		border-radius: 8upx;
@@ -1840,10 +1885,13 @@
 		font-weight: bold;
 		letter-spacing: 2rpx;
 	}
-	.typeOneLMain{
+
+	.typeOneLMain {
 		padding: 12upx 30upx 12upx 40upx;
 	}
-	.typeOneRT,.typeOneRB{
+
+	.typeOneRT,
+	.typeOneRB {
 		width: 422upx;
 		height: 120upx;
 		padding: 12upx 20upx;
@@ -1859,22 +1907,26 @@
 		font-family: Adobe Heiti Std;
 		letter-spacing: 2rpx;
 	}
-	.typeOneRB{
+
+	.typeOneRB {
 		margin-top: 18upx;
 	}
-	.cateBox{
+
+	.cateBox {
 		width: 100%;
 		height: 336upx;
 		box-sizing: border-box;
 		padding: 32upx 54upx;
 	}
-	.cateWrap{
+
+	.cateWrap {
 		width: 100%;
 		height: 100%;
 		display: flex;
 		flex-wrap: wrap;
 	}
-	.cateItems{
+
+	.cateItems {
 		width: 90upx;
 		display: flex;
 		flex-direction: column;
@@ -1884,16 +1936,19 @@
 		margin-bottom: 20upx;
 		height: 126upx;
 	}
-	.cateItems:nth-child(4n+4){
+
+	.cateItems:nth-child(4n+4) {
 		margin-right: 0;
 	}
-	.cateItems>image{
+
+	.cateItems>image {
 		width: 90upx;
 		height: 90upx;
 		margin-bottom: 16upx;
 		border-radius: 6upx;
 	}
-	.cateItems>text{
+
+	.cateItems>text {
 		width: 90upx;
 		overflow: hidden;
 		white-space: nowrap;
@@ -1903,12 +1958,12 @@
 		color: #333333;
 		text-align: center;
 	}
-	
-	
+
+
 	.heads {
 		position: fixed;
 		width: 100%;
-		
+
 		top: 0;
 		left: 0;
 		display: flex;
@@ -1919,6 +1974,7 @@
 		z-index: 1;
 		color: #FFFFFF;
 	}
+
 	.heads2 {
 		display: flex;
 		align-items: center;
@@ -1929,23 +1985,27 @@
 		color: #FFFFFF;
 		height: 100%;
 	}
-	.heads2 .heads2-left image{
+
+	.heads2 .heads2-left image {
 		width: 40upx;
 		height: 40upx;
 		vertical-align: top;
 	}
-	.heads2 .heads2-right image{
+
+	.heads2 .heads2-right image {
 		width: 40upx;
 		height: 40upx;
 		vertical-align: top;
 	}
-	.heads2-left text{
+
+	.heads2-left text {
 		font-size: 32upx;
 		color: #FFFFFF;
 		margin-left: 12upx;
 		font-family: PingFang SC-Medium, PingFang SC;
 		font-weight: 500;
 	}
+
 	/* #ifdef H5 */
 	uni-scroll-view .uni-scroll-view::-webkit-scrollbar {
 		/* 隐藏滚动条，但依旧具备可以滚动的功能 */
@@ -2078,27 +2138,31 @@
 		height: 300upx;
 		border-radius: 10upx;
 	}
+
 	// .swiper6{
 	// 	width: 750upx;
 	// 	height: 300upx;
 	// 	margin: 0 auto 0;
 	// }
-/* 轮播 */
+	/* 轮播 */
 	.home-lunb2 {
 		margin-top: -12upx;
 	}
-	.adverImg{
+
+	.adverImg {
 		width: 702upx;
 		height: 192upx;
 		margin: 24upx auto 0;
 		display: flex;
 		border-radius: 20upx;
 	}
-	.adverImg>image{
+
+	.adverImg>image {
 		width: 100%;
 		height: 100%;
 		border-radius: 20upx;
 	}
+
 	.swiper2 {
 		// height: 382upx;
 		width: 702upx;
@@ -2112,6 +2176,7 @@
 		height: 192upx;
 		border-radius: 10upx;
 	}
+
 	/* 走马灯 */
 	.swiper4 {
 		height: 60upx;
@@ -2126,26 +2191,30 @@
 		width: 100%;
 		height: 60upx;
 	}
-	.newMain{
+
+	.newMain {
 		width: 702upx;
 		margin: 24upx auto 0;
 		background-color: #FFFFFF;
 		border-radius: 20upx;
 	}
-	.home-point{
+
+	.home-point {
 		// padding: 30upx 0;
 		/* display: flex;
 		justify-content: space-between; */
 		background-color: #FFFFFF;
 		margin-top: 40upx;
 	}
-	.swiper6{
+
+	.swiper6 {
 		width: 702upx;
 		height: 380upx;
 		margin: 0 auto 0;
 	}
+
 	/* 金刚区 */
-	.home-district{
+	.home-district {
 		padding: 30upx 0;
 		width: 100%;
 		/* display: flex;
@@ -2154,41 +2223,48 @@
 		background-color: #FFFFFF;
 		margin-top: 20upx;
 	}
-	.home-district-header{
+
+	.home-district-header {
 		font-size: 30upx;
 		color: #333333;
 		padding-left: 28upx;
 		margin-bottom: 30upx;
 		font-weight: PingFang-SC-Regular;
 	}
-	.point-item{
+
+	.point-item {
 		width: 126upx;
 		margin-left: 14upx;
 		margin-bottom: 24upx;
 		display: inline-block;
 	}
+
 	.point-item:nth-child(6),
 	.point-item:nth-child(7),
 	.point-item:nth-child(8),
 	.point-item:nth-child(9),
-	.point-item:nth-child(10){
+	.point-item:nth-child(10) {
 		margin-bottom: 20upx;
 	}
-	.point-img{
+
+	.point-img {
 		width: 80upx;
 		height: 80upx;
 		margin: 0 auto 8upx;
 	}
-	.point-img>image{
+
+	.point-img>image {
 		width: 100%;
 		height: 100%;
 	}
-	.point-item .point-text{
+
+	.point-item .point-text {
 		font-size: 22upx;
 		text-align: center;
 		display: inline-block;
 		width: 100%;
 	}
+
 	/* 金刚区 end*/
 	.homepage-lantern {
 		width: 702upx;
@@ -2230,11 +2306,13 @@
 		width: 40upx;
 		height: 40upx;
 	}
-	.homepage-lantern-icon2{
+
+	.homepage-lantern-icon2 {
 		width: 28upx;
 		height: 28upx;
 		padding-top: 30upx;
 	}
+
 	.homepage-lantern-icon2>image {
 		width: 28upx;
 		height: 28upx;
@@ -2462,7 +2540,7 @@
 		vertical-align: top;
 	}
 
-    // 返回头部
+	// 返回头部
 	.home-returnTop {
 		position: fixed;
 		bottom: 120upx;
@@ -2477,6 +2555,7 @@
 		height: 108upx;
 		vertical-align: top;
 	}
+
 	/* 首页推荐 */
 	.home-recommend {
 		margin-top: 24upx;
@@ -2494,25 +2573,29 @@
 		display: flex;
 		align-items: center;
 	}
-	.recommend-header image{
+
+	.recommend-header image {
 		width: 21upx;
 		height: 26upx;
 		margin: 6upx 12upx 4upx 10upx;
 	}
-	.recommend-header text{
+
+	.recommend-header text {
 		font-size: 30upx;
 		color: #FFFFFF;
 		line-height: 46upx;
 		vertical-align: top;
 	}
-	.home-seckill{
+
+	.home-seckill {
 		width: 702upx;
 		margin: 24upx auto 0;
 		background-color: #FFFFFF;
 		border-radius: 20upx;
 		padding: 24upx 20upx;
 	}
-	.seckill-header{
+
+	.seckill-header {
 		height: 46upx;
 		margin: 0 auto 0;
 		display: flex;
@@ -2521,20 +2604,24 @@
 		align-items: center;
 		justify-content: space-between;
 	}
-	.seckill-headerL image{
+
+	.seckill-headerL image {
 		width: 172upx;
 		height: 36upx;
 	}
-	.seckillMore{
+
+	.seckillMore {
 		font-size: 28rpx;
 		color: #565656;
 		line-height: 28rpx;
 	}
-	.seckillMore image{
+
+	.seckillMore image {
 		width: 28upx;
 		height: 28upx;
 		vertical-align: top;
 	}
+
 	.recommend-bjt {
 		width: 80upx;
 		height: 4upx;
@@ -2598,8 +2685,8 @@
 		// margin-top: 17upx;
 		margin-bottom: 20upx;
 	}
-	
-	.home-recommend .recommend-title3{
+
+	.home-recommend .recommend-title3 {
 		font-size: 22upx;
 		color: #878787;
 		// margin-top: 18upx;
@@ -2613,11 +2700,12 @@
 		color: #EF343D;
 		margin-right: 18upx;
 	}
-	.home-recommend .recommend-text1 text{
+
+	.home-recommend .recommend-text1 text {
 		font-size: 36upx;
 		font-weight: bold;
 	}
-	
+
 	.home-recommend .recommend-texts {
 		font-size: 22upx;
 		// font-weight: bold;
@@ -2794,12 +2882,14 @@
 		margin-top: 20upx;
 		// padding: 32upx 0 16upx 0;
 	}
-	.district-item2 .active{
+
+	.district-item2 .active {
 		position: relative;
 		padding-bottom: 16upx;
 		font-weight: bold;
 		color: #FFFFFF;
 	}
+
 	.active::after {
 		content: "";
 		position: absolute;
@@ -2811,44 +2901,50 @@
 		border-radius: 2upx;
 		background-color: #FFFFFF;
 	}
-	.classification-conter{
+
+	.classification-conter {
 		position: absolute;
 		top: 0;
 		right: 110upx;
 		width: 46upx;
 		height: 52upx;
-		margin:20upx 0 10upx 0 ;
+		margin: 20upx 0 10upx 0;
 		background: linear-gradient(272deg, #EF343D 0%, rgba(222, 59, 67, 0) 100%);
 		opacity: 1;
 	}
-	.classification{
+
+	.classification {
 		width: 17.2%;
 		height: 52upx;
 		position: absolute;
 		top: 0;
 		right: 0;
-		margin:18upx 0 10upx 0 ;
+		margin: 18upx 0 10upx 0;
 		padding: 0 10upx 0 10upx;
 		background-color: #EF343D;
 		// border-radius:30upx 0 0 30upx ;
-		
+
 	}
-	.classification image{
+
+	.classification image {
 		width: 40upx;
 		height: 40upx;
 		vertical-align: top;
 	}
-	.classification text{
+
+	.classification text {
 		font-size: 28upx;
 		color: #FFFFFF;
 		margin-left: 6upx;
 	}
+
 	// 购票
-	.addCon{
+	.addCon {
 		box-sizing: border-box;
 		width: 702upx;
 		margin: 24upx auto 0;
 	}
+
 	.ticket {
 		width: 100%;
 		display: flex;
@@ -2857,7 +2953,8 @@
 		box-sizing: border-box;
 		// padding: 0 24upx;
 	}
-	.ticket-left{
+
+	.ticket-left {
 		width: 340upx;
 		height: 160upx;
 		overflow: hidden;
@@ -2867,7 +2964,8 @@
 		// padding: 24upx 16upx;
 		box-sizing: border-box;
 	}
-	.ticket-right{
+
+	.ticket-right {
 		width: 340upx;
 		// height: 136upx;
 		height: 160upx;
@@ -2877,6 +2975,7 @@
 		// padding: 24upx 16upx;
 		box-sizing: border-box;
 	}
+
 	.ticket-img {
 		// width: 88upx;
 		// height: 88upx;
@@ -2891,10 +2990,12 @@
 		height: 160upx;
 		vertical-align: top;
 	}
-	.ticket-conter{
+
+	.ticket-conter {
 		margin-left: 8upx;
 	}
-	.ticket-conterT{
+
+	.ticket-conterT {
 		font-size: 32upx;
 		color: #333333;
 		font-family: PingFang SC-Bold, PingFang SC;
@@ -2902,7 +3003,8 @@
 		position: relative;
 		display: inline-block;
 	}
-	.ticket-label{
+
+	.ticket-label {
 		position: absolute;
 		top: 4upx;
 		right: -76upx;
@@ -2916,58 +3018,66 @@
 		text-align: center;
 		font-weight: 500;
 	}
-	.ticket-conterB{
+
+	.ticket-conterB {
 		font-size: 24upx;
 		color: #9C9C9C;
 		margin-top: 10upx;
 	}
+
 	//客服
-	.popup-kf{
+	.popup-kf {
 		width: 400upx;
 		position: fixed;
 		top: 50%;
 		left: 50%;
-		transform: translate(-50%,-50%);
+		transform: translate(-50%, -50%);
 		z-index: 2000;
 		// background-color: #FFFFFF;
 	}
-	.popup-kf-img{
+
+	.popup-kf-img {
 		width: 400upx;
 		height: 400upx;
 	}
-	.popup-kf-img>image{
+
+	.popup-kf-img>image {
 		width: 100%;
 		height: 100%;
 	}
+
 	.home-popup2 {
 		width: 528upx;
 		position: fixed;
 		top: 50%;
 		left: 50%;
-		transform: translate(-50%,-50%);
+		transform: translate(-50%, -50%);
 		z-index: 2000;
 	}
-	
+
 	.home-box2 {
 		width: 100%;
 		// height: 512upx;
 	}
-	.home-box2>image{
+
+	.home-box2>image {
 		width: 100%;
 		height: 100%;
 	}
+
 	.home-popup2-close {
 		width: 48upx;
 		height: 48upx;
 		margin: 0 auto 0;
 	}
-	
+
 	.home-popup2-close>image {
 		width: 100%;
 		height: 100%;
 		vertical-align: top;
 	}
-	.pass{
+
+	.pass {
 		width: 702upx;
 		height: 66upx;
 		margin: 20upx auto 0;
@@ -2978,26 +3088,31 @@
 		display: flex;
 		justify-content: space-between;
 	}
-	.passL{
+
+	.passL {
 		display: flex;
 		justify-content: flex-start;
 	}
-	.passMessage{
+
+	.passMessage {
 		height: 42upx;
 		margin-top: 12upx;
 		display: flex;
 		justify-content: flex-start;
 	}
-	.passMessageL{
+
+	.passMessageL {
 		width: 36upx;
 		height: 36upx;
 		margin-top: 16upx;
 	}
-	.passMessageL>image{
+
+	.passMessageL>image {
 		width: 100%;
 		height: 100%;
 	}
-	.passMessageR{
+
+	.passMessageR {
 		width: 102upx;
 		height: 42upx;
 		font-weight: bold;
@@ -3007,8 +3122,8 @@
 		margin-left: 20upx;
 		margin-top: 12upx;
 	}
-	
-	.passData{
+
+	.passData {
 		height: 34upx;
 		margin-top: 16upx;
 		margin-left: 16upx;
@@ -3018,7 +3133,8 @@
 		line-height: 34upx;
 		text-align: center;
 	}
-	.passR{
+
+	.passR {
 		width: 130upx;
 		height: 42upx;
 		background-color: #FFF2F2;
@@ -3029,6 +3145,6 @@
 		text-align: center;
 		font-size: 24upx;
 		font-weight: 500;
-		
+
 	}
 </style>
