@@ -47,6 +47,9 @@
 					</view>
 				</view>
 			</view>
+            
+           
+            
 		</view>
 
 		<view class="caShier-footer">
@@ -450,6 +453,7 @@
 		}
 	}
 </script>
+<!-- <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script> -->
 
 <style>
 	/* checkbox样式修改 */

@@ -744,7 +744,7 @@
 			obj.paddingTop = App.globalData.paddingTop;
 			this.navInfo = obj;
 			this.getPageData();
-			this.getArticle();
+			// this.getArticle();
 			// timer=setInterval(()=>{
 			// 	this.getRandomList();
 			// },1000)
