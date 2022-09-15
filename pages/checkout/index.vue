@@ -160,8 +160,9 @@
         </view>
       </view>
     </view>
+	<!-- v-if="bigId!=''" -->
 	
-	<view class="pay-method flow-all-money b-f m-top20" v-if="bigId!=''">
+	<view class="pay-method flow-all-money b-f m-top20" v-if="bigId!=''" >
 	  <view class="flow-all-list dis-flex">
 	    <text class="flex-five">权益选择</text>
 	  </view>
@@ -203,6 +204,51 @@
 	    </view>
 	  </view>
 	</view>
+	
+	
+	<!-- 大会员 -->
+	<view class="pay-method flow-all-money b-f m-top20" v-if="showMember" >
+	  <view class="flow-all-list dis-flex">
+	    <text class="flex-five">权益选择</text>
+	  </view>
+	  <!-- 权益选择 -->
+	
+	  <view class="pay-item dis-flex flex-x-between" @click="freeChoice(0)">
+	    <view class="item-left dis-flex flex-y-center">
+	     <view class="item-left_icon wechat">
+	      </view>
+	      <view class="item-left_text">
+	        正常购买
+	      </view>
+	    </view>
+	    <view class="item-right col-m" v-if="is_free == 0">
+	      <text class="iconfont icon-check"></text>
+	    </view>
+	  </view>
+	  	
+	  
+	  <!-- 邀请好友获得免单 -->
+	  <view class="pay-item dis-flex flex-x-between" @click="freeChoice(1)">
+	    <view class="item-left dis-flex flex-y-center">
+	     <view class="item-left_icon balance">
+	      </view>
+	      <view class="item-left_text">
+	        <text>成团购买</text>
+	      </view>
+	    </view>
+	    <view class="item-right col-m" v-if="is_free == 1">
+	      <text class="iconfont icon-check"></text>
+	    </view>
+	  </view>
+	  
+	  <view class="pay-method flow-all-money b-f m-top20" style="padding: 40rpx;" v-if="is_free==0 &&!showMember">
+	    <view style="margin: 0 auto; color: #999999; font-size: 26rpx; border-radius: 20upx;">
+	  	活动期间内，购买专区商品将获得更高比例通证。消费
+	  	者在该专区累计兑换3000元通证后，即可获赠商城会员
+	  	一份。
+	    </view>
+	  </view>
+	</view>
 	<view class="pay-method flow-all-money b-f m-top20" style="padding: 40rpx;" v-if="is_free==1">
 	  <view style="display: flex;justify-content: center;">
 	  	<image style="width: 80rpx;height: 80rpx;" src="../../static/home/ask.png" mode=""></image>
@@ -212,7 +258,7 @@
 	  </view>
 	  <view style="margin: 24upx auto 0;">
 	  	<view style="font-size: 26upx;color: #999999;">
-	  		邀请4位新用户在此专区达成交易
+	  		邀请4位新用户{{showMember?'':'在此专区'}}达成交易
 	  	</view>
 		<view style="font-size: 26upx;color: #999999;margin-top: 8upx;">
 			成功邀请与被邀请的均可在最后一名成员确认支付之后获得免单奖励
@@ -391,6 +437,7 @@
   import {giftAdd} from "@/api/gift/index.js"
   import * as giveApi from "@/api/give/index.js"
   const CouponColors = ['red', 'blue', 'violet', 'yellow']
+   import * as memberApi from "@/api/member/index.js";
 
   export default {
     data() {
@@ -451,7 +498,8 @@
 		is_free:0,
 		group_order_id:0,
 		showModalStatus3:false,
-		message:''
+		message:'',
+		showMember:''//0不是大会员 1是大会员
       }
     },
 	filters: {
@@ -490,6 +538,7 @@
       // 获取当前订单信息
       this.getOrderData()
 	  this.getDeliveryType()
+	  this.getbigvip()
 	  // this.getOrder()
     },
 	onShareAppMessage() {
@@ -525,6 +574,16 @@
 				this.deliveryList=res.data.delivery_type;
 				if(this.deliveryList.length>1){
 					_that.isSHSM=true;
+				}
+			})
+		},
+		getbigvip() {
+			memberApi.index().then(res => {
+				let data = res.data
+				if (data.big_vip_user.is_vip == 0) {
+					this.showMember = false;
+				} else if (data.big_vip_user.is_vip == 1) {
+					this.showMember = true;
 				}
 			})
 		},
@@ -921,7 +980,8 @@
       // 表单提交的数据
       getFormData() {
         const app = this
-        const { options } = app
+        const { options } = app;
+		let vip_group_order_id = uni.getStorageSync('vip_group_order_id')||0
         // 表单数据
         const form = {
           delivery: app.curDelivery,
@@ -929,6 +989,7 @@
           couponId: app.selectCouponId || 0,
           isUsePoints: app.isUsePoints ? 1 : 0,
           remark: app.remark || '',
+		  vip_group_order_id
         }
         // 创建订单-立即购买
         if (options.mode === 'buyNow') {
@@ -938,6 +999,10 @@
 		  if(app.poolId){
 			  form.PoolId=options.poolId
 			  form.LuckyFreeId=options.LuckyFreeId
+		  }
+		  // 大会员
+		  if (app.showMember){
+			  form.is_vip_free = app.is_free;
 		  }
 		  if(app.bigId!=''||app.bigId!=1){
 			  form.is_free=this.is_free

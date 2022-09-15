@@ -7,8 +7,8 @@
  * 格式化日期格式 (用于兼容ios Date对象)
  */
 export const formatDate = (time) => {
-  // 将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式 
-  return time.replace(/\-/g, "/");
+	// 将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式 
+	return time.replace(/\-/g, "/");
 }
 
 /**
@@ -16,40 +16,40 @@ export const formatDate = (time) => {
  * @param {object} obj
  */
 export const urlEncode = (obj = {}) => {
-  const result = []
-  for (const key in obj) {
-    const item = obj[key]
-    if (!item) {
-      continue
-    }
-    if (isArray(item)) {
-      item.forEach(val => {
-        result.push(key + '=' + val)
-      })
-    } else {
-      result.push(key + '=' + item)
-    }
-  }
-  return result.join('&')
+	const result = []
+	for (const key in obj) {
+		const item = obj[key]
+		if (!item && item != 0) {
+			continue
+		}
+		if (isArray(item)) {
+			item.forEach(val => {
+				result.push(key + '=' + val)
+			})
+		} else {
+			result.push(key + '=' + item)
+		}
+	}
+	return result.join('&')
 }
 
 /**
  * 遍历对象
  */
 export const objForEach = (obj, callback) => {
-  Object.keys(obj).forEach((key) => {
-    callback(obj[key], key)
-  });
+	Object.keys(obj).forEach((key) => {
+		callback(obj[key], key)
+	});
 }
 
 /**
  * 是否在数组内
  */
 export const inArray = (search, array) => {
-  for (var i in array) {
-    if (array[i] == search) return true
-  }
-  return false
+	for (var i in array) {
+		if (array[i] == search) return true
+	}
+	return false
 }
 
 /**
@@ -59,23 +59,23 @@ export const inArray = (search, array) => {
  * dateFormat('YYYY-mm-dd HH:MM:SS', new Date()) ==> 2020-01-01 08:00:00
  */
 export const dateFormat = (fmt, date) => {
-  const opt = {
-    "Y+": date.getFullYear().toString(), // 年
-    "m+": (date.getMonth() + 1).toString(), // 月
-    "d+": date.getDate().toString(), // 日
-    "H+": date.getHours().toString(), // 时
-    "M+": date.getMinutes().toString(), // 分
-    "S+": date.getSeconds().toString() // 秒
-    // 有其他格式化字符需求可以继续添加，必须转化成字符串
-  };
-  let ret
-  for (let k in opt) {
-    ret = new RegExp("(" + k + ")").exec(fmt)
-    if (ret) {
-      fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
-    };
-  };
-  return fmt
+	const opt = {
+		"Y+": date.getFullYear().toString(), // 年
+		"m+": (date.getMonth() + 1).toString(), // 月
+		"d+": date.getDate().toString(), // 日
+		"H+": date.getHours().toString(), // 时
+		"M+": date.getMinutes().toString(), // 分
+		"S+": date.getSeconds().toString() // 秒
+		// 有其他格式化字符需求可以继续添加，必须转化成字符串
+	};
+	let ret
+	for (let k in opt) {
+		ret = new RegExp("(" + k + ")").exec(fmt)
+		if (ret) {
+			fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+		};
+	};
+	return fmt
 }
 
 /**
@@ -83,7 +83,7 @@ export const dateFormat = (fmt, date) => {
  * @param {*} object 源对象
  */
 export const isEmptyObject = (object) => {
-  return Object.keys(object).length === 0
+	return Object.keys(object).length === 0
 }
 
 /**
@@ -91,7 +91,7 @@ export const isEmptyObject = (object) => {
  * @param {*} object
  */
 export const isObject = (object) => {
-  return Object.prototype.toString.call(object) === '[object Object]'
+	return Object.prototype.toString.call(object) === '[object Object]'
 }
 
 /**
@@ -99,7 +99,7 @@ export const isObject = (object) => {
  * @param {*} array
  */
 export const isArray = (array) => {
-  return Object.prototype.toString.call(array) === '[object Array]'
+	return Object.prototype.toString.call(array) === '[object Array]'
 }
 
 /**
@@ -107,13 +107,13 @@ export const isArray = (array) => {
  * @param {*} object 源对象
  */
 export const isEmpty = (value) => {
-  if (isArray(value)) {
-    return value.length === 0
-  }
-  if (isObject(value)) {
-    return isEmptyObject(value)
-  }
-  return !value
+	if (isArray(value)) {
+		return value.length === 0
+	}
+	if (isObject(value)) {
+		return isEmptyObject(value)
+	}
+	return !value
 }
 
 /**
@@ -121,14 +121,14 @@ export const isEmpty = (value) => {
  * @param {*} obj 源对象
  */
 export const cloneObj = (obj) => {
-  let newObj = obj.constructor === Array ? [] : {};
-  if (typeof obj !== 'object') {
-    return;
-  }
-  for (let i in obj) {
-    newObj[i] = typeof obj[i] === 'object' ? cloneObj(obj[i]) : obj[i];
-  }
-  return newObj
+	let newObj = obj.constructor === Array ? [] : {};
+	if (typeof obj !== 'object') {
+		return;
+	}
+	for (let i in obj) {
+		newObj[i] = typeof obj[i] === 'object' ? cloneObj(obj[i]) : obj[i];
+	}
+	return newObj
 }
 
 // 节流函数
@@ -137,16 +137,16 @@ export const cloneObj = (obj) => {
 // 是则返回。当第一次的定时器执行完函数最后会设定变量为flase。
 // 那么下次判断变量时则为flase，函数会依次运行。
 export function throttle(fn, delay = 100) {
-  // 首先设定一个变量，在没有执行我们的定时器时为null
-  var timer = null
-  return function() {
-    // 当我们发现这个定时器存在时，则表示定时器已经在运行中，需要返回
-    if (timer) return
-    timer = setTimeout(() => {
-      fn.apply(this, arguments)
-      timer = null
-    }, delay)
-  }
+	// 首先设定一个变量，在没有执行我们的定时器时为null
+	var timer = null
+	return function() {
+		// 当我们发现这个定时器存在时，则表示定时器已经在运行中，需要返回
+		if (timer) return
+		timer = setTimeout(() => {
+			fn.apply(this, arguments)
+			timer = null
+		}, delay)
+	}
 }
 
 // 防抖函数
@@ -156,17 +156,17 @@ export function throttle(fn, delay = 100) {
 // 没有执行清除定时器， 超过一定时间后触发回调函数。
 // 参考文档：https://segmentfault.com/q/1010000021145192
 export function debounce(fn, delay) {
-  let timer
-  return function() {
-    const that = this
-    const _args = arguments // 存一下传入的参数
-    if (timer) {
-      clearTimeout(timer)
-    }
-    timer = setTimeout(function() {
-      fn.apply(that, _args)
-    }, delay)
-  }
+	let timer
+	return function() {
+		const that = this
+		const _args = arguments // 存一下传入的参数
+		if (timer) {
+			clearTimeout(timer)
+		}
+		timer = setTimeout(function() {
+			fn.apply(that, _args)
+		}, delay)
+	}
 }
 
 
@@ -177,5 +177,5 @@ export function debounce(fn, delay) {
  * @return {Array}
  */
 export const arrayIntersect = (array1, array2) => {
-  return array1.filter(val => array2.indexOf(val) > -1)
+	return array1.filter(val => array2.indexOf(val) > -1)
 }

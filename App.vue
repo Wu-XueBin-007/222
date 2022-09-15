@@ -8,18 +8,22 @@
 		globalData: {
 			// uploadBaseUrl: "https://3013.zhouyangjun.com/"
 			uploadBaseUrl: "https://shop.gzrhhj.com/",
-			goodsData:{},
-			setting:{}
+			goodsData: {},
+			setting: {}
 		},
 
 		/**
 		 * 初始化完成时触发
 		 */
 		onLaunch(options) {
-			console.log(options)
+
 			// #ifdef MP-WEIXIN
 			if (options.query.scene) {
 				this.globalData.shareId = options.query.scene;
+			}
+			if (options.query && options.query.refereeId) {
+				console.log(options.query.refereeId, 'options.query.refereeId');
+				this.$store.commit('SET_SUPERIOR_USER_ID', options.query.refereeId)
 			}
 			// #endif
 			this.getInfo();
@@ -27,19 +31,19 @@
 			// 小程序主动更新
 			this.updateManager()
 		},
-		onShow(){
+		onShow() {
 			// #ifdef APP-PLUS
-			   var args= plus.runtime.arguments;
-			   if(args){  
-			    
-			    // 处理args参数，如直达到某新页面等  
-			    var arr = args.split('shareId=');
-			    this.globalData.shareId = arr[1];
-			   }
-			   // #endif
+			var args = plus.runtime.arguments;
+			if (args) {
+
+				// 处理args参数，如直达到某新页面等  
+				var arr = args.split('shareId=');
+				this.globalData.shareId = arr[1];
+			}
+			// #endif
 		},
 		methods: {
-			getInfo(){
+			getInfo() {
 				Rapi.info().then(setting => {
 					this.globalData.setting = setting.data.storeInfo
 				})
@@ -58,45 +62,45 @@
 					return year + desc + month + desc + day + ' ' + hour + ":" + min + ":" + sec;
 				}
 			},
-			getSystemInfo: function () {
-			    let t = this;
-			    let rect = uni.getMenuButtonBoundingClientRect ? uni.getMenuButtonBoundingClientRect() : null;
-			    uni.getSystemInfo({
-			      success: function (res) {
-			        t.globalData.systemInfo = res;
-			        let windowWidth = res.windowWidth;
-					t.globalData.windowWidth=windowWidth;
-					let windowHeight=res.windowHeight;
-					t.globalData.windowHeight=windowHeight;
-			       // 获取状态栏的高度
-			        let statusBarHeight = res.statusBarHeight;
-					//#ifdef MP-WEIXIN
-					// 根据胶囊的位置计算导航栏的高度
-					 let realHeight = (rect.top - statusBarHeight) * 2 + rect.height + statusBarHeight;
-					 t.globalData.navH = realHeight;
-					// 根据胶囊的位置计算文字的行高以及距离状态栏的位置
-					 let lineHeight = (rect.top - statusBarHeight) * 2 + rect.height;
-					//#endif
-					//#ifdef APP
-					// 根据胶囊的位置计算导航栏的高度
-					 let realHeight = 40 + statusBarHeight;
-					 t.globalData.navH = realHeight;
-					// 根据胶囊的位置计算文字的行高以及距离状态栏的位置
-					 let lineHeight = 40;
-					//#endif
-			        t.globalData.lineHeight = lineHeight;
-			        t.globalData.paddingTop = statusBarHeight;
-			       // 根据胶囊的位置计算距离右侧的宽度，用于设置返回按钮至左侧的距离
-			        let leftDistance = windowWidth - rect.right;
-			        t.globalData.leftDistance = leftDistance;
-			        console.log(t.globalData)
-					
-					
-					
-					
-			      }
-			    });
-			  },
+			getSystemInfo: function() {
+				let t = this;
+				let rect = uni.getMenuButtonBoundingClientRect ? uni.getMenuButtonBoundingClientRect() : null;
+				uni.getSystemInfo({
+					success: function(res) {
+						t.globalData.systemInfo = res;
+						let windowWidth = res.windowWidth;
+						t.globalData.windowWidth = windowWidth;
+						let windowHeight = res.windowHeight;
+						t.globalData.windowHeight = windowHeight;
+						// 获取状态栏的高度
+						let statusBarHeight = res.statusBarHeight;
+						//#ifdef MP-WEIXIN
+						// 根据胶囊的位置计算导航栏的高度
+						let realHeight = (rect.top - statusBarHeight) * 2 + rect.height + statusBarHeight;
+						t.globalData.navH = realHeight;
+						// 根据胶囊的位置计算文字的行高以及距离状态栏的位置
+						let lineHeight = (rect.top - statusBarHeight) * 2 + rect.height;
+						//#endif
+						//#ifdef APP
+						// 根据胶囊的位置计算导航栏的高度
+						let realHeight = 40 + statusBarHeight;
+						t.globalData.navH = realHeight;
+						// 根据胶囊的位置计算文字的行高以及距离状态栏的位置
+						let lineHeight = 40;
+						//#endif
+						t.globalData.lineHeight = lineHeight;
+						t.globalData.paddingTop = statusBarHeight;
+						// 根据胶囊的位置计算距离右侧的宽度，用于设置返回按钮至左侧的距离
+						let leftDistance = windowWidth - rect.right;
+						t.globalData.leftDistance = leftDistance;
+						console.log(t.globalData)
+
+
+
+
+					}
+				});
+			},
 			/**
 			 * 小程序主动更新
 			 */

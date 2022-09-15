@@ -343,6 +343,9 @@
 	  if(options.group_order_id){
 		  this.group_order_id=options.group_order_id;
 	  }
+	  if(options.vip_group_order_id){
+	  		  this.vip_group_order_id=options.vip_group_order_id;
+	  }
 	  this.getCommon();
       // 加载页面数据
       this.onRefreshPage()

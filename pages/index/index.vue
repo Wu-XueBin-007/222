@@ -772,6 +772,7 @@
 		 * 生命周期函数--监听页面显示
 		 */
 		onShow() {
+			// console.log(this.$store.state.user.superior_user_id, 'superior_user_id');
 			var now = new Date();
 			var day = now.getDay() - 1;
 			var oneTiem = day * 24 * 60 * 60 * 1000;
@@ -1678,9 +1679,10 @@
 			const app = this
 			const {
 				page
-			} = app
+			} = app;
+			console.log("/pages/index/index?" + app.$getShareUrlParams());
 			return {
-				title: page.params.share_title,
+				// title: page.params.share_title,
 				path: "/pages/index/index?" + app.$getShareUrlParams()
 			}
 		},
@@ -1696,7 +1698,7 @@
 				page
 			} = app
 			return {
-				title: page.params.share_title,
+				// title: page.params.share_title,
 				path: "/pages/index/index?" + app.$getShareUrlParams()
 			}
 		}

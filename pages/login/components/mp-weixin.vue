@@ -60,8 +60,6 @@
 				})
 			},
 			decryptPhoneNumber(e) {
-				console.log(e)
-
 				const app = this
 				// 提交到后端
 				store.dispatch('wxMobileDecrypt', {
@@ -75,7 +73,7 @@
 						app.getUserData(datas)
 					})
 					.catch(err => {
-						console.log(err,1231)
+						console.log(err, 1231)
 
 					})
 			},
@@ -91,12 +89,12 @@
 				};
 				obj.isParty = true;
 				obj.type = 1;
-				
 
 				if (APP.globalData.shareId) {
 					obj.superior_user_id = APP.globalData.shareId;
 				}
-				console.log(APP.globalData.shareId)
+				let superior_user_id = this.$store.state.user.superior_user_id;
+				obj.superior_user_id = superior_user_id
 				store.dispatch('Login', obj)
 					.then(result => {
 						// 显示登录成功
@@ -131,8 +129,6 @@
 						// 授权成功事件
 						app.userMsg = userInfo;
 						app.onAuthSuccess(userInfo)
-
-
 					},
 					fail() {
 						//console.log('用户拒绝了授权')
@@ -146,7 +142,7 @@
 			// 2.如果不存在该用户, 则显示注册页面, 需填写手机号
 			// 3.如果后端报错了, 则显示错误信息
 			async onAuthSuccess(userInfo) {
-				const app = this
+				const app = this;
 				// 提交到后端
 				store.dispatch('MpWxLogin', {
 						code: await app.getCode(),

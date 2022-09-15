@@ -4,6 +4,7 @@ import request from '@/utils/request'
 const api = {
   code:'highluxury.index/qr_code',
   list: 'highluxury.index/myOrderList',
+  bigviplist: 'bigvip.index/myOrderList',
   index: 'bigvip.index/index',
   myOrderList: 'luckyFree.index/myOrderList',
   goodsList: 'luckyFree.index/goodsList',
@@ -12,7 +13,8 @@ const api = {
   detail: 'highluxury.index/detail',
   inviteList:'bigvip.index/get_my_invite_list',
   balanceLog:'bigvip.index/balance_log',
-  todoCounts:'order/todoCounts'
+  todoCounts:'order/todoCounts',
+  bigVipdetail: 'bigvip.index/detail',
 }
 // 大会员二维码
 export function code(params) {
@@ -68,4 +70,12 @@ export const balanceLog = (data) => {
 // 大会员返现记录
 export const todoCounts = (data) => {
   return request.post(api.todoCounts, data)
+}
+// 大会员详情（banner图）
+export const bigVipdetail = (data) =>{
+	return request.post(api.bigVipdetail, data) 
+}
+// 大会员成团订单列表
+export const bigviplist = (data) =>{
+	return request.post(api.bigviplist, data) 
 }

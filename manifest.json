@@ -1,6 +1,6 @@
 {
     "name" : "融汇商城",
-    "appid" : "__UNI__1902AE4",
+    "appid" : "__UNI__984591A",
     "description" : "链生活",
     "versionName" : "2.1.2",
     "versionCode" : 212,
@@ -140,7 +140,8 @@
             "scope.userLocation" : {
                 "desc" : "ceshi"
             }
-        }
+        },
+        "lazyCodeLoading" : "requiredComponents"
     },
     "mp-alipay" : {
         "usingComponents" : true
