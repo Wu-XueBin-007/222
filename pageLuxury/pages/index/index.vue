@@ -78,12 +78,11 @@
 
 										<!-- v-if="item.is_free==1&&item.is_inviter==1" -->
 										<!-- #ifdef MP-WEIXIN -->
-										<button open-type="share" v-if="item.is_free==1&&item.is_inviter==1"
+										<button open-type="share" @click="group_order_id = item.group_order_id" v-if="item.is_free==1&&item.is_inviter==1"
 											class="shareBtn">
 											<view class="specialOrderItemBRBR2">邀请好友</view>
 										</button>
 										<!-- #endif -->
-
 										<view class="specialOrderItemBRBR3" v-if="item.is_free==0">
 											通证奖励
 										</view>
@@ -243,7 +242,7 @@
 				</view>
 			</view>
 			<view class="ranksR">
-				<image v-for="(item,index) in team.list" :kry="index" class="potL" :src="item.user.avatar_url" mode="">
+				<image v-for="(item,index) in 4" :kry="index" class="potL" :src="item.user.avatar_url?item.user.avatar_url:'../../static/icon_ask.png'" mode="">
 				</image>
 				<!-- <image class="potL" src="../../static/icon_ask.png" mode=""></image>
 			<image class="potL" src="../../static/icon_ask.png" mode=""></image>
@@ -276,9 +275,7 @@
 			MescrollBody,
 			Search
 		},
-
 		mixins: [MescrollMixin],
-
 		data() {
 			return {
 				showView: false, // 列表显示方式 (true列表、false平铺)
@@ -376,11 +373,10 @@
 				})
 			},
 			getDetail() {
-				LuxuryApi.detail().then(res => {
-					console.log(res, 123)
+				LuxuryApi.detail({group_order_id:this.group_order_id}).then(res => {
 					this.poster_image = res.data.poster_image;
 					this.team = res.data.team;
-					if (isObj(this.team) == 'true') {
+					if (JSON.stringify(this.team) != '{}') {
 						console.log(1)
 						this.isRanks = true;
 					} else {
@@ -517,7 +513,8 @@
 		 */
 		onShareAppMessage() {
 			// 构建分享参数
-			console.log(this.isRanks, 123456)
+			console.log("/pageLuxury/pages/index/index?" + this.$getShareUrlParams() + "&group_order_id=" + this
+					.group_order_id);
 			return {
 				title: "高奢名品",
 				path: "/pageLuxury/pages/index/index?" + this.$getShareUrlParams() + "&group_order_id=" + this
@@ -656,8 +653,8 @@
 
 			.goods-name {
 				margin-top: 10rpx;
-				// height: 64rpx;
-				max-height: 64rpx;
+				height: 68rpx;
+				// max-height: 64rpx;
 				line-height: 1.3;
 				white-space: normal;
 				color: #484848;
@@ -704,7 +701,6 @@
 
 	.multi {
 		box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
-		border-radius: 120upx;
 	}
 
 	.goods-item {
@@ -807,6 +803,118 @@
 			line-height: 40upx;
 			color: #FFFFFF;
 			text-align: center;
+		}
+	}
+
+	.advertisement {
+		width: 750upx;
+		height: 136upx;
+		margin-bottom: 28upx;
+		position: relative;
+		display: flex;
+		justify-content: space-between;
+
+		.advertisementImage {
+			width: 750upx;
+			height: 136upx;
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: -1;
+
+			image {
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		.advertisementL {
+			margin: 46upx 0 0 112upx;
+
+			.advertisementLT {
+				font-size: 32upx;
+				color: #A05318;
+			}
+
+			.advertisementLB {
+				font-size: 24upx;
+				color: #815317;
+			}
+		}
+
+		.advertisementR {
+			display: flex;
+			margin: 66upx 24upx 0 0;
+
+			.advertisementRL {
+				font-size: 24upx;
+				color: #FFFFFF;
+			}
+
+			.advertisementRR {
+				width: 40upx;
+				height: 40upx;
+
+				image {
+					width: 100%;
+					height: 100%;
+				}
+			}
+		}
+	}
+
+	.advertisement2 {
+		width: 750upx;
+		height: 136upx;
+		margin-bottom: 28upx;
+		position: relative;
+		display: flex;
+		justify-content: space-between;
+
+		.advertisementImage {
+			width: 750upx;
+			height: 136upx;
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: -1;
+
+			image {
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		.advertisementL {
+			margin: 56upx 0 0 102upx;
+			font-size: 32upx;
+			color: #FFFFFF;
+		}
+
+		.advertisementR {
+			// display: flex;
+			margin: 66upx 54upx 0 0;
+
+			.advertisementRT {
+				// margin-top: 66upx;
+				width: 326upx;
+			}
+
+			.advertisementRB {
+				display: flex;
+				justify-content: space-between;
+				margin-top: 6rpx;
+
+				.advertisementRBL {
+					font-size: 24upx;
+					color: rgba(255, 255, 255, 0.69);
+				}
+
+				.advertisementRBR {
+					font-size: 24upx;
+					color: rgba(255, 255, 255, 0.69);
+				}
+			}
 		}
 	}
 
@@ -926,9 +1034,8 @@
 							width: 150upx;
 							height: 42upx;
 							margin-top: 17upx;
+							margin-right: 10upx;
 							background-color: rgba(0, 0, 0, 0.01);
-							margin-left: 0;
-							margin-right: 0;
 						}
 
 						.specialOrderItemBRBR2 {
@@ -999,6 +1106,7 @@
 				image {
 					width: 100%;
 					height: 100%;
+					border-radius: 50%;
 					vertical-align: top;
 				}
 			}
@@ -1020,6 +1128,7 @@
 			image {
 				width: 60upx;
 				height: 60upx;
+				border-radius: 50%;
 			}
 
 			.potL {
@@ -1029,120 +1138,21 @@
 		}
 	}
 
-	.advertisement {
-		width: 750upx;
-		height: 136upx;
-		margin-bottom: 28upx;
-		position: relative;
-		display: flex;
-		justify-content: space-between;
-
-		.advertisementImage {
-			width: 750upx;
-			height: 136upx;
-			position: absolute;
-			top: 0;
-			left: 0;
-			z-index: -1;
-
-			image {
-				width: 100%;
-				height: 100%;
-			}
-		}
-
-		.advertisementL {
-			margin: 46upx 0 0 112upx;
-
-			.advertisementLT {
-				font-size: 32upx;
-				color: #A05318;
-			}
-
-			.advertisementLB {
-				font-size: 24upx;
-				color: #815317;
-			}
-		}
-
-		.advertisementR {
-			display: flex;
-			margin: 66upx 24upx 0 0;
-			height: 42rpx;
-
-			.advertisementRL {
-				font-size: 24upx;
-				color: #FFFFFF;
-			}
-
-			.advertisementRR {
-				width: 40upx;
-				height: 40upx;
-
-				image {
-					width: 100%;
-					height: 100%;
-				}
-			}
-		}
+	.unOrder {
+		margin: 0 auto;
+		width: 350upx;
+		text-align: center;
+		padding-bottom: 60upx;
 	}
 
-	.advertisement2 {
-		width: 750upx;
-		height: 136upx;
-		margin-bottom: 28upx;
-		position: relative;
-		display: flex;
-		justify-content: space-between;
+	.unOrder-icon {
+		width: 350upx;
+		height: 272upx;
+		margin: 0 auto;
 
-		.advertisementImage {
-			width: 750upx;
-			height: 136upx;
-			position: absolute;
-			top: 0;
-			left: 0;
-			z-index: -1;
-
-			image {
-				width: 100%;
-				height: 100%;
-			}
+		image {
+			width: 100%;
+			height: 100%;
 		}
-
-		.advertisementL {
-			margin: 56upx 0 0 102upx;
-			font-size: 32upx;
-			color: #FFFFFF;
-		}
-
-		.advertisementR {
-			// display: flex;
-			margin: 66upx 54upx 0 0;
-
-			.advertisementRT {
-				// margin-top: 66upx;
-				width: 326upx;
-			}
-
-			.advertisementRB {
-				display: flex;
-				justify-content: space-between;
-				margin-top: 6rpx;
-
-				.advertisementRBL {
-					font-size: 24upx;
-					color: rgba(255, 255, 255, 0.69);
-				}
-
-				.advertisementRBR {
-					font-size: 24upx;
-					color: rgba(255, 255, 255, 0.69);
-				}
-			}
-		}
-	}
-
-	.noOrder>image {
-		margin-left: 55upx;
 	}
 </style>

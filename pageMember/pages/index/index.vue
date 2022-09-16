@@ -38,7 +38,7 @@
 				</view>
 				<view style="max-height: 740upx;background-color: #F7F5F5;" v-if="orderList.length>0">
 					<view class="specialOrder">
-						<view class="specialOrderItem" v-for="(item,index) in orderList" :key="index">
+						<view class="specialOrderItem" v-for="(item,index,arr) in orderList" :key="index">
 							<view class="specialOrderItemT">
 								下单时间：{{item.create_time}}
 							</view>
@@ -62,25 +62,28 @@
 									</view>
 									<view class="specialOrderItemBRB">
 										<view class="specialOrderItemBRBL">
-											<view class="" v-if="item.teamStat&&item.is_free==1">
+											<view class="" v-if="item.team.length==0&&item.is_free==1&&!item.order_id">
 												<image :class="[indexs!=0?'Image':'']"
 													v-for="(items,indexs) in item.team.list" :key="indexs"
 													:src="items.user.avatar_url" mode=""></image>
 												<image class="Image" v-if="indexs<4" src="../../static/ask.png" mode="">
 												</image>
-
 											</view>
-											<view class="" v-if="!item.teamStat&&item.is_free==1">
+											<view class="" v-if="item.team.length>0&&item.is_free==1&&item.pay_status!=10">
+
 												<image :class="[indexs!=0?'Image':'']" v-for="(items,indexs) in 4"
-													:key="indexs" src="../../static/ask.png" mode=""></image>
+													:key="indexs" :src="item.team[indexs]['user']['avatar_url']?item.team[indexs]['user']['avatar_url']:'../../static/ask.png'" mode=""></image>
 											</view>
 										</view>
-
 										<!-- v-if="item.is_free==1&&item.is_inviter==1" -->
 										<!-- #ifdef MP-WEIXIN -->
-										<button open-type="share" v-if="item.is_free==1&&item.is_inviter==1"
+										<button open-type="share"  @click="vip_group_order_id = item.group_order_id" v-if="item.is_free==1&&item.is_inviter==1&&item.pay_status==20"
 											class="shareBtn">
 											<view class="specialOrderItemBRBR2">邀请好友</view>
+										</button>
+										<button @click="onPay(item.order_id)" v-else
+											class="shareBtn">
+											<view class="specialOrderItemBRBR2">去支付</view>
 										</button>
 										<!-- #endif -->
 
@@ -188,9 +191,27 @@
 					</view>
 				</view>
 			</view>
-
 		</view>
+<view class="ranks" v-if="isRanks">
+			<view class="ranksL">
+				<view class="ranksLL">
+					<image :src="team.inviter.user.avatar_url" mode=""></image>
+				</view>
+				<view class="ranksLR">
+					{{team.inviter.user.nick_name}}
+					<text style="margin-left: 10rpx;">邀请您参与免单</text>
+				</view>
+				
+			</view>
+			<view class="ranksR">
+				<image v-for="(item,index) in 4" :key="index" class="potL" :src="team['list'][item]['user']['avatar_url']?team['list'][item]['user']['avatar_url']:'../../static/ask.png'"  mode="">
+				</image>
+				<!-- <image class="potL" src="../../static/icon_ask.png" mode=""></image>
+			<image class="potL" src="../../static/icon_ask.png" mode=""></image>
+			<image class="potL" src="../../static/icon_ask.png" mode=""></image> -->
 
+			</view>
+		</view>
 	</mescroll-body>
 </template>
 
@@ -243,7 +264,7 @@
 				isRanks: false,
 				isFinish: false,
 				rules: '',
-				orderList: {},
+				orderList: [],
 				poster_image: {},
 				team: {},
 				vip_group_order_id: 0,
@@ -261,6 +282,7 @@
 			this.options = options
 			// 设置默认列表显示方式
 			if (options.vip_group_order_id) {
+				console.log(options.vip_group_order_id,'vip_group_order_id');
 				this.vip_group_order_id = options.vip_group_order_id;
 				uni.setStorageSync('vip_group_order_id',options.vip_group_order_id)
 			}
@@ -273,8 +295,8 @@
 		},
 		onShow() {
 			// this.getRule()
-			this.getDetail()
 			this.getbigvip()
+			this.getDetail()
 		},
 		methods: {
 			close() {
@@ -332,14 +354,17 @@
 			},
 			getOrderList() {
 				LuxuryApi.bigviplist().then(res => {
-					this.orderList = res.data.list.map(cur => {
-						if (JSON.stringify(cur.team) != '{}') {
-							cur.teamStat = true
-						} else {
-							cur.teamStat = false
-						}
-						return cur
-					});
+					console.log(res.data.list,'res.data.list');
+					this.orderList = res.data.list
+					// .map(cur => {
+					// 	if (JSON.stringify(cur.team) != '{}') {
+					// 		cur.teamStat = true
+					// 	} else {
+					// 		cur.teamStat = false
+					// 	}
+					// 	return cur
+					// });
+					// console.log(this.orderList,'this.orderList');
 				})
 			},
 			/**
@@ -397,6 +422,14 @@
 						})
 						.catch(reject)
 				})
+			},
+			// 点击去支付
+			onPay(orderId) {
+			  // 记录订单id
+			  // this.payOrderId = orderId
+			  // // 显示支付方式弹窗
+			  // this.showPayPopup = true
+					this.$navTo('pages/cashier/index',{order_id:orderId})
 			},
 
 			// 切换排序方式
@@ -466,7 +499,8 @@
 	 */
 	onShareAppMessage() {
 		// 构建分享参数
-		console.log(this.isRanks, 123456)
+		console.log("/pageMember/pages/index/index?" + this.$getShareUrlParams() + "&vip_group_order_id=" + this
+				.vip_group_order_id)
 		return {
 			title: "大会员专区",
 			path: "/pageMember/pages/index/index?" + this.$getShareUrlParams() + "&vip_group_order_id=" + this
@@ -1067,10 +1101,12 @@
 				width: 370upx;
 				font-size: 26upx;
 				color: #FFFFFF;
-				line-height: 98upx;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
+				display: flex;
+				align-items: center;
+				// justify-content: center;
 			}
 		}
 

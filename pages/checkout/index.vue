@@ -981,7 +981,7 @@
       getFormData() {
         const app = this
         const { options } = app;
-		let vip_group_order_id = uni.getStorageSync('vip_group_order_id')||0
+		
         // 表单数据
         const form = {
           delivery: app.curDelivery,
@@ -989,7 +989,6 @@
           couponId: app.selectCouponId || 0,
           isUsePoints: app.isUsePoints ? 1 : 0,
           remark: app.remark || '',
-		  vip_group_order_id
         }
         // 创建订单-立即购买
         if (options.mode === 'buyNow') {
@@ -1003,6 +1002,8 @@
 		  // 大会员
 		  if (app.showMember){
 			  form.is_vip_free = app.is_free;
+			  let vip_group_order_id = uni.getStorageSync('vip_group_order_id')||0;
+			  form.vip_group_order_id = vip_group_order_id
 		  }
 		  if(app.bigId!=''||app.bigId!=1){
 			  form.is_free=this.is_free
