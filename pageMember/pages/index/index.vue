@@ -10,11 +10,11 @@
 				<text class="iconfont icon-view-list" v-else></text>
 			</view>
 		</view>
-<view class="banr">
+		<view class="banr">
 			<view class="banrC">
 				<image :src="poster_image.preview_url" mode=""></image>
 			</view>
-<!-- 			<view class="banrRule" @click="checkRule">
+			<!-- 			<view class="banrRule" @click="checkRule">
 				专区规则
 			</view>
 			<u-popup v-model="showRule" mode="bottom" @close="close" @open="open">
@@ -69,32 +69,35 @@
 												<image class="Image" v-if="indexs<4" src="../../static/ask.png" mode="">
 												</image>
 											</view>
-											<view class="" v-if="item.team.length>0&&item.is_free==1&&item.pay_status!=10">
-
+											<view class="" v-if="item.is_free==1&&item.pay_status!=10">
 												<image :class="[indexs!=0?'Image':'']" v-for="(items,indexs) in 4"
-													:key="indexs" :src="item.team[indexs]['user']['avatar_url']?item.team[indexs]['user']['avatar_url']:'../../static/ask.png'" mode=""></image>
+													:key="indexs"
+													:src="item.team[indexs]['user']['avatar_url']?item.team[indexs]['user']['avatar_url']:'../../static/ask.png'"
+													mode=""></image>
 											</view>
 										</view>
 										<!-- v-if="item.is_free==1&&item.is_inviter==1" -->
 										<!-- #ifdef MP-WEIXIN -->
-										<button open-type="share"  @click="vip_group_order_id = item.group_order_id" v-if="item.is_free==1&&item.is_inviter==1&&item.pay_status==20"
+										<button open-type="share" @click="vip_group_order_id = item.group_order_id"
+											v-if="item.is_free==1&&item.is_inviter==1&&item.pay_status!=10"
 											class="shareBtn">
 											<view class="specialOrderItemBRBR2">邀请好友</view>
 										</button>
-										<button @click="onPay(item.order_id)" v-else
+
+										<!-- #endif -->
+										<button @click="onPay(item.order_id)" v-if='item.pay_status==10'
 											class="shareBtn">
 											<view class="specialOrderItemBRBR2">去支付</view>
 										</button>
-										<!-- #endif -->
-
-										<view class="specialOrderItemBRBR3" v-if="item.is_free==0">
+										<!-- 										<view class="specialOrderItemBRBR3" v-if="item.is_free==0">
 											通证奖励
-										</view>
-										<view class="specialOrderItemBRBR4" v-if="item.is_free==1&&item.is_back==1">
+										</view> -->
+										<view class="specialOrderItemBRBR4"
+											v-if="item.is_free==1&&item.is_back==1&&item.pay_status!=10">
 											已返现
 										</view>
 										<view class="specialOrderItemBRBR1"
-											v-if="item.is_free==1&&item.is_back==0&&item.is_inviter==0">
+											v-if="item.is_free==1&&item.is_back==0&&item.is_inviter==0&&item.pay_status!=10">
 											待返现
 										</view>
 									</view>
@@ -192,7 +195,7 @@
 				</view>
 			</view>
 		</view>
-<view class="ranks" v-if="isRanks">
+		<view class="ranks" v-if="isRanks">
 			<view class="ranksL">
 				<view class="ranksLL">
 					<image :src="team.inviter.user.avatar_url" mode=""></image>
@@ -201,10 +204,12 @@
 					{{team.inviter.user.nick_name}}
 					<text style="margin-left: 10rpx;">邀请您参与免单</text>
 				</view>
-				
+
 			</view>
 			<view class="ranksR">
-				<image v-for="(item,index) in 4" :key="index" class="potL" :src="team['list'][item]['user']['avatar_url']?team['list'][item]['user']['avatar_url']:'../../static/ask.png'"  mode="">
+				<image v-for="(item,index) in 4" :key="index" class="potL"
+					:src="team['list'][item]['user']['avatar_url']?team['list'][item]['user']['avatar_url']:'../../static/ask.png'"
+					mode="">
 				</image>
 				<!-- <image class="potL" src="../../static/icon_ask.png" mode=""></image>
 			<image class="potL" src="../../static/icon_ask.png" mode=""></image>
@@ -282,9 +287,10 @@
 			this.options = options
 			// 设置默认列表显示方式
 			if (options.vip_group_order_id) {
-				console.log(options.vip_group_order_id,'vip_group_order_id');
 				this.vip_group_order_id = options.vip_group_order_id;
-				uni.setStorageSync('vip_group_order_id',options.vip_group_order_id)
+				uni.setStorageSync('vip_group_order_id', options.vip_group_order_id)
+			} else {
+				uni.setStorageSync('vip_group_order_id', 0)
 			}
 			uni.setNavigationBarColor({
 				frontColor: '#ffffff',
@@ -295,6 +301,14 @@
 		},
 		onShow() {
 			// this.getRule()
+			let allPages = getCurrentPages(); //获取当前页面栈的实例；
+			let lastPages = allPages.length - 1; // 获得倒数第二个元素的索引；
+			let option = allPages[lastPages].options; // 获得上个页面传递的参数；
+			if (!option.vip_group_order_id) {
+				uni.setStorageSync('vip_group_order_id', 0)
+			} else {
+				uni.setStorageSync('vip_group_order_id', option.vip_group_order_id)
+			}
 			this.getbigvip()
 			this.getDetail()
 		},
@@ -354,7 +368,7 @@
 			},
 			getOrderList() {
 				LuxuryApi.bigviplist().then(res => {
-					console.log(res.data.list,'res.data.list');
+					console.log(res.data.list, 'res.data.list');
 					this.orderList = res.data.list
 					// .map(cur => {
 					// 	if (JSON.stringify(cur.team) != '{}') {
@@ -425,11 +439,13 @@
 			},
 			// 点击去支付
 			onPay(orderId) {
-			  // 记录订单id
-			  // this.payOrderId = orderId
-			  // // 显示支付方式弹窗
-			  // this.showPayPopup = true
-					this.$navTo('pages/cashier/index',{order_id:orderId})
+				// 记录订单id
+				// this.payOrderId = orderId
+				// // 显示支付方式弹窗
+				// this.showPayPopup = true
+				this.$navTo('pages/cashier/index', {
+					order_id: orderId
+				})
 			},
 
 			// 切换排序方式
@@ -457,9 +473,11 @@
 				//       this.$navTo('pages/goods/detail', { goodsId,bigId,group_order_id })
 				// let goodsId = e.currentTarget.dataset.id || e.target.dataset.id;
 				let bigId = 1;
+				let vip_group_order_id = this.vip_group_order_id || 0;
 				this.$navTo('pages/goods/detail', {
 					goodsId,
-					bigId
+					bigId,
+					vip_group_order_id
 				})
 			},
 
@@ -482,7 +500,7 @@
 			shareMessage(e) {
 				let goodsId = e.currentTarget.dataset.id || e.target.dataset.id;
 				let bigId = 1
-				let vip_group_order_id = this.vip_group_order_id||0
+				let vip_group_order_id = this.vip_group_order_id || 0;
 				this.$navTo('pages/goods/detail', {
 					goodsId,
 					bigId,
@@ -494,33 +512,33 @@
 		},
 
 
-	/**
-	 * 设置分享内容
-	 */
-	onShareAppMessage() {
-		// 构建分享参数
-		console.log("/pageMember/pages/index/index?" + this.$getShareUrlParams() + "&vip_group_order_id=" + this
+		/**
+		 * 设置分享内容
+		 */
+		onShareAppMessage() {
+			// 构建分享参数
+			console.log("/pageMember/pages/index/index?" + this.$getShareUrlParams() + "&vip_group_order_id=" + this
 				.vip_group_order_id)
-		return {
-			title: "大会员专区",
-			path: "/pageMember/pages/index/index?" + this.$getShareUrlParams() + "&vip_group_order_id=" + this
-				.vip_group_order_id
+			return {
+				title: "大会员专区",
+				path: "/pageMember/pages/index/index?" + this.$getShareUrlParams() + "&vip_group_order_id=" + this
+					.vip_group_order_id
+			}
+		},
+
+		/**
+		 * 分享到朋友圈
+		 * 本接口为 Beta 版本，暂只在 Android 平台支持，详见分享到朋友圈 (Beta)
+		 * https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/share-timeline.html
+		 */
+		onShareTimeline() {
+			// 构建分享参数
+			return {
+				title: "大会员专区",
+				path: "/pageMember/pages/index/index?" + this.$getShareUrlParams() + "&vip_group_order_id=" + this
+					.group_order_id
+			}
 		}
-	},
-	
-	/**
-	 * 分享到朋友圈
-	 * 本接口为 Beta 版本，暂只在 Android 平台支持，详见分享到朋友圈 (Beta)
-	 * https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/share-timeline.html
-	 */
-	onShareTimeline() {
-		// 构建分享参数
-		return {
-			title: "大会员专区",
-			path: "/pageMember/pages/index/index?" + this.$getShareUrlParams() + "&vip_group_order_id=" + this
-				.group_order_id
-		}
-	}
 
 	}
 </script>
