@@ -63,11 +63,11 @@
 				</view>
 			</view>
 			<view class="operation">
-				<view class="operationitem">
+				<view @click="onTargetDetail(info_by_key.area_good_id)" class="operationitem">
 					<image class="partner operationitemimg" src="../../static/partner.png" mode=""></image>
 					<text class="tx_title">成为创作合伙人</text>
 				</view>
-				<view class="operationitem">
+				<view @click="onTargetDetail(info_by_key.city_good_id)" class="operationitem">
 					<image class="regimental operationitemimg" src="../../static/regimental.png" mode=""></image>
 					<text class="tx_title">成为团长</text>
 				</view>
@@ -461,6 +461,7 @@
 				phone_discount: 9,
 				orderCoun: {},
 				bigVip: {},
+				info_by_key: {}
 			}
 		},
 		components: {
@@ -492,6 +493,7 @@
 			// console.log(this.isLoading,222)
 			this.getCommon();
 			this.getSett();
+			this.get_info_by_key();
 			if (this.$store.getters.token) {
 				this.getbigvip();
 				this.getTodoCoun();
@@ -524,7 +526,7 @@
 		methods: {
 			getbigvip() {
 				memberApi.index().then(res => {
-					console.log(res.data,'memberApi');
+					console.log(res.data, 'memberApi');
 					this.bigUser = res.data;
 					if (this.bigUser.big_vip_user.is_vip == 0) {
 						this.showMember = false;
@@ -585,11 +587,36 @@
 			toLink() {
 				this.$navTo("pageHome/code/index")
 			},
+			// 跳转商品详情页
+			onTargetDetail(goodsId) {
+				// let bigId=2;
+				// let group_order_id=this.group_order_id
+				//       this.$navTo('pages/goods/detail', { goodsId,bigId,group_order_id })
+				// let goodsId = e.currentTarget.dataset.id || e.target.dataset.id;
+				let bigId = 1;
+				let info_by_key = 1;
+				this.$navTo('pages/goods/detail', {
+					goodsId,
+					bigId,
+					info_by_key
+				})
+			},
 			getCommon() {
 				const app = this
 				return new Promise((resolve, reject) => {
 					settingApi.detail().then(res => {
 						app.commonL = res.data.detail
+						resolve(res)
+					}).catch(reject)
+				})
+			},
+			get_info_by_key() {
+				const app = this
+				return new Promise((resolve, reject) => {
+					settingApi.get_info_by_key({
+						key: 'agent'
+					}).then(res => {
+						app.info_by_key = res.data.setting
 						resolve(res)
 					}).catch(reject)
 				})
@@ -890,12 +917,14 @@
 		background: #FFFFFF;
 		border-radius: 10rpx;
 	}
-	.operationitem .tx_title{
+
+	.operationitem .tx_title {
 		font-size: 28rpx;
 		color: #333333;
 		font-weight: bold;
 	}
-	.operationitem .operationitemimg{
+
+	.operationitem .operationitemimg {
 		width: 76rpx;
 		height: 76rpx;
 		margin-left: 24rpx;

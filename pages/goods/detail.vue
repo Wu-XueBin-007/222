@@ -119,12 +119,13 @@
 		</view>
 
 		<!-- 商品服务 -->
-		<Service v-if="!isLoading&&type=='product'" :goods-id="goodsId" />
+		<!-- 成为创客||成为团长info_by_key=1隐藏  -->
+		<Service v-if="!isLoading&&type=='product'&&info_by_key!=1" :goods-id="goodsId" />
 
 		<!-- 商品SKU弹窗 -->
-		<SkuPopup v-if="!isLoading" v-model="showSkuPopup" :skuMode="skuMode" :poolId="poolId" :bigId="bigId"
-			:group_order_id="group_order_id" :LuckyFreeId="LuckyFreeId" :goods="goods" @addCart="onAddCart" :type="type"
-			:status="timeStatus" />
+		<SkuPopup v-if="!isLoading" v-model="showSkuPopup" :info_by_key=info_by_key :skuMode="skuMode" :poolId="poolId"
+			:bigId="bigId" :group_order_id="group_order_id" :LuckyFreeId="LuckyFreeId" :goods="goods"
+			@addCart="onAddCart" :type="type" :status="timeStatus" />
 		<!-- 商品评价 -->
 		<Comment v-if="!isLoading" :goods-id="goods.goods_id" :limit="2" />
 
@@ -332,7 +333,8 @@
 				poolId: '',
 				LuckyFreeId: '',
 				bigId: '',
-				group_order_id: 0
+				group_order_id: 0,
+				info_by_key: ''
 			}
 		},
 
@@ -357,6 +359,10 @@
 			}
 			if (options.group_order_id) {
 				this.group_order_id = options.group_order_id;
+			}
+			// 成为创始合伙人||成为团长
+			if (options.info_by_key) {
+				this.info_by_key = options.info_by_key;
 			}
 			this.getCommon();
 			// 加载页面数据
