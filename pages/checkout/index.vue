@@ -168,8 +168,8 @@
 			</view>
 		</view>
 		<!-- v-if="bigId!=''" -->
-
-		<view class="pay-method flow-all-money b-f m-top20" v-if="bigId!=''">
+		<!-- 高奢 -->
+		<view class="pay-method flow-all-money b-f m-top20" v-if="bigId==2">
 			<view class="flow-all-list dis-flex">
 				<text class="flex-five">权益选择</text>
 			</view>
@@ -212,14 +212,12 @@
 			</view>
 		</view>
 
-
 		<!-- 大会员 -->
-		<view class="pay-method flow-all-money b-f m-top20" v-if="showMember">
+		<view class="pay-method flow-all-money b-f m-top20" v-if="source">
 			<view class="flow-all-list dis-flex">
 				<text class="flex-five">权益选择</text>
 			</view>
 			<!-- 权益选择 -->
-
 			<view class="pay-item dis-flex flex-x-between" @click="freeChoice(0)">
 				<view class="item-left dis-flex flex-y-center">
 					<view class="item-left_icon wechat">
@@ -248,7 +246,7 @@
 				</view>
 			</view>
 
-			<view class="pay-method flow-all-money b-f m-top20" style="padding: 40rpx;" v-if="is_free==0 &&!showMember">
+			<view class="pay-method flow-all-money b-f m-top20" style="padding: 40rpx;" v-if="is_free==0 &&!source">
 				<view style="margin: 0 auto; color: #999999; font-size: 26rpx; border-radius: 20upx;">
 					活动期间内，购买专区商品将获得更高比例通证。消费
 					者在该专区累计兑换3000元通证后，即可获赠商城会员
@@ -268,7 +266,7 @@
 			</view>
 			<view style="margin: 24upx auto 0;">
 				<view style="font-size: 26upx;color: #999999;">
-					邀请4位新用户{{showMember?'':'在此专区'}}达成交易
+					邀请4位新用户{{source?'':'在此专区'}}达成交易
 				</view>
 				<view style="font-size: 26upx;color: #999999;margin-top: 8upx;">
 					成功邀请与被邀请的均可在最后一名成员确认支付之后获得免单奖励
@@ -439,8 +437,6 @@
 			style="background: #000000 ; width: 750upx; height: 1500upx; z-index: -99; opacity: 0.6; position: absolute; top: 0; left: 0; right: 0; bottom: 0;">
 		</view>
 	</view>
-
-
 </template>
 
 <script>
@@ -525,7 +521,9 @@
 				group_order_id: 0,
 				showModalStatus3: false,
 				message: '',
-				showMember: '' //0不是大会员 1是大会员
+				showMember: '', //0不是大会员 1是大会员
+				info_by_key: 0,
+				source: ''
 			}
 		},
 		filters: {
@@ -555,6 +553,13 @@
 			if (this.options.group_order_id) {
 				this.group_order_id = this.options.group_order_id
 			}
+			if (this.options.info_by_key) {
+				this.info_by_key = this.options.info_by_key
+			}
+			if (this.options.source) {
+				this.source = this.options.source
+			}
+
 		},
 
 		/**
@@ -564,7 +569,7 @@
 			// 获取当前订单信息
 			this.getOrderData()
 			this.getDeliveryType()
-			this.getbigvip()
+			// this.getbigvip()
 			// this.getOrder()
 		},
 		onShareAppMessage() {
@@ -743,11 +748,11 @@
 
 
 							//   }
-							this.showModalStatus3 = true
+							// this.showModalStatus3 = true
 						})
 						.finally(res => {
 
-							this.showModalStatus3 = true
+							// this.showModalStatus3 = true
 						})
 
 				}
@@ -785,6 +790,7 @@
 					modeParam.goodsId = options.goodsId
 					modeParam.goodsNum = options.goodsNum
 					modeParam.goodsSkuId = options.goodsSkuId
+					modeParam.regionId = options.regionId
 					if (app.poolId) {
 						modeParam.PoolId = options.poolId
 						modeParam.LuckyFreeId = options.LuckyFreeId
@@ -793,6 +799,7 @@
 						modeParam.is_free = options.is_free;
 						modeParam.group_order_id = options.group_order_id
 					}
+
 				}
 				// 结算模式: 购物车
 				if (options.mode === 'cart') {
@@ -889,9 +896,27 @@
 
 			// 跳转到商品详情页
 			onTargetGoods(goodsId) {
-				this.$navTo('pages/goods/detail', {
+				let bigId = this.bigId;
+				let parameter = {
 					goodsId
-				})
+				}
+				if (this.info_by_key == 1) {
+					parameter.info_by_key = this.info_by_key;
+					parameter.bigId = 3
+				}
+				if (this.info_by_key == 1) {
+					this.$navTo('pages/goods/detail', {
+						goodsId,
+						info_by_key: this.info_by_key,
+						bigId: 3
+					})
+				} else {
+					this.$navTo('pages/goods/detail', {
+						goodsId,
+						bigId
+					})
+				}
+
 			},
 
 			// 订单提交
@@ -928,6 +953,9 @@
 						.then(result => app.onSubmitCallback(result))
 						.catch(err => {
 							console.log(err.result, 321)
+							if (err.result.message == '该商品仅限大会员购买' || err.result.message == '该类型仅限大会员可以发起') {
+								// this.showModalStatus3 = true
+							}
 							if (err.result) {
 								const errData = err.result.data
 								if (errData.is_created) {
@@ -995,6 +1023,7 @@
 
 			// 订单提交成功后回调
 			onSubmitCallback(result) {
+				console.log(result, 'result');
 				const app = this;
 				app.disabled = false
 				//console.log(result)
@@ -1048,12 +1077,13 @@
 					form.goodsId = options.goodsId
 					form.goodsNum = options.goodsNum
 					form.goodsSkuId = options.goodsSkuId
+					form.regionId = options.regionId || 0
 					if (app.poolId) {
 						form.PoolId = options.poolId
 						form.LuckyFreeId = options.LuckyFreeId
 					}
 					// 大会员
-					if (app.showMember) {
+					if (app.source) {
 						form.is_vip_free = app.is_free;
 					}
 					if (app.bigId != '' || app.bigId != 1) {

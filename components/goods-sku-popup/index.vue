@@ -46,7 +46,7 @@
 								</view>
 							</view>
 						</view>
-
+						<!-- 成为创始人 合伙人 隐藏数量 -->
 						<view v-if='!info_by_key' style="display: flex;">
 							<view style="flex: 1;">
 								<text
@@ -58,7 +58,17 @@
 								</number-box>
 							</view>
 						</view>
-
+						<!--is_city = 0 隐藏地区选择模块
+						is_city = 1 显示地区选择模块
+						is_area = 0 只显示省市
+						is_area = 1 显示省市区 -->
+						<u-form v-if='info_by_key==1&&(Region.is_area||Region.is_city)' :model="form" ref="uForm"
+							label-width="140rpx">
+							<u-form-item label="地区" prop="region">
+								<select-region :class="{'noarea': Region.is_area == 0}" @change=dateChange
+									v-model="form.region" />
+							</u-form-item>
+						</u-form>
 					</view>
 				</scroll-view>
 				<view class="close" @click="close('close')" v-if="showClose">
@@ -85,7 +95,6 @@
 					{{ buyNowText }}
 				</view>
 			</view>
-
 			<!-- 页面结束 -->
 		</view>
 		<!-- 页面内容结束 -->
@@ -94,13 +103,27 @@
 
 <script>
 	import NumberBox from './number-box'
-
 	var that; // 当前页面对象
 	var vk; // 自定义函数集
+	import {
+		areaInfo,
+		isShowRegion
+	} from "@/api/region"
+	import SelectRegion from '@/components/select-region/select-region'
+	import Region from '../../common/model/Region';
+	const rules = {
+		region: [{
+			required: true,
+			message: '请选择省市区',
+			trigger: ['blur', 'change'],
+			type: 'array'
+		}],
+	}
 	export default {
 		name: 'GoodsSkuPopup',
 		components: {
-			NumberBox
+			NumberBox,
+			SelectRegion
 		},
 		props: {
 			// true 组件显示 false 组件隐藏
@@ -298,13 +321,30 @@
 				selectShop: {}, // 存放最后选中的商品
 				selectNum: this.minBuyNum, // 选中数量
 				outFoStock: false, // 是否全部sku都缺货
+				form: {
+					region: [] //省市区
+				},
+				rules,
+				Region: {} //地区
 			};
+		},
+		onReady() {
+			if (this.info_by_key == 1 && (this.Region.is_area || this.Region.is_city)) {
+				this.$nextTick().then(() => {
+					this.$refs.uForm.setRules(this.rules)
+				})
+
+			}
 		},
 		mounted() {
 			that = this;
 			vk = that.vk;
 			if (that.value) {
 				that.open();
+			}
+			if (that.info_by_key == 1) {
+				// this.getAreaInfo()
+				this.getRegion()
 			}
 		},
 		methods: {
@@ -331,6 +371,33 @@
 				that.checkInpath(-1); // 传-1是为了不跳过循环
 				that.autoClickSku(); // 自动选择sku策略
 			},
+			getRegion() {
+				isShowRegion({
+					goodsId: this.goodsId
+				}).then(res => {
+					this.Region = res.data.res;
+				})
+			},
+			dateChange(val) {
+				console.log(val);
+				if (this.Region.is_area == 0) {
+					this.form.region.length = 2
+				}
+			},
+			getAreaInfo() {
+				areaInfo({
+					id: this.goodsId
+				}).then(res => {
+					this.$nextTick((res) => {
+						this.form.region = [{
+							label: '北京',
+							value: 1
+						}]
+					})
+
+				})
+			},
+			onnodeclick(node) {},
 			// 使用vk路由模式框架获取商品信息
 			findGoodsInfo() {
 				if (typeof vk == "undefined") {
@@ -543,10 +610,23 @@
 			},
 			// 立即购买
 			buyNow() {
+				let app = this
 				that.checkSelectComplete({
 					success: function(selectShop) {
 						selectShop.buy_num = that.selectNum;
-						that.$emit("buy-now", selectShop);
+						if (that.info_by_key == 1 && (that.Region.is_area || that.Region.is_city)) {
+							that.$refs.uForm.validate(valid => {
+								if (valid) {
+									let formIndex = app.form.region.length - 1;
+									console.log(app.form.region, 'app.form.region');
+									selectShop.regionId = app.form.region[formIndex].value;
+									app.$emit("buy-now", selectShop);
+								}
+							})
+						} else {
+							that.$emit("buy-now", selectShop);
+						}
+
 					}
 				});
 			},
@@ -608,10 +688,6 @@
 				}
 				return n.toFixed(2)
 			}
-		},
-		// 计算属性
-		computed: {
-
 		},
 		watch: {
 			value: function(val) {
@@ -759,6 +835,16 @@
 
 					.specification-content {
 						font-weight: 500;
+
+						&::v-deep .uni-data-tree-dialog {
+							top: -17vh !important;
+						}
+
+						.noarea {
+							::v-deep picker-view-column:nth-child(3) {
+								display: none;
+							}
+						}
 
 						.specification-item {
 							margin-bottom: 40rpx;

@@ -593,7 +593,8 @@
 				// let group_order_id=this.group_order_id
 				//       this.$navTo('pages/goods/detail', { goodsId,bigId,group_order_id })
 				// let goodsId = e.currentTarget.dataset.id || e.target.dataset.id;
-				let bigId = 1;
+				if (!goodsId) return;
+				let bigId = 3;
 				let info_by_key = 1;
 				this.$navTo('pages/goods/detail', {
 					goodsId,

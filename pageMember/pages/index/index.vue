@@ -474,10 +474,12 @@
 				// let goodsId = e.currentTarget.dataset.id || e.target.dataset.id;
 				let bigId = 1;
 				let vip_group_order_id = this.vip_group_order_id || 0;
+				let source = 'Big_member'
 				this.$navTo('pages/goods/detail', {
 					goodsId,
 					bigId,
-					vip_group_order_id
+					vip_group_order_id,
+					source
 				})
 			},
 

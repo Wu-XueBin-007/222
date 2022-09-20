@@ -1,8 +1,8 @@
 <template>
 	<goods-sku-popup :value="value" @input="onChangeValue" border-radius="20" :custom-action="findGoodsInfo"
-		:mode="skuMode" :info_by_key=info_by_key :defaultPrice="goods.goods_price_min" :defaultStock="goods.stock_total"
-		:maskCloseAble="true" @open="openSkuPopup" @close="closeSkuPopup" @add-cart="addCart" @buy-now="buyNow"
-		:priceColor="type=='product'?'#EF343D':'#DD1010'"
+		:mode="skuMode" :info_by_key=info_by_key :goodsId=goods.goods_id :defaultPrice="goods.goods_price_min"
+		:defaultStock="goods.stock_total" :maskCloseAble="true" @open="openSkuPopup" @close="closeSkuPopup"
+		@add-cart="addCart" @buy-now="buyNow" :priceColor="type=='product'?'#EF343D':'#DD1010'"
 		:buyNowBackgroundColor="type=='product'?'#EF343D':(((status==0||status==2)&&type=='seckill')?'#999999':'#DD1010')"
 		:buyNowText="type=='seckill'?(status==0?'未开始':(status==1?'立即购买':'已结束')):'立即购买'" />
 </template>
@@ -68,7 +68,11 @@
 			info_by_key: {
 				type: Number,
 				default: 0
-			}
+			},
+			source: {
+				type: String,
+				default: ''
+			},
 		},
 
 		data() {
@@ -246,6 +250,8 @@
 				// 跳转到订单结算页
 				// console.log(this.goods);return false;
 				// console.log(this.type)
+				let type = ''
+				console.log(selectShop, 'selectShop');
 				if (this.type == 'product') {
 					if (this.bigId == 1 || this.bigId == '') {
 						this.$navTo('pages/checkout/index', {
@@ -254,7 +260,11 @@
 							goodsSkuId: selectShop.goods_sku_id,
 							goodsNum: selectShop.buy_num,
 							poolId: this.poolId,
-							LuckyFreeId: this.LuckyFreeId
+							LuckyFreeId: this.LuckyFreeId,
+							info_by_key: this.info_by_key, //成为创始合伙人/成为团长
+							bigId: this.bigId,
+							source: this.source,
+
 						})
 					} else {
 						this.$navTo('pages/checkout/index', {
@@ -265,7 +275,9 @@
 							poolId: this.poolId,
 							bigId: this.bigId,
 							group_order_id: this.group_order_id,
-							LuckyFreeId: this.LuckyFreeId
+							LuckyFreeId: this.LuckyFreeId,
+							source: this.source,
+							regionId: selectShop.regionId
 						})
 					}
 

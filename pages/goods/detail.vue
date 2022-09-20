@@ -120,11 +120,11 @@
 
 		<!-- 商品服务 -->
 		<!-- 成为创客||成为团长info_by_key=1隐藏  -->
-		<Service v-if="!isLoading&&type=='product'&&info_by_key!=1" :goods-id="goodsId" />
+		<Service v-if="!isLoading&&type=='product'&&bigId!=3" :goods-id="goodsId" />
 
 		<!-- 商品SKU弹窗 -->
-		<SkuPopup v-if="!isLoading" v-model="showSkuPopup" :info_by_key=info_by_key :skuMode="skuMode" :poolId="poolId"
-			:bigId="bigId" :group_order_id="group_order_id" :LuckyFreeId="LuckyFreeId" :goods="goods"
+		<SkuPopup v-if="!isLoading" v-model="showSkuPopup" :source=source :info_by_key=info_by_key :skuMode="skuMode"
+			:poolId="poolId" :bigId="bigId" :group_order_id="group_order_id" :LuckyFreeId="LuckyFreeId" :goods="goods"
 			@addCart="onAddCart" :type="type" :status="timeStatus" />
 		<!-- 商品评价 -->
 		<Comment v-if="!isLoading" :goods-id="goods.goods_id" :limit="2" />
@@ -334,7 +334,8 @@
 				LuckyFreeId: '',
 				bigId: '',
 				group_order_id: 0,
-				info_by_key: ''
+				info_by_key: '',
+				source: ''
 			}
 		},
 
@@ -363,6 +364,11 @@
 			// 成为创始合伙人||成为团长
 			if (options.info_by_key) {
 				this.info_by_key = options.info_by_key;
+			}
+
+			// 大会员
+			if (options.source) {
+				this.source = options.source;
 			}
 			this.getCommon();
 			// 加载页面数据
@@ -397,7 +403,11 @@
 			onRefreshPage() {
 				const app = this
 				app.isLoading = true
-				Promise.all([app.getGoodsDetail(), app.getCartTotal()])
+				Promise.all([app.getGoodsDetail(), app.getCartTotal()]).catch((error) => {
+						uni.switchTab({
+							url: '/pages/index/index'
+						});
+					})
 					.finally(() => app.isLoading = false)
 			},
 
@@ -409,6 +419,10 @@
 						GoodsApi.detail(app.goodsId)
 							.then(result => {
 								app.goods = result.data.detail
+								console.log(result, 'resultresult');
+								// if (result.status == 500) {
+								// 	uni.navigateBack()
+								// }
 								resolve(result)
 							})
 							.catch(reject)
