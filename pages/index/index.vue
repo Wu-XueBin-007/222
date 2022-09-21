@@ -148,7 +148,7 @@
 					<view class="point-img">
 						<image src="../../static/home/bigber.png"></image>
 					</view>
-					<view class="point-text">大会员</view>
+					<view class="point-text">会员专区</view>
 				</view>
 				<view class="point-item" @click="btn_brand">
 					<view class="point-img">
