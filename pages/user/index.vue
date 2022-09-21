@@ -1,7 +1,8 @@
 <template>
 	<view v-if="!isLoading" class="container" :style="{'box-sizing': 'border-box'}">
 		<!-- <head-nav title="个人中心" :backFlag="false" color="white" backGround="linear-gradient(270deg, #FF5A5E, #DF6BAE)" backType="user" fontSize="36"></head-nav> -->
-		<view class="head" :style="{'padding-top':navInfo.paddingTop+'px'}">
+		<view class="head"
+			:style="{'padding-top':navInfo.paddingTop+'px','height':info_by_key.area_good_id&&info_by_key.city_good_id?'650rpx':'538rpx'}">
 			<image src="../../static/mine/backImage.png" class="headBack"></image>
 			<view class="headT">
 				<view class="imgWrap" @click="handleLogin">
@@ -62,14 +63,15 @@
 					</view>
 				</view>
 			</view>
-			<view class="operation">
-				<view @click="onTargetDetail(info_by_key.area_good_id)" class="operationitem">
+			<!-- 创业合伙人 团长 -->
+			<view v-if="info_by_key.area_good_id&&info_by_key.city_good_id" class="operation">
+				<view @click="onTargetDetail(info_by_key.area_good_id,1)" class="operationitem">
 					<image class="partner operationitemimg" src="../../static/partner.png" mode=""></image>
-					<text class="tx_title">成为创作合伙人</text>
+					<text class="tx_title">成为{{info_by_key.area_name}} </text>
 				</view>
-				<view @click="onTargetDetail(info_by_key.city_good_id)" class="operationitem">
+				<view @click="onTargetDetail(info_by_key.city_good_id,2)" class="operationitem">
 					<image class="regimental operationitemimg" src="../../static/regimental.png" mode=""></image>
-					<text class="tx_title">成为团长</text>
+					<text class="tx_title">成为{{info_by_key.city_name}}</text>
 				</view>
 			</view>
 		</view>
@@ -588,18 +590,23 @@
 				this.$navTo("pageHome/code/index")
 			},
 			// 跳转商品详情页
-			onTargetDetail(goodsId) {
+			onTargetDetail(goodsId, info_by_key) {
 				// let bigId=2;
 				// let group_order_id=this.group_order_id
 				//       this.$navTo('pages/goods/detail', { goodsId,bigId,group_order_id })
 				// let goodsId = e.currentTarget.dataset.id || e.target.dataset.id;
-				if (!goodsId) return;
+				if (!goodsId) {
+					uni.showToast({
+						icon: 'none',
+						title: 'ID错误'
+					})
+					return
+				};
 				let bigId = 3;
-				let info_by_key = 1;
 				this.$navTo('pages/goods/detail', {
 					goodsId,
 					bigId,
-					info_by_key
+					info_by_key,
 				})
 			},
 			getCommon() {

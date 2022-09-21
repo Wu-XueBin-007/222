@@ -59,7 +59,8 @@
             },
             /* ios打包配置 */
             "ios" : {
-                "urltypes" : "gzrhhj"
+                "urltypes" : "gzrhhj",
+                "dSYMs" : false
             },
             /* SDK配置 */
             "sdkConfigs" : {

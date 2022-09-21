@@ -691,6 +691,11 @@
 								app.order.address = res.data.detail;
 							}
 
+						}).catch(err => {
+							setTimeout(function() {
+								uni.navigateBack()
+							}, 1000)
+
 						})
 				} else if (app.options.mode == "gift") {
 					app.curDelivery = 10;
@@ -707,7 +712,10 @@
 							if (res.data.detail) {
 								app.order.address = res.data.detail;
 							}
-
+						}).catch(err => {
+							setTimeout(function() {
+								uni.navigateBack()
+							}, 1000)
 						})
 				} else {
 					// 请求的参数
@@ -727,6 +735,9 @@
 						})
 						// .catch(err => err)
 						.catch(err => {
+							setTimeout(function() {
+								uni.navigateBack()
+							}, 1000)
 							console.log(err)
 							//   if(err.result.message=='该商品仅限大会员购买'){
 							// 	  uni.showModal({

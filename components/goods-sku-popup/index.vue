@@ -62,13 +62,21 @@
 						is_city = 1 显示地区选择模块
 						is_area = 0 只显示省市
 						is_area = 1 显示省市区 -->
-						<u-form v-if='info_by_key==1&&(Region.is_area||Region.is_city)' :model="form" ref="uForm"
-							label-width="140rpx">
-							<u-form-item label="地区" prop="region">
+						<!-- v-if='info_by_key==1&&(Region.is_area||Region.is_city)' -->
+						<u-form :model="form" ref="uForm" label-width="140rpx">
+							<u-form-item v-if='info_by_key&&(Region.is_area||Region.is_city)' label="地区" prop="region">
 								<select-region :class="{'noarea': Region.is_area == 0}" @change=dateChange
 									v-model="form.region" />
 							</u-form-item>
 						</u-form>
+						<checkbox-group v-if='info_by_key' @change="changeFlag">
+							<view style="margin-top: 30upx;display: flex;align-items: center;">
+								<label>
+									<checkbox value="1" color="#ff5060" style="transform: scale(.7);" />
+								</label>
+								<view>签约前请先阅读并同意<text style="color: red;" @click="toProto">《签约协议》</text></view>
+							</view>
+						</checkbox-group>
 					</view>
 				</scroll-view>
 				<view class="close" @click="close('close')" v-if="showClose">
@@ -117,7 +125,7 @@
 			message: '请选择省市区',
 			trigger: ['blur', 'change'],
 			type: 'array'
-		}],
+		}]
 	}
 	export default {
 		name: 'GoodsSkuPopup',
@@ -325,16 +333,12 @@
 					region: [] //省市区
 				},
 				rules,
-				Region: {} //地区
+				Region: {}, //地区
+				agreeFlag: false
 			};
 		},
 		onReady() {
-			if (this.info_by_key == 1 && (this.Region.is_area || this.Region.is_city)) {
-				this.$nextTick().then(() => {
-					this.$refs.uForm.setRules(this.rules)
-				})
-
-			}
+			this.$refs.uForm.setRules(this.rules)
 		},
 		mounted() {
 			that = this;
@@ -342,7 +346,7 @@
 			if (that.value) {
 				that.open();
 			}
-			if (that.info_by_key == 1) {
+			if (that.info_by_key) {
 				// this.getAreaInfo()
 				this.getRegion()
 			}
@@ -358,7 +362,6 @@
 				that.outFoStock = false;
 				that.shopItemInfo = {};
 				// that.shopItemInfo = that.goodsInfo;
-
 				let specListName = that.specListName;
 				console.log(that.goodsInfo)
 				console.log(that.shopItemInfo, 44)
@@ -370,6 +373,18 @@
 				that.checkItem(); // 计算sku里面规格形成路径
 				that.checkInpath(-1); // 传-1是为了不跳过循环
 				that.autoClickSku(); // 自动选择sku策略
+			},
+			changeFlag(e) {
+				//console.log(e)
+				if (e.detail.value.length > 0) {
+					this.agreeFlag = true;
+				} else {
+					this.agreeFlag = false;
+				}
+			},
+			toProto() {
+				let info_by_key = this.info_by_key
+				this.$navTo("pageHome/prepaidRefill/detail/detail?info_by_key=" + info_by_key)
 			},
 			getRegion() {
 				isShowRegion({
@@ -614,11 +629,18 @@
 				that.checkSelectComplete({
 					success: function(selectShop) {
 						selectShop.buy_num = that.selectNum;
-						if (that.info_by_key == 1 && (that.Region.is_area || that.Region.is_city)) {
+						if (!app.agreeFlag && that.info_by_key) {
+							uni.showToast({
+								icon: 'none',
+								title: '请先勾选签约协议'
+							})
+							return
+						}
+						// 合伙人 团长
+						if (that.info_by_key && (that.Region.is_area || that.Region.is_city)) {
 							that.$refs.uForm.validate(valid => {
 								if (valid) {
 									let formIndex = app.form.region.length - 1;
-									console.log(app.form.region, 'app.form.region');
 									selectShop.regionId = app.form.region[formIndex].value;
 									app.$emit("buy-now", selectShop);
 								}

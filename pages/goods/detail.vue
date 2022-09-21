@@ -266,7 +266,7 @@
 							<text>加入购物车</text>
 						</view>
 						<view class="btn-item btn-item-main" @click="onShowSkuPopup(3)">
-							<text>立即购买</text>
+							<text>{{info_by_key?"立即签约":"立即购买"}} </text>
 						</view>
 					</view>
 				</view>

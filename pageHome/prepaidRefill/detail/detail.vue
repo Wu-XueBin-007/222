@@ -1,19 +1,29 @@
 <template>
 	<view style="padding: 30upx;background: white;">
-		<rich-text :nodes="info.mobile_recharge_count"></rich-text>
-		<view @click="back" style="width: 380upx;height: 60upx;border-radius: 12upx;margin: 30upx auto 0;font-size: 28upx;color: white;background: #ff5060;text-align: center;line-height: 60upx;">确定</view>
+		<rich-text
+			:nodes="info_by_key?(info_by_key==1?info.cooperation_agreement_of_area:info.cooperation_agreement_of_head):info.mobile_recharge_count">
+		</rich-text>
+		<view @click="back"
+			style="width: 380upx;height: 60upx;border-radius: 12upx;margin: 30upx auto 0;font-size: 28upx;color: white;background: #ff5060;text-align: center;line-height: 60upx;">
+			确定</view>
 	</view>
 </template>
 
 <script>
-	import {detail} from "@/api/common.js"
+	import {
+		detail
+	} from "@/api/common.js"
 	export default {
 		data() {
 			return {
-				info:{}
+				info: {},
+				info_by_key: ''
 			}
 		},
-		onLoad() {
+		onLoad(options) {
+			if (options.info_by_key) {
+				this.info_by_key = options.info_by_key
+			}
 			this.getDetail()
 		},
 		onShareAppMessage() {
@@ -26,7 +36,7 @@
 				path: "/pages/index/index"
 			}
 		},
-		
+
 		/**
 		 * 分享到朋友圈
 		 * 本接口为 Beta 版本，暂只在 Android 平台支持，详见分享到朋友圈 (Beta)
@@ -43,16 +53,16 @@
 			}
 		},
 		methods: {
-			getDetail(){
+			getDetail() {
 				detail()
-					.then(res=>{
+					.then(res => {
 						//console.log(res)
 						this.info = res.data.detail;
 					})
 			},
-			back(){
+			back() {
 				uni.navigateBack({
-					delta:1
+					delta: 1
 				})
 			}
 		}
