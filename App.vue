@@ -16,12 +16,14 @@
 		 * 初始化完成时触发
 		 */
 		onLaunch(options) {
-
+			console.log(options, 'options');
 			// #ifdef MP-WEIXIN
 			if (options.query.scene) {
+				console.log('scene', options.query.scene);
 				this.globalData.shareId = options.query.scene;
 			}
-			if (options.query && options.query.refereeId) {
+			// options.query && options.query.refereeId
+			if (options.query && options.query.scene) {
 				console.log(options.query.refereeId, 'options.query.refereeId');
 				this.$store.commit('SET_SUPERIOR_USER_ID', options.query.refereeId)
 			}
@@ -94,10 +96,6 @@
 						let leftDistance = windowWidth - rect.right;
 						t.globalData.leftDistance = leftDistance;
 						console.log(t.globalData)
-
-
-
-
 					}
 				});
 			},
