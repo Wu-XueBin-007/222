@@ -393,48 +393,26 @@
 			</view>
 		</u-popup>
 
-		<!-- 不是会员弹框 -->
-		<!-- <view class="home-popup2" catchtouchmove="true">
-    	<view class="home-box2" @click="">
-    		<image src="../../static/background/notvip_model.png" mode="widthFix"></image>
-			<view class="memberT">
-				1、“我的”-成为大会员-<text @click="buyNow">点击购买</text>。
-			</view>
-			<view class="memberB">
-				2、“高奢名品”专区累计消费3000元即可。
-			</view>
-			<view style="position: absolute; top: 544upx; left: 112upx; width: 306upx; height: 88upx;" @click="toIndex"></view>
-    	</view>
-    	<view class="home-popup2-close" @click="box_close3">
-    		<image src="../../static/home/icon_close.png" mode=""></image>
-    	</view>
-    </view>
-	
-	<view
-		style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: rgba(0,0,0,.5);z-index: 999;"
-		catchtouchmove="true"></view> -->
-		<!--不是会员弹框 end -->
-	</view>
-
-	<view v-else-if="showModalStatus3">
-		<view class="home-popup2" catchtouchmove="true">
-			<view class="home-box2">
-				<image src="../../static/notvip_model.png" mode="widthFix"></image>
-				<view class="memberT">
-					1、“我的”-成为大会员-<text @click="buyNow">点击购买</text>。
+		<view v-if="showModalStatus3">
+			<view class="home-popup2" catchtouchmove="true">
+				<view class="home-box2">
+					<image src="../../static/notvip_model.png" mode="widthFix"></image>
+					<view class="memberT">
+						1、“我的”-成为大会员-<text @click="buyNow">点击购买</text>。
+					</view>
+					<view class="memberB">
+						2、“高奢名品”专区累计消费3000元即可。
+					</view>
+					<view style="position: absolute; top: 544upx; left: 112upx; width: 306upx; height: 88upx;"
+						@click="toIndex"></view>
 				</view>
-				<view class="memberB">
-					2、“高奢名品”专区累计消费3000元即可。
+				<view class="home-popup2-close" @click="box_close3">
+					<!-- <image src="../../static/home/icon_close.png" mode=""></image> -->
 				</view>
-				<view style="position: absolute; top: 544upx; left: 112upx; width: 306upx; height: 88upx;"
-					@click="toIndex"></view>
 			</view>
-			<view class="home-popup2-close" @click="box_close3">
-				<!-- <image src="../../static/home/icon_close.png" mode=""></image> -->
+			<view
+				style="background: #000000 ; width: 100vw; height: 100vh; z-index: 100; opacity: 0.6; position: fixed; top: 0; left: 0; right: 0; bottom: 0;">
 			</view>
-		</view>
-		<view
-			style="background: #000000 ; width: 750upx; height: 1500upx; z-index: -99; opacity: 0.6; position: absolute; top: 0; left: 0; right: 0; bottom: 0;">
 		</view>
 	</view>
 </template>
@@ -491,8 +469,6 @@
 				// 是否显示优惠券弹窗
 				showPopup: false,
 				showPopup1: false,
-				// 按钮禁用
-				disabled: false,
 				// 订单信息 (从后端api中获取)
 				order: {
 					// 商品列表
@@ -941,7 +917,9 @@
 					return false
 				}
 				// 按钮禁用
+
 				app.disabled = true
+
 				// 请求api
 				if (this.poolId) {
 					giveApi.create(app.options.mode, app.getFormData())
@@ -965,7 +943,7 @@
 						.catch(err => {
 							console.log(err.result, 321)
 							if (err.result.message == '该商品仅限大会员购买' || err.result.message == '该类型仅限大会员可以发起') {
-								// this.showModalStatus3 = true
+								this.showModalStatus3 = true
 							}
 							if (err.result) {
 								const errData = err.result.data
@@ -1122,15 +1100,15 @@
 				return true
 			},
 			buyNow() {
-
 				uni.redirectTo({
 					url: '../../pageMember/pages/index/report'
 				})
 			},
 			toIndex() {
-				uni.redirectTo({
-					url: '../../pageMember/pages/index/index'
-				})
+				uni.navigateBack()
+				// uni.redirectTo({
+				// 	url: '../../pageMember/pages/index/index'
+				// })
 			},
 			box_close3() {
 				// this.showModalStatus3 = false
