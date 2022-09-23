@@ -974,9 +974,7 @@
 								}
 
 							}
-							if (uni.getStorageSync('vip_group_order_id')) {
-								uni.setStorageSync('vip_group_order_id', 0);
-							}
+
 							app.disabled = false
 						})
 				}
@@ -1015,7 +1013,10 @@
 				console.log(result, 'result');
 				const app = this;
 				app.disabled = false
-				//console.log(result)
+				//清除大会员推广id
+				if (uni.getStorageSync('vip_group_order_id')) {
+					uni.setStorageSync('vip_group_order_id', 0);
+				}
 				app.navToMyOrder(result.data.order_on)
 				// 发起微信支付
 				// if (result.data.payType == PayTypeEnum.WECHAT.value) {
