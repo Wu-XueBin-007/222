@@ -932,9 +932,9 @@
 									return false
 								}
 							}
-							if (uni.getStorageSync('vip_group_order_id')) {
-								uni.setStorageSync('vip_group_order_id', 0);
-							}
+							// if (uni.getStorageSync('vip_group_order_id')) {
+							// 	uni.setStorageSync('vip_group_order_id', 0);
+							// }
 							app.disabled = false
 						})
 				} else {

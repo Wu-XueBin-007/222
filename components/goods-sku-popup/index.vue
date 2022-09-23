@@ -316,6 +316,10 @@
 				Type: Number,
 				default: 0
 			},
+			vip_group_order_id: {
+				Type: Number,
+				default: 0
+			}
 		},
 		data() {
 			return {

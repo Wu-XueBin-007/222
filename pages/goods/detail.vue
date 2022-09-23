@@ -123,9 +123,9 @@
 		<Service v-if="!isLoading&&type=='product'&&bigId!=3" :goods-id="goodsId" />
 
 		<!-- 商品SKU弹窗 -->
-		<SkuPopup v-if="!isLoading" v-model="showSkuPopup" :source=source :info_by_key=info_by_key :skuMode="skuMode"
-			:poolId="poolId" :bigId="bigId" :group_order_id="group_order_id" :LuckyFreeId="LuckyFreeId" :goods="goods"
-			@addCart="onAddCart" :type="type" :status="timeStatus" />
+		<SkuPopup v-if="!isLoading" v-model="showSkuPopup" :vip_group_order_id="vip_group_order_id" :source=source
+			:info_by_key=info_by_key :skuMode="skuMode" :poolId="poolId" :bigId="bigId" :group_order_id="group_order_id"
+			:LuckyFreeId="LuckyFreeId" :goods="goods" @addCart="onAddCart" :type="type" :status="timeStatus" />
 		<!-- 商品评价 -->
 		<Comment v-if="!isLoading" :goods-id="goods.goods_id" :limit="2" />
 
@@ -335,7 +335,8 @@
 				bigId: '',
 				group_order_id: 0,
 				info_by_key: '',
-				source: ''
+				source: '',
+				vip_group_order_id: 0,
 			}
 		},
 
@@ -343,6 +344,7 @@
 		 * 生命周期函数--监听页面加载
 		 */
 		onLoad(options) {
+			console.log(options, 'optionsoptions');
 			// 记录商品ID
 			this.goodsId = parseInt(options.goodsId)
 			if (options.type) {
@@ -369,6 +371,12 @@
 			// 大会员
 			if (options.source) {
 				this.source = options.source;
+			}
+			if (options.vip_group_order_id) {
+				this.vip_group_order_id = options.vip_group_order_id
+				uni.setStorageSync('vip_group_order_id', options.vip_group_order_id)
+			} else {
+				uni.setStorageSync('vip_group_order_id', 0)
 			}
 			this.getCommon();
 			// 加载页面数据
