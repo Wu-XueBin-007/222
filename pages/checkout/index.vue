@@ -272,7 +272,7 @@
 					成功邀请与被邀请的均可在最后一名成员确认支付之后获得免单奖励
 				</view>
 				<view style="font-size: 26upx;color: #999999;margin-top: 8upx;">
-					(免单说明：该订单实付金额的94%返回我的钱包，扣取6%税费)
+					(免单说明：该订单实付金额的100%返回我的钱包)
 				</view>
 			</view>
 		</view>
@@ -299,7 +299,7 @@
 				<view class="chackout-left pl-12">实付款：
 					<text class="col-m">￥{{ order.orderPayPrice }}</text>
 				</view>
-				<view class="chackout-right" @click="onSubmitOrder()">
+				<view @click="onSubmitOrder()" class="chackout-right">
 					<view class="flow-btn f-32" :class="{ disabled }">提交订单</view>
 				</view>
 			</view>

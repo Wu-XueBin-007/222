@@ -292,6 +292,10 @@
 			} else {
 				uni.setStorageSync('vip_group_order_id', 0)
 			}
+			// 成团订单
+			if (options.from == 'cashier') {
+				this.checkOrder()
+			}
 			uni.setNavigationBarColor({
 				frontColor: '#ffffff',
 				backgroundColor: "#000000"
@@ -325,7 +329,6 @@
 			checkOrder() {
 				this.getOrderList()
 				this.showOrder = true;
-
 			},
 			getbigvip() {
 				var obj = {}

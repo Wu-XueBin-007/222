@@ -24,8 +24,8 @@
 			}
 			// options.query && options.query.refereeId
 			if (options.query && options.query.scene) {
-				console.log(options.query.refereeId, 'options.query.refereeId');
-				this.$store.commit('SET_SUPERIOR_USER_ID', options.query.refereeId)
+				console.log(options.query.scene, 'options.query.refereeId');
+				this.$store.commit('SET_SUPERIOR_USER_ID', options.query.scene)
 			}
 			// #endif
 			this.getInfo();
