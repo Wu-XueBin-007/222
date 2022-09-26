@@ -349,8 +349,8 @@
 			async getList() {
 				// this.getCommon();
 				let res = await API.my()
-				this.teamInfo = res.data;
-				this.nav = res.data.nav
+				this.teamInfo = res.data.data;
+				this.nav = res.data.data.nav
 				this.getUserList();
 			},
 			getUserList() {
