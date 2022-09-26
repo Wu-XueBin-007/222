@@ -37,7 +37,8 @@
 						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.WECHAT.value"></checkbox>
 					</view>
 				</view>
-				<!-- 				<view class="caShier-item-list" @click="btn_payTa(PayTypeEnum.BALANCE.value)">
+				<view v-if='!(order.is_big_vip||order.is_luxury_free)' class="caShier-item-list"
+					@click="btn_payTa(PayTypeEnum.BALANCE.value)">
 					<view class="caShier-item-icon" style="display: flex;align-items: center;">
 						<image src="../../static/icon/icon_ye.png" mode="widthFix"></image>
 						<text>{{PayTypeEnum.BALANCE.name}}（可用余额：{{userInfo.balance ? userInfo.balance : 0}}）</text>
@@ -45,7 +46,8 @@
 					<view class="coupons-item-chbox">
 						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.BALANCE.value"></checkbox>
 					</view>
-				</view> -->
+				</view>
+
 			</view>
 
 

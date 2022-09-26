@@ -1,5 +1,6 @@
 <template>
-	<view style="width: 100%;height: 100vh;box-sizing: border-box;background: #F3F3F3;padding: 30upx 24upx 130upx;overflow-y: auto;">
+	<view
+		style="width: 100%;height: 100vh;box-sizing: border-box;background: #F3F3F3;padding: 30upx 24upx 130upx;overflow-y: auto;">
 		<view class="quota">
 			<view class="quotaL">
 				剩余话费额度：
@@ -19,11 +20,12 @@
 				<text @click="recharHis">充值记录>></text>
 			</view>
 			<view class="phoneWrap">
-				<input type="number" v-model="mobile" @blur="getValue" maxlength="13" disabled/>
+				<input type="number" v-model="mobile" @blur="getValue" maxlength="13" />
 				<!-- <image src="../../static/prepaidRefill/icon_addressbook.png" mode="" @click="choicePhone"></image> -->
 			</view>
 			<view class="priceWrap">
-				<view :class="['priceItem',packageIndex==index?'active':'']" v-for="(item,index) in list" :key="index" :data-index="index" @click="choicePackage">
+				<view :class="['priceItem',packageIndex==index?'active':'']" v-for="(item,index) in list" :key="index"
+					:data-index="index" @click="choicePackage">
 					<view class="oPrice">
 						<text>{{item.price}}</text>元
 					</view>
@@ -80,24 +82,27 @@
 			</view>
 		</checkbox-group>
 		<view class="submitBtn" @click="submit">立即充值</view>
-		
+
 		<view v-if="showModalStatus3&&bigVip.big_vip_user.is_vip==0">
-			<view class="home-popup2" catchtouchmove="true" >
-			 	<view class="home-box2">
-			 		<image src="../../static/notvip_model.png" mode="widthFix"></image>
-			 		<view class="memberT">
-			 			1、"我的"-成为大会员-<text @click="buyNow">点击购买</text>。
-			 		</view>
-			 		<view class="memberB">
-			 			2、“高奢名品”专区累计消费3000元即可。
-			 		</view>
-			 		<view style="position: absolute; top: 544upx; left: 112upx; width: 306upx; height: 88upx;" @click="toIndex"></view>
-			 	</view>
-			 	<view class="home-popup2-close" @click="box_close3">
-			 		<!-- <image src="../../static/home/icon_close.png" mode=""></image> -->
-			 	</view>
-			 </view>
-			 <view style="background: #000000 ; width: 750upx; height: 1500upx; z-index: 1; opacity: 0.6; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></view>
+			<view class="home-popup2" catchtouchmove="true">
+				<view class="home-box2">
+					<image src="../../static/notvip_model.png" mode="widthFix"></image>
+					<view class="memberT">
+						1、"我的"-成为大会员-<text @click="buyNow">点击购买</text>。
+					</view>
+					<view class="memberB">
+						2、“高奢名品”专区累计消费3000元即可。
+					</view>
+					<view style="position: absolute; top: 544upx; left: 112upx; width: 306upx; height: 88upx;"
+						@click="toIndex"></view>
+				</view>
+				<view class="home-popup2-close" @click="box_close3">
+					<!-- <image src="../../static/home/icon_close.png" mode=""></image> -->
+				</view>
+			</view>
+			<view
+				style="background: #000000 ; width: 750upx; height: 1500upx; z-index: 1; opacity: 0.6; position: absolute; top: 0; left: 0; right: 0; bottom: 0;">
+			</view>
 		</view>
 	</view>
 </template>
@@ -105,10 +110,13 @@
 <script>
 	import * as rechargeApi from "@/api/prepaidRefill.js";
 	import * as memberApi from "@/api/member/index.js";
-	import {detail} from "@/api/common.js";
+	import {
+		detail
+	} from "@/api/common.js";
 	var timer = null;
 	import {
-		wxPayment,zfbPayment
+		wxPayment,
+		zfbPayment
 	} from '@/utils/app'
 	export default {
 		data() {
@@ -118,16 +126,16 @@
 				packageIndex: 0,
 				payIndex: 0,
 				list: [],
-				agreeFlag:false,
-				info:{},
-				bigVip:{},
-				showModalStatus3:false
+				agreeFlag: false,
+				info: {},
+				bigVip: {},
+				showModalStatus3: false
 			}
 		},
 		onLoad() {
 			console.log(rechargeApi)
 			detail()
-				.then(res=>{
+				.then(res => {
 					this.info = res.data.detail;
 				})
 			this.getList();
@@ -146,7 +154,7 @@
 				path: "/pages/index/index"
 			}
 		},
-		
+
 		/**
 		 * 分享到朋友圈
 		 * 本接口为 Beta 版本，暂只在 Android 平台支持，详见分享到朋友圈 (Beta)
@@ -163,76 +171,76 @@
 			}
 		},
 		methods: {
-			toProto(){
+			toProto() {
 				this.$navTo("pageHome/prepaidRefill/detail/detail")
 			},
-			changeFlag(e){
+			changeFlag(e) {
 				//console.log(e)
-				if(e.detail.value.length>0){
+				if (e.detail.value.length > 0) {
 					this.agreeFlag = true;
-				}else{
+				} else {
 					this.agreeFlag = false;
 				}
 			},
-			getbigVip(){
-				memberApi.index().then(res=>{
+			getbigVip() {
+				memberApi.index().then(res => {
 					console.log(res)
-					this.bigVip=res.data;
+					this.bigVip = res.data;
 				})
 			},
-			recharHis(){
+			recharHis() {
 				this.$navTo("pageHome/prepaidRefill/history/history")
 			},
-			submit(){
-				if(!this.agreeFlag){
+			submit() {
+				if (!this.agreeFlag) {
 					uni.showToast({
-						icon:'none',
-						title:'请先阅读充值协议',
-						duration:2000
+						icon: 'none',
+						title: '请先阅读充值协议',
+						duration: 2000
 					})
 					return false;
 				}
 				let app = this;
 				let obj = {};
-				if(app.payIndex == 2){
+				if (app.payIndex == 2) {
 					obj.type = 10
-				}else if(app.payIndex == 1){
+				} else if (app.payIndex == 1) {
 					obj.type = 30;
-				}else if(app.payIndex == 0){
+				} else if (app.payIndex == 0) {
 					obj.type = 20;
 					// #ifdef APP-PLUS
 					obj.type = 40;
 					// #endif
 				}
 				obj.id = app.list[app.packageIndex].id;
-				if(!app.mobile.trim()){
+				if (!app.mobile.trim()) {
 					uni.showToast({
-						icon:'none',
-						title:'请输入充值手机号',
-						duration:2000
+						icon: 'none',
+						title: '请输入充值手机号',
+						duration: 2000
 					})
 					return false;
 				}
 				console.log(app.mobile.split(" ").join(''))
 				obj.mobile = app.mobile.split(" ").join('');
-				
+
 				rechargeApi.add(obj)
-					.then(res=>{
+					.then(res => {
 						console.log(res)
 						// if(res.message == '请先成为大会员才能使用话费充值'){
 						// 	this.showModalStatus3 == true
 						// }
 						app.onSubmitCallback(res)
 					})
-					.catch(err=>{
+					.catch(err => {
 						console.log(err)
 						console.log(11111111)
-						if(err.errMsg == '请先成为大会员才能使用话费充值'){
+						if (err.errMsg == '请先成为大会员才能使用话费充值') {
 							this.showModalStatus3 = true
 						}
 						// this.showModalStatus3 = true
 					})
-					this.showModalStatus3 = true
+				this.showModalStatus3 = true
 			},
 			// 订单提交成功后回调
 			onSubmitCallback(result) {
@@ -260,7 +268,7 @@
 						app.navToMyOrder()
 					}, 1500)
 				}
-				if(app.payIndex == 1){
+				if (app.payIndex == 1) {
 					zfbPayment(result.data.data)
 						.then((res) => {
 							app.$success('支付成功')
@@ -276,38 +284,38 @@
 						})
 				}
 			},
-			navToMyOrder(){
+			navToMyOrder() {
 				this.$navTo("pageHome/prepaidRefill/history/history")
 			},
-			getPhone(){
+			getPhone() {
 				rechargeApi.get()
-					.then(res=>{
+					.then(res => {
 						console.log(res)
 						this.mobile = this.formatPhone(res.data.mobile);
 					})
-					.catch(err=>{
+					.catch(err => {
 						console.log(err)
 					})
 			},
-			getList(){
+			getList() {
 				rechargeApi.list()
-					.then(res=>{
+					.then(res => {
 						console.log(res)
 						this.list = res.data.list;
 					})
-					.catch(err=>{
+					.catch(err => {
 						console.log(err)
 					})
 			},
-			selectPayType(e){
+			selectPayType(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
 				this.payIndex = index;
 			},
-			choicePackage(e){
+			choicePackage(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
 				this.packageIndex = index;
 			},
-			getValue(e){
+			getValue(e) {
 				this.mobile = this.formatPhone(e.detail.value)
 			},
 			choicePhone() {
@@ -344,24 +352,24 @@
 				value = arr.join('');
 				return value;
 			},
-			buyNow(){
-					
-					uni.navigateTo({
-						url:'../../pageMember/pages/index/report'
-					})
+			buyNow() {
+
+				uni.navigateTo({
+					url: '../../pageMember/pages/index/report'
+				})
 			},
-			toIndex(){
-					 // uni.redirectTo({
-					 // 	url:'../../pageMember/pages/index/index'
-					 // })
-					 this.showModalStatus3 = false
+			toIndex() {
+				// uni.redirectTo({
+				// 	url:'../../pageMember/pages/index/index'
+				// })
+				this.showModalStatus3 = false
 			}
 		}
 	}
 </script>
 
 <style scoped>
-	.quota{
+	.quota {
 		width: 702upx;
 		height: 90upx;
 		border-radius: 20upx;
@@ -370,31 +378,36 @@
 		display: flex;
 		justify-content: space-between;
 	}
-	.quotaL{
+
+	.quotaL {
 		font-size: 30upx;
 		color: #333333;
 		font-weight: bold;
 		margin-left: 24upx;
 		line-height: 90upx;
 	}
-	.quotaR{
+
+	.quotaR {
 		display: flex;
 		margin-right: 24upx;
 		line-height: 90upx;
 	}
-	.quotaRL{
-		font-size:30upx;
+
+	.quotaRL {
+		font-size: 30upx;
 		font-weight: bold;
 		color: #EC586D;
 		margin-right: 12upx;
 	}
-	.quotaRR{
+
+	.quotaRR {
 		font-size: 30upx;
 		font-weight: bold;
 		color: #333333;
 		/* margin-left: 12upx; */
 	}
-	.submitBtn{
+
+	.submitBtn {
 		width: 100%;
 		height: 100upx;
 		text-align: center;
@@ -406,21 +419,24 @@
 		left: 0;
 		bottom: 0;
 	}
-	.payTitle{
+
+	.payTitle {
 		font-size: 28upx;
 		line-height: 28upx;
 		margin-top: 60upx;
 		margin-bottom: 30upx;
 		color: #333333;
 	}
-	.payCon{
+
+	.payCon {
 		width: 100%;
 		background: white;
 		border-radius: 20upx;
 		box-sizing: border-box;
 		padding: 0 16upx;
 	}
-	.payConItem{
+
+	.payConItem {
 		width: 100%;
 		height: 88upx;
 		border-bottom: 2upx solid #EFEFEF;
@@ -428,23 +444,28 @@
 		align-items: center;
 		justify-content: space-between;
 	}
-	.payConItem:last-child{
+
+	.payConItem:last-child {
 		border-bottom: none;
 	}
-	.payConItemL{
+
+	.payConItemL {
 		display: flex;
 		align-items: center;
 	}
-	.payConItemL>image{
+
+	.payConItemL>image {
 		width: 40upx;
 		margin-right: 16upx;
 	}
-	.payConItemL>text{
+
+	.payConItemL>text {
 		font-size: 24upx;
 		line-height: 24upx;
 		color: #333333;
 	}
-	.payConItemR{
+
+	.payConItemR {
 		width: 32upx;
 		height: 32upx;
 		box-sizing: border-box;
@@ -454,26 +475,30 @@
 		border: 2upx solid #E5E5E5;
 		border-radius: 50%;
 	}
-	.payConItemR>image{
+
+	.payConItemR>image {
 		width: 16upx;
 		height: 16upx;
 	}
-	.payConItemR.active{
+
+	.payConItemR.active {
 		border-color: #ff5060;
 		background: #ff5060;
 	}
-	
-	
-	.rules{
+
+
+	.rules {
 		width: 100%;
 		margin-top: 30upx;
 	}
-	.ruleItem{
+
+	.ruleItem {
 		font-size: 20upx;
 		line-height: 20upx;
 		color: #999999;
 		margin-bottom: 16upx;
 	}
+
 	.rechargeMsg {
 		width: 100%;
 		box-sizing: border-box;
@@ -537,18 +562,21 @@
 		margin-right: 22upx;
 		margin-top: 20upx;
 	}
-	
-	.priceItem.active{
+
+	.priceItem.active {
 		border-color: #ff5060;
 		background: #E7F9FF;
 	}
-	.priceItem.active>.oPrice>text{
+
+	.priceItem.active>.oPrice>text {
 		color: #ff5060;
 	}
-	.priceItem.active>.oPrice{
+
+	.priceItem.active>.oPrice {
 		color: #ff5060;
 	}
-	.priceItem.active>.pPrice{
+
+	.priceItem.active>.pPrice {
 		color: #ff5060;
 	}
 
@@ -578,59 +606,65 @@
 		line-height: 24upx;
 		color: #999999;
 	}
+
 	.home-popup2 {
-			width: 528upx;
-			height: 728upx;
-			position: fixed;
-			top: 20%;
-			left: 14%;
-			// transform: translate(-50%,-50%);
-			z-index: 2000;
-		}
-		
-		.home-box2 {
-			width: 100%;
-			height: 636upx;
-			position: relative;
-			top: 0;
-			left: 0;
-		}
-		.home-box2>image{
-			width: 100%;
-			height: 100%;
-		}
-		.home-popup2-close {
-			width: 48upx;
-			height: 48upx;
-			margin: 20upx auto 0;
-		}
-		
-		.home-popup2-close>image {
-			width: 100%;
-			height: 100%;
-			vertical-align: top;
-		}
-		.memberT{
-			width: 396upx;
-			position: absolute;
-			top: 310upx;
-			left: 76upx;
-			font-size: 24upx;
-			color: #4F2A03;
-			/* text-align: center; */
-			margin: 0 auto;
-		}
-		.memberT>text{
-			color: #F86F07;
-		}
-		.memberB{
-			width: 396upx;
-			position: absolute;
-			top: 354upx;
-			left: 76upx;
-			font-size: 24upx;
-			color: #4F2A03;
-			// text-align: center;
-			margin: 0 auto;
-		}
+		width: 528upx;
+		height: 728upx;
+		position: fixed;
+		top: 20%;
+		left: 14%;
+		// transform: translate(-50%,-50%);
+		z-index: 2000;
+	}
+
+	.home-box2 {
+		width: 100%;
+		height: 636upx;
+		position: relative;
+		top: 0;
+		left: 0;
+	}
+
+	.home-box2>image {
+		width: 100%;
+		height: 100%;
+	}
+
+	.home-popup2-close {
+		width: 48upx;
+		height: 48upx;
+		margin: 20upx auto 0;
+	}
+
+	.home-popup2-close>image {
+		width: 100%;
+		height: 100%;
+		vertical-align: top;
+	}
+
+	.memberT {
+		width: 396upx;
+		position: absolute;
+		top: 310upx;
+		left: 76upx;
+		font-size: 24upx;
+		color: #4F2A03;
+		/* text-align: center; */
+		margin: 0 auto;
+	}
+
+	.memberT>text {
+		color: #F86F07;
+	}
+
+	.memberB {
+		width: 396upx;
+		position: absolute;
+		top: 354upx;
+		left: 76upx;
+		font-size: 24upx;
+		color: #4F2A03;
+		// text-align: center;
+		margin: 0 auto;
+	}
 </style>

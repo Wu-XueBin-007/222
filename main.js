@@ -4,15 +4,14 @@ import store from './store'
 import uView from 'uview-ui'
 import bootstrap from './core/bootstrap'
 import {
-  getPlatform,
-  navTo,
-  showToast,
-  showSuccess,
-  showError,
-  getShareUrlParams
+	getPlatform,
+	navTo,
+	showToast,
+	showSuccess,
+	showError,
+	getShareUrlParams
 } from './utils/app'
 import './js_sdk/ican-H5Api/ican-H5Api'
-
 Vue.config.productionTip = false
 
 App.mpType = 'app'
@@ -32,8 +31,8 @@ Vue.prototype.$getShareUrlParams = getShareUrlParams
 
 // 实例化应用
 const app = new Vue({
-  ...App,
-  store,
-  created: bootstrap
+	...App,
+	store,
+	created: bootstrap
 })
 app.$mount()
