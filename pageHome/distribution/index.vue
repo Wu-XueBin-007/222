@@ -32,9 +32,8 @@
 					</view>
 				</template>
 			</view>
-
-
 		</view>
+		<!-- tabs -->
 		<scroll-view class="scroll-view_H" :scroll-into-view='scroll_into_view' scroll-with-animation scroll-x="true">
 			<template v-for="(tab,index) in nav">
 				<view class="scroll-view-item_H" v-if="tab.isShow" :id="tab.field"
@@ -275,37 +274,26 @@
 					data: id.toString()
 				})
 			},
-			tabTopChange(index) {
-				this.tabTopCurrent = index;
-				this.scrollLeft = this.itemWidth * (index - 1);
-			},
-			tabSelect(e) {
-				// 获取tab切换的索引，存储到本地
-				this.current = e;
-			},
+			// TAB切换
 			checkIndex(index) {
 				this.navIndex = index;
 				this.keyword = ''
 				this.scroll_into_view = this.nav[index].field;
 				this.getUserList();
 			},
-			tabsChange(e) {
-				this.current = e
-				console.log(e);
-			},
+			// 我的推荐人
 			showMark() {
 				this.markFlag = true;
 			},
+			// 隐藏 我的推荐人
 			hideMark() {
 				this.markFlag = false;
 			},
+			// 搜索
 			searchList() {
 				console.log(2222);
 				this.page = 1;
 				this.getUserList();
-			},
-			async getCommon() {
-
 			},
 			bottomCallBack(e) {
 				console.log(e)
@@ -354,7 +342,6 @@
 					})
 			},
 			async getList() {
-				// this.getCommon();
 				let res = await API.my()
 				this.teamInfo = res.data.data;
 				this.nav = res.data.data.nav
@@ -381,20 +368,6 @@
 						this.moreFlag = false;
 					}
 				})
-			},
-			btn_box() {
-				this.$navTo('pageHome/distribution/commission/index')
-			},
-			btn_record() {
-				this.$navTo('pageHome/distribution/withdrawal/index', {
-					type: 1
-				})
-			},
-			btn_withdrawal() {
-				this.$navTo('pageHome/cashier/withdrawal?type=2')
-			},
-			btn_withdrawalTicket() {
-				this.$navTo('pageHome/cashier/withdrawalTicket?type=2')
 			}
 		}
 	}

@@ -37,24 +37,18 @@
 						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.WECHAT.value"></checkbox>
 					</view>
 				</view>
-				<template v-if="loading">
-					<view v-if='!(order.is_big_vip||order.is_luxury_free)' class="caShier-item-list"
-						@click="btn_payTa(PayTypeEnum.BALANCE.value)">
-						<view class="caShier-item-icon" style="display: flex;align-items: center;">
-							<image src="../../static/icon/icon_ye.png" mode="widthFix"></image>
-							<text>{{PayTypeEnum.BALANCE.name}}（可用余额：{{userInfo.balance ? userInfo.balance : 0}}）</text>
-						</view>
-						<view class="coupons-item-chbox">
-							<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.BALANCE.value"></checkbox>
-						</view>
+
+				<view v-if='(!(order.is_big_vip||order.is_luxury_free))&&loading' class="caShier-item-list"
+					@click="btn_payTa(PayTypeEnum.BALANCE.value)">
+					<view class="caShier-item-icon" style="display: flex;align-items: center;">
+						<image src="../../static/icon/icon_ye.png" mode="widthFix"></image>
+						<text>{{PayTypeEnum.BALANCE.name}}（可用余额：{{userInfo.balance ? userInfo.balance : 0}}）</text>
 					</view>
-				</template>
-
-
+					<view class="coupons-item-chbox">
+						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.BALANCE.value"></checkbox>
+					</view>
+				</view>
 			</view>
-
-
-
 		</view>
 
 		<view class="caShier-footer">
@@ -219,16 +213,9 @@
 				if (app.type == 1) {
 					OrderApi.detail(app.order_id)
 						.then(result => {
-							// app.test3 = 123123;
-							// app.test2 = JSON.stringify(result)
 							app.order = result.data.order
 							app.setting = result.data.setting
-							// app.test = new Date(result.data.order.create_time).getTime();
-							// app.test1 = result.data.order.create_time;
-							// app.test2 = JSON.stringify(result)
 							result.data.order.create_time = result.data.order.create_time.replace(/-/g, "/");
-							// app.test = result.data.order.create_time;
-							console.log(app.settings)
 							app.loading = true
 							let times = 0;
 							if (result.data.order.order_source == 20) {
@@ -287,13 +274,9 @@
 				} else {
 					OrderApi.merge_detail(app.order_id)
 						.then(result => {
-							// app.test3 = 123123;
-							// app.test2 = JSON.stringify(result)
 							app.order = result.data.order
 							app.setting = result.data.setting
-							// app.test = new Date(result.data.order.create_time).getTime();
-							// app.test1 = result.data.order.create_time;
-							// app.test2 = JSON.stringify(result)
+							app.loading = true
 							result.data.order.create_time = result.data.order.create_time.replace(/-/g, "/");
 							// app.test = result.data.order.create_time;
 							console.log(app.settings)
