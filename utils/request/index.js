@@ -180,6 +180,23 @@ $http.dataFactory = async res => {
 				}, 10)
 			})
 		}
+		console.log(httpData.data.is_jump, 'is_jump');
+		if (httpData.data && httpData.data.is_jump && httpData.message) {
+			uni.showModal({
+				title: '提示',
+				content: httpData.message,
+				success: function(res) {
+					if (res.confirm) {
+						uni.redirectTo({
+							url: httpData.data.is_jump
+						})
+					} else if (res.cancel) {
+						console.log('用户点击取消');
+					}
+				}
+			})
+		}
+
 		// 返回错误的结果(catch接受数据)
 		return Promise.reject({
 			statusCode: 0,
