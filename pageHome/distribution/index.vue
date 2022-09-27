@@ -23,9 +23,9 @@
 				<template v-if="teamInfo.progress_meter_show"
 					style="margin-top: 20rpx;z-index: 2;display: flex;flex-direction: column;justify-content: center;">
 					<view v-for="item in teamInfo.progress_meter" class="progressx_box">
-						<text>{{item.notes}}({{item.now}}/{{item.count}})</text>
+						<text>{{item.notes||'推广进度条'}}({{item.now||0}}/{{item.count||0}})</text>
 						<view class="progress">
-							<view :style="{width:(item.now/item.count)*100+'%'}" class="progress_w">
+							<view :style="{width:(item.now/item.count)*100||0+'%'}" class="progress_w">
 
 							</view>
 						</view>
@@ -60,7 +60,7 @@
 			</view>
 		</view>
 		<!-- <scroll-view style="height: calc(100vh - 878rpx);padding-bottom: 40rpx;box-sizing: border-box;" scroll-y="true"> -->
-		<view style="padding: 0 24rpx;box-sizing: border-box;">
+		<view v-if="teamList.length" style="padding: 0 24rpx;box-sizing: border-box;">
 			<view v-for="item in teamList" class="listWrap">
 				<view class="member_avater">
 					<image :src="item.avatar_url" class="mavater" mode=""></image>
@@ -85,6 +85,12 @@
 				</view>
 			</view>
 		</view>
+
+		<!-- 		<empty v-if="!teamList.length" :custom-style="{ padding: '180rpx 50rpx' }" tips="空空如也哦~">
+			<view slot="slot" class="empty-ipt" @click="onTargetIndex">
+				<text>去逛逛</text>
+			</view>
+		</empty> -->
 
 		<!-- </scroll-view> -->
 		<!-- 		<u-list @scrolltolower="scrolltolower">
@@ -193,6 +199,7 @@
 	import * as API from "@/api/distribution/index.js";
 	import * as UserApi from '@/api/user'
 	import headNav from '@/components/seckillNav.vue'
+	import Empty from '@/components/empty'
 	export default {
 		data() {
 			return {
@@ -401,6 +408,21 @@
 	::-webkit-scrollbar {
 		width: 0;
 		height: 0;
+	}
+
+	// 空数据按钮
+	.empty-ipt {
+		width: 100%;
+		height: 100%;
+		font-size: 28rpx;
+		// height: 64rpx;
+		// line-height: 64rpx;
+		text-align: center;
+		color: black;
+		// background-color: #EF343D;
+		border-radius: 60rpx;
+		// background: linear-gradient(to right, #f9211c, #ff6335);
+		// border: 2upx solid #EF343D;
 	}
 
 	.distribution {

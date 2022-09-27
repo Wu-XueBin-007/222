@@ -168,10 +168,9 @@ $http.dataFactory = async res => {
 			result: httpData
 		})
 	}
-
 	// 其他错误提示
 	if (httpData.status == 500 && httpData.message != '请先成为大会员才能使用话费充值' && httpData.message != '该商品仅限大会员购买') {
-		if (res.isPrompt) {
+		if (res.isPrompt && !httpData.data.is_jump) {
 			setTimeout(() => {
 				uni.showToast({
 					title: httpData.message,
@@ -180,7 +179,7 @@ $http.dataFactory = async res => {
 				}, 10)
 			})
 		}
-		console.log(httpData.data.is_jump, 'is_jump');
+		// 判断是否要跳转新路径
 		if (httpData.data && httpData.data.is_jump && httpData.message) {
 			uni.showModal({
 				title: '提示',

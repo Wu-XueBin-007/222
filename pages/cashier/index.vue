@@ -37,16 +37,19 @@
 						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.WECHAT.value"></checkbox>
 					</view>
 				</view>
-				<view v-if='!(order.is_big_vip||order.is_luxury_free)' class="caShier-item-list"
-					@click="btn_payTa(PayTypeEnum.BALANCE.value)">
-					<view class="caShier-item-icon" style="display: flex;align-items: center;">
-						<image src="../../static/icon/icon_ye.png" mode="widthFix"></image>
-						<text>{{PayTypeEnum.BALANCE.name}}（可用余额：{{userInfo.balance ? userInfo.balance : 0}}）</text>
+				<template v-if="loading">
+					<view v-if='!(order.is_big_vip||order.is_luxury_free)' class="caShier-item-list"
+						@click="btn_payTa(PayTypeEnum.BALANCE.value)">
+						<view class="caShier-item-icon" style="display: flex;align-items: center;">
+							<image src="../../static/icon/icon_ye.png" mode="widthFix"></image>
+							<text>{{PayTypeEnum.BALANCE.name}}（可用余额：{{userInfo.balance ? userInfo.balance : 0}}）</text>
+						</view>
+						<view class="coupons-item-chbox">
+							<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.BALANCE.value"></checkbox>
+						</view>
 					</view>
-					<view class="coupons-item-chbox">
-						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.BALANCE.value"></checkbox>
-					</view>
-				</view>
+				</template>
+
 
 			</view>
 
@@ -103,7 +106,8 @@
 				test1: "",
 				timer: null,
 				userInfo: {},
-				type: 1
+				type: 1,
+				loading: false
 				// test2:"",
 				// test3:"",
 				// test4:"",
@@ -211,6 +215,7 @@
 			getOrderDetail() {
 				const app = this
 				app.isLoading = true
+
 				if (app.type == 1) {
 					OrderApi.detail(app.order_id)
 						.then(result => {
@@ -224,6 +229,7 @@
 							result.data.order.create_time = result.data.order.create_time.replace(/-/g, "/");
 							// app.test = result.data.order.create_time;
 							console.log(app.settings)
+							app.loading = true
 							let times = 0;
 							if (result.data.order.order_source == 20) {
 								times = new Date(result.data.order.create_time).getTime() + Number(app.settings.order
