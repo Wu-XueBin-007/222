@@ -25,8 +25,7 @@
 					<view v-for="item in teamInfo.progress_meter" class="progressx_box">
 						<text>{{item.notes||'推广进度条'}}({{item.now||0}}/{{item.count||0}})</text>
 						<view class="progress">
-							<view :style="{width:(item.now/item.count)*100||0+'%'}" class="progress_w">
-
+							<view :style="{width:((item.now||0)/(item.count||0))*100+'%'}" class="progress_w">
 							</view>
 						</view>
 					</view>
@@ -39,14 +38,13 @@
 				<view class="scroll-view-item_H" v-if="tab.isShow" :id="tab.field"
 					:class="navIndex==index ? 'activite' : ''" @click="checkIndex(index)">{{tab.name}}</view>
 			</template>
-
 		</scroll-view>
 
 		<view class="listWrap_box">
 			<view class="listHead">
 				<view class="">
 					<view class="allNum">
-						共<text style="color: red;">{{teamList.length}}</text>人
+						共<text style="color: red;">{{nav[navIndex].num}}</text>人
 					</view>
 				</view>
 				<view class="inpwrap">
@@ -279,7 +277,7 @@
 				this.navIndex = index;
 				this.keyword = ''
 				this.scroll_into_view = this.nav[index].field;
-				this.getUserList();
+				this.getList();
 			},
 			// 我的推荐人
 			showMark() {

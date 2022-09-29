@@ -42,7 +42,7 @@
 			const {
 				page
 			} = app;
-			console.log("/pageHome/code/index?" + app.$getShareUrlParams());
+			//console.log("/pageHome/code/index?" + app.$getShareUrlParams());
 			return {
 				// title: page.params.share_title,
 				path: "/pageHome/code/index?" + app.$getShareUrlParams()
@@ -104,7 +104,7 @@
 						}
 					},
 					fail: err => {
-						console.log(err)
+						//console.log(err)
 					}
 				})
 			},
@@ -162,7 +162,7 @@
 							that.saveImg()
 						})
 						.catch(err => {
-							console.log(err, 1111)
+							//console.log(err, 1111)
 						})
 				}).exec()
 				// wx.createSelectorQuery().select('#back').boundingClientRect(function(rect) {

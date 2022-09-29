@@ -1,7 +1,9 @@
 <template>
 	<view>
-		<view :style="{'padding-top': navInfo.paddingTop + 'px','background':backGround,'position':'fixed','width':'100%','top':'0','left':'0','z-index':'999999'}">
-			<view class="commonHead" :style="{'height':navInfo.lineHeight+'px','line-height':navInfo.lineHeight+'px','background':color,'-webkit-text-fill-color':'transparent','-webkit-background-clip':'text'}">
+		<view
+			:style="{'padding-top': navInfo.paddingTop + 'px','background':backGround,'position':'fixed','width':'100%','top':'0','left':'0','z-index':'999999'}">
+			<view class="commonHead"
+				:style="{'height':navInfo.lineHeight+'px','line-height':navInfo.lineHeight+'px','background':color,'-webkit-text-fill-color':'transparent','-webkit-background-clip':'text'}">
 				<view class="commonHeadLBack" @click="back" v-if="backFlag" :style="{'background':backL}">
 					<image src="/static/icon/back_white.png"></image>
 				</view>
@@ -10,35 +12,35 @@
 		</view>
 		<view :style="{'height':navInfo.navH+'px','width':'100%'}"></view>
 	</view>
-	
+
 </template>
 
 <script>
 	const App = getApp();
 	export default {
 		props: {
-		  title: {
-		    type: String,
-		    default: '',
-		  },
-		  backFlag: {
-			  type: Boolean,
-			  default: true
-		  },
-		  backGround: {
-			  type: String,
-			  default: "white"
-		  },
-		  color: {
-			  type: String,
-			  default: "linear-gradient(to right, #FF5F60 0%, #DF6BAC 98.6328125%)"
-		  },
-		  backL: {
-			  type: String,
-			  default: "linear-gradient(43deg, #FF5F60 0%, #DF6BAC 100%)"
-		  }
+			title: {
+				type: String,
+				default: '',
+			},
+			backFlag: {
+			 type: Boolean,
+				default: true
+			},
+			backGround: {
+			 type: String,
+				default: "white"
+			},
+			color: {
+				type: String,
+				default: "linear-gradient(to right, #FF5F60 0%, #DF6BAC 98.6328125%)"
+			},
+			backL: {
+				type: String,
+				default: "linear-gradient(43deg, #FF5F60 0%, #DF6BAC 100%)"
+			}
 		},
-		name:"navHead",
+		name: "navHead",
 		data() {
 			return {
 				navInfo: {
@@ -49,7 +51,7 @@
 				},
 			};
 		},
-		mounted(){
+		mounted() {
 			let obj = {};
 			obj.leftDistance = App.globalData.leftDistance;
 			obj.lineHeight = App.globalData.lineHeight;
@@ -58,27 +60,27 @@
 			// console.log(obj)
 			this.navInfo = obj;
 		},
-		methods:{
-			back(){
+		methods: {
+			back() {
 				let page = getCurrentPages();
-				console.log(page)
-				if(page.length == 1){
+				//console.log(page)
+				if (page.length == 1) {
 					uni.switchTab({
-						url:"/pages/index/index"
+						url: "/pages/index/index"
 					})
-				}else{
+				} else {
 					uni.navigateBack({
-						delta:1
+						delta: 1
 					})
 				}
-				
+
 			}
 		}
 	}
 </script>
 
 <style scoped>
-	.commonHead{
+	.commonHead {
 		text-align: center;
 		font-size: 30upx;
 		font-family: PingFang;
@@ -89,7 +91,8 @@
 		-webkit-text-fill-color: transparent; */
 		position: relative;
 	}
-	.commonHeadLBack{
+
+	.commonHeadLBack {
 		width: 80upx;
 		height: 36upx;
 		display: flex;
@@ -104,7 +107,8 @@
 		top: 50%;
 		transform: translateY(-50%);
 	}
-	.commonHeadLBack>image{
+
+	.commonHeadLBack>image {
 		width: 16upx;
 		height: 28upx;
 	}

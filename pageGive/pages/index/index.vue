@@ -11,30 +11,33 @@
 				暂无活动哦~
 			</view>
 		</view>
-		<view class="give-heardR" >
+		<view class="give-heardR">
 			<view class="give-heardRT" @click="checkRule">
 				规则说明
 			</view>
-			<u-popup v-model="showRule" mode="bottom"  @close="close" @open="open">
-			<view class="" style="font-size: 36upx;color: #404040;text-align: center;padding-top: 30upx;font-weight: bold;">
-				规则说明
-			</view>
-			<view style="max-height: 740upx;">
+			<u-popup v-model="showRule" mode="bottom" @close="close" @open="open">
+				<view class=""
+					style="font-size: 36upx;color: #404040;text-align: center;padding-top: 30upx;font-weight: bold;">
+					规则说明
+				</view>
+				<view style="max-height: 740upx;">
 					<view v-html="lucky_free_activity_rules" style="padding: 30upx;box-sizing: border-box;">
-						
+
 					</view>
 				</view>
 			</u-popup>
 			<view class="give-heardRB" @click="checkgive">
 				往期活动
 			</view>
-			<u-popup v-model="showAgree" mode="bottom"  @close="close" @open="open">
-			<view class="" style="font-size: 36upx;color: #404040;text-align: center;padding-top: 30upx;font-weight: bold;">
-				往期活动
-			</view>
-			<view style="max-height: 740upx;">
+			<u-popup v-model="showAgree" mode="bottom" @close="close" @open="open">
+				<view class=""
+					style="font-size: 36upx;color: #404040;text-align: center;padding-top: 30upx;font-weight: bold;">
+					往期活动
+				</view>
+				<view style="max-height: 740upx;">
 					<view style="padding: 30upx;box-sizing: border-box;">
-						<view class="previousItem" v-for="(itemP,indexP) in luckyList" :key="indexP" :data-id="itemP.id" @click="getLuck">
+						<view class="previousItem" v-for="(itemP,indexP) in luckyList" :key="indexP" :data-id="itemP.id"
+							@click="getLuck">
 							<view class="previousItemL">
 								<view class="previousT">
 									{{itemP.name}}
@@ -67,10 +70,13 @@
 					已结束
 					<!-- <text>{{countdownTime | dateFormat}}</text> -->
 				</view>
-				
-				<scroll-view scroll-x="true" style="display: flex;white-space: nowrap;width: 100%;box-sizing: border-box;overflow: scroll;">
+
+				<scroll-view scroll-x="true"
+					style="display: flex;white-space: nowrap;width: 100%;box-sizing: border-box;overflow: scroll;">
 					<view class="giveBTB" v-if="givemap.status!=3">
-						<view :class="[givemap.pool.lenght>3?'giveBTBI2':'giveBTBI']" v-for="(item,index) in givemap.pool" :data-name="item.name" :data-id="item.id" :key="index" @click="getGoods">
+						<view :class="[givemap.pool.lenght>3?'giveBTBI2':'giveBTBI']"
+							v-for="(item,index) in givemap.pool" :data-name="item.name" :data-id="item.id" :key="index"
+							@click="getGoods">
 							<view class="giveBImage">
 								<image :src="item.image_url" mode=""></image>
 							</view>
@@ -83,7 +89,8 @@
 						</view>
 					</view>
 					<view class="giveBTB" v-else>
-						<view :class="[givemap.pool.lenght>3?'giveBTBI2':'giveBTBI']" style="position: relative;" v-for="(item,index) in givemap.pool" :data-name="item.name" :data-id="item.id" :key="index">
+						<view :class="[givemap.pool.lenght>3?'giveBTBI2':'giveBTBI']" style="position: relative;"
+							v-for="(item,index) in givemap.pool" :data-name="item.name" :data-id="item.id" :key="index">
 							<view class="giveBImage">
 								<image :src="item.image_url" mode=""></image>
 							</view>
@@ -93,14 +100,17 @@
 							<view class="giveBbtn">
 								￥{{item.turnover}}
 							</view>
-							<view class="" v-if="givemap.status==3" style="width: 210upx;height: 100%; position: absolute;top: 0;left: 0;background-color: rgba(0, 0, 0, 0.4);z-index: 9999;">
-								
+							<view class="" v-if="givemap.status==3"
+								style="width: 210upx;height: 100%; position: absolute;top: 0;left: 0;background-color: rgba(0, 0, 0, 0.4);z-index: 9999;">
+
 							</view>
-							<image v-if="item.free_status==2" src="../../static/backFree.png" style="width: 146upx;height: 146upx;position: absolute;top: 36upx;left: 32upx;" mode=""></image>
+							<image v-if="item.free_status==2" src="../../static/backFree.png"
+								style="width: 146upx;height: 146upx;position: absolute;top: 36upx;left: 32upx;" mode="">
+							</image>
 						</view>
 					</view>
 				</scroll-view>
-				
+
 			</view>
 			<view class="giveOrder" v-if="giveList.length>0&&givemap.status!=3">
 				<view class="head" v-if="!isFinish">
@@ -125,15 +135,16 @@
 				</view>
 			</view>
 		</view>
-		
+
 		<view class="myParticipate" @click="checkParticipate" v-if="showMap">
 			<image src="../../static/pate.png" mode=""></image>
 		</view>
-		<u-popup v-model="showParticipate" mode="bottom"  @close="close" @open="open">
-		<view class="" style="font-size: 36upx;color: #404040;text-align: center;padding-top: 30upx;font-weight: bold;">
-			我的参与
-		</view>
-		<view style="max-height: 740upx;">
+		<u-popup v-model="showParticipate" mode="bottom" @close="close" @open="open">
+			<view class=""
+				style="font-size: 36upx;color: #404040;text-align: center;padding-top: 30upx;font-weight: bold;">
+				我的参与
+			</view>
+			<view style="max-height: 740upx;">
 				<view style="padding: 30upx;box-sizing: border-box;">
 					<view class="ParticItem" v-for="(itemP,indexP) in myOrderList" :key="indexP">
 						<view class="buoy" v-if="itemP.pool.free_status==1">
@@ -144,7 +155,7 @@
 						</view>
 						<view class="ParticItemL">
 							<image :src="itemP.goods[0].goods_image" mode=""></image>
-							
+
 						</view>
 						<view class="ParticItemR">
 							<view class="ParticT">
@@ -164,13 +175,14 @@
 				</view>
 			</view>
 		</u-popup>
-		<view v-if="showMap" style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: linear-gradient(180deg, #EC1347 0%, #FF3434 100%);z-index: -1;" catchtouchmove="true"></view>
-		</view>
+		<view v-if="showMap"
+			style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: linear-gradient(180deg, #EC1347 0%, #FF3434 100%);z-index: -1;"
+			catchtouchmove="true"></view>
+	</view>
 	</view>
 </template>
 
 <script>
-	
 	import * as UserApi from "@/api/user.js";
 	import {
 		detail
@@ -181,38 +193,37 @@
 	import navHead from "@/components/navHead.vue";
 	const App = getApp();
 	let timer = null;
-	let drawTimer=null;
-	let timeOut=null;
+	let drawTimer = null;
+	let timeOut = null;
 	export default {
 		data() {
 			return {
-				isActive:1,
-				balance:0.00,
-				giveList:[],
-				page:1,
-				limit:6,
-				bottomFlag:true,
-				topFlag:true,
-				showAgree:false,
-				showRule:false,
-				showParticipate:false,
+				isActive: 1,
+				balance: 0.00,
+				giveList: [],
+				page: 1,
+				limit: 6,
+				bottomFlag: true,
+				topFlag: true,
+				showAgree: false,
+				showRule: false,
+				showParticipate: false,
 				lucky_free_activity_rules: '',
-				givemap:{},
-				showMap:false,
-				countdownTime:0,
-				
-				luckyList:[],
-				myOrderList:[],
-				isFinish:false
+				givemap: {},
+				showMap: false,
+				countdownTime: 0,
+
+				luckyList: [],
+				myOrderList: [],
+				isFinish: false
 			}
 		},
 		onLoad() {
-			
-			
+
+
 		},
-		onUnload() {
-		},
-		filters:{
+		onUnload() {},
+		filters: {
 			dateFormat: function(value) {
 				var date = new Date(value);
 				var sdate = Math.floor(value / 1000 / 60 / 60 / 24);
@@ -232,17 +243,20 @@
 			clearInterval(this.timeOut)
 			// clearInterval(timer)
 		},
-		onShow(){
+		onShow() {
 			// this.init();
 			// this.getBalance();
 			clearInterval(this.timeOut)
 			this.getgivemap();
 			this.getCommon();
 		},
-		components:{seckillNav,navHead},
+		components: {
+			seckillNav,
+			navHead
+		},
 		onPullDownRefresh() {
 			// 下拉
-			if(!this.topFlag){
+			if (!this.topFlag) {
 				return false;
 			}
 			clearInterval(this.timeOut)
@@ -254,7 +268,7 @@
 		},
 		onReachBottom() {
 			// 触底
-			if(!this.bottomFlag){
+			if (!this.bottomFlag) {
 				return false;
 			}
 			this.page = this.page + 1;
@@ -262,225 +276,229 @@
 			this.status = "loading";
 			// clearInterval(this.timeOut)
 			this.init();
-		
+
 		},
 		methods: {
-			close(){
-				
+			close() {
+
 			},
-			open(){
-				
+			open() {
+
 			},
-			getActive(type){
-				this.isActive=type;
-				this.page=1;
+			getActive(type) {
+				this.isActive = type;
+				this.page = 1;
 				this.init()
 			},
-			checkRule(){
-				this.showRule=true
+			checkRule() {
+				this.showRule = true
 			},
-			checkgive(){
+			checkgive() {
 				this.showAgree = true;
 				this.getPeriod();
 			},
-			checkParticipate(){
-				this.showParticipate=true;
+			checkParticipate() {
+				this.showParticipate = true;
 				this.getReal()
 			},
-			getCommon(){
-				settingApi.detail().then(res=>{
-					this.lucky_free_activity_rules = res.data.detail.lucky_free_activity_rules.replace(/<img/g,"<img style='width: 100%;'");
+			getCommon() {
+				settingApi.detail().then(res => {
+					this.lucky_free_activity_rules = res.data.detail.lucky_free_activity_rules.replace(/<img/g,
+						"<img style='width: 100%;'");
 					// this.commonL = res.data.detail.map(cur=>{
 					// 	cur.content = cur.content.replace(/<img/g,"<img style='width: 100%;'");
 					// 	return cur;
 					// });
 				})
 			},
-			getLuck(e){
+			getLuck(e) {
 				let id = e.currentTarget.dataset.id || e.target.dataset.id;
-				let obj={};
-				obj.lucky_free_id=id;
-				giveApi.detail(obj).then(res=>{
-					console.log(res)
-					
-					if(res.status==200){
-						this.givemap=res.data;
-						this.showMap=true;
-						let date=res.data.end_time;
+				let obj = {};
+				obj.lucky_free_id = id;
+				giveApi.detail(obj).then(res => {
+					//console.log(res)
+
+					if (res.status == 200) {
+						this.givemap = res.data;
+						this.showMap = true;
+						let date = res.data.end_time;
 						var newDate2 = new Date(date.replace(/-/g, '/'));
 						let times = newDate2 - (new Date().getTime())
 						this.countdownTime = times;
-						this.timeOut = setInterval(()=>{
+						this.timeOut = setInterval(() => {
 							this.countdownTime = this.countdownTime - 1000;
-						},1000);
-						this.giveList=[];
+						}, 1000);
+						this.giveList = [];
 						this.init();
-						this.isFinish=true;
-						this.showAgree=false;
-					}else{
+						this.isFinish = true;
+						this.showAgree = false;
+					} else {
 						// this.givemap=res.data;
-						this.showMap=false;
+						this.showMap = false;
 					}
 				})
 			},
-			getgivemap(){
+			getgivemap() {
 				clearInterval(this.timeOut)
-				giveApi.detail().then(res=>{
-					console.log(res)
-					
-					if(res.status==200){
-						this.givemap=res.data;
-						this.showMap=true;
-						let date=res.data.end_time;
+				giveApi.detail().then(res => {
+					//console.log(res)
+
+					if (res.status == 200) {
+						this.givemap = res.data;
+						this.showMap = true;
+						let date = res.data.end_time;
 						var newDate2 = new Date(date.replace(/-/g, '/'));
 						let times = newDate2 - (new Date().getTime())
 						this.countdownTime = times;
-						this.timeOut = setInterval(()=>{
+						this.timeOut = setInterval(() => {
 							this.countdownTime = this.countdownTime - 1000;
-						},1000);
+						}, 1000);
 						this.init();
-						this.isFinish=false;
-					}else{
+						this.isFinish = false;
+					} else {
 						// this.givemap=res.data;
-						this.showMap=false;
+						this.showMap = false;
 					}
 				})
 			},
-			getReal(){
-				giveApi.myOrderList().then(res=>{
-					console.log(res)
-					this.myOrderList=res.data.list.data
+			getReal() {
+				giveApi.myOrderList().then(res => {
+					//console.log(res)
+					this.myOrderList = res.data.list.data
 				})
 			},
-			getPeriod(){
-				giveApi.luckyList().then(res=>{
-					console.log(res)
-					this.luckyList=res.data.list.data;
-					console.log(this.luckyList)
+			getPeriod() {
+				giveApi.luckyList().then(res => {
+					//console.log(res)
+					this.luckyList = res.data.list.data;
+					//console.log(this.luckyList)
 				})
 			},
-			getGoods(e){
+			getGoods(e) {
 				let id = e.currentTarget.dataset.id || e.target.dataset.id;
 				let name = e.currentTarget.dataset.name || e.target.dataset.name;
 				uni.navigateTo({
-					url:"/pageGive/pages/index/giveGoods?id="+id+"&name="+name
+					url: "/pageGive/pages/index/giveGoods?id=" + id + "&name=" + name
 				})
 			},
-			getImageText(e){
+			getImageText(e) {
 				let id = e.currentTarget.dataset.id || e.target.dataset.id;
 				uni.navigateTo({
-					url:"/pageGive/pages/index/ImageText?id="+id
+					url: "/pageGive/pages/index/ImageText?id=" + id
 				})
 			},
-			init(flag){
-				var obj={}
-				obj.lucky_free_id=this.givemap.id;
-				obj.page=this.page;
-				obj.listRows=this.limit;
-				giveApi.real_time_order_list(obj).then(res=>{
+			init(flag) {
+				var obj = {}
+				obj.lucky_free_id = this.givemap.id;
+				obj.page = this.page;
+				obj.listRows = this.limit;
+				giveApi.real_time_order_list(obj).then(res => {
 					// this.giveList=res.data.list.data;
-					if(res.status==200){
+					if (res.status == 200) {
 						// this.JgoodsList=res.data.list.data;
-						if(flag){
+						if (flag) {
 							this.topFlag = true;
 							this.bottomFlag = true;
 							uni.stopPullDownRefresh()
 						}
-						if(Math.ceil(res.data.list.total/this.limit)!=this.page&&res.data.list.last_page>0){
+						if (Math.ceil(res.data.list.total / this.limit) != this.page && res.data.list.last_page >
+							0) {
 							this.bottomFlag = true;
 							this.status = "loadmore";
-						}else{
+						} else {
 							this.status = "normal";
 						}
-						if(this.page != 1){
-							this.giveList = this.giveList.concat(res.data.list.data).map(cur=>{
-								cur.name='';
-								cur.time='';
+						if (this.page != 1) {
+							this.giveList = this.giveList.concat(res.data.list.data).map(cur => {
+								cur.name = '';
+								cur.time = '';
 								return cur;
 							});
-							for(var i=0;i<this.giveList.length;i++){
-								var str=this.giveList[i].user_name;
-								let date= new Date(this.giveList[i].pay_time.replace(/-/g, '/'));
-								let time2 =(new Date().getTime())- date;
-								if(1*1000<=time2&&time2<60*1000){
-									let day=Math.ceil(time2/(1*1000))
-									this.giveList[i].time=day+'秒前'
-									
-								}else if(1*60*1000<=time2&&time2<60*60*1000){
-									let day=Math.ceil(time2/(1*60*1000))
-									this.giveList[i].time=day+'分钟前'
+							for (var i = 0; i < this.giveList.length; i++) {
+								var str = this.giveList[i].user_name;
+								let date = new Date(this.giveList[i].pay_time.replace(/-/g, '/'));
+								let time2 = (new Date().getTime()) - date;
+								if (1 * 1000 <= time2 && time2 < 60 * 1000) {
+									let day = Math.ceil(time2 / (1 * 1000))
+									this.giveList[i].time = day + '秒前'
+
+								} else if (1 * 60 * 1000 <= time2 && time2 < 60 * 60 * 1000) {
+									let day = Math.ceil(time2 / (1 * 60 * 1000))
+									this.giveList[i].time = day + '分钟前'
 									// this.giveList[i].time='5分钟前'
-								}else if(1*60*60*1000<=time2&&time2<24*60*60*1000){
-									let day=Math.ceil(time2/(1*60*60*1000))
-									this.giveList[i].time=day+'小时前'
-								}else if(time2>=1*24*60*60*1000){
-									let day=Math.ceil(time2/(1*24*60*60*1000))
-									this.giveList[i].time=day+'天前'
+								} else if (1 * 60 * 60 * 1000 <= time2 && time2 < 24 * 60 * 60 * 1000) {
+									let day = Math.ceil(time2 / (1 * 60 * 60 * 1000))
+									this.giveList[i].time = day + '小时前'
+								} else if (time2 >= 1 * 24 * 60 * 60 * 1000) {
+									let day = Math.ceil(time2 / (1 * 24 * 60 * 60 * 1000))
+									this.giveList[i].time = day + '天前'
 								}
-								console.log(str.charAt(0),22)
-								this.giveList[i].name=str.charAt(0)+'***'+str.charAt(str.length-1);
-								
+								//console.log(str.charAt(0),22)
+								this.giveList[i].name = str.charAt(0) + '***' + str.charAt(str.length - 1);
+
 							}
-							
-						}else{
-							this.giveList = res.data.list.data.map(cur=>{
-								cur.name='';
-								cur.time='';
+
+						} else {
+							this.giveList = res.data.list.data.map(cur => {
+								cur.name = '';
+								cur.time = '';
 								return cur;
 							});
-							for(var i=0;i<this.giveList.length;i++){
-								var str=this.giveList[i].user_name;
-								let date= new Date(this.giveList[i].pay_time.replace(/-/g, '/'));
-								let time2 =(new Date().getTime())- date;
-								if(1*1000<=time2&&time2<60*1000){
-									let day=Math.ceil(time2/(1*1000))
-									this.giveList[i].time=day+'秒前'
-									
-								}else if(1*60*1000<=time2&&time2<60*60*1000){
-									let day=Math.ceil(time2/(1*60*1000))
-									this.giveList[i].time=day+'分钟前'
+							for (var i = 0; i < this.giveList.length; i++) {
+								var str = this.giveList[i].user_name;
+								let date = new Date(this.giveList[i].pay_time.replace(/-/g, '/'));
+								let time2 = (new Date().getTime()) - date;
+								if (1 * 1000 <= time2 && time2 < 60 * 1000) {
+									let day = Math.ceil(time2 / (1 * 1000))
+									this.giveList[i].time = day + '秒前'
+
+								} else if (1 * 60 * 1000 <= time2 && time2 < 60 * 60 * 1000) {
+									let day = Math.ceil(time2 / (1 * 60 * 1000))
+									this.giveList[i].time = day + '分钟前'
 									// this.giveList[i].time='5分钟前'
-								}else if(1*60*60*1000<=time2&&time2<24*60*60*1000){
-									let day=Math.ceil(time2/(1*60*60*1000))
-									this.giveList[i].time=day+'小时前'
-								}else if(time2>=1*24*60*60*1000){
-									let day=Math.ceil(time2/(1*24*60*60*1000))
-									this.giveList[i].time=day+'天前'
+								} else if (1 * 60 * 60 * 1000 <= time2 && time2 < 24 * 60 * 60 * 1000) {
+									let day = Math.ceil(time2 / (1 * 60 * 60 * 1000))
+									this.giveList[i].time = day + '小时前'
+								} else if (time2 >= 1 * 24 * 60 * 60 * 1000) {
+									let day = Math.ceil(time2 / (1 * 24 * 60 * 60 * 1000))
+									this.giveList[i].time = day + '天前'
 								}
-								console.log(str.charAt(0),22)
-								this.giveList[i].name=str.charAt(0)+'***'+str.charAt(str.length-1);
-								
+								//console.log(str.charAt(0),22)
+								this.giveList[i].name = str.charAt(0) + '***' + str.charAt(str.length - 1);
+
 							}
 						}
-						
+
 					}
 				})
 			},
-			
+
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	.give{
-		
-	}
-	.fault{
+	.give {}
+
+	.fault {
 		width: 352upx;
 		margin: 200upx auto 0;
-		.faultText{
+
+		.faultText {
 			font-size: 28upx;
 			color: #848484;
 			text-align: center;
 			// margin-top: 32upx;
 			font-weight: bold;
 		}
-		image{
+
+		image {
 			width: 352upx;
 			height: 272upx;
 		}
 	}
-	.give-heard{
+
+	.give-heard {
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -488,7 +506,8 @@
 		height: 704upx;
 		z-index: 9;
 	}
-	.give-heard image{
+
+	.give-heard image {
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -496,13 +515,15 @@
 		height: 704upx;
 		z-index: -1;
 	}
-	.give-heardR{
+
+	.give-heardR {
 		position: fixed;
 		top: 176upx;
 		right: 0;
 		z-index: 99;
 	}
-	.give-heardRT{
+
+	.give-heardRT {
 		width: 154upx;
 		height: 60upx;
 		line-height: 60upx;
@@ -512,7 +533,8 @@
 		font-size: 30upx;
 		border-radius: 32upx 0 0 32upx;
 	}
-	.give-heardRB{
+
+	.give-heardRB {
 		width: 154upx;
 		height: 60upx;
 		line-height: 60upx;
@@ -523,13 +545,15 @@
 		border-radius: 32upx 0 0 32upx;
 		margin-top: 12upx;
 	}
-	.giveB{
+
+	.giveB {
 		position: relative;
 		margin-top: 584upx;
 		z-index: 9;
-		
+
 	}
-	.giveBT{
+
+	.giveBT {
 		width: 702upx;
 		height: 482upx;
 		border: 8upx solid #FFE9B7;
@@ -538,7 +562,8 @@
 		background-color: #FF473D;
 		border-radius: 30upx;
 	}
-	.giveBTT{
+
+	.giveBTT {
 		font-size: 40upx;
 		color: #FFFFFF;
 		height: 80upx;
@@ -547,31 +572,36 @@
 		font-style: oblique;
 		font-weight: bold;
 	}
-	.giveBTT text{
+
+	.giveBTT text {
 		margin-left: 12upx;
 	}
-	.giveBTB{
+
+	.giveBTB {
 		display: flex;
 		margin-left: 8upx;
-		.giveBTBI{
+
+		.giveBTBI {
 			width: 210upx;
 			background-color: #FFFFFF;
 			border-radius: 20upx;
 			margin-left: 12upx;
-			fiex:1;
-			
-			.giveBImage{
+			fiex: 1;
+
+			.giveBImage {
 				width: 210upx;
 				height: 210upx;
 				border-radius: 20upx 20upx 0 0;
-				image{
+
+				image {
 					width: 100%;
 					height: 100%;
 					vertical-align: top;
 					border-radius: 20upx 20upx 0 0;
 				}
 			}
-			.giveBText{
+
+			.giveBText {
 				margin: 16upx 0 0 12upx;
 				width: 100%;
 				font-size: 28upx;
@@ -581,7 +611,8 @@
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}
-			.giveBbtn{
+
+			.giveBbtn {
 				width: 186upx;
 				height: 60upx;
 				line-height: 60upx;
@@ -595,27 +626,30 @@
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}
-			
+
 		}
-		.giveBTBI2{
+
+		.giveBTBI2 {
 			width: 190upx;
 			background-color: #FFFFFF;
 			border-radius: 20upx;
 			margin-left: 12upx;
-			fiex:1;
-			
-			.giveBImage{
+			fiex: 1;
+
+			.giveBImage {
 				width: 190upx;
 				height: 190upx;
 				border-radius: 20upx 20upx 0 0;
-				image{
+
+				image {
 					width: 100%;
 					height: 100%;
 					vertical-align: top;
 					border-radius: 20upx 20upx 0 0;
 				}
 			}
-			.giveBText{
+
+			.giveBText {
 				margin: 16upx 0 0 12upx;
 				width: 100%;
 				font-size: 28upx;
@@ -625,7 +659,8 @@
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}
-			.giveBbtn{
+
+			.giveBbtn {
 				width: 160upx;
 				height: 60upx;
 				line-height: 60upx;
@@ -639,13 +674,15 @@
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}
-			
+
 		}
-		.giveBTBback{
+
+		.giveBTBback {
 			background-color: rgba(0, 0, 0, 0.4);
 		}
 	}
-	.giveOrder{
+
+	.giveOrder {
 		width: 702upx;
 		// height: 482upx;
 		min-height: 480upx;
@@ -653,7 +690,8 @@
 		margin: 24upx auto 26upx;
 		background-color: #FF473D;
 		border-radius: 30upx;
-		.head{
+
+		.head {
 			font-size: 40upx;
 			color: #FFFFFF;
 			height: 80upx;
@@ -662,38 +700,46 @@
 			font-style: oblique;
 			font-weight: bold;
 		}
-		.main{
-			padding: 24upx 16upx 0 16upx ;
-			.item{
+
+		.main {
+			padding: 24upx 16upx 0 16upx;
+
+			.item {
 				display: flex;
 				justify-content: space-between;
 				margin-bottom: 24upx;
-				.itemL{
+
+				.itemL {
 					width: 45%;
-					image{
+
+					image {
 						width: 64upx;
 						height: 64upx;
 						border-radius: 50%;
 						vertical-align: top;
 					}
-					text{
+
+					text {
 						font-size: 26upx;
 						color: #FFFFFF;
 						margin-left: 20upx;
 						line-height: 64upx;
 					}
-					
+
 				}
-				.itemR{
+
+				.itemR {
 					width: 50%;
 					display: flex;
 					justify-content: space-between;
 					line-height: 64upx;
-					.itemRT{
+
+					.itemRT {
 						font-size: 26upx;
 						color: #FFFFFF;
 					}
-					.itemRB{
+
+					.itemRB {
 						font-size: 26upx;
 						color: #FFFFFF;
 						margin-left: 40upx;
@@ -701,10 +747,11 @@
 				}
 			}
 		}
-		
-		
+
+
 	}
-	.previousItem{
+
+	.previousItem {
 		width: 702upx;
 		height: 134upx;
 		border-radius: 20upx;
@@ -712,21 +759,25 @@
 		margin: 20upx auto 0;
 		display: flex;
 		justify-content: space-between;
-		.previousItemL{
+
+		.previousItemL {
 			margin-left: 24upx;
-			.previousT{
+
+			.previousT {
 				font-size: 28upx;
 				color: #333333;
 				font-weight: bold;
 				margin-top: 24upx;
 			}
-			.previousB{
+
+			.previousB {
 				font-size: 24upx;
 				color: #666666;
 				margin-top: 12upx;
 			}
 		}
-		.previousItemR{
+
+		.previousItemR {
 			width: 112upx;
 			height: 60upx;
 			line-height: 60upx;
@@ -738,10 +789,11 @@
 			margin: 38upx 24upx 0 0;
 		}
 	}
+
 	// .ParticItem:active{
 	// 	background-color: #D9D9D9;
 	// }
-	.ParticItem{
+	.ParticItem {
 		width: 702upx;
 		height: 180upx;
 		margin: 24upx auto 0;
@@ -750,7 +802,8 @@
 		display: flex;
 		border: 2upx solid #E1E1E1;
 		border-radius: 20upx;
-		.buoy{
+
+		.buoy {
 			position: absolute;
 			left: 0;
 			top: 0;
@@ -764,7 +817,8 @@
 			background-color: #EF343D;
 			border-radius: 30upx;
 		}
-		.buoy2{
+
+		.buoy2 {
 			position: absolute;
 			left: 0;
 			top: 0;
@@ -778,19 +832,23 @@
 			background-color: #C9C9C9;
 			border-radius: 30upx;
 		}
-		.ParticItemL{
+
+		.ParticItemL {
 			position: relative;
-			image{
+
+			image {
 				width: 130upx;
 				height: 130upx;
 				vertical-align: top;
 			}
-			
+
 		}
-		.ParticItemR{
+
+		.ParticItemR {
 			margin-left: 20upx;
 			width: calc(100% - 240upx);
-			.ParticT{
+
+			.ParticT {
 				font-size: 28upx;
 				color: #333333;
 				font-weight: bold;
@@ -798,7 +856,8 @@
 				text-overflow: ellipsis;
 				white-space: nowrap;
 			}
-			.ParticC{
+
+			.ParticC {
 				font-size: 28upx;
 				color: #333333;
 				font-weight: bold;
@@ -807,36 +866,40 @@
 				white-space: nowrap;
 				margin-top: 10upx;
 			}
-			.ParticB{
+
+			.ParticB {
 				font-size: 24upx;
 				color: #666666;
 				margin-top: 12upx;
 			}
 		}
-		.ParticImage{
+
+		.ParticImage {
 			position: absolute;
 			right: 0;
 			top: 0;
 			width: 106upx;
 			height: 106upx;
-			image{
+
+			image {
 				width: 100%;
 				height: 100%;
 			}
 		}
 	}
-	.myParticipate{
+
+	.myParticipate {
 		position: fixed;
 		right: 24upx;
 		bottom: 88upx;
 		width: 136upx;
 		height: 136upx;
 		z-index: 99;
-		image{
+
+		image {
 			width: 100%;
 			height: 100%;
 			vertical-align: top;
 		}
 	}
-	
 </style>

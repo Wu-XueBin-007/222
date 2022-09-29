@@ -1,48 +1,52 @@
 <template>
 	<view>
-		<view :style="{'padding-top': navInfo.paddingTop + 'px','background':backGround,'position':'fixed','width':'100%','top':'0','left':'0','z-index':'999999'}">
-			<view class="commonHead" :style="{'font-weight':(backType=='seckill'||backType=='other'||backType=='user')?'500':'500','font-size':fontSize+'rpx','height':navInfo.lineHeight+'px','line-height':navInfo.lineHeight+'px','color':color}">
+		<view
+			:style="{'padding-top': navInfo.paddingTop + 'px','background':backGround,'position':'fixed','width':'100%','top':'0','left':'0','z-index':'999999'}">
+			<view class="commonHead"
+				:style="{'font-weight':(backType=='seckill'||backType=='other'||backType=='user')?'500':'500','font-size':fontSize+'rpx','height':navInfo.lineHeight+'px','line-height':navInfo.lineHeight+'px','color':color}">
 				<view class="commonHeadLBack" @click="back" v-if="backFlag">
-					<image :src="backType=='seckill'?'/static/home/back_black.png':(backType=='other'?'/static/icon/back_white.png':'/static/home/back_black.png')"></image>
+					<image
+						:src="backType=='seckill'?'/static/home/back_black.png':(backType=='other'?'/static/icon/back_white.png':'/static/home/back_black.png')">
+					</image>
 				</view>
 				{{title}}
 			</view>
 		</view>
 		<view class="initHead" :style="{'height':navInfo.navH+'px','width':'100%'}"></view>
 	</view>
-	
+
 </template>
 
 <script>
 	const App = getApp();
 	export default {
 		props: {
-		  fontSize: {
-			type: Number,
-			default: 30
-		  },
-		  backType: {
-			type: String,
-			default: 'seckill'
-		  },
-		  title: {
-		    type: String,
-		    default: '',
-		  },
-		  backFlag: {
-			  type: Boolean,
-			  default: true
-		  },
-		  backGround: {
-			  type: String,
-			  default: "white"
-		  },
-		  color: {
-			  type: String,
-			  default: "#333333"
-		  }
+			fontSize: {
+				type: Number,
+				default: 30
+			},
+			backType: {
+				type: String,
+				default: 'seckill'
+			},
+			title: {
+				type: String,
+				default: '',
+			},
+			backFlag: {
+				type: Boolean,
+				default: true
+			},
+			backGround: {
+			 type: String,
+				default: "white"
+			},
+			color: {
+				type: String,
+				default: "#333333"
+			}
 		},
-		name:"seckillNav",
+		name: "seckillNav",
 		data() {
 			return {
 				navInfo: {
@@ -53,7 +57,7 @@
 				},
 			};
 		},
-		mounted(){
+		mounted() {
 			let obj = {};
 			obj.leftDistance = App.globalData.leftDistance;
 			obj.lineHeight = App.globalData.lineHeight;
@@ -62,27 +66,27 @@
 			// console.log(obj)
 			this.navInfo = obj;
 		},
-		methods:{
-			back(){
+		methods: {
+			back() {
 				let page = getCurrentPages();
-				console.log(page)
-				if(page.length == 1){
+				//console.log(page)
+				if (page.length == 1) {
 					uni.switchTab({
-						url:"/pages/index/index"
+						url: "/pages/index/index"
 					})
-				}else{
+				} else {
 					uni.navigateBack({
-						delta:1
+						delta: 1
 					})
 				}
-				
+
 			}
 		}
 	}
 </script>
 
 <style scoped>
-	.commonHead{
+	.commonHead {
 		text-align: center;
 		font-size: 30upx;
 		font-family: PingFang;
@@ -93,7 +97,8 @@
 		-webkit-text-fill-color: transparent; */
 		position: relative;
 	}
-	.commonHeadLBack{
+
+	.commonHeadLBack {
 		width: 80upx;
 		height: 36upx;
 		display: flex;
@@ -108,7 +113,8 @@
 		top: 50%;
 		transform: translateY(-50%);
 	}
-	.commonHeadLBack>image{
+
+	.commonHeadLBack>image {
 		width: 20upx;
 		height: 36upx;
 	}

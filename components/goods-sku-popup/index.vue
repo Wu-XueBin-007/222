@@ -367,8 +367,8 @@
 				that.shopItemInfo = {};
 				// that.shopItemInfo = that.goodsInfo;
 				let specListName = that.specListName;
-				console.log(that.goodsInfo)
-				console.log(that.shopItemInfo, 44)
+				//console.log(that.goodsInfo)
+				//console.log(that.shopItemInfo, 44)
 				that.goodsInfo[specListName].map(item => {
 					that.selectArr.push('');
 					that.subIndex.push(-1);
@@ -379,7 +379,7 @@
 				that.autoClickSku(); // 自动选择sku策略
 			},
 			changeFlag(e) {
-				//console.log(e)
+				////console.log(e)
 				if (e.detail.value.length > 0) {
 					this.agreeFlag = true;
 				} else {
@@ -398,7 +398,7 @@
 				})
 			},
 			dateChange(val) {
-				console.log(val);
+				//console.log(val);
 				if (this.Region.is_area == 0) {
 					this.form.region.length = 2
 				}
@@ -423,7 +423,7 @@
 					that.toast("custom-action必须是function");
 					return false;
 				}
-				console.log(that.action)
+				////console.log(that.action)
 				vk.callFunction({
 					url: that.action,
 					title: '请求中...',
@@ -454,7 +454,7 @@
 					that.skuIdName]);
 
 				Object.assign(that.selectShop, select_sku_info);
-				// console.log(that.selectShop,select_sku_info)
+				// ////console.log(that.selectShop,select_sku_info)
 				that.complete = true;
 				that.$emit("open", true);
 				that.$emit("input", true);
@@ -465,9 +465,9 @@
 				if (that.customAction && typeof(that.customAction) === 'function') {
 					let goodsInfo = await that.customAction();
 					let shopItemInfo = {};
-					console.log("goodsInfo", goodsInfo);
+					////console.log("goodsInfo", goodsInfo);
 					that.shopItemInfo = that.goodsInfo;
-					console.log("shopItemInfo", that.shopItemInfo)
+					////console.log("shopItemInfo", that.shopItemInfo)
 					if (goodsInfo && typeof goodsInfo == "object" && JSON.stringify(goodsInfo) != "{}") {
 						findGoodsInfoRun = false;
 						that.updateGoodsInfo(goodsInfo);
@@ -508,15 +508,15 @@
 					that.checkInpath(index1);
 					// 如果全部选完
 					that.checkSelectShop();
-					// console.log(that.selectShop,13313131321313)
-					// console.log(that.shopItemInfo[that.selectArr],10101010)
-					console.log(value, index1, event, index2, 333333333333333)
-					console.log(that.selectArr, 1111)
+					// ////console.log(that.selectShop,13313131321313)
+					// ////console.log(that.shopItemInfo[that.selectArr],10101010)
+					////console.log(value, index1, event, index2, 333333333333333)
+					////console.log(that.selectArr, 1111)
 				}
 			},
 			// 检测是否已经选完sku
 			checkSelectShop() {
-				console.log(that.shopItemInfo, 22222222)
+				//console.log(that.shopItemInfo, 22222222)
 				// 如果全部选完
 				if (that.selectArr.every(item => item != '')) {
 					that.selectShop = that.shopItemInfo[that.selectArr];
@@ -544,8 +544,8 @@
 						let choosed_copy = [...that.selectArr];
 						that.$set(choosed_copy, i, specList[i].list[j].name);
 						let choosed_copy2 = choosed_copy.filter(item => item !== '' && typeof item !== 'undefined');
-						console.log(choosed_copy2, "```````````````````````````", that.shopItemInfo, "```````````````````",
-							choosed_copy)
+						//console.log(choosed_copy2, "```````````````````````````", that.shopItemInfo, "```````````````````",
+						//choosed_copy)
 						if (that.shopItemInfo.hasOwnProperty(choosed_copy2)) {
 							specList[i].list[j].ishow = true;
 						} else {
@@ -587,7 +587,7 @@
 												that.shopItemInfo[[...item2, item]] = items;
 											}
 											let r = that.shopItemInfo;
-											console.log(r, 66);
+											//console.log(r, 66);
 											return [...item2, item];
 										})
 									);

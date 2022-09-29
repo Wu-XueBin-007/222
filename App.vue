@@ -16,15 +16,15 @@
 		 * 初始化完成时触发
 		 */
 		onLaunch(options) {
-			console.log(options, 'options');
+			//console.log(options, 'options');
 			// #ifdef MP-WEIXIN
 			if (options.query.scene) {
-				console.log('scene', options.query.scene);
+				//console.log('scene', options.query.scene);
 				this.globalData.shareId = options.query.scene;
 			}
 			// options.query && options.query.refereeId
 			if (options.query && options.query.scene) {
-				console.log(options.query.scene, 'options.query.refereeId');
+				//console.log(options.query.scene, 'options.query.refereeId');
 				this.$store.commit('SET_SUPERIOR_USER_ID', options.query.scene)
 			}
 			// #endif
@@ -95,7 +95,7 @@
 						// 根据胶囊的位置计算距离右侧的宽度，用于设置返回按钮至左侧的距离
 						let leftDistance = windowWidth - rect.right;
 						t.globalData.leftDistance = leftDistance;
-						console.log(t.globalData)
+						//console.log(t.globalData)
 					}
 				});
 			},
@@ -106,7 +106,7 @@
 				const updateManager = uni.getUpdateManager();
 				updateManager.onCheckForUpdate(res => {
 					// 请求完新版本信息的回调
-					// console.log(res.hasUpdate)
+					// //console.log(res.hasUpdate)
 				})
 				updateManager.onUpdateReady(() => {
 					uni.showModal({
