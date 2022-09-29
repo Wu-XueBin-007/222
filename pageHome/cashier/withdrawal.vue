@@ -9,7 +9,7 @@
 			</view>
 			<view class="headNavB">
 				<text>￥</text>
-				{{userInfo.balance}}
+				{{userInfo.balance||0}}
 			</view>
 		</view>
 		<view class="withdrawalCon">
@@ -93,10 +93,7 @@
 			this.type = options.type;
 			this.getPageData();
 			this.getDetail();
-			this.getCommon();
-		},
-		onShow() {
-
+			// this.getCommon();
 		},
 		onShareAppMessage() {
 			const app = this
@@ -126,11 +123,10 @@
 		},
 		methods: {
 			getCommon() {
-
 				settingApi.detail().then(res => {
-					res.data.detail.withdrawal_rules = res.data.detail.withdrawal_rules.replace(/<img/g,
-						"<img style='width:100%'");
-					this.commonL = res.data.detail
+					// res.data.detail.withdrawal_rules = res.data.detail.withdrawal_rules.replace(/<img/g,
+					// 							"<img style='width:100%'");
+					// 						this.commonL = res.data.detail
 				}).catch(err => {})
 			},
 			hideSuccess() {
@@ -142,19 +138,14 @@
 					type: 1
 				})
 			},
-			aaa(e) {
-				//console.log(e)
-				this.payType = e.detail.value;
-				setTimeout(() => {
-					//console.log(this.payType)
-				}, 1000)
-				// //console.log(e)
-			},
 			getDetail() {
 				detail()
 					.then(res => {
 						//console.log(res)
 						this.msg = res.data.detail;
+						res.data.detail.withdrawal_rules = res.data.detail.withdrawal_rules.replace(/<img/g,
+							"<img style='width:100%'");
+						this.commonL = res.data.detail
 					})
 			},
 			uplaodImg() {
@@ -218,20 +209,14 @@
 				this.money = money;
 			},
 			btn_drawal() {
-				// if (this.money < 1) {
-				// 	uni.showToast({
-				// 		icon: 'none',
-				// 		title: "提现金额单次最低1"
-				// 	})
-				// 	return false;
-				// }
-				// if (200<this.money) {
-				// 	uni.showToast({
-				// 		icon: 'none',
-				// 		title: "提现金额单次最多200"
-				// 	})
-				// 	return false;
-				// }
+
+				if (Number(this.money) > Number(this.msg.most_withdraw_money)) {
+					uni.showToast({
+						icon: 'none',
+						title: "提现金额最高为" + this.msg.most_withdraw_money + "元"
+					})
+					return false;
+				}
 				if (Number(this.money) < Number(this.msg.least_withdraw_money)) {
 					uni.showToast({
 						icon: 'none',
