@@ -556,8 +556,9 @@
 				// uni.navigateTo({
 				// 	url:'/pageMember/pages/index/Myrights'
 				// })
+				let vip_price = this.bigVip.vip_price || 188
 				uni.navigateTo({
-					url: '/pageMember/pages/index/report'
+					url: '/pageMember/pages/index/report?vip_price=' + vip_price
 				})
 			},
 			copy(e) {

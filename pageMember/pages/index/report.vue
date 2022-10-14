@@ -12,21 +12,19 @@
 						</view>
 						<view class="vipIcon">
 							<image src="../../static/member_icon.png" v-if="userInfo.big_vip_user.is_vip==1"></image>
-							<!-- <image src="../../static/un_memeber_icon.png" v-if="userInfo.big_vip_user.is_vip==0"></image> -->
 						</view>
 					</view>
-					<view class="memberTime" v-if="userInfo.big_vip_user.is_vip==1">
+					<!-- 					<view class="memberTime" v-if="userInfo.big_vip_user.is_vip==1">
 						到期时间：{{userInfo.big_vip_user.expire_time}}
-						<!-- 到期时间：{{expireTime}} -->
-					</view>
+					</view> -->
 					<view class="memberTime" v-if="userInfo.big_vip_user.is_vip==0">
 						您还不是大会员哦~
 					</view>
 				</view>
 			</view>
-			<view class="renewBtn" v-if="userInfo.big_vip_user.is_vip==1" @click="toRenew">
+			<!-- 			<view class="renewBtn" v-if="userInfo.big_vip_user.is_vip==1" @click="toRenew">
 				立即续费
-			</view>
+			</view> -->
 			<view class="purchasePrice" v-if="userInfo.big_vip_user.is_vip==1">
 				<view class="purchasePriceL">
 					<view class="price">
@@ -48,10 +46,11 @@
 			</view>
 			<view :class="['privilege',status==true?'unprivilege':'']">
 				<view class="privilegeT">
-					大会员尊享3大特权
+					会员尊享特权
 				</view>
+
 				<view class="privilegeA">
-					<view class="recharge">
+					<!-- <view class="recharge">
 						<view class="rechargeT">
 							<image src="../../static/icon-recharge.png"></image>
 						</view>
@@ -59,8 +58,8 @@
 							<view class="rechargeInfoT">话费充值9折</view>
 							<view class="rechargeInfoB">200元话费/月</view>
 						</view>
-					</view>
-					<view class="recharge">
+					</view> -->
+					<!-- <view class="recharge">
 						<view class="rechargeT">
 							<image src="../../static/icon-free.png"></image>
 						</view>
@@ -68,8 +67,8 @@
 							<view class="rechargeInfoT">专区免单</view>
 							<view class="rechargeInfoB">每月4次免单</view>
 						</view>
-					</view>
-					<view class="recharge">
+					</view> -->
+					<!-- <view class="recharge">
 						<view class="rechargeT">
 							<image src="../../static/icon-ticket.png"></image>
 						</view>
@@ -77,7 +76,8 @@
 							<view class="rechargeInfoT">高铁火车9折</view>
 							<view class="rechargeInfoB">优惠24次/年</view>
 						</view>
-					</view>
+					</view> -->
+					<jyf-parser :html="content"></jyf-parser>
 				</view>
 				<view class="checkE" @click="toEquity">
 					<view>
@@ -87,7 +87,13 @@
 						<image src="../../static/more.png"></image>
 					</view>
 				</view>
-				<view class="openvip">
+				<view class="vipbtn" v-if="userInfo.big_vip_user.is_vip==0" @click="openMember">
+					<image src="../../static/vip_btn.png"></image>
+					<view class="vipM">
+						￥{{userInfo.setting.vip_price}}, 不回本退差价
+					</view>
+				</view>
+				<!-- <view class="openvip">
 					<view class="openvipT">
 						开通大会员专区免单
 					</view>
@@ -97,37 +103,13 @@
 							专区免单，每月4次
 						</view>
 					</view>
-				</view>
-				<!-- <view class="otherB">
-				<image src="../../static/arc.png"></image>
-				
-			</view> -->
-				<!-- <view class="other">
-			    <image src="../../static/back_bottom.png"></image>	
-			</view> -->
+				</view> -->
+
 			</view>
 			<view class="other">
 				<image src="../../static/back_bottomB.png"></image>
-				<view class="vipbtn" v-if="userInfo.big_vip_user.is_vip==0" @click="openMember">
-					<image src="../../static/vip_btn.png"></image>
-					<view class="vipM">
-						￥{{userInfo.setting.vip_price}}/年, 不回本退差价
-					</view>
-				</view>
-			</view>
-			<!-- <view class="otherB">
-			<image src="../../static/arc.png"></image>
-		</view> -->
 
-			<!-- <view class="otherM">
-			
-		</view> -->
-			<!-- <view v-if="userInfo.big_vip_user.is_vip==0" class="" style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;height: 84%; background-image: url(../../static/vipback.png);z-index: -1;">
-			
-		</view> -->
-			<!-- <view v-if="userInfo.big_vip_user.is_vip==1" class="" style="position: fixed;top: 0;left: 0;right: 0;bottom: 0; background-image: url(../../static/vipback.png);z-index: -1;">
-			
-		</view> -->
+			</view>
 			<image v-if="userInfo.big_vip_user.is_vip==0"
 				style="position: fixed;top: 0;left: 0;right: 0;bottom: 0; z-index: -1; width: 100%; height: 69%;"
 				src="../../static/vipback.png"></image>
@@ -146,7 +128,8 @@
 	import * as memberApi from "@/api/member/index.js";
 	import wxPayment from '@/utils/app'
 	import * as CheckoutApi from '@/api/checkout'
-
+	import * as GoodsApi from '@/api/goods'
+	import jyfParser from '@/components/jyf-parser/jyf-parser'
 	const App = getApp()
 	export default {
 		data() {
@@ -159,11 +142,15 @@
 				status: false,
 				userInfo: [],
 				goodsId: '',
-				expireTime: ''
+				expireTime: '',
+				content: ''
 			}
 		},
 		onLoad() {
 			this.getUserinfo()
+		},
+		components: {
+			jyfParser
 		},
 		onShow() {
 			// this.getbalanceLog()
@@ -239,6 +226,18 @@
 					// this.expireTime = new Date().format("yyyy-MM-dd")
 					// let time = this.expireTime.getFullYear()+(this.expireTime.getMonth()+1)+this.expireTime.getDate();
 					// console.log(time,123123)
+					GoodsApi.detail(res.data.setting.vip_goods_id)
+						.then(result => {
+							console.log(result, 'resultresult');
+							this.content = result.data.detail.content
+							// if (result.status == 500) {
+							// 	uni.navigateBack()
+							// }
+
+						})
+						.catch((err) => {
+							console.log(err);
+						})
 				})
 			},
 			toRecord(e) {
@@ -478,6 +477,7 @@
 		background-image: url(../../static/black_back.png);
 		background-size: 738upx 986upx;
 		margin: -24rpx auto 0;
+		position: relative;
 		// position: absolute;
 		// top: 340upx;
 
@@ -498,8 +498,11 @@
 		width: 260upx;
 		color: #A27748;
 		margin: 0 auto;
-		font-size: 30upx;
+		font-size: 36rpx;
 		padding-top: 20upx;
+		font-family: PingFang SC-Bold, PingFang SC;
+		font-weight: bold;
+		color: #A27748;
 	}
 
 	.privilegeA {
@@ -508,6 +511,12 @@
 		// margin: 20upx 0 0 0;
 		// padding-top: 60upx;
 		padding: 60upx 60upx 24upx;
+
+		.tiptext {
+			font-size: 26rpx;
+			font-weight: 400;
+			color: #BBBBBB;
+		}
 	}
 
 	.recharge {
@@ -648,8 +657,9 @@
 		height: 112upx;
 		margin: 10rpx auto 0;
 		position: absolute;
-		bottom: 16upx;
+		bottom: 104rpx;
 		left: 135upx;
+		z-index: 2;
 
 		image {
 			width: 100%;

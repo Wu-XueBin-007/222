@@ -288,7 +288,7 @@
 
 		<!-- 购票入口 -->
 		<view class="addCon" v-if="commonL.ticketImage&&commonL.MobileRechargeImage">
-			<view class="ticket" v-if="commonL.ticketImage&&commonL.MobileRechargeImage">
+			<view class="ticket" v-if="commonL.is_open_ticket&&commonL.if_switch">
 				<view class="ticket-left" @click="getTicket">
 
 					<view class="ticket-img">
