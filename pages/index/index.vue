@@ -285,7 +285,10 @@
 			</view>
 		</view>
 		<!-- 通证信息 end -->
-
+		<view class="adverImg" v-if="setting.ActivityTopicsImageId">
+			<image :src="setting.ActivityTopicsImageId.preview_url" :data-url="setting.activity_topics_url"
+				@click="btn_tourl"></image>
+		</view>
 		<!-- 购票入口 -->
 		<view class="addCon" v-if="commonL.ticketImage&&commonL.MobileRechargeImage">
 			<view class="ticket" v-if="commonL.is_open_ticket&&commonL.if_switch">
@@ -412,10 +415,7 @@
 				<image src="../../static/icon/icon_right.png"></image>
 			</view>
 		</view> -->
-		<view class="adverImg" v-if="setting.ActivityTopicsImageId">
-			<image :src="setting.ActivityTopicsImageId.preview_url" :data-url="setting.activity_topics_url"
-				@click="btn_tourl"></image>
-		</view>
+
 		<!-- 特价 -->
 		<!-- <view class="home-district">
 			<view class="home-district-header">
@@ -867,7 +867,7 @@
 			},
 			getRandomList() {
 				seckillApi.randomList().then(res => {
-					console.log(res)
+					console.log(res, 111)
 					let arr = res.data.list;
 					// arr.splice(0,2);
 					// let len = arr.length;
@@ -1020,6 +1020,7 @@
 				let url = e.currentTarget.dataset.url || e.target.dataset.url;
 				console.log(url)
 				var reg = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+				console.log(!reg.test(url), '!reg.test(url)');
 				if (!reg.test(url)) {
 					uni.navigateTo({
 						url: url

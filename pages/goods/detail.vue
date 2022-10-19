@@ -517,15 +517,17 @@
 		onShareAppMessage() {
 			const app = this
 			// 构建页面参数
-			const params = app.$getShareUrlParams({
-				goodsId: app.goodsId,
-			})
-
-			if (this.type == "seckill") {
+			let pages = getCurrentPages() //获取加载的页面
+			let currentPage = pages[pages.length - 1] //获取当前页面的对象
+			let options = currentPage.options //如果要获取url中所带的参数可以查看options
+			console.log(options, 'options');
+			const params = app.$getShareUrlParams(options)
+			console.log(`/pages/goods/detail?${params}`);
+			if (app.type == "seckill") {
 				return {
 					title: app.goods.goods_name,
 					path: `/pages/goods/detail?${params}`,
-					imageUrl: App.$vm.globalData.setting.SeckillShareImageId.preview_url
+					imageUrl: app.goods.goods_image
 				}
 			} else {
 				return {

@@ -78,12 +78,15 @@
 						</view>
 					</view> -->
 					<jyf-parser :html="content"></jyf-parser>
+					<view class="mask">
+
+					</view>
 				</view>
 				<view class="checkE" @click="toEquity">
-					<view>
+					<view style="z-index: 4;">
 						查看会员权益
 					</view>
-					<view class="morebtn">
+					<view style="z-index: 4;" class="morebtn">
 						<image src="../../static/more.png"></image>
 					</view>
 				</view>
@@ -324,6 +327,15 @@
 		height: 100%;
 		// background-image:url(../../static/vipback.png) ;
 		// background-image: url(../../static/vipback.png);
+	}
+
+	.mask {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 2;
 	}
 
 	.member {
@@ -571,6 +583,7 @@
 		display: flex;
 		justify-content: flex-start;
 		text-align: center;
+		z-index: 4;
 	}
 
 	.morebtn {
@@ -659,7 +672,7 @@
 		position: absolute;
 		bottom: 104rpx;
 		left: 135upx;
-		z-index: 2;
+		z-index: 3;
 
 		image {
 			width: 100%;
