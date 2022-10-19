@@ -21,9 +21,9 @@
 					<view class="orderTime">
 						下单时间：{{item.create_time}}
 					</view>
-					<view class="expirationTime">
+					<!-- 					<view class="expirationTime">
 						到期时间：{{item.expire_time}}
-					</view>
+					</view> -->
 				</view>
 				<view class="payWay">
 					<view class="payWayL" v-if="item.pay_type==20">支付方式：微信支付</view>
@@ -39,9 +39,11 @@
 			</view>
 			<view class="recordMessage">暂无消费记录哦~</view>
 		</view>
-		
+
 		<!-- <view v-if="isSpringFrame" style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: rgba(0, 0, 0, 0.7);z-index: 9;" catchtouchmove="true"></view> -->
-		<view style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: #F8F8F8;z-index: -1;" catchtouchmove="true"></view>
+		<view
+			style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: #F8F8F8;z-index: -1;"
+			catchtouchmove="true"></view>
 	</view>
 </template>
 
@@ -56,25 +58,25 @@
 	import * as commonApi from "@/api/home/rotation.js";
 	import * as UserApi from '@/api/user';
 	export default {
-		data(){
+		data() {
 			return {
-				isShow:false,
-				isSpringFrame:false,
+				isShow: false,
+				isSpringFrame: false,
 				infos: {},
-				invitLit:[],
-				userInfo:{},
-				bigUser:{},
-				showRules:false,
+				invitLit: [],
+				userInfo: {},
+				bigUser: {},
+				showRules: false,
 				imgsrc: "",
-				id:'',
-				buyrecord:[]
+				id: '',
+				buyrecord: []
 			}
 		},
 		onLoad(option) {
-			console.log(option,101)
+			console.log(option, 101)
 			this.getInfo()
 			this.id = option.userid
-			console.log(this.id,222)
+			console.log(this.id, 222)
 			this.getRecord()
 		},
 		onShow() {
@@ -86,16 +88,16 @@
 				page
 			} = app
 			return {
-				title:'大会员专区',
-				path:"/pageMember/pages/index/index?scene="+this.$store.getters.userId,
-				imageUrl:this.bigUser.setting.share_image.preview_url
+				title: '大会员专区',
+				path: "/pageMember/pages/index/index?scene=" + this.$store.getters.userId,
+				imageUrl: this.bigUser.setting.share_image.preview_url
 			}
 			// return {
 			// 	title: "融汇商城",
 			// 	path: "/pageMember/pages/index/index"
 			// }
 		},
-		
+
 		/**
 		 * 分享到朋友圈
 		 * 本接口为 Beta 版本，暂只在 Android 平台支持，详见分享到朋友圈 (Beta)
@@ -108,13 +110,13 @@
 			} = app
 			return {
 				title: "大会员专区",
-				path: "/pageMember/pages/index/index?scene="+this.$store.getters.userId,
-				imageUrl:this.bigUser.setting.share_image.preview_url
+				path: "/pageMember/pages/index/index?scene=" + this.$store.getters.userId,
+				imageUrl: this.bigUser.setting.share_image.preview_url
 			}
 		},
 		methods: {
-			InviteNow(){
-				
+			InviteNow() {
+
 				// var _that=this;
 				// uni.showActionSheet({
 				// 	itemList: ['发送给朋友','生成二维码'],
@@ -127,27 +129,27 @@
 				// 			_that.isSpringFrame=true;
 				// 			// _this.getImgInfo(_this.infos.shareImage.preview_url)
 				// 		}
-						
+
 				// 	}
 				// })
-				this.showRules=true;
+				this.showRules = true;
 			},
-			cancel(){
-				this.showRules=false;
+			cancel() {
+				this.showRules = false;
 			},
-			generate(){
+			generate() {
 				this.getCode();
-				this.showRules=false;
-				this.isSpringFrame=true;
+				this.showRules = false;
+				this.isSpringFrame = true;
 			},
-			close(){
-				
+			close() {
+
 			},
-			open(){
-				
+			open() {
+
 			},
-			closes(){
-				this.isSpringFrame=false
+			closes() {
+				this.isSpringFrame = false
 			},
 			getInfo() {
 				commonApi.info()
@@ -159,18 +161,18 @@
 					.then(result => {
 						this.userInfo = result.data.userInfo
 					})
-					memberApi.index().then(res=>{
-						this.bigUser=res.data;
-						
-					})
+				memberApi.index().then(res => {
+					this.bigUser = res.data;
+
+				})
 			},
 			// 获取邀请列表
-			getinvitLit(){
-				var obj={};
-				obj.user_id=this.$store.getters.userId;
-				memberApi.inviteList(obj).then(res=>{
+			getinvitLit() {
+				var obj = {};
+				obj.user_id = this.$store.getters.userId;
+				memberApi.inviteList(obj).then(res => {
 					console.log(res)
-					this.invitLit=res.data.list.data
+					this.invitLit = res.data.list.data
 				})
 			},
 			showSave() {
@@ -210,7 +212,7 @@
 							})
 						}
 					},
-					fail:err=>{
+					fail: err => {
 						console.log(err)
 					}
 				})
@@ -252,23 +254,23 @@
 				const ctx = wx.createCanvasContext('myCanvas'); //创建画布
 				var width = "";
 				wx.createSelectorQuery().select('#qrCode').boundingClientRect(function(
-				rects1) {
+					rects1) {
 					ctx.width = rects1.width + 'px';
 					ctx.height = rects1.height + 'px';
-					
+
 					// that.widthH = rects1.width;
 					// that.heightH = rects1.height;
 					ctx.setFillStyle('#fff');
 					ctx.fillRect(0, 0, rects1.width, rects1.height);
 					that.send_code(that.imgsrc)
-						.then(rep=>{
+						.then(rep => {
 							ctx.drawImage(rep, 0, 0, rects1
 								.width, rects1.height)
 							ctx.draw();
 							wx.hideLoading();
 							that.saveImg()
 						})
-						.catch(err=>{
+						.catch(err => {
 							//console.log(err)
 						})
 				}).exec()
@@ -290,7 +292,7 @@
 				// 	if (cardbg) {
 				// 		ctx.drawImage(cardbg, 0, 0, width, height);
 				// 	}
-			
+
 				// 	//  绘制二维码
 				// 	// if (codeImg) {
 				// 	// 	wx.createSelectorQuery().select('#userAvator').boundingClientRect(function(rects) {
@@ -299,7 +301,7 @@
 				// 	// 		let b = rects.top+rects.width/2;
 				// 	// 		let c = rects.width/2;
 				// 	// 		//console.log(a,b,c,rects.top,rects.top+rects.width/2)
-							
+
 				// 	// 		wx.createSelectorQuery().select('#qrCode').boundingClientRect(function(
 				// 	// 		rects1) {
 				// 	// 			//console.log(rects1)
@@ -333,34 +335,34 @@
 				// 				//console.log(err)
 				// 			})
 				// 	}).exec()
-			
+
 				// }).exec()
 			},
 			send_code(code) {
-			  /*code是指图片base64格式数据*/
-			  //声明文件系统
-			  return new Promise((resolve,reject)=>{
-				  const fs = uni.getFileSystemManager();
-				  //随机定义路径名称
-				  var times = new Date().getTime();
-				  //console.log(wx.env.USER_DATA_PATH)
-				  var codeimg = wx.env.USER_DATA_PATH + '/' + times + '.png';
-				  				//console.log(code)
-				  //将base64图片写入
-				  fs.writeFile({
-				    filePath: codeimg,
-				    data: code.slice(22),
-				    encoding: 'base64',
-				    success: () => {
-				      //写入成功了的话，新的图片路径就能用了
-				      resolve(codeimg);
-				    },
-					fail:err=>{
-						reject(err)
-					}
-				  });
-			  })
-			  
+				/*code是指图片base64格式数据*/
+				//声明文件系统
+				return new Promise((resolve, reject) => {
+					const fs = uni.getFileSystemManager();
+					//随机定义路径名称
+					var times = new Date().getTime();
+					//console.log(wx.env.USER_DATA_PATH)
+					var codeimg = wx.env.USER_DATA_PATH + '/' + times + '.png';
+					//console.log(code)
+					//将base64图片写入
+					fs.writeFile({
+						filePath: codeimg,
+						data: code.slice(22),
+						encoding: 'base64',
+						success: () => {
+							//写入成功了的话，新的图片路径就能用了
+							resolve(codeimg);
+						},
+						fail: err => {
+							reject(err)
+						}
+					});
+				})
+
 			},
 			saveImg() {
 				var that = this;
@@ -411,7 +413,7 @@
 								}
 							})
 						},
-						fail:err=>{
+						fail: err => {
 							console.log(err)
 						}
 					});
@@ -429,30 +431,34 @@
 						this.imgsrc = this.imgsrc.replace(/[\r\n]/g, '')
 					})
 			},
-			getRecord(){
-				
-				memberApi.upgradeRecord({user_id:this.id}).then(res=>{
-					console.log(this.id,333)
+			getRecord() {
+
+				memberApi.upgradeRecord({
+					user_id: this.id
+				}).then(res => {
+					console.log(this.id, 333)
 					this.buyrecord = res.data.upgrade_log.data
-					console.log(this.buyrecord,101)
+					console.log(this.buyrecord, 101)
 				})
-				
+
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	.invitat{
+	.invitat {
 		padding-top: 40upx;
 	}
-	.allInfo{
+
+	.allInfo {
 		width: 702upx;
 		// padding-top: 20upx;
 		margin: 0 auto;
 		position: relative;
 	}
-	.record{
+
+	.record {
 		width: 702upx;
 		height: 228upx;
 		margin: 0 auto 24upx;
@@ -460,7 +466,8 @@
 		background-color: #FFFFFF;
 		border-radius: 12upx;
 	}
-	.Vipmember{
+
+	.Vipmember {
 		height: 72upx;
 		width: 500upx;
 		display: flex;
@@ -470,23 +477,27 @@
 		margin-left: 16upx;
 		position: relative;
 	}
-	.vipIcon{
+
+	.vipIcon {
 		width: 56upx;
 		height: 56upx;
+
 		// margin: 0 0 0 16upx;
-		image{
+		image {
 			width: 100%;
 			height: 100%;
 		}
 	}
-	.vipName{
+
+	.vipName {
 		font-size: 32upx;
 		color: #333333;
 		font-weight: 400;
 		height: 44upx;
 		margin: 6upx 0 0 8upx;
 	}
-	.status{
+
+	.status {
 		width: 134upx;
 		height: 48upx;
 		background-color: #FBEACD;
@@ -498,7 +509,8 @@
 		right: 0;
 		top: 40upx;
 	}
-	.statusM{
+
+	.statusM {
 		width: 134upx;
 		height: 48upx;
 		background-color: #EFEFEF;
@@ -510,12 +522,14 @@
 		right: 0;
 		top: 40upx;
 	}
-	.allTime{
+
+	.allTime {
 		width: 702upx;
-		height: 84upx;
+		// height: 84upx;
 		margin-top: 8upx;
 	}
-	.orderTime{
+
+	.orderTime {
 		// width: 402upx;
 		height: 40upx;
 		margin-left: 24upx;
@@ -523,7 +537,8 @@
 		font-weight: 400;
 		font-size: 28upx;
 	}
-	.expirationTime{
+
+	.expirationTime {
 		// width: 402upx;
 		height: 40upx;
 		margin-left: 24upx;
@@ -532,7 +547,8 @@
 		font-weight: 400;
 		font-size: 28upx;
 	}
-	.payWay{
+
+	.payWay {
 		width: 702upx;
 		height: 40upx;
 		// margin-left: 24upx;
@@ -543,18 +559,21 @@
 		display: flex;
 		justify-content: space-between;
 	}
-	.payWayL{
+
+	.payWayL {
 		margin-left: 24upx;
 	}
-	.payWayR{
+
+	.payWayR {
 		margin-right: 24upx;
 		text-align: center;
 		line-height: 40upx;
 		// width: 86upx;
 		height: 40upx;
 	}
-	.recordMessage{
+
+	.recordMessage {
 		text-align: center;
-		
+
 	}
 </style>

@@ -520,15 +520,35 @@
 		/**
 		 * 设置分享内容
 		 */
-		onShareAppMessage() {
+		onShareAppMessage(res) {
+			console.log(this.vip_group_order_id, 'vip_group_order_id');
 			// 构建分享参数
 			console.log("/pageMember/pages/index/index?" + this.$getShareUrlParams() + "&vip_group_order_id=" + this
 				.vip_group_order_id)
-			return {
-				title: "大会员专区",
-				path: "/pageMember/pages/index/index?" + this.$getShareUrlParams() + "&vip_group_order_id=" + this
-					.vip_group_order_id
+			// 右上角分享
+			if (res.from != 'button') {
+				return {
+					title: "大会员专区",
+					path: "/pageMember/pages/index/index?" + this.$getShareUrlParams() + "&vip_group_order_id=" + 0
+				}
+			} else {
+				// 按钮分享
+				let filterItem = this.orderList.filter(item => item.order_id == this.vip_group_order_id);
+				console.log(filterItem, 'filterItem');
+				if (filterItem.length == 0) {
+					uni.showToast({
+						icon: 'none',
+						title: '参数orderList>order_id错误'
+					})
+				}
+				return {
+					title: filterItem[0].user.nick_name + '邀请您参与免单',
+					path: "/pageMember/pages/index/index?" + this.$getShareUrlParams() + "&vip_group_order_id=" + this
+						.vip_group_order_id,
+					imageUrl: filterItem[0].goods[0].goods_image
+				}
 			}
+
 		},
 
 		/**
@@ -800,18 +820,18 @@
 		}
 
 		.banrOrder {
-			position: absolute;
-			top: 124upx;
+			position: fixed;
+			top: 557rpx;
 			right: 0;
-			background-color: rgba(51, 51, 51, 0.5);
+			background-color: #EF343D;
 			width: 112upx;
-			height: 40upx;
-			line-height: 40upx;
-			border-radius: 20upx 0 0 20upx;
-			font-size: 24upx;
-			line-height: 40upx;
+			height: 66rpx;
+			line-height: 66rpx;
+			border-radius: 20rpx 0 0 20rpx;
+			font-size: 24rpx;
 			color: #FFFFFF;
 			text-align: center;
+			z-index: 999
 		}
 	}
 

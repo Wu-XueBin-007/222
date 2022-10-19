@@ -431,6 +431,7 @@
 						goods_id: that.goodsId
 					},
 					success(data) {
+						console.log(33355566);
 						that.updateGoodsInfo(data.goodsInfo);
 					}
 				});
@@ -438,6 +439,7 @@
 			// 更新商品信息(库存、名称、图片)
 			updateGoodsInfo(goodsInfo) {
 				let skuListName = that.skuListName;
+				console.log(111,goodsInfo );
 				if (JSON.stringify(that.goodsInfo) === "{}" || that.goodsInfo[that.goodsIdName] !== goodsInfo[that
 						.goodsIdName]) {
 					that.goodsInfo = goodsInfo;
@@ -445,6 +447,7 @@
 				} else {
 					that.goodsInfo[skuListName] = goodsInfo[skuListName];
 				}
+				console.log(that.goodsInfo,'that.goodsInfo');
 				if (that.initKey) {
 					that.initKey = false;
 					that.init();
@@ -470,6 +473,7 @@
 					////console.log("shopItemInfo", that.shopItemInfo)
 					if (goodsInfo && typeof goodsInfo == "object" && JSON.stringify(goodsInfo) != "{}") {
 						findGoodsInfoRun = false;
+						console.log(888999);
 						that.updateGoodsInfo(goodsInfo);
 					} else {
 						that.toast("未获取到商品信息");
@@ -532,6 +536,7 @@
 				//循环所有属性判断哪些属性可选
 				//当前选中的兄弟节点和已选中属性不需要循环
 				let specList = that.goodsInfo[specListName];
+				console.log(specList,'specList');
 				for (let i = 0, len = specList.length; i < len; i++) {
 					if (i == clickIndex) {
 						continue;
@@ -546,6 +551,9 @@
 						let choosed_copy2 = choosed_copy.filter(item => item !== '' && typeof item !== 'undefined');
 						//console.log(choosed_copy2, "```````````````````````````", that.shopItemInfo, "```````````````````",
 						//choosed_copy)
+						console.log(choosed_copy,'choosed_copy');
+						 console.log(that.shopItemInfo,'shopItemInfo');
+						 console.log(choosed_copy2,'choosed_copy2');
 						if (that.shopItemInfo.hasOwnProperty(choosed_copy2)) {
 							specList[i].list[j].ishow = true;
 						} else {
@@ -575,6 +583,7 @@
 					that.outFoStock = true;
 				}
 				// 计算有多小种可选路径
+				console.log(skuList,'skuList');
 				let result = skuList.reduce(
 					(arrs, items) => {
 						return arrs.concat(
@@ -587,6 +596,7 @@
 												that.shopItemInfo[[...item2, item]] = items;
 											}
 											let r = that.shopItemInfo;
+											console.log(that.shopItemInfo,'that.shopItemInfothat.shopItemInfothat.shopItemInfo');
 											//console.log(r, 66);
 											return [...item2, item];
 										})
