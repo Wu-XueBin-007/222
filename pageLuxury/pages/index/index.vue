@@ -1,15 +1,7 @@
 <template>
 	<mescroll-body ref="mescrollRef" :sticky="true" @init="mescrollInit" :down="{ native: true }" @down="downCallback"
 		:up="upOption" @up="upCallback">
-		<!-- 页面头部 -->
-		<view class="header">
-			<search class="search" :tips="options.search ? options.search : '搜索商品'" @event="handleSearch" />
-			<!-- 切换列表显示方式 -->
-			<view class="show-view" @click="handleShowView">
-				<text class="iconfont icon-view-tile" v-if="showView"></text>
-				<text class="iconfont icon-view-list" v-else></text>
-			</view>
-		</view>
+
 		<view class="banr">
 			<view class="banrC">
 				<image :src="poster_image.preview_url" mode=""></image>
@@ -130,6 +122,7 @@
 				</view>
 			</view>
 		</view>
+		
 		<view class="advertisement2" v-else>
 			<view class="advertisementImage">
 				<image src="../../static/notvip_backimg.png" mode=""></image>
@@ -151,6 +144,43 @@
 						{{bigUser.consumption}}/{{setting.Luxury_upgrade_consum}}
 					</view>
 				</view>
+			</view>
+		</view>
+		<!-- 权益消费额度 -->
+
+		<view v-if="userInfo.team_level == 2||userInfo.team_level == 3 " class="EquityLines">
+			<view class="EquityLinesTitle">
+				权益消费额度 
+				<!-- <u-icon @click="shoWequity" name="question-circle"></u-icon> -->
+			</view>
+			<view class="lines">
+				<view class="combination">
+					<text class="combinationTitle">年度总额度(单位：元)</text>
+					<text class="combinationNum">{{equities.all}}</text>
+				</view>
+				<view class="remainingAmount">
+					<text class="combinationTitle">年度已用额度(单位：元)</text>
+					<text class="combinationNum">{{equities.used}}</text>
+				</view>
+			</view>
+			<view style="margin-top: 16rpx;" class="lines">
+				<view class="combination">
+					<text class="combinationTitle">年度剩余额度(单位：元)</text>
+					<text class="combinationNum">{{equities.balance}}</text>
+				</view>
+				<view class="remainingAmount">
+					<text class="combinationTitle">待发放额度(单位：元)</text>
+					<text class="combinationNum">{{equities.wait}}</text>
+				</view>
+			</view>
+		</view>
+		<!-- 页面头部 -->
+		<view class="header">
+			<search class="search" :tips="options.search ? options.search : '搜索商品'" @event="handleSearch" />
+			<!-- 切换列表显示方式 -->
+			<view class="show-view" @click="handleShowView">
+				<text class="iconfont icon-view-tile" v-if="showView"></text>
+				<text class="iconfont icon-view-list" v-else></text>
 			</view>
 		</view>
 		<!-- 排序标签 -->
@@ -250,6 +280,13 @@
 
 			</view>
 		</view>
+		<uni-popup background-color="#fff" ref="popup" type="center">
+			<view class="popup-content" ><text
+									class="text">权益消费额度：
+		1、购买合伙人身份可获得权益消费额度9800元/年，连续3年
+		2、购买团长身份可获得权益消费额度2980元/年，连续3年
+		3、权益消费额度可在高奢名品区购买商品</text></view>
+			</uni-popup>
 	</mescroll-body>
 </template>
 
@@ -259,17 +296,22 @@
 	import * as GoodsApi from '@/api/goods'
 	import * as LuxuryApi from '@/api/luxury'
 	import * as memberApi from "@/api/member/index.js";
+	
 	import {
 		getEmptyPaginateObj,
 		getMoreListData
 	} from '@/utils/app'
 	import Search from '@/components/search'
-
+	import {
+		checkLogin
+	} from '@/utils/app'
+	import * as UserApi from '@/api/user'
 	const pageSize = 15
 	const showViewKey = 'GoodsList-ShowView';
 	export const isObj = (o) => {
 		return Object.prototype.toString.call(o).slice(8, -1) === 'Object'
 	}
+
 	export default {
 		components: {
 			MescrollBody,
@@ -307,7 +349,9 @@
 				bigUser: {},
 				setting: {},
 				pgList: 0,
-				show: false
+				show: false,
+				equities:{},//权益消费额度
+				userInfo:{}
 			}
 		},
 
@@ -323,17 +367,41 @@
 			}
 			this.setShowView()
 		},
-		onShow() {
+		async onShow() {
 			this.getRule()
 			this.getDetail()
 			this.getbigvip()
+			await this.getUserInfo()
+			await this.getequities()
 		},
 		methods: {
-			close() {
+			 close() {
 
 			},
 			open() {
 
+			},
+			shoWequity(){
+				console.log(2222);
+				// this.$refs.popup.open('center')
+			},
+			// 获取当前用户信息
+			getUserInfo() {
+				const app = this
+					 UserApi.info()
+						.then(result => {
+							app.userInfo = result.data.userInfo
+						})
+						.catch(err => {
+							console.log(err);
+						})
+			},
+			// 获取权益额度
+			getequities(){
+				LuxuryApi.equities().then(res=>{
+					this.equities = res.data
+					console.log(res,'equities');
+				})
 			},
 			checkRule() {
 				this.showRule = true;
@@ -755,6 +823,78 @@
 				.line-price {
 					text-decoration: line-through;
 				}
+			}
+		}
+	}
+	.popup-content{
+		display: flex;
+		align-items: center;
+				justify-content: center;
+				padding: 15px;
+				height: 50px;
+				background-color: #fff;
+	}
+	.EquityLines{
+		width: 100%;
+		padding: 0 22rpx;
+		box-sizing: border-box;
+		margin: 24rpx 0;
+		background: #FFFFFF;
+		padding-bottom: 24rpx;
+		.EquityLinesTitle{
+			font-size: 30rpx;
+			font-family: PingFang SC-Bold, PingFang SC;
+			font-weight: bold;
+			color: #333333;
+			padding: 20rpx 0 ;
+			position: relative;
+			&::after{
+				content: '';
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				height: 2rpx;
+				background: #F8F8F8;
+				border-radius: 0px 0px 0px 0px;
+				opacity: 1;
+			}
+		}
+		.lines{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+			.combination,.remainingAmount{
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+			.combinationTitle{
+				color: #999999;
+				font-size: 24rpx;
+				font-family: PingFang SC-Regular, PingFang SC;
+				font-weight: 400;
+				margin-bottom: 6rpx;
+			}
+			.combinationNum{
+				font-size: 32rpx;
+				font-family: DINbek-Medium, DINbek;
+				font-weight: 500;
+				color: #333333;
+				font-weight: 500;
+				color: #333333;
+			}
+			.combination{
+				border-right:2rpx solid #F8F8F8;
+				display: flex;
+				margin-left: 20rpx;
+				margin-top: 20rpx;
+			}
+			.remainingAmount{
+				display: flex;
+				margin-left: 62rpx;
 			}
 		}
 	}

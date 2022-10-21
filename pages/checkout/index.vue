@@ -174,6 +174,20 @@
 				<text class="flex-five">权益选择</text>
 			</view>
 			<!-- 权益选择 -->
+			
+			<view class="pay-item dis-flex flex-x-between" @click="freeChoice(3)">
+				<view class="item-left dis-flex flex-y-center">
+					<view class="item-left_icon wechat">
+					</view>
+					<view class="item-left_text">
+						权益额度兑换
+					</view>
+				</view>
+				<view class="item-right col-m" v-if="is_free == 3">
+					<text class="iconfont icon-check"></text>
+				</view>
+			</view>
+			
 
 			<view class="pay-item dis-flex flex-x-between" @click="freeChoice(0)">
 				<view class="item-left dis-flex flex-y-center">
@@ -917,9 +931,7 @@
 					return false
 				}
 				// 按钮禁用
-
 				app.disabled = true
-
 				// 请求api
 				if (this.poolId) {
 					giveApi.create(app.options.mode, app.getFormData())
@@ -1084,6 +1096,10 @@
 				// 创建订单-购物车结算
 				if (options.mode === 'cart') {
 					form.cartIds = options.cartIds || null
+				}
+				// 权益额度兑换
+				if(app.is_free ==3){
+					form.isEquities = 1
 				}
 				//console.log(form);
 				form.goods_card_voucher_ids = app.voucherId ? [app.voucherId] : [];

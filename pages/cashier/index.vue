@@ -48,11 +48,21 @@
 						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.BALANCE.value"></checkbox>
 					</view>
 				</view>
+				
+				<view v-if='(userInfo.team_level == 2||userInfo.team_level == 3||true)&&loading' class="caShier-item-list"
+					@click="btn_payTa(PayTypeEnum.ConsumptionQuota.value)">
+					<view class="caShier-item-icon" style="display: flex;align-items: center;">
+						<image src="../../static/icon/consumption.png" mode="widthFix"></image>
+						<text>{{PayTypeEnum.ConsumptionQuota.name}}（可用余额：{{userInfo.equities ? userInfo.equities : 0}}）</text>
+					</view>
+					<view class="coupons-item-chbox">
+						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.ConsumptionQuota.value"></checkbox>
+					</view>
+				</view>
 			</view>
 		</view>
 
 		<view class="caShier-footer">
-
 			<view class="caShier-footer-btn" @click="btn_backTran">
 				支付
 			</view>
@@ -338,7 +348,6 @@
 			},
 			btn_payTa(type) {
 				this.paymentType = type;
-
 			},
 			btn_backTran() {
 				const app = this
@@ -355,12 +364,20 @@
 					paymentType = 40;
 				}
 				// #endif
-				if (paymentType == PayTypeEnum.BALANCE.value) {
+				if (paymentType == PayTypeEnum.BALANCE.value ||paymentType == PayTypeEnum.ConsumptionQuota.value) {
 					uni.showModal({
 						content: "确认支付吗?",
 						success: res => {
 							if (res.confirm) {
 								if (this.type == 2) {
+									// 权益消费支付
+									if(paymentType == PayTypeEnum.ConsumptionQuota.value){
+										// 权益消费额度不足 微信支付
+										if(app.userInfo.equities<app.order.pay_price){
+											OrderApi.mergePay(app.order_id, paymentType)
+												.then(result => app.onSubmitCallback(result))
+										}
+									}
 									OrderApi.mergePay(app.order_id, paymentType)
 										.then(result => app.onSubmitCallback(result))
 								} else {
@@ -379,7 +396,6 @@
 							.then(result => app.onSubmitCallback(result))
 					}
 				}
-
 			},
 			// 订单提交成功后回调
 			onSubmitCallback(result) {
