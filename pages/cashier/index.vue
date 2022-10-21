@@ -420,7 +420,7 @@
 						})
 				}
 				// 余额支付
-				if (result.data.pay_type == PayTypeEnum.BALANCE.value) {
+				if (result.data.pay_type == PayTypeEnum.BALANCE.value || result.data.pay_type ==PayTypeEnum.ConsumptionQuota.value) {
 					app.$success('支付成功')
 					app.disabled = false
 					setTimeout(() => {
