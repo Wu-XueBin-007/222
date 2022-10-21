@@ -49,7 +49,7 @@
 					<!-- <view class="headItemT">{{token_price?token_price:(isLogin?0:'---')}}</view> -->
 					<view class="headItemT">{{userInfo.cert_total_price?userInfo.cert_total_price:(isLogin?0:'---')}}
 					</view>
-					<view class="headItemB">通证</view>
+					<view class="headItemB">权益积分</view>
 				</view>
 				<view class="headItem" @click="toProfit">
 					<view class="headItemT">
