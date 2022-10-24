@@ -77,7 +77,7 @@
 		</view>
 
 		<view class="orderWrapBox" :style="{'position': 'relative','z-index': '999'}">
-			<view class="" v-if="bigVip.big_vip_switch==1">
+			<!-- <view class="" v-if="bigVip.big_vip_switch==1">
 				<view class="majorMember" v-if="!showMember">
 					<view class="majorMemberT">
 						<view class="majorMemberTL">
@@ -116,7 +116,7 @@
 						我的权益
 					</view>
 				</view>
-			</view>
+			</view> -->
 			<view class="orderWrap" style="margin: -20rpx auto 0;">
 				<view class="orderWrapHead" @click="onTargetOrder(orderNavbar[4])">
 					<view class="orderWrapHeadL">我的订单</view>
@@ -161,8 +161,6 @@
 					</view>
 				</view>
 			</view>
-
-
 
 			<view class="orderWrap" style="margin-top: 30rpx;">
 				<view class="orderWrapHead">

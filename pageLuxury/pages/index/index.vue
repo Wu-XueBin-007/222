@@ -147,30 +147,30 @@
 			</view>
 		</view>
 		<!-- 权益消费额度 -->
-
-		<view v-if="userInfo.team_level == 2||userInfo.team_level == 3 " class="EquityLines">
+        <helpTip v-if="helpTipState" @close='helpTipColse'  :title="helpTipTitle" :content="helpTipContent"></helpTip>
+		<view v-if="userInfo.team_level == 2||userInfo.team_level == 3" class="EquityLines">
 			<view class="EquityLinesTitle">
 				权益消费额度 
-				<!-- <u-icon @click="shoWequity" name="question-circle"></u-icon> -->
+				<u-icon @click="shoWequity" name="question-circle"></u-icon>
 			</view>
 			<view class="lines">
 				<view class="combination">
 					<text class="combinationTitle">年度总额度(单位：元)</text>
-					<text class="combinationNum">{{equities.all}}</text>
+					<text class="combinationNum">{{equities.all||0}}</text>
 				</view>
 				<view class="remainingAmount">
 					<text class="combinationTitle">年度已用额度(单位：元)</text>
-					<text class="combinationNum">{{equities.used}}</text>
+					<text class="combinationNum">{{equities.used||0}}</text>
 				</view>
 			</view>
 			<view style="margin-top: 16rpx;" class="lines">
 				<view class="combination">
 					<text class="combinationTitle">年度剩余额度(单位：元)</text>
-					<text class="combinationNum">{{equities.balance}}</text>
+					<text class="combinationNum">{{equities.balance||0}}</text>
 				</view>
 				<view class="remainingAmount">
 					<text class="combinationTitle">待发放额度(单位：元)</text>
-					<text class="combinationNum">{{equities.wait}}</text>
+					<text class="combinationNum">{{equities.wait||0}}</text>
 				</view>
 			</view>
 		</view>
@@ -351,7 +351,10 @@
 				pgList: 0,
 				show: false,
 				equities:{},//权益消费额度
-				userInfo:{}
+				userInfo:{},
+				helpTipState:false,
+				helpTipTitle:'',
+				helpTipContent:''
 			}
 		},
 
@@ -367,12 +370,12 @@
 			}
 			this.setShowView()
 		},
-		async onShow() {
+		 onShow() {
 			this.getRule()
 			this.getDetail()
 			this.getbigvip()
-			await this.getUserInfo()
-			await this.getequities()
+			 this.getUserInfo()
+			
 		},
 		methods: {
 			 close() {
@@ -382,6 +385,13 @@
 
 			},
 			shoWequity(){
+				this.helpTipState = true;
+				this.helpTipTitle = '权益消费额度：'
+				this.helpTipContent =
+				`1、购买合伙人身份可获得权益消费额度9800元/年，连续3年
+				2、购买团长身份可获得权益消费额度2980元/年，连续3年
+				3、权益消费额度可在高奢名品区购买商品
+				`
 				console.log(2222);
 				// this.$refs.popup.open('center')
 			},
@@ -390,7 +400,11 @@
 				const app = this
 					 UserApi.info()
 						.then(result => {
-							app.userInfo = result.data.userInfo
+							let userInfo = result.data.userInfo
+							app.userInfo = userInfo
+							if (userInfo.team_level ==2 || userInfo.team_level==3){
+								app.getequities()
+							}
 						})
 						.catch(err => {
 							console.log(err);
@@ -402,6 +416,9 @@
 					this.equities = res.data
 					console.log(res,'equities');
 				})
+			},
+			helpTipColse(){
+				this.helpTipState = false
 			},
 			checkRule() {
 				this.showRule = true;

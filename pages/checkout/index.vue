@@ -1050,9 +1050,11 @@
 
 			// 跳转到我的订单(等待1秒)
 			navToMyOrder(order_on) {
+				let is_free = this.is_free
 				setTimeout(() => {
 					this.$navTo('pages/cashier/index', {
-						order_on
+						order_on,
+						is_free
 					})
 				}, 1000)
 			},

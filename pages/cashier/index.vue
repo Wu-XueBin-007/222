@@ -48,8 +48,8 @@
 						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.BALANCE.value"></checkbox>
 					</view>
 				</view>
-				
-				<view v-if='(userInfo.team_level == 2||userInfo.team_level == 3||true)&&loading' class="caShier-item-list"
+				<!-- 团长或者创客 并且选中权益额度兑换显示 -->
+				<view v-if='(userInfo.team_level == 2||userInfo.team_level == 3)&&loading&&is_free==3' class="caShier-item-list"
 					@click="btn_payTa(PayTypeEnum.ConsumptionQuota.value)">
 					<view class="caShier-item-icon" style="display: flex;align-items: center;">
 						<image src="../../static/icon/consumption.png" mode="widthFix"></image>
@@ -111,7 +111,8 @@
 				timer: null,
 				userInfo: {},
 				type: 1,
-				loading: false
+				loading: false,
+				is_free:0,
 				// test2:"",
 				// test3:"",
 				// test4:"",
@@ -129,6 +130,9 @@
 			} else {
 				this.order_id = parseInt(options.order_id);
 				this.type = 1;
+			}
+			if (options.is_free){
+				this.is_free = options.is_free
 			}
 			// this.test4 = this.order_id;
 			detail().then(res => {
@@ -349,7 +353,7 @@
 			btn_payTa(type) {
 				this.paymentType = type;
 			},
-			btn_backTran() {
+			 btn_backTran() {
 				const app = this
 				if (app.paymentType == null) {
 					uni.showToast({
@@ -369,17 +373,25 @@
 						content: "确认支付吗?",
 						success: res => {
 							if (res.confirm) {
-								if (this.type == 2) {
+								if (app.type == 2) {
 									// 权益消费支付
-									if(paymentType == PayTypeEnum.ConsumptionQuota.value){
+									if(paymentType == PayTypeEnum.ConsumptionQuota.value&&parseInt(app.userInfo.equities) <parseInt(app.order.pay_price)){
 										// 权益消费额度不足 微信支付
-										if(app.userInfo.equities<app.order.pay_price){
-											OrderApi.mergePay(app.order_id, paymentType)
-												.then(result => app.onSubmitCallback(result))
-										}
+											paymentType = 20
+											uni.showToast({
+												icon:'none',
+												title:'权益消费额度不足,将使用微信支付补差额',
+												success: () => {
+													setTimeout(()=>{
+														OrderApi.mergePay(app.order_id,paymentType)
+															.then(result => app.onSubmitCallback(result))
+															return
+													},2500)
+												}
+											})
 									}
-									OrderApi.mergePay(app.order_id, paymentType)
-										.then(result => app.onSubmitCallback(result))
+									if (paymentType == 20) return;
+									OrderApi.mergePay(app.order_id, paymentType).then(result => app.onSubmitCallback(result))	
 								} else {
 									OrderApi.pay(app.order_id, paymentType)
 										.then(result => app.onSubmitCallback(result))
