@@ -535,7 +535,7 @@
 				</view>
 				
 			</view> -->
-			<zero-waterfall :list="JgoodsList" v-if="JgoodsList.length>0">
+			<zero-waterfall ref="waterfall" :list="JgoodsList" v-if="JgoodsList.length>0">
 				<!--  #ifdef  MP-WEIXIN -->
 				<view v-for="(item, index) of JgoodsList" :key="index" slot="slot{{item.goods_id}}">
 					<view class="cnt">
@@ -722,7 +722,8 @@
 				windowHeight: [],
 				bigVip: {},
 				passMessage: {},
-				showPass: false
+				showPass: false,
+				requestSwitch:false,
 				// vajraDistrict:[
 				// 	{name:"",url:"",icon:"",index:0},
 				// 	]
@@ -825,24 +826,13 @@
 			// this.getJgoodslist(true);
 		},
 		onReachBottom() {
-			// if (this.dataList.length >= this.JgoodsList.length) {
-			// 	this.loadingStatus = 'noMore'
-			// } else {
-			// 	this.loadStatus = 'more';
-			// 	setTimeout(() => {
-			// 		// this.loadMore();
-			// 		this.loadStatus = 'loadmore';
-			// 	}, 1000)
-			// }
-			// 触底
 			if (!this.bottomFlag) {
 				return false;
 			}
-			this.page = this.page + 1;
+			 if (!this.requestSwitch) this.page =this.page + 1;
 			this.bottomFlag = false;
-			this.status = "loading";
+			this.loadStatus = "loading";
 			this.getJgoodslist();
-
 		},
 		onPageScroll(e) {
 			// 获取页面高度
@@ -1427,6 +1417,7 @@
 					goodsApi.list({
 						if_hot: 1
 					}).then(res => {
+							
 						app.RgoodsList = res.data.list.data
 						resolve(res)
 					}).catch(reject)
@@ -1445,13 +1436,16 @@
 			// 	})
 			// },
 			getJgoodslist(flag) {
+				if(this.requestSwitch) return;
+				this.requestSwitch = true;
 				var _that = this;
 				var obj = {};
 				obj.page = this.page;
 				obj.limit = this.limit;
 				obj.if_selected = 1;
 				goodsApi.list(obj).then(res => {
-					console.log(res)
+					console.log(res,'resresresres')
+					this.requestSwitch = false
 					if (res.status == 200) {
 						// this.JgoodsList=res.data.list.data;
 						if (flag) {
@@ -1459,18 +1453,20 @@
 							this.bottomFlag = true;
 							uni.stopPullDownRefresh()
 						}
-						if (Math.ceil(res.data.list.total / _that.limit) != this.page && res.data.list.last_page >
+						if (res.data.list.last_page != this.page && res.data.list.last_page >
 							0) {
 							this.bottomFlag = true;
-							this.status = "loadmore";
+							this.loadStatus = "more";
 						} else {
-							this.status = "normal";
+							this.bottomFlag = false;
+							this.loadStatus = "normal"
 						}
 						if (this.page != 1) {
 							this.JgoodsList = this.JgoodsList.concat(res.data.list.data);
-
+							this.JgoodsList.splice()//触发更新
 						} else {
 							this.JgoodsList = res.data.list.data;
+							this.JgoodsList.splice()//触发更新
 						}
 
 					}

@@ -241,6 +241,7 @@
 						//console.log(res)
 						if (res.confirm) {
 							let flag = false;
+							
 							// if(_this.account_number || _this.imgInfo.file_id){
 							// 	flag = true;
 							// }
@@ -272,6 +273,7 @@
 									// })
 									_this.successFlag = true;
 									_this.successTxt = "成功";
+									_this.getPageData();
 									// setTimeout(()=>{
 									// 	let url = "/pageHome/distribution/withdrawal/index";
 									// 	// let query = _this.type == 1 ? 2 : 1

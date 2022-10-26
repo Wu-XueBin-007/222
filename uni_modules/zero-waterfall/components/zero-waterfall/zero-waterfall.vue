@@ -8,7 +8,7 @@
 					<zero-lazy-load :image="item.goods_image" :imgMode='imgMode' @load='considerPush' @error='considerPush'>
 					</zero-lazy-load>
 				</view>
-				<view class="item_info">
+				<view  class="item_info">
 					<view class="item_info_title">{{item.goods_name}}</view>
 					<!-- <view class="item_info_note">{{item.note}}</view> -->
 					<view class="item_info_note">
@@ -88,13 +88,17 @@
 			}
 		},
 		watch: {
-			list(newValue, oldValue) {
-				this.newList = newValue.slice(oldValue.length);
-				this.considerPush()
+		 list: {
+			handler (newValue, oldValue) {
+				    let newarr = [...this.listLeft,...this.listRight]
+					this.newList = newValue.slice(newarr?newarr.length:0);
+					this.considerPush()
 			},
+			immediate: true
+		 }
 		},
 		mounted() {
-			this.init()
+			// this.init()
 		},
 
 		methods: {
@@ -107,11 +111,12 @@
 			},
 			// 触发重新排列
 			init() {
-				this.newList = [...this.list];
+				// this.newList = [...this.list];
+				// console.log(3333);
 				this.listLeft = [];
 				this.listRight = [];
 				if (this.newList.length != 0) {
-					this.listLeft.push(this.newList.shift()); //触发排列
+					// this.listLeft.push(this.newList.shift()); //触发排列
 					// this.listRight.push(this.newList[1]); //触发排列
 				}
 
@@ -127,7 +132,7 @@
 
 			// 计算排列
 			considerPush() {
-				// console.log(123456,"加载",this.newList.length)
+				// console.log(123456,"加载",this.newList)
 				// if(!this.loadFlag){
 				// 	return false;
 				// }
@@ -152,7 +157,6 @@
 						this.listRight.push(this.newList.shift());
 					}
 					// this.loadFlag = true;
-					// console.log(this.loadFlag)
 				});
 
 			},
