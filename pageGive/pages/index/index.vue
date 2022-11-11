@@ -616,7 +616,7 @@
 				width: 186upx;
 				height: 60upx;
 				line-height: 60upx;
-				background-color: #EF343D;
+				background-color: #EF343D  ;
 				color: #FFFFFF;
 				border-radius: 30upx;
 				margin: 16upx auto 24upx;
@@ -664,7 +664,7 @@
 				width: 160upx;
 				height: 60upx;
 				line-height: 60upx;
-				background-color: #EF343D;
+				background-color: #EF343D  ;
 				color: #FFFFFF;
 				border-radius: 30upx;
 				margin: 16upx auto 24upx;
@@ -814,7 +814,7 @@
 			text-align: center;
 			font-size: 26upx;
 			color: #FFFFFF;
-			background-color: #EF343D;
+			background-color: #EF343D  ;
 			border-radius: 30upx;
 		}
 

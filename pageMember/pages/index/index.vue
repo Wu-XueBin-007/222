@@ -823,7 +823,7 @@
 			position: fixed;
 			top: 557rpx;
 			right: 0;
-			background-color: #EF343D;
+			background-color: #EF343D  ;
 			width: 112upx;
 			height: 66rpx;
 			line-height: 66rpx;

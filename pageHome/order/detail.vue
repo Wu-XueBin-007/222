@@ -498,7 +498,7 @@
   .header {
     display: flex;
     justify-content: space-between;
-	background-color: #EF343D;
+	background-color: #EF343D  ;
     height: 260rpx;
     padding: 0 30rpx 80rpx 30rpx;
 
@@ -957,8 +957,8 @@
 	  border-radius: 40rpx;
 
       &.active {
-        color: #EF343D;
-		border: 2rpx solid #EF343D;
+        color: #EF343D  ;
+		border: 2rpx solid #EF343D  ;
         // border: none;
         // background: linear-gradient(to right, #f9211c, #ff6335);
       }

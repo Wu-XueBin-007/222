@@ -38,7 +38,7 @@
 					</view>
 				</view>
 
-				<view v-if='(!(order.is_big_vip||order.is_luxury_free))&&loading' class="caShier-item-list"
+				<view v-if='order.is_big_vip&&loading&&is_free==0' class="caShier-item-list"
 					@click="btn_payTa(PayTypeEnum.BALANCE.value)">
 					<view class="caShier-item-icon" style="display: flex;align-items: center;">
 						<image src="../../static/icon/icon_ye.png" mode="widthFix"></image>

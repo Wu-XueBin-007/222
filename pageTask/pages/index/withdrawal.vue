@@ -303,7 +303,7 @@
 		width: 284upx;
 		height: 78upx;
 		line-height: 78upx;
-		background-color: #EF343D;
+		background-color: #EF343D  ;
 		text-align: center;
 		color: #FFFFFF;
 		border-radius: 40upx;
@@ -356,7 +356,7 @@
 	}
 	.active{
 		font-size: 30upx;
-		color: #EF343D;
+		color: #EF343D  ;
 		font-weight: bold;
 		position: relative;
 	}
@@ -370,7 +370,7 @@
 		/* transform: translateX(-50%); */
 		transform: translateX(-50%);
 		border-radius: 10upx;
-		background-color: #EF343D;
+		background-color: #EF343D  ;
 	}
 	.withdrawalMainB{
 		width: 690upx;
@@ -402,7 +402,7 @@
 	}
 	.withdrawalMainItemR{
 		font-size: 30upx;
-		color: #EF343D;
+		color: #EF343D  ;
 		margin: 22upx 24upx 22upx 0;
 	}
 	.withdrawalMainItemR2{

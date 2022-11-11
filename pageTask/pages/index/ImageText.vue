@@ -292,7 +292,7 @@
 			width: 344upx;
 			height: 80upx;
 			border-radius: 40upx;
-			background-color: #EF343D;
+			background-color: #EF343D  ;
 			line-height: 80upx;
 			color: #FFFFFF;
 			margin: 36upx auto 30upx;

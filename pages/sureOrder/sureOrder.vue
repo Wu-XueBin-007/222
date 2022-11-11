@@ -287,18 +287,18 @@
 	.surePriceR{
 		font-size: 30upx;
 		font-weight: bold;
-		color: #EF343D;
+		color: #EF343D  ;
 	}
 	.surePriceR text{
 		font-size: 44upx;
-		color: #EF343D;
+		color: #EF343D  ;
 	}
 	.submit{
 		width: 244upx;
 		height: 80upx;
 		line-height: 80upx;
 		text-align: center;
-		background: #EF343D;
+		background: #EF343D  ;
 		border-radius: 40upx;
 		color: white;
 		font-size: 34upx;

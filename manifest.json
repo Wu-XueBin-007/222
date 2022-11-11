@@ -2,8 +2,8 @@
     "name" : "融汇商城",
     "appid" : "__UNI__984591A",
     "description" : "链生活",
-    "versionName" : "2.1.6",
-    "versionCode" : 216,
+    "versionName" : "2.1.7",
+    "versionCode" : 217,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {

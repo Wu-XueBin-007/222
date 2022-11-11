@@ -38,7 +38,7 @@
 			</scroll-view>
 
 			<!-- 右侧 二级分类 -->
-			<scroll-view class="cate-right b-f" :scroll-top="scrollTop" :scroll-y="true"
+			<!-- <scroll-view class="cate-right b-f" :scroll-top="scrollTop" :scroll-y="true"
 				:style="{ height: `${scrollHeight}px` }">
 				<view v-if="list[curIndex]">
 					<view class="cate-right-cont">
@@ -59,7 +59,7 @@
 						</view>
 					</view>
 				</view>
-			</scroll-view>
+			</scroll-view> -->
 		</view>
 		<empty v-if="!list.length" :isLoading="isLoading" />
 	</view>

@@ -225,7 +225,7 @@
 					font-size: 22upx;
 					// font-weight: bold;
 					line-height: 22upx;
-					color: #EF343D;
+					color: #F97112  ;
 					margin-right: 18upx;
 					text{
 						font-size: 36upx;

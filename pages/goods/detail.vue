@@ -344,7 +344,6 @@
 		 * 生命周期函数--监听页面加载
 		 */
 		onLoad(options) {
-			console.log(options, 'optionsoptions');
 			// 记录商品ID
 			this.goodsId = parseInt(options.goodsId)
 			if (options.type) {
@@ -427,7 +426,6 @@
 						GoodsApi.detail(app.goodsId)
 							.then(result => {
 								app.goods = result.data.detail
-								console.log(result, 'resultresult');
 								// if (result.status == 500) {
 								// 	uni.navigateBack()
 								// }

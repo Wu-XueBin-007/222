@@ -244,7 +244,7 @@
 			// 价格的字体颜色
 			priceColor: {
 				Type: String,
-				default: "#EF343D"
+				default: "#EF343D  "
 			},
 			// 立即购买按钮的文字
 			buyNowText: {
@@ -259,7 +259,7 @@
 			// 立即购买按钮的背景颜色
 			buyNowBackgroundColor: {
 				Type: String,
-				default: "#EF343D"
+				default: "#EF343D  "
 			},
 			// 加入购物车按钮的文字
 			addCartText: {
@@ -269,7 +269,7 @@
 			// 加入购物车按钮的字体颜色
 			addCartColor: {
 				Type: String,
-				default: "#EF343D"
+				default: "#EF343D  "
 			},
 			// 加入购物车按钮的背景颜色
 			addCartBackgroundColor: {
@@ -367,8 +367,6 @@
 				that.shopItemInfo = {};
 				// that.shopItemInfo = that.goodsInfo;
 				let specListName = that.specListName;
-				//console.log(that.goodsInfo)
-				//console.log(that.shopItemInfo, 44)
 				that.goodsInfo[specListName].map(item => {
 					that.selectArr.push('');
 					that.subIndex.push(-1);
@@ -379,7 +377,6 @@
 				that.autoClickSku(); // 自动选择sku策略
 			},
 			changeFlag(e) {
-				////console.log(e)
 				if (e.detail.value.length > 0) {
 					this.agreeFlag = true;
 				} else {
@@ -398,7 +395,6 @@
 				})
 			},
 			dateChange(val) {
-				//console.log(val);
 				if (this.Region.is_area == 0) {
 					this.form.region.length = 2
 				}
@@ -423,7 +419,6 @@
 					that.toast("custom-action必须是function");
 					return false;
 				}
-				////console.log(that.action)
 				vk.callFunction({
 					url: that.action,
 					title: '请求中...',
@@ -439,7 +434,6 @@
 			// 更新商品信息(库存、名称、图片)
 			updateGoodsInfo(goodsInfo) {
 				let skuListName = that.skuListName;
-				console.log(111,goodsInfo );
 				if (JSON.stringify(that.goodsInfo) === "{}" || that.goodsInfo[that.goodsIdName] !== goodsInfo[that
 						.goodsIdName]) {
 					that.goodsInfo = goodsInfo;
@@ -447,7 +441,6 @@
 				} else {
 					that.goodsInfo[skuListName] = goodsInfo[skuListName];
 				}
-				console.log(that.goodsInfo,'that.goodsInfo');
 				if (that.initKey) {
 					that.initKey = false;
 					that.init();
@@ -455,9 +448,7 @@
 				// 更新选中sku的库存信息
 				let select_sku_info = that.getListItem(that.goodsInfo[skuListName], that.skuIdName, that.selectShop[
 					that.skuIdName]);
-
 				Object.assign(that.selectShop, select_sku_info);
-				// ////console.log(that.selectShop,select_sku_info)
 				that.complete = true;
 				that.$emit("open", true);
 				that.$emit("input", true);
@@ -468,12 +459,9 @@
 				if (that.customAction && typeof(that.customAction) === 'function') {
 					let goodsInfo = await that.customAction();
 					let shopItemInfo = {};
-					////console.log("goodsInfo", goodsInfo);
 					that.shopItemInfo = that.goodsInfo;
-					////console.log("shopItemInfo", that.shopItemInfo)
 					if (goodsInfo && typeof goodsInfo == "object" && JSON.stringify(goodsInfo) != "{}") {
 						findGoodsInfoRun = false;
-						console.log(888999);
 						that.updateGoodsInfo(goodsInfo);
 					} else {
 						that.toast("未获取到商品信息");
@@ -509,18 +497,14 @@
 						that.$set(that.selectArr, index1, '');
 						that.$set(that.subIndex, index1, -1);
 					}
+					that.checkItem();
 					that.checkInpath(index1);
 					// 如果全部选完
 					that.checkSelectShop();
-					// ////console.log(that.selectShop,13313131321313)
-					// ////console.log(that.shopItemInfo[that.selectArr],10101010)
-					////console.log(value, index1, event, index2, 333333333333333)
-					////console.log(that.selectArr, 1111)
 				}
 			},
 			// 检测是否已经选完sku
 			checkSelectShop() {
-				//console.log(that.shopItemInfo, 22222222)
 				// 如果全部选完
 				if (that.selectArr.every(item => item != '')) {
 					that.selectShop = that.shopItemInfo[that.selectArr];
@@ -536,7 +520,6 @@
 				//循环所有属性判断哪些属性可选
 				//当前选中的兄弟节点和已选中属性不需要循环
 				let specList = that.goodsInfo[specListName];
-				console.log(specList,'specList');
 				for (let i = 0, len = specList.length; i < len; i++) {
 					if (i == clickIndex) {
 						continue;
@@ -549,11 +532,6 @@
 						let choosed_copy = [...that.selectArr];
 						that.$set(choosed_copy, i, specList[i].list[j].name);
 						let choosed_copy2 = choosed_copy.filter(item => item !== '' && typeof item !== 'undefined');
-						//console.log(choosed_copy2, "```````````````````````````", that.shopItemInfo, "```````````````````",
-						//choosed_copy)
-						console.log(choosed_copy,'choosed_copy');
-						 console.log(that.shopItemInfo,'shopItemInfo');
-						 console.log(choosed_copy2,'choosed_copy2');
 						if (that.shopItemInfo.hasOwnProperty(choosed_copy2)) {
 							specList[i].list[j].ishow = true;
 						} else {
@@ -562,7 +540,6 @@
 					}
 				}
 				that.$set(that.goodsInfo, specListName, specList);
-				// console.timeEnd('筛选可选路径需要的时间是');
 			},
 			// 计算sku里面规格形成路径
 			checkItem() {
@@ -583,7 +560,6 @@
 					that.outFoStock = true;
 				}
 				// 计算有多小种可选路径
-				console.log(skuList,'skuList');
 				let result = skuList.reduce(
 					(arrs, items) => {
 						return arrs.concat(
@@ -596,8 +572,6 @@
 												that.shopItemInfo[[...item2, item]] = items;
 											}
 											let r = that.shopItemInfo;
-											console.log(that.shopItemInfo,'that.shopItemInfothat.shopItemInfothat.shopItemInfo');
-											//console.log(r, 66);
 											return [...item2, item];
 										})
 									);
@@ -841,7 +815,7 @@
 							font-weight: 500;
 
 							.price-content {
-								color: #EF343D;
+								color: #EF343D  ;
 								margin-bottom: 10rpx;
 
 								.sign {
@@ -915,8 +889,8 @@
 									box-sizing: border-box;
 
 									&.actived {
-										border-color: #EF343D;
-										color: #EF343D;
+										border-color: #EF343D  ;
+										color: #EF343D  ;
 									}
 
 									&.noactived {
@@ -977,11 +951,11 @@
 
 					&.add-cart {
 						background-color: #ffffff;
-						border: 3rpx solid #EF343D;
+						border: 3rpx solid #EF343D  ;
 					}
 
 					&.buy {
-						background: #EF343D;
+						background: #EF343D  ;
 					}
 				}
 
@@ -994,7 +968,7 @@
 					text-align: center;
 					font-weight: bold;
 					font-size: 28rpx;
-					background: #EF343D;
+					background: #EF343D  ;
 					border-radius: 46rpx;
 				}
 
@@ -1007,7 +981,7 @@
 					text-align: center;
 					font-weight: bold;
 					font-size: 28rpx;
-					background: #EF343D;
+					background: #EF343D  ;
 					border-radius: 46rpx;
 				}
 
@@ -1015,18 +989,18 @@
 					width: 342rpx;
 					height: 80rpx;
 					// border-radius: 38rpx;
-					color: #EF343D;
+					color: #EF343D  ;
 					line-height: 80rpx;
 					text-align: center;
 					font-weight: bold;
 					font-size: 28rpx;
 					border-radius: 46rpx;
-					border: 3rpx solid #EF343D;
+					border: 3rpx solid #EF343D  ;
 				}
 
 				.sure.add-cart {
 					background-color: #ffffff;
-					border: 3rpx solid #EF343D;
+					border: 3rpx solid #EF343D  ;
 				}
 			}
 		}

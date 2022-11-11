@@ -36,7 +36,6 @@
 		<view style="box-sizing: border-box;padding: 0 30upx;margin-top: 10upx;color: #999999;">5、确认收货后，佣金实时到账，若佣金到账后，则不可退换货；</view>
 		<view style="box-sizing: border-box;padding: 0 30upx;margin-top: 10upx;color: #999999;">6、如果疑问请联系客服咨询；</view> -->
 		<view class="conWraps" style="padding: 30rpx;" v-html="commonL.withdrawal_rules">
-
 		</view>
 		<view class="successMark" v-if="successFlag" @click="hideSuccess"></view>
 		<view class="successCon" v-if="successFlag">

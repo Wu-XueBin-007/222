@@ -623,6 +623,7 @@
 					settingApi.get_info_by_key({
 						key: 'agent'
 					}).then(res => {
+
 						app.info_by_key = res.data.setting
 						resolve(res)
 					}).catch(reject)

@@ -117,7 +117,7 @@
 			},
 			getBanner(){
 				seckillApi.bannerList().then(res=>{
-					console.log(res)
+					console.log(res,'resresresres')
 					this.bannerList = res.data.list;
 				})
 			},
@@ -136,7 +136,6 @@
 			getTime(){
 				seckillApi.timeList().then(res=>{
 					// uni.hideLoading();
-					console.log(res)
 					let nowTimes = new Date();
 					this.timeList = res.data.list.map(cur=>{
 						let startArr = cur.start_hour.split(":");

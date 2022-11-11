@@ -496,7 +496,7 @@
     }
 
     .state-text {
-      color: #EF343D;
+      color: #EF343D  ;
     }
   }
 
@@ -516,7 +516,7 @@
 		  .state-text{
 			  font-size: 26upx;
 			  font-weight: bold;
-			  color: #EF343D;
+			  color: #EF343D  ;
 			  
 		  }
 	  }
@@ -648,8 +648,8 @@
         border: 1rpx solid #C8C8C8;
 
         &.active {
-          color: #EF343D;
-          border: 1rpx solid #EF343D;
+          color: #EF343D  ;
+          border: 1rpx solid #EF343D  ;
         }
       }
 

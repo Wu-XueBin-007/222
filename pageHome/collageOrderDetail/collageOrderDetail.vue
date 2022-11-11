@@ -275,14 +275,14 @@
 	.orderMsgConRCL{
 		font-size: 22upx;
 		line-height: 28upx;
-		color: #EF343D;
+		color: #EF343D  ;
 		margin-right: 100upx;
 	}
 	.orderMsgConRCL>text{
 		font-size: 28upx;
 		font-weight: bold;
 		line-height: 28upx;
-		color: #EF343D; 
+		color: #EF343D  ; 
 	}
 	.orderMsgConRCR{
 		display: flex;

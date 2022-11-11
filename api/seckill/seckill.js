@@ -9,7 +9,8 @@ const api = {
   pay: 'order/pay',
   bannerList: 'seckill.ad/list',
   randomList: 'seckill.goods/random_list',
-  updateAddress: 'order/update_address'
+  updateAddress: 'order/update_address',
+  seckilltime: 'seckill.time/now'
 }
 
 // 秒杀分组列表
@@ -50,5 +51,10 @@ export const randomList = (data) => {
 // 修改发货地址
 export const updateAddress = (data) => {
   return request.post(api.updateAddress, data)
+}
+
+// 当前秒杀
+export const seckilltime = (data) => {
+  return request.post(api.seckilltime, data)
 }
 

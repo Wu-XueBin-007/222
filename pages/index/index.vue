@@ -8,25 +8,32 @@
 			<!-- #ifdef MP-WEIXIN -->
 			<view class="heads2">
 				<view class="heads2-left">
-					<image src="../../static/home/icon_home.png"></image>
+					<!-- <image src="../../static/home/icon_home.png"></image> -->
 					<text>融汇链生活</text>
 				</view>
 				<view class="heads2-right" @click="btn_invitation">
-					<image src="../../static/home/icon_code.png" mode=""></image>
+					<view class="heads2-right-imgwrap">
+						<image src="../../static/home/icon_code.png" mode=""></image>
+					</view>
+					邀请码
 				</view>
 			</view>
 			<!-- #endif -->
 			<!-- #ifdef !MP-WEIXIN -->
 			<view class="heads2" style="width: 100%;">
 				<view class="heads2-left">
-					<image src="../../static/home/icon_home.png"></image>
+					<!-- <image src="../../static/home/icon_home.png"></image> -->
 					<text>融汇链生活</text>
 				</view>
 				<view class="heads2-right" @click="btn_invitation">
-					<image src="../../static/home/icon_code.png" mode=""></image>
+					<view class="heads2-right-imgwrap">
+						<image src="../../static/home/icon_code.png" mode=""></image>
+					</view>
+					邀请码
 				</view>
 			</view>
 			<!-- #endif -->
+			<image class="headerimg" src="../../static/bg_bj.png" mode=""></image>
 		</view>
 		<view class="subject" :style="{'padding-top': navInfo.navH-10+'px'}">
 			<!-- <view class="subject-img" :style="{'height': 210+navInfo.navH+'px'}" @click="toMyCollage">
@@ -57,11 +64,11 @@
 					<view @click="handleSearch">
 						融汇链生活
 					</view>
-					<image src="../../static/sreach.png" mode=""></image>
+					<image src="../../static/icon_ss.png" mode=""></image>
 				</view>
 			</view>
 			<!-- 分类 -->
-			<view class="" style="position: relative;margin-top: 20upx;">
+			<!-- <view class="" style="position: relative;margin-top: 20upx;">
 				<scroll-view scroll-x="true"
 					style="display: flex;white-space: nowrap;width: 84%;height: 80upx;margin: 0 0 0 12upx;box-sizing: border-box;overflow: scroll;">
 					<view class="district-item2" v-for="(item,index) in classList" :key="index"
@@ -77,7 +84,7 @@
 					<image src="../../static/icon/icon_fl.png" mode=""></image>
 					<text>分类</text>
 				</view>
-			</view>
+			</view> -->
 
 		</view>
 		<view class="newMain">
@@ -93,13 +100,16 @@
 			<!-- 轮播图 end-->
 			<!-- 金刚区 -->
 			<view class="home-point">
-				<view class="point-item" v-if="commonL.lucky_free_activity_switch==1" @click="btn_give">
+				<template v-for="item in Kingkong">
+				<view   class="point-item" v-if="item.status" @click="btn_give(item)">
 					<view class="point-img">
-						<image src="../../static/home/give.png"></image>
+						<image :src="item.image_url"></image>
 					</view>
-					<view class="point-text">幸运免单</view>
+					<view class="point-text">{{item.title}}</view>
 				</view>
-				<view class="point-item" @click="btn_collage">
+				</template>
+
+<!-- 				<view class="point-item" @click="btn_collage">
 					<view class="point-img">
 						<image src="../../static/home/collage.png"></image>
 					</view>
@@ -117,15 +127,13 @@
 					</view>
 					<view class="point-text">高奢名品</view>
 				</view>
-
-
 				<view class="point-item" v-if="commonL.blindbox_switch==1" @click="btn_blindbox">
 					<view class="point-img">
 						<image src="../../static/home/blindbox.png"></image>
 					</view>
 					<view class="point-text">盲盒</view>
-				</view>
-				<view class="point-item" v-if="commonL.advert_switch==1" @click="btn_advertisement">
+				</view> -->
+				<!-- <view class="point-item" v-if="commonL.advert_switch==1" @click="btn_advertisement">
 					<view class="point-img">
 						<image src="../../static/home/advertisement.png"></image>
 					</view>
@@ -155,7 +163,7 @@
 						<image src="../../static/home/brand.png"></image>
 					</view>
 					<view class="point-text">国有品牌</view>
-				</view>
+				</view> -->
 				<!-- <view class="point-item" @click="btn_welfare">
 					<view class="point-img">
 						<image src="../../static/home/welfare.png"></image>
@@ -163,12 +171,12 @@
 					<view class="point-text">免费试用</view>
 				</view> -->
 
-				<view class="point-item" @click="btn_boutique">
+<!-- 				<view class="point-item" @click="btn_boutique">
 					<view class="point-img">
 						<image src="../../static/home/boutique.png"></image>
 					</view>
 					<view class="point-text">大牌专区</view>
-				</view>
+				</view> -->
 				<!-- <swiper class="swiper6" indicator-dots="false" indicator-active-color="#ff5060" indicator-color="#FFFFFF"
 					autoplay="true" interval="3000" duration="500">
 					<swiper-item>
@@ -233,10 +241,7 @@
 							<view class="point-text">大牌专区</view>
 						</view>
 					</swiper-item>
-					
 				</swiper> -->
-
-
 			</view>
 			<!-- 金刚区 end-->
 		</view>
@@ -263,32 +268,30 @@
 		</view> -->
 
 		<!-- 通证信息 -->
-		<view class="pass">
+		<!-- <view class="pass">
 			<view class="passL">
 				<view class="passMessageL">
 					<image src="../../static/home/pass.png"></image>
 				</view>
 				<view class="passMessageR">
-					<!-- {{passMessage.name}} -->
+					
 					BLCXF
 				</view>
 				<view class="passData" v-if="passMessage.token_price">
 					￥{{passMessage.token_price}}
 				</view>
 				<view v-else style="margin-left: 20rpx; margin-top: 16rpx;font-size: 24rpx;">￥--</view>
-				<!-- <view class="passData" v-if="showPass">
-					￥{{passMessage.token_price}}
-				</view> -->
+
 			</view>
 			<view class="passR" v-if="passMessage.token_increase">
 				+{{passMessage.token_increase}}
 			</view>
-		</view>
+		</view> -->
 		<!-- 通证信息 end -->
-		<view class="adverImg" v-if="setting.ActivityTopicsImageId">
+<!-- 		<view class="adverImg" v-if="setting.ActivityTopicsImageId">
 			<image :src="setting.ActivityTopicsImageId.preview_url" :data-url="setting.activity_topics_url"
 				@click="btn_tourl"></image>
-		</view>
+		</view> -->
 		<!-- 购票入口 -->
 		<view class="addCon" v-if="commonL.ticketImage&&commonL.MobileRechargeImage">
 			<view class="ticket" v-if="commonL.is_open_ticket&&commonL.if_switch">
@@ -329,12 +332,32 @@
 
 		</view>
 		<!-- 秒杀 -->
-		<view class="home-seckill" @click="btn_seckill" v-if="seckillGoodsBanner.length>0">
+		<view class="home-seckill" @click="btn_seckill" v-if="seckillGoodsBanner.length>0&&!JSON.stringify(seckilltime) === '{}' ">
 			<view class="seckill-header">
 				<view class="seckill-headerL" style="display: flex;align-items: center;">
-					<image src="../../static/icon/seckill.png" mode=""></image>
+					<image src="../../static/img_xsms.png" mode=""></image>
 				</view>
-				<view class="seckillMore">查看更多 <image src="../../static/icon/icon_right.png" mode=""></image>
+				<!-- <view class="seckillMore">查看更多 <image src="../../static/icon/icon_right.png" mode=""></image>
+				</view> -->
+				<view class="seckillMore">
+					<view class="title">距离结束剩余</view>
+					<view class="time_wrap">
+						<view class="hour">
+							07
+						</view>
+						<view class="colon">
+							:
+						</view>
+						<view class="hour minute">
+							57
+						</view>
+						<view class="colon">
+							:
+						</view>
+						<view class="hour seconds">
+							09
+						</view>
+					</view>
 				</view>
 			</view>
 			<view class="seckillConWrap">
@@ -552,7 +575,7 @@
 				</template>
 				<!-- #endif -->
 			</zero-waterfall>
-			<uni-load-more bg-color="rgb(240, 240, 240)" :status="loadStatus" @clickLoadMore='loadMore'></uni-load-more>
+			<uni-load-more bg-color="rgb(240, 240, 240)" :status="loadStatus" @clickLoadMore='getJgoodslist'></uni-load-more>
 
 		</view>
 		<!--弹出框  -->
@@ -621,7 +644,7 @@
 		<!-- #ifdef MP-WEIXIN -->
 		<button open-type="contact" style="opacity: 1;">
 			<view class="home-kf">
-				<image src="../../static/home/icon_kfb.png" mode=""></image>
+				<image src="../../static/home/icon_kf.png" mode=""></image>
 			</view>
 		</button>
 		<!-- #endif -->
@@ -631,7 +654,7 @@
 			</view>
 		</button> -->
 		<view class="home-returnTop" v-if="back" @click="btn_top">
-			<image src="../../static/home/icon_top.png" mode=""></image>
+			<image src="../../static/home/icon_zd.png" mode=""></image>
 		</view>
 
 	</view>
@@ -724,6 +747,8 @@
 				passMessage: {},
 				showPass: false,
 				requestSwitch:false,
+				Kingkong:[],//金刚区
+				seckilltime:{}
 				// vajraDistrict:[
 				// 	{name:"",url:"",icon:"",index:0},
 				// 	]
@@ -744,6 +769,7 @@
 			obj.navH = App.globalData.navH;
 			obj.paddingTop = App.globalData.paddingTop;
 			this.navInfo = obj;
+			this.getKingkong()
 			this.getPageData();
 			// this.getArticle();
 			// timer=setInterval(()=>{
@@ -751,6 +777,8 @@
 			// },1000)
 			this.getRandomList();
 			this.getPass();
+			this.getseckilltime()
+			
 		},
 		watch: {
 			classList: function(val) {
@@ -829,9 +857,7 @@
 			if (!this.bottomFlag) {
 				return false;
 			}
-			 if (!this.requestSwitch) this.page =this.page + 1;
-			this.bottomFlag = false;
-			this.loadStatus = "loading";
+
 			this.getJgoodslist();
 		},
 		onPageScroll(e) {
@@ -854,6 +880,13 @@
 				this.loadStatus = 'loading';
 				this.page++
 				this.dataList = this.dataList.concat(this.JgoodsList.slice(this.dataList.length, this.page * this.limit))
+			},
+			getseckilltime(){
+					
+				seckillApi.seckilltime().then(res=>{
+					this.seckilltime = res.data.list&& res.data.list[0]
+					console.log(res,'seckillApi');
+				})
 			},
 			getRandomList() {
 				seckillApi.randomList().then(res => {
@@ -1008,9 +1041,7 @@
 			//轮播图
 			btn_tourl(e) {
 				let url = e.currentTarget.dataset.url || e.target.dataset.url;
-				console.log(url)
 				var reg = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
-				console.log(!reg.test(url), '!reg.test(url)');
 				if (!reg.test(url)) {
 					uni.navigateTo({
 						url: url
@@ -1176,7 +1207,7 @@
 					duration: 2000
 				});
 			},
-			btn_give() {
+			btn_give(item) {
 				// uni.showToast({
 				//     title: '此功能暂未开放，敬请期待',
 				// 	icon:"none",
@@ -1185,9 +1216,9 @@
 				// uni.navigateTo({
 				// 	url:"/pageGive/pages/index/index"
 				// })
-				if (this.commonL.lucky_free_activity_switch == 1) {
+				if (item.url) {
 					uni.navigateTo({
-						url: "/pageGive/pages/index/index"
+						url: item.url
 					})
 				} else {
 					uni.showToast({
@@ -1410,6 +1441,13 @@
 					}).catch(reject)
 				})
 			},
+			// 获取金刚区
+			getKingkong(){
+				goodsApi.Kingkong({}).then(res => {
+					console.log(res.data.list.data,'Kingkong');
+					this.Kingkong = res.data.list.data;
+				})
+			},
 			// 获取热门商品列表
 			getRgoodslist() {
 				const app = this
@@ -1437,6 +1475,9 @@
 			// },
 			getJgoodslist(flag) {
 				if(this.requestSwitch) return;
+				if (!this.requestSwitch) this.page =this.page + 1;
+				this.bottomFlag = false;
+				this.loadStatus = "loading";
 				this.requestSwitch = true;
 				var _that = this;
 				var obj = {};
@@ -1444,7 +1485,6 @@
 				obj.limit = this.limit;
 				obj.if_selected = 1;
 				goodsApi.list(obj).then(res => {
-					console.log(res,'resresresres')
 					this.requestSwitch = false
 					if (res.status == 200) {
 						// this.JgoodsList=res.data.list.data;
@@ -1458,8 +1498,9 @@
 							this.bottomFlag = true;
 							this.loadStatus = "more";
 						} else {
+							this.page = res.data.list.last_page||1;
 							this.bottomFlag = false;
-							this.loadStatus = "normal"
+							this.loadStatus = "normal";
 						}
 						if (this.page != 1) {
 							this.JgoodsList = this.JgoodsList.concat(res.data.list.data);
@@ -1634,7 +1675,6 @@
 			},
 			getPass() {
 				blockChina().then(res => {
-						console.log(res, 121)
 						this.passMessage = res.data.data
 						this.showPass = true
 					})
@@ -1770,19 +1810,19 @@
 
 	.seckillItemB {
 		margin-top: 20rpx;
-		// display: flex;
+		display: flex;
+	    align-items: center;
 	}
 
 	.seckillItemBT {
 		font-size: 28rpx;
-		// line-height: 20rpx;
-		color: #EF343D;
-		text-align: center;
-		// margin-bottom: 12rpx;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		font-weight: 700;
+		    color: #F97112;
+		    text-align: center;
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		    white-space: nowrap;
+		    font-weight: 700;
+		    margin-right: 4px;
 	}
 
 	.seckillItemBB {
@@ -1802,8 +1842,17 @@
 		top: 0;
 		left: 0;
 		z-index: 99999;
-		background-color: #EF343D;
-		// padding-bottom: 20upx;
+		// background: url('../../static/bg_bj.png') no-repeat center fixed;
+	}
+	.headerimg{
+		width: 100%;
+		// height: 100%;
+		position: fixed;
+		width: 100%;
+		top: 0;
+		left: 0;
+		z-index: 999999;
+		pointer-events:none
 	}
 
 	.subject {
@@ -1818,7 +1867,7 @@
 		position: relative;
 		// background-image: url(../../static/home/logo.png);
 		// background-size: 750upx 560upx;
-		background-color: #EF343D;
+		background-color: transparent;
 	}
 
 	.subject-img {
@@ -1977,12 +2026,34 @@
 	.heads2 {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+		// justify-content: space-between;
 		box-sizing: border-box;
 		width: 78%;
 		padding: 0 40rpx 0 40upx;
-		color: #FFFFFF;
+		color: #F97014;
 		height: 100%;
+		
+	}
+	.heads2-right{
+		display: flex;
+		align-items: center;
+		font-size: 20rpx;
+		margin-left: 30rpx;
+		width: 128rpx;
+		height: 40rpx;
+		background: rgba(249, 112, 20, 0.1);
+		border-radius: 8rpx;
+		color: #F97014;
+	}
+	.heads2-right .heads2-right-imgwrap{
+		width: 48rpx;
+		height: 40rpx;
+		background: #F97014;
+		border-radius: 8rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 10rpx;
 	}
 
 	.heads2 .heads2-left image {
@@ -1992,17 +2063,19 @@
 	}
 
 	.heads2 .heads2-right image {
-		width: 40upx;
-		height: 40upx;
+		width: 28rpx;
+		height: 28rpx;
 		vertical-align: top;
 	}
 
 	.heads2-left text {
-		font-size: 32upx;
-		color: #FFFFFF;
-		margin-left: 12upx;
-		font-family: PingFang SC-Medium, PingFang SC;
-		font-weight: 500;
+		color: var(--main-color);
+		margin-left: 12rpx;
+		font-family: 'PingFang SC';
+		font-style: normal;
+		font-weight: 700;
+		font-size: 36rpx;
+		line-height: 50rpx;
 	}
 
 	/* #ifdef H5 */
@@ -2249,7 +2322,7 @@
 	.point-img {
 		width: 80upx;
 		height: 80upx;
-		margin: 0 auto 8upx;
+		margin: 0 auto ;
 	}
 
 	.point-img>image {
@@ -2528,14 +2601,18 @@
 		position: fixed;
 		bottom: 204upx;
 		right: 24upx;
-		width: 108upx;
-		height: 108upx;
+		width: 80rpx;
+		height: 80rpx;
 		border-radius: 50%;
+		background: #ffffff;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.home-kf>image {
-		width: 108upx;
-		height: 108upx;
+		width: 48rpx;
+		height: 48rpx;
 		vertical-align: top;
 	}
 
@@ -2544,14 +2621,19 @@
 		position: fixed;
 		bottom: 120upx;
 		right: 24upx;
-		width: 108upx;
-		height: 108upx;
+		width: 80rpx;
+		height: 80rpx;
 		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #F97112;
+		backdrop-filter: blur(5px);
 	}
 
 	.home-returnTop>image {
-		width: 108upx;
-		height: 108upx;
+		width: 48rpx;
+		height: 48rpx;
 		vertical-align: top;
 	}
 
@@ -2589,7 +2671,7 @@
 	.home-seckill {
 		width: 702upx;
 		margin: 24upx auto 0;
-		background-color: #FFFFFF;
+		background-color: #fff8f3;
 		border-radius: 20upx;
 		padding: 24upx 20upx;
 	}
@@ -2605,20 +2687,55 @@
 	}
 
 	.seckill-headerL image {
-		width: 172upx;
-		height: 36upx;
+		width: 190rpx;
+		height: 48rpx;
 	}
 
 	.seckillMore {
 		font-size: 28rpx;
 		color: #565656;
 		line-height: 28rpx;
+		display: flex;
+		align-items: center;
+		color: #666666;
+		font-family: 'PingFang SC';
+		font-style: normal;
+		font-weight: 400;
+		font-size: 24rpx;
+	}
+	.seckillMore .title{
+		margin-right: 20rpx;
 	}
 
 	.seckillMore image {
 		width: 28upx;
 		height: 28upx;
 		vertical-align: top;
+	}
+	.time_wrap {
+		display: flex;
+		align-items: center;
+	}
+	.colon{
+		color: #333333;
+		margin: 0 8rpx;
+		font-size: 28rpx;
+		font-weight: 700;
+	}
+	.hour{
+		width: 44rpx;
+		height: 44rpx;
+		background: #333333;
+		box-shadow: inset 0px -2rpx 2rpx rgba(0, 0, 0, 0.5), inset 0px 2rpx 2rpx rgba(255, 255, 255, 0.25);
+		border-radius: 8rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #FFFFFF;
+		font-weight: 900;
+		font-size: 24rpx;
+		font-family: 'PingFang SC';
+		font-style: normal;
 	}
 
 	.recommend-bjt {
@@ -2696,7 +2813,7 @@
 		font-size: 22upx;
 		// font-weight: bold;
 		line-height: 22upx;
-		color: #EF343D;
+		color: #EF343D  ;
 		margin-right: 18upx;
 	}
 
@@ -2908,7 +3025,7 @@
 		width: 46upx;
 		height: 52upx;
 		margin: 20upx 0 10upx 0;
-		background: linear-gradient(272deg, #EF343D 0%, rgba(222, 59, 67, 0) 100%);
+		background: linear-gradient(272deg, #EF343D   0%, rgba(222, 59, 67, 0) 100%);
 		opacity: 1;
 	}
 
@@ -2920,7 +3037,7 @@
 		right: 0;
 		margin: 18upx 0 10upx 0;
 		padding: 0 10upx 0 10upx;
-		background-color: #EF343D;
+		background-color: #EF343D  ;
 		// border-radius:30upx 0 0 30upx ;
 
 	}
@@ -3137,7 +3254,7 @@
 		width: 130upx;
 		height: 42upx;
 		background-color: #FFF2F2;
-		color: #EF343D;
+		color: #EF343D  ;
 		line-height: 42upx;
 		border-radius: 6upx;
 		margin: 12upx 0;

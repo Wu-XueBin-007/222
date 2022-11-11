@@ -195,11 +195,9 @@
 					}
 				})
 				app.$options.api.CommonLst({
-					
 				}).then(res=>{
 					if(res.data.code=='success'){
 						this.CommonLst=res.data.data.data;
-						
 					}
 				})
 				//#endif
@@ -216,11 +214,8 @@
 						}).then(res=>{
 						//console.log(res)
 						const div = document.createElement('divform');
-						
 						div.innerHTML= res.data.data.data;//这个data是后端返回的form表单
-						
 						document.body.appendChild(div);
-						
 						document.forms[0].submit();
 					})
 					//#endif

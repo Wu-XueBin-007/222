@@ -404,7 +404,7 @@
 	.taskVideoSmallB{
 		font-size: 30upx;
 		color: #FFFFFF;
-		background-color: #EF343D;
+		background-color: #EF343D  ;
 		border-radius: 40upx;
 		text-align: center;
 		width: 348upx;
@@ -461,7 +461,7 @@
 	.taskVideoLargeB{
 		font-size: 30upx;
 		color: #FFFFFF;
-		background-color: #EF343D;
+		background-color: #EF343D  ;
 		border-radius: 40upx;
 		text-align: center;
 		width: 348upx;
