@@ -3,7 +3,12 @@
 
 page {
   background: #fafafa;
+   --main-bg:rgba(255, 78, 44, 0.1);//背景色
+   --main-color:#333333/* 标题 */
 }
+
+
+
 
 @-webkit-keyframes rotate {
   0% {

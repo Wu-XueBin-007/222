@@ -124,7 +124,7 @@
 		color: #909090;
 		margin-left: 30upx;
 		padding-left: 8upx;
-		border-left: 8upx solid #EF343D;
+		border-left: 8upx solid #EF343D  ;
 	}
 	.binding-main {
 		padding-left: 30upx;
@@ -177,7 +177,7 @@
 
 	.binding-item1-btn {
 		font-size: 24upx;
-		color: #EF343D;
+		color: #EF343D  ;
 		border-left: 2upx solid #F1F1F5;
 		padding-left: 30upx;
 		line-height: 36upx;
@@ -193,7 +193,7 @@
 	.binding-btn view{
 		width: 690upx;
 		height: 92upx;
-		background-color: #EF343D;
+		background-color: #EF343D  ;
 		border-radius: 46upx;
 		color: #FFFFFF;
 		font-size: 28upx;

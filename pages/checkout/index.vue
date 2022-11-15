@@ -175,6 +175,20 @@
 			</view>
 			<!-- 权益选择 -->
 
+			<view class="pay-item dis-flex flex-x-between" @click="freeChoice(3)">
+				<view class="item-left dis-flex flex-y-center">
+					<view class="item-left_icon wechat">
+					</view>
+					<view class="item-left_text">
+						权益额度兑换
+					</view>
+				</view>
+				<view class="item-right col-m" v-if="is_free == 3">
+					<text class="iconfont icon-check"></text>
+				</view>
+			</view>
+
+
 			<view class="pay-item dis-flex flex-x-between" @click="freeChoice(0)">
 				<view class="item-left dis-flex flex-y-center">
 					<view class="item-left_icon wechat">
@@ -272,7 +286,7 @@
 					成功邀请与被邀请的均可在最后一名成员确认支付之后获得免单奖励
 				</view>
 				<view style="font-size: 26upx;color: #999999;margin-top: 8upx;">
-					(免单说明：该订单实付金额的94%返回我的钱包，扣取6%税费)
+					(免单说明：该订单实付金额的100%返回我的钱包)
 				</view>
 			</view>
 		</view>
@@ -299,7 +313,7 @@
 				<view class="chackout-left pl-12">实付款：
 					<text class="col-m">￥{{ order.orderPayPrice }}</text>
 				</view>
-				<view class="chackout-right" @click="onSubmitOrder()">
+				<view @click="onSubmitOrder()" class="chackout-right">
 					<view class="flow-btn f-32" :class="{ disabled }">提交订单</view>
 				</view>
 			</view>
@@ -393,48 +407,26 @@
 			</view>
 		</u-popup>
 
-		<!-- 不是会员弹框 -->
-		<!-- <view class="home-popup2" catchtouchmove="true">
-    	<view class="home-box2" @click="">
-    		<image src="../../static/background/notvip_model.png" mode="widthFix"></image>
-			<view class="memberT">
-				1、“我的”-成为大会员-<text @click="buyNow">点击购买</text>。
-			</view>
-			<view class="memberB">
-				2、“高奢名品”专区累计消费3000元即可。
-			</view>
-			<view style="position: absolute; top: 544upx; left: 112upx; width: 306upx; height: 88upx;" @click="toIndex"></view>
-    	</view>
-    	<view class="home-popup2-close" @click="box_close3">
-    		<image src="../../static/home/icon_close.png" mode=""></image>
-    	</view>
-    </view>
-	
-	<view
-		style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: rgba(0,0,0,.5);z-index: 999;"
-		catchtouchmove="true"></view> -->
-		<!--不是会员弹框 end -->
-	</view>
-
-	<view v-else-if="showModalStatus3">
-		<view class="home-popup2" catchtouchmove="true">
-			<view class="home-box2">
-				<image src="../../static/notvip_model.png" mode="widthFix"></image>
-				<view class="memberT">
-					1、“我的”-成为大会员-<text @click="buyNow">点击购买</text>。
+		<view v-if="showModalStatus3">
+			<view class="home-popup2" catchtouchmove="true">
+				<view class="home-box2">
+					<image src="../../static/notvip_model.png" mode="widthFix"></image>
+					<view class="memberT">
+						1、“我的”-成为大会员-<text @click="buyNow">点击购买</text>。
+					</view>
+					<view class="memberB">
+						2、“高奢名品”专区累计消费3000元即可。
+					</view>
+					<view style="position: absolute; top: 544upx; left: 112upx; width: 306upx; height: 88upx;"
+						@click="toIndex"></view>
 				</view>
-				<view class="memberB">
-					2、“高奢名品”专区累计消费3000元即可。
+				<view class="home-popup2-close" @click="box_close3">
+					<!-- <image src="../../static/home/icon_close.png" mode=""></image> -->
 				</view>
-				<view style="position: absolute; top: 544upx; left: 112upx; width: 306upx; height: 88upx;"
-					@click="toIndex"></view>
 			</view>
-			<view class="home-popup2-close" @click="box_close3">
-				<!-- <image src="../../static/home/icon_close.png" mode=""></image> -->
+			<view
+				style="background: #000000 ; width: 100vw; height: 100vh; z-index: 100; opacity: 0.6; position: fixed; top: 0; left: 0; right: 0; bottom: 0;">
 			</view>
-		</view>
-		<view
-			style="background: #000000 ; width: 750upx; height: 1500upx; z-index: -99; opacity: 0.6; position: absolute; top: 0; left: 0; right: 0; bottom: 0;">
 		</view>
 	</view>
 </template>
@@ -491,8 +483,6 @@
 				// 是否显示优惠券弹窗
 				showPopup: false,
 				showPopup1: false,
-				// 按钮禁用
-				disabled: false,
 				// 订单信息 (从后端api中获取)
 				order: {
 					// 商品列表
@@ -517,7 +507,7 @@
 				},
 				isSHSM: false,
 				bigId: '',
-				is_free: 0,
+				is_free: 1,
 				group_order_id: 0,
 				showModalStatus3: false,
 				message: '',
@@ -954,9 +944,9 @@
 									return false
 								}
 							}
-							if (uni.getStorageSync('vip_group_order_id')) {
-								uni.setStorageSync('vip_group_order_id', 0);
-							}
+							// if (uni.getStorageSync('vip_group_order_id')) {
+							// 	uni.setStorageSync('vip_group_order_id', 0);
+							// }
 							app.disabled = false
 						})
 				} else {
@@ -965,7 +955,7 @@
 						.catch(err => {
 							console.log(err.result, 321)
 							if (err.result.message == '该商品仅限大会员购买' || err.result.message == '该类型仅限大会员可以发起') {
-								// this.showModalStatus3 = true
+								this.showModalStatus3 = true
 							}
 							if (err.result) {
 								const errData = err.result.data
@@ -996,9 +986,7 @@
 								}
 
 							}
-							if (uni.getStorageSync('vip_group_order_id')) {
-								uni.setStorageSync('vip_group_order_id', 0);
-							}
+
 							app.disabled = false
 						})
 				}
@@ -1037,7 +1025,10 @@
 				console.log(result, 'result');
 				const app = this;
 				app.disabled = false
-				//console.log(result)
+				//清除大会员推广id
+				if (uni.getStorageSync('vip_group_order_id')) {
+					uni.setStorageSync('vip_group_order_id', 0);
+				}
 				app.navToMyOrder(result.data.order_on)
 				// 发起微信支付
 				// if (result.data.payType == PayTypeEnum.WECHAT.value) {
@@ -1059,9 +1050,11 @@
 
 			// 跳转到我的订单(等待1秒)
 			navToMyOrder(order_on) {
+				let is_free = this.is_free
 				setTimeout(() => {
 					this.$navTo('pages/cashier/index', {
-						order_on
+						order_on,
+						is_free
 					})
 				}, 1000)
 			},
@@ -1106,6 +1099,10 @@
 				if (options.mode === 'cart') {
 					form.cartIds = options.cartIds || null
 				}
+				// 权益额度兑换
+				if (app.is_free == 3) {
+					form.isEquities = 1
+				}
 				//console.log(form);
 				form.goods_card_voucher_ids = app.voucherId ? [app.voucherId] : [];
 				// return false;
@@ -1122,15 +1119,15 @@
 				return true
 			},
 			buyNow() {
-
 				uni.redirectTo({
 					url: '../../pageMember/pages/index/report'
 				})
 			},
 			toIndex() {
-				uni.redirectTo({
-					url: '../../pageMember/pages/index/index'
-				})
+				uni.navigateBack()
+				// uni.redirectTo({
+				// 	url: '../../pageMember/pages/index/index'
+				// })
 			},
 			box_close3() {
 				// this.showModalStatus3 = false

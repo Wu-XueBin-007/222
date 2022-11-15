@@ -51,6 +51,7 @@ const user = {
 				console.log({
 					form: data
 				})
+				console.log(data, 'logindata');
 				LoginApi.login({
 						form: data
 					})

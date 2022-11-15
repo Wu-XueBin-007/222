@@ -1,6 +1,7 @@
 <template>
 	<view class="withdrawal">
-		<head-nav title="提现" :backFlag="true" color="white" backGround="linear-gradient(90deg, #FF5F60, #DE6BAD)" backType="other" fontSize="36"></head-nav>
+		<head-nav title="提现" :backFlag="true" color="white" backGround="linear-gradient(90deg, #FF5F60, #DE6BAD)"
+			backType="other" fontSize="36"></head-nav>
 		<view class="headNav">
 			<view class="headNavT">
 				<view class="headNavTL">可提现余额</view>
@@ -8,13 +9,14 @@
 			</view>
 			<view class="headNavB">
 				<text>￥</text>
-				{{userInfo.balance}}
+				{{userInfo.balance||0}}
 			</view>
 		</view>
 		<view class="withdrawalCon">
 			<view class="withdrawalConT">提现金额</view>
 			<view class="withdrawalConC">
-				<input type="digit" @input="btn_input" v-model="money" placeholder="输入提现金额" placeholder-style="color:#cccccc" />
+				<input type="digit" @input="btn_input" v-model="money" placeholder="输入提现金额"
+					placeholder-style="color:#cccccc" />
 				<text @click="btn_dc">全部提现</text>
 			</view>
 			<view class="withdrawalConB">
@@ -34,7 +36,6 @@
 		<view style="box-sizing: border-box;padding: 0 30upx;margin-top: 10upx;color: #999999;">5、确认收货后，佣金实时到账，若佣金到账后，则不可退换货；</view>
 		<view style="box-sizing: border-box;padding: 0 30upx;margin-top: 10upx;color: #999999;">6、如果疑问请联系客服咨询；</view> -->
 		<view class="conWraps" style="padding: 30rpx;" v-html="commonL.withdrawal_rules">
-			
 		</view>
 		<view class="successMark" v-if="successFlag" @click="hideSuccess"></view>
 		<view class="successCon" v-if="successFlag">
@@ -59,38 +60,39 @@
 
 <script>
 	import * as UserApi from '@/api/user';
-	import {detail} from "@/api/common.js";
+	import {
+		detail
+	} from "@/api/common.js";
 	import headNav from '@/components/seckillNav.vue'
 	import * as settingApi from '@/api/ticket/setting'
 	const App = getApp();
 	export default {
 		data() {
 			return {
-				successFlag:false,
-				successTxt:"",
+				successFlag: false,
+				successTxt: "",
 				money: '',
 				auser_list: '',
 				withdrawal_img: '',
 				test_money: 0,
 				ausermomey: 0,
 				userInfo: {},
-				type:1,//1为退款余额提现，2位佣金提现
-				imgInfo:{},
-				account_number:"",
-				payType:1,
-				msg:{},
-				commonL:{}
+				type: 1, //1为退款余额提现，2位佣金提现
+				imgInfo: {},
+				account_number: "",
+				payType: 1,
+				msg: {},
+				commonL: {}
 			}
 		},
-		components:{headNav},
+		components: {
+			headNav
+		},
 		onLoad(options) {
 			this.type = options.type;
 			this.getPageData();
 			this.getDetail();
-			this.getCommon();
-		},
-		onShow() {
-
+			// this.getCommon();
 		},
 		onShareAppMessage() {
 			const app = this
@@ -102,7 +104,7 @@
 				path: "/pages/index/index"
 			}
 		},
-		
+
 		/**
 		 * 分享到朋友圈
 		 * 本接口为 Beta 版本，暂只在 Android 平台支持，详见分享到朋友圈 (Beta)
@@ -119,47 +121,44 @@
 			}
 		},
 		methods: {
-			getCommon(){
-				
+			getCommon() {
 				settingApi.detail().then(res => {
-					res.data.detail.withdrawal_rules = res.data.detail.withdrawal_rules.replace(/<img/g,"<img style='width:100%'");
-					this.commonL = res.data.detail
-				}).catch(err=>{})
+					// res.data.detail.withdrawal_rules = res.data.detail.withdrawal_rules.replace(/<img/g,
+					// 							"<img style='width:100%'");
+					// 						this.commonL = res.data.detail
+				}).catch(err => {})
 			},
-			hideSuccess(){
+			hideSuccess() {
 				this.successFlag = false;
 				this.successTxt = "";
 			},
-			btn_record(){
-				this.$navTo('pageHome/distribution/withdrawal/index',{type:1})
+			btn_record() {
+				this.$navTo('pageHome/distribution/withdrawal/index', {
+					type: 1
+				})
 			},
-			aaa(e){
-				//console.log(e)
-				this.payType = e.detail.value;
-				setTimeout(()=>{
-					//console.log(this.payType)
-				},1000)
-				// //console.log(e)
-			},
-			getDetail(){
+			getDetail() {
 				detail()
-					.then(res=>{
+					.then(res => {
 						//console.log(res)
 						this.msg = res.data.detail;
+						res.data.detail.withdrawal_rules = res.data.detail.withdrawal_rules.replace(/<img/g,
+							"<img style='width:100%'");
+						this.commonL = res.data.detail
 					})
 			},
-			uplaodImg(){
+			uplaodImg() {
 				let _this = this;
 				uni.chooseImage({
-					count:1,
-					success:res=>{
+					count: 1,
+					success: res => {
 						uni.uploadFile({
-							url:App.globalData.uploadBaseUrl + "api/upload/image",
-							filePath:res.tempFilePaths[0],
-							header:{
-								'Access-Token':_this.$store.getters.token
+							url: App.globalData.uploadBaseUrl + "api/upload/image",
+							filePath: res.tempFilePaths[0],
+							header: {
+								'Access-Token': _this.$store.getters.token
 							},
-							name:"file",
+							name: "file",
 							success: (rep) => {
 								//console.log(rep);
 								let data = JSON.parse(rep.data);
@@ -209,44 +208,39 @@
 				this.money = money;
 			},
 			btn_drawal() {
-				// if (this.money < 1) {
-				// 	uni.showToast({
-				// 		icon: 'none',
-				// 		title: "提现金额单次最低1"
-				// 	})
-				// 	return false;
-				// }
-				if (200<this.money) {
+
+				if (Number(this.money) > Number(this.msg.most_withdraw_money)) {
 					uni.showToast({
 						icon: 'none',
-						title: "提现金额单次最多200"
+						title: "提现金额最高为" + this.msg.most_withdraw_money + "元"
 					})
 					return false;
 				}
-				if(Number(this.money) < Number(this.msg.least_withdraw_money)){
+				if (Number(this.money) < Number(this.msg.least_withdraw_money)) {
 					uni.showToast({
 						icon: 'none',
-						title: "提现金额最低为"+this.msg.least_withdraw_money+"元"
+						title: "提现金额最低为" + this.msg.least_withdraw_money + "元"
 					})
 					return false;
 				}
-				
+
 				let money = this.money;
-				let ssfMoney = (Number(this.money)*Number(this.msg.service_charge)/1000).toFixed(2);
+				let ssfMoney = (Number(this.money) * Number(this.msg.service_charge) / 1000).toFixed(2);
 				let str = "";
-				if(this.msg.service_charge > 0){
+				if (this.msg.service_charge > 0) {
 					str = "本次提现" + money + "元，需支付手续费" + ssfMoney + "元，实际到账" + (Number(money) - Number(ssfMoney)) + "元"
-				}else{
+				} else {
 					str = "本次提现" + money + "元，实际到账" + money + "元"
 				}
 				let _this = this;
 				uni.showModal({
-					content:str,
-					title:"提现说明",
+					content: str,
+					title: "提现说明",
 					success(res) {
 						//console.log(res)
-						if(res.confirm){
+						if (res.confirm) {
 							let flag = false;
+							
 							// if(_this.account_number || _this.imgInfo.file_id){
 							// 	flag = true;
 							// }
@@ -270,7 +264,7 @@
 							// obj.form.image.image = _this.imgInfo.file_id;
 							// obj.form.image.type = _this.payType;
 							UserApi.withdrawalAdd(obj)
-								.then(res=>{
+								.then(res => {
 									//console.log(res)
 									// uni.showToast({
 									// 	icon: 'none',
@@ -278,6 +272,7 @@
 									// })
 									_this.successFlag = true;
 									_this.successTxt = "成功";
+									_this.getPageData();
 									// setTimeout(()=>{
 									// 	let url = "/pageHome/distribution/withdrawal/index";
 									// 	// let query = _this.type == 1 ? 2 : 1
@@ -290,7 +285,7 @@
 									// 	})
 									// },1500)
 								})
-								.catch(err=>{
+								.catch(err => {
 									_this.successFlag = true;
 									_this.successTxt = "失败";
 									// uni.showToast({
@@ -307,7 +302,7 @@
 </script>
 
 <style scoped>
-	.successMark{
+	.successMark {
 		width: 100%;
 		height: 100%;
 		position: fixed;
@@ -316,20 +311,22 @@
 		right: 0;
 		bottom: 0;
 		z-index: 9;
-		background: rgba(0,0,0,.5);
+		background: rgba(0, 0, 0, .5);
 	}
-	.successCon{
+
+	.successCon {
 		width: 550rpx;
 		position: fixed;
 		left: 50%;
 		top: 50%;
-		transform: translate(-50%,-50%);
+		transform: translate(-50%, -50%);
 		display: flex;
 		align-items: center;
 		flex-direction: column;
 		z-index: 10;
 	}
-	.successConBox{
+
+	.successConBox {
 		width: 550rpx;
 		height: 550rpx;
 		border-radius: 20rpx;
@@ -341,41 +338,48 @@
 		justify-content: space-between;
 		background: #fde8eb;
 	}
-	.successConT{
+
+	.successConT {
 		width: 122rpx;
 		height: 122rpx;
 	}
-	.successConC{
+
+	.successConC {
 		font-size: 36rpx;
 		font-family: PingFang;
 		font-weight: bold;
 		color: #595757;
 		line-height: 36rpx;
 	}
-	.successConB{
+
+	.successConB {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 	}
-	.successConBT,.successConBB{
+
+	.successConBT,
+	.successConBB {
 		font-size: 24rpx;
 		line-height: 24rpx;
 		color: #595757;
 	}
-	.successConBT{
+
+	.successConBT {
 		margin-bottom: 10rpx;
 	}
-	.successConClose{
+
+	.successConClose {
 		width: 50rpx;
 		height: 50rpx;
 		margin-top: 68rpx;
 	}
-	
-	
-	
-	
-	.withdrawalCon{
+
+
+
+
+	.withdrawalCon {
 		width: 690rpx;
 		background: white;
 		margin: 0 auto;
@@ -384,13 +388,15 @@
 		padding: 30rpx;
 		transform: translateY(-32rpx);
 	}
-	.withdrawalConT{
+
+	.withdrawalConT {
 		font-size: 28rpx;
 		line-height: 28rpx;
 		color: #686868;
 		margin-bottom: 30rpx;
 	}
-	.withdrawalConC{
+
+	.withdrawalConC {
 		width: 100%;
 		padding: 10rpx 0;
 		border-bottom: 2rpx solid rgba(153, 153, 153, .3);
@@ -398,48 +404,57 @@
 		align-items: center;
 		justify-content: space-between;
 	}
-	.withdrawalConC>input{
+
+	.withdrawalConC>input {
 		width: calc(100% - 142rpx);
 		height: 50rpx;
 		font-size: 50rpx;
 		line-height: 50rpx;
 	}
-	.withdrawalConC>text{
+
+	.withdrawalConC>text {
 		font-size: 28rpx;
 		line-height: 28rpx;
 		color: #FD6064;
 	}
-	.withdrawalConB{
+
+	.withdrawalConB {
 		margin-top: 40rpx;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
-	.withdrawalConBL{
+
+	.withdrawalConBL {
 		font-size: 28rpx;
 		line-height: 28rpx;
 		color: #686868;
 	}
-	.withdrawalConBR{
+
+	.withdrawalConBR {
 		display: flex;
 		align-items: center;
 	}
-	.withdrawalConBRL{
+
+	.withdrawalConBRL {
 		width: 38rpx;
 		height: 32rpx;
 		margin-right: 6rpx;
 	}
-	.withdrawalConBRC{
+
+	.withdrawalConBRC {
 		font-size: 28rpx;
 		line-height: 28rpx;
 		color: #686868;
 		margin-right: 20rpx;
 	}
-	.withdrawalConBRR{
+
+	.withdrawalConBRR {
 		width: 12rpx;
 		height: 22rpx;
 	}
-	.submit{
+
+	.submit {
 		width: 690rpx;
 		height: 70rpx;
 		margin: 60rpx auto 0;
@@ -450,17 +465,18 @@
 		font-size: 36rpx;
 		color: white;
 	}
-	
-	
-	
-	.headNav{
+
+
+
+	.headNav {
 		width: 100%;
 		height: 288rpx;
 		background: linear-gradient(90deg, #FF5F60, #DE6BAD);
 		box-sizing: border-box;
 		padding-top: 70rpx;
 	}
-	.headNavT{
+
+	.headNavT {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -468,12 +484,14 @@
 		padding: 0 30rpx;
 		margin-bottom: 30rpx;
 	}
-	.headNavTL{
+
+	.headNavTL {
 		font-size: 32rpx;
 		line-height: 32rpx;
 		color: white;
 	}
-	.headNavTR{
+
+	.headNavTR {
 		height: 40rpx;
 		box-sizing: border-box;
 		padding: 0 20rpx;
@@ -483,7 +501,8 @@
 		line-height: 36rpx;
 		color: white;
 	}
-	.headNavB{
+
+	.headNavB {
 		display: flex;
 		align-items: baseline;
 		box-sizing: border-box;
@@ -493,35 +512,40 @@
 		color: white;
 		height: 100rpx;
 	}
-	.headNavB>text{
+
+	.headNavB>text {
 		font-size: 60rpx;
 		line-height: 60rpx;
 		color: white;
 	}
+
 	/* .headNavB>input{
 		font-size: 100rpx;
 		line-height: 100rpx;
 		color: white;
 		height: 100rpx;
 	} */
-	
-	
-	
-	.withdrawalPayType{
+
+
+
+	.withdrawalPayType {
 		display: flex;
 		align-items: center;
 		margin-bottom: 30upx;
 	}
-	.withdrawalPayType>view:nth-child(1){
+
+	.withdrawalPayType>view:nth-child(1) {
 		width: 180upx;
 		font-size: 28upx;
 		line-height: 28upx;
 		color: #333333;
 	}
-	.withdrawalPayWay{
+
+	.withdrawalPayWay {
 		transform: scale(.7);
 	}
-	.withdrawalInfo{
+
+	.withdrawalInfo {
 		width: 690upx;
 		margin: 30upx auto 0;
 		box-sizing: border-box;
@@ -529,19 +553,23 @@
 		background: white;
 		padding: 30upx;
 	}
-	.withdrawalInfoT{
+
+	.withdrawalInfoT {
 		width: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
-	.withdrawalInfoT>view:nth-child(1),.withdrawalInfoB>view:nth-child(1){
+
+	.withdrawalInfoT>view:nth-child(1),
+	.withdrawalInfoB>view:nth-child(1) {
 		width: 180upx;
 		font-size: 28upx;
 		line-height: 28upx;
 		color: #333333;
 	}
-	.withdrawalInfoT>input{
+
+	.withdrawalInfoT>input {
 		width: calc(100% - 180upx);
 		height: 60upx;
 		box-sizing: border-box;
@@ -552,12 +580,14 @@
 		padding: 0 16upx;
 		outline: none;
 	}
-	.withdrawalInfoB{
+
+	.withdrawalInfoB {
 		width: 100%;
 		display: flex;
 		margin-top: 30upx;
 	}
-	.withdrawalInfoBR{
+
+	.withdrawalInfoBR {
 		width: 120upx;
 		height: 120upx;
 		box-sizing: border-box;
@@ -568,12 +598,13 @@
 		border-radius: 6upx;
 		background: white;
 	}
-	.withdrawalInfoBR>image{
+
+	.withdrawalInfoBR>image {
 		width: 38upx;
 		height: 38upx;
 	}
-	
-	
+
+
 	.withdrawal {
 		width: 100%;
 		background-color: #F1F1F1;

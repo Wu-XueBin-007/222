@@ -976,7 +976,7 @@
 		font-weight: bold;
 		color: #FFFFFF;
 		border-radius: 70upx;
-		background-color: #EF343D;
+		background-color: #EF343D  ;
 		/* background: linear-gradient(to right , rgba(255,95,96,.2) , rgba(222,107,173,.2)); */
 		margin-left: 12upx;
 	}
@@ -992,7 +992,7 @@
 	.back{
 		width: 100%;
 		min-height: 100vh;
-		background-color: #EF343D;
+		background-color: #EF343D  ;
 		/* background: linear-gradient(to right , rgba(255,95,96,.2) , rgba(222,107,173,.2)); */
 	}
 	.head{

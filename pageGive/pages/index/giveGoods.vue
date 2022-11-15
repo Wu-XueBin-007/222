@@ -12,7 +12,8 @@
 			</view>
 		</view>
 		<view class="giveGoodsC">
-			<view class="giveGoodsItem" v-for="(item,index) in goodsLst" :data-poolid="item.id" :data-luckyid="item.lucky_free_id" :data-id="item.goods_id" :key="index" @click="onTargetGoodsList">
+			<view class="giveGoodsItem" v-for="(item,index) in goodsLst" :data-poolid="item.id"
+				:data-luckyid="item.lucky_free_id" :data-id="item.goods_id" :key="index" @click="onTargetGoodsList">
 				<view class="Image">
 					<image :src="item.goods_image" mode=""></image>
 				</view>
@@ -29,7 +30,9 @@
 				</view>
 			</view>
 		</view>
-		<view style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background:#F8F8F8 ;z-index: -1;" catchtouchmove="true"></view>
+		<view
+			style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background:#F8F8F8 ;z-index: -1;"
+			catchtouchmove="true"></view>
 	</view>
 </template>
 
@@ -41,25 +44,25 @@
 		data() {
 			return {
 				goodsList: {},
-				goodsLst:[],
-				page:1,
-				limit:6,
-				bottomFlag:true,
-				topFlag:true,
+				goodsLst: [],
+				page: 1,
+				limit: 6,
+				bottomFlag: true,
+				topFlag: true,
 			}
 		},
-		onLoad(options){
-			this.name=options.name;
-			this.pool_id=options.id;
+		onLoad(options) {
+			this.name = options.name;
+			this.pool_id = options.id;
 			uni.setNavigationBarTitle({
-			title:this.name
+				title: this.name
 			})
 			this.getGoodsList();
 			// uni.setStorageSync('agreementState',true)
 		},
 		onPullDownRefresh() {
 			// 下拉
-			if(!this.topFlag){
+			if (!this.topFlag) {
 				return false;
 			}
 			this.bottomFlag = true;
@@ -69,45 +72,46 @@
 		},
 		onReachBottom() {
 			// 触底
-			if(!this.bottomFlag){
+			if (!this.bottomFlag) {
 				return false;
 			}
 			this.page = this.page + 1;
 			this.bottomFlag = false;
 			this.status = "loading";
 			this.getGoodsList();
-		
+
 		},
 		methods: {
-			getGoodsList(flag){
-				var obj={}
-				obj.pool_id=this.pool_id;
-				obj.page=this.page;
-				obj.limit=this.limit;
-				giveApi.goodsList(obj).then(res=>{
-					console.log(res);
-					this.goodsList=res.data;
-					if(res.status==200){
+			getGoodsList(flag) {
+				var obj = {}
+				obj.pool_id = this.pool_id;
+				obj.page = this.page;
+				obj.limit = this.limit;
+				giveApi.goodsList(obj).then(res => {
+					//console.log(res);
+					this.goodsList = res.data;
+					if (res.status == 200) {
 						// this.JgoodsList=res.data.list.data;
-						if(flag){
+						if (flag) {
 							this.topFlag = true;
 							this.bottomFlag = true;
 							uni.stopPullDownRefresh()
 						}
-						if(Math.ceil(res.data.goods_list.total/this.limit)!=this.page&&res.data.goods_list.last_page>0){
+						if (Math.ceil(res.data.goods_list.total / this.limit) != this.page && res.data.goods_list
+							.last_page > 0) {
 							this.bottomFlag = true;
 							this.status = "loadmore";
-						}else{
+						} else {
 							this.status = "normal";
 						}
-						if(this.page != 1){
+						if (this.page != 1) {
 							this.goodsLst = this.goodsLst.concat(res.data.goods_list.data);
-							
-							
-						}else{
-							this.goodsLst=res.data.goods_list.data;
+
+
+						} else {
+							this.goodsLst = res.data.goods_list.data;
 						}
-						
+
 					}
 				})
 			},
@@ -116,7 +120,7 @@
 				let goodsId = e.currentTarget.dataset.id || e.target.dataset.id;
 				let poolId = this.pool_id;
 				let LuckyFreeId = e.currentTarget.dataset.luckyid || e.target.dataset.luckyid;
-				let type="give"
+				let type = "give"
 				this.$navTo('pages/goods/detail', {
 					goodsId,
 					poolId,
@@ -128,19 +132,21 @@
 </script>
 
 <style lang="scss" scoped>
-	.giveGoods{
-		.giveGoodsH{
+	.giveGoods {
+		.giveGoodsH {
 			position: fixed;
 			top: 0;
 			bottom: 0;
 			width: 750upx;
 			height: 148upx;
 			z-index: 999;
-			.main{
+
+			.main {
 				position: relative;
 				width: 100%;
 				height: 100%;
-				.name{
+
+				.name {
 					position: relative;
 					font-size: 32upx;
 					font-weight: bold;
@@ -149,7 +155,8 @@
 					margin: 0 0 0 54upx;
 					z-index: 999;
 				}
-				.moeny{
+
+				.moeny {
 					position: relative;
 					font-size: 48upx;
 					font-weight: bold;
@@ -158,7 +165,8 @@
 					margin: 10upx 0 0 44upx;
 					z-index: 999;
 				}
-				image{
+
+				image {
 					position: absolute;
 					top: 0;
 					left: 0;
@@ -167,30 +175,35 @@
 					height: 148upx;
 				}
 			}
-			
+
 		}
-		.giveGoodsC{
+
+		.giveGoodsC {
 			margin-top: 176upx;
 			display: flex;
 			flex-wrap: wrap;
-			.giveGoodsItem{
+
+			.giveGoodsItem {
 				width: 338upx;
 				border-radius: 20upx;
 				margin-left: 24upx;
 				background-color: #FFFFFF;
 				margin-bottom: 24upx;
-				.Image{
+
+				.Image {
 					width: 338upx;
 					height: 338upx;
 					border-radius: 20upx 20upx 0 0;
-					image{
+
+					image {
 						width: 100%;
 						height: 100%;
 						border-radius: 20upx 20upx 0 0;
 					}
-					
+
 				}
-				.title{
+
+				.title {
 					margin: 10upx 10upx 0 10upx;
 					font-size: 28upx;
 					color: #333333;
@@ -204,17 +217,21 @@
 					-webkit-box-orient: vertical;
 					height: 80upx;
 				}
-				.goods_price{
+
+				.goods_price {
 					display: flex;
 					margin: 24upx 12upx 20upx 10upx;
-					.goods_priceL{
-						font-size:22upx;
-						color: #EF343D;
-						text{
+
+					.goods_priceL {
+						font-size: 22upx;
+						color: #EF343D  ;
+
+						text {
 							font-size: 40upx;
 						}
 					}
-					.goods_priceR{
+
+					.goods_priceR {
 						font-size: 22upx;
 						color: #999999;
 						margin-left: 8upx;

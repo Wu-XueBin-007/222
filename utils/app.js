@@ -98,7 +98,7 @@ export const getTabBarLinks = () => {
 export const getShareUrlParams = (params) => {
 	let userId = store.getters.userId || 0;
 	return util.urlEncode({
-		refereeId: userId, // 推荐人ID
+		scene: userId, // 推荐人ID
 		...params
 	})
 }
@@ -135,6 +135,7 @@ export const navTo = (url, query = {}) => {
  */
 export const setCartTotalNum = (value) => {
 	uni.setStorageSync('cartTotalNum', Number(value))
+	setCartTabBadge()
 }
 
 /**

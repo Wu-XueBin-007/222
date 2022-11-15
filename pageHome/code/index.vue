@@ -6,7 +6,8 @@
 		</image> -->
 		<!-- <view class="userName">{{ userInfo.nick_name }}</view> -->
 		<!-- <view class="userMsg">邀请您加入</view> -->
-		<image :src="imgsrc" style="width: 200upx;height: 200upx;position: absolute;bottom: 168upx;right: 68upx;" id="qrCode"></image>
+		<image :src="imgsrc" style="width: 200upx;height: 200upx;position: absolute;bottom: 168upx;right: 68upx;"
+			id="qrCode"></image>
 		<!-- <view class="desc">长按扫码 参加活动</view> -->
 		<canvas canvas-id="myCanvas" style="width: 200upx;height: 200upx;position: absolute;top: -9999999999999px;" />
 	</view>
@@ -24,8 +25,8 @@
 				imgsrc: "",
 				infos: {},
 				userInfo: {},
-				widthH:0,
-				heightH:0
+				widthH: 0,
+				heightH: 0
 			}
 		},
 		onLoad() {
@@ -33,17 +34,21 @@
 			this.getCode()
 
 		},
+		/**
+		 * 分享当前页面
+		 */
 		onShareAppMessage() {
 			const app = this
 			const {
 				page
-			} = app
+			} = app;
+			//console.log("/pageHome/code/index?" + app.$getShareUrlParams());
 			return {
-				title: "融汇商城",
-				path: "/pages/index/index"
+				// title: page.params.share_title,
+				path: "/pageHome/code/index?" + app.$getShareUrlParams()
 			}
 		},
-		
+
 		/**
 		 * 分享到朋友圈
 		 * 本接口为 Beta 版本，暂只在 Android 平台支持，详见分享到朋友圈 (Beta)
@@ -55,10 +60,11 @@
 				page
 			} = app
 			return {
-				title: "融汇商城",
-				path: "/pages/index/index"
+				// title: page.params.share_title,
+				path: "/pageHome/code/index?" + app.$getShareUrlParams()
 			}
 		},
+
 		methods: {
 			showSave() {
 				//console.log(1234)
@@ -97,8 +103,8 @@
 							})
 						}
 					},
-					fail:err=>{
-						console.log(err)
+					fail: err => {
+						//console.log(err)
 					}
 				})
 			},
@@ -139,24 +145,24 @@
 				const ctx = wx.createCanvasContext('myCanvas'); //创建画布
 				var width = "";
 				wx.createSelectorQuery().select('#qrCode').boundingClientRect(function(
-				rects1) {
+					rects1) {
 					ctx.width = rects1.width + 'px';
 					ctx.height = rects1.height + 'px';
-					
+
 					// that.widthH = rects1.width;
 					// that.heightH = rects1.height;
 					ctx.setFillStyle('#fff');
 					ctx.fillRect(0, 0, rects1.width, rects1.height);
 					that.send_code(that.imgsrc)
-						.then(rep=>{
+						.then(rep => {
 							ctx.drawImage(rep, 0, 0, rects1
 								.width, rects1.height)
 							ctx.draw();
 							wx.hideLoading();
 							that.saveImg()
 						})
-						.catch(err=>{
-							console.log(err,1111)
+						.catch(err => {
+							//console.log(err, 1111)
 						})
 				}).exec()
 				// wx.createSelectorQuery().select('#back').boundingClientRect(function(rect) {
@@ -186,7 +192,7 @@
 				// 	// 		let b = rects.top+rects.width/2;
 				// 	// 		let c = rects.width/2;
 				// 	// 		//console.log(a,b,c,rects.top,rects.top+rects.width/2)
-							
+
 				// 	// 		wx.createSelectorQuery().select('#qrCode').boundingClientRect(function(
 				// 	// 		rects1) {
 				// 	// 			//console.log(rects1)
@@ -224,30 +230,30 @@
 				// }).exec()
 			},
 			send_code(code) {
-			  /*code是指图片base64格式数据*/
-			  //声明文件系统
-			  return new Promise((resolve,reject)=>{
-				  const fs = uni.getFileSystemManager();
-				  //随机定义路径名称
-				  var times = new Date().getTime();
-				  //console.log(wx.env.USER_DATA_PATH)
-				  var codeimg = wx.env.USER_DATA_PATH + '/' + times + '.png';
-				  				//console.log(code)
-				  //将base64图片写入
-				  fs.writeFile({
-				    filePath: codeimg,
-				    data: code.slice(22),
-				    encoding: 'base64',
-				    success: () => {
-				      //写入成功了的话，新的图片路径就能用了
-				      resolve(codeimg);
-				    },
-					fail:err=>{
-						reject(err)
-					}
-				  });
-			  })
-			  
+				/*code是指图片base64格式数据*/
+				//声明文件系统
+				return new Promise((resolve, reject) => {
+					const fs = uni.getFileSystemManager();
+					//随机定义路径名称
+					var times = new Date().getTime();
+					//console.log(wx.env.USER_DATA_PATH)
+					var codeimg = wx.env.USER_DATA_PATH + '/' + times + '.png';
+					//console.log(code)
+					//将base64图片写入
+					fs.writeFile({
+						filePath: codeimg,
+						data: code.slice(22),
+						encoding: 'base64',
+						success: () => {
+							//写入成功了的话，新的图片路径就能用了
+							resolve(codeimg);
+						},
+						fail: err => {
+							reject(err)
+						}
+					});
+				})
+
 			},
 			saveImg() {
 				var that = this;
@@ -280,30 +286,37 @@
 								fail: function(res) {
 									console.log(res)
 									if (res.errMsg ===
-										"saveImageToPhotosAlbum:fail:auth denied"||res.errMsg === "saveImageToPhotosAlbum:fail auth deny") {
+										"saveImageToPhotosAlbum:fail:auth denied" || res
+										.errMsg === "saveImageToPhotosAlbum:fail auth deny"
+									) {
 										//console.log("打开设置窗口");
 										uni.showModal({
-											title:'提示',
-											content:'需要您授权保存相册',
+											title: '提示',
+											content: '需要您授权保存相册',
 											showCancel: false,
-											success:()=>{
+											success: () => {
 												//打开设置窗口
 												uni.openSetting({
-													success(settingdata) {
+													success(
+														settingdata) {
 														//console.log(settingdata)
-														if (settingdata.authSetting[
+														if (settingdata
+															.authSetting[
 																'scope.writePhotosAlbum'
 															]) {
-																uni.showModal({
-																	title:'提示',
-																	content:'获取权限成功,再次点击图片保存到相册',
-																	showCancel: false,
-																})
-															console.log("获取权限成功，再次点击图片保存到相册")
+															uni.showModal({
+																title: '提示',
+																content: '获取权限成功,再次点击图片保存到相册',
+																showCancel: false,
+															})
+															console
+																.log(
+																	"获取权限成功，再次点击图片保存到相册"
+																)
 														} else {
 															uni.showModal({
-																title:'提示',
-																content:'获取权限失败,再次点击图片保存到相册',
+																title: '提示',
+																content: '获取权限失败,再次点击图片保存到相册',
 																showCancel: false,
 															})
 															//console.log("获取权限失败")
@@ -311,7 +324,7 @@
 													}
 												})
 											}
-											
+
 										})
 										// uni.openSetting({
 										// 	success(settingdata) {
@@ -329,7 +342,7 @@
 								}
 							})
 						},
-						fail:err=>{
+						fail: err => {
 							console.log(err)
 						}
 					});

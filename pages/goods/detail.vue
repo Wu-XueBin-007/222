@@ -123,9 +123,9 @@
 		<Service v-if="!isLoading&&type=='product'&&bigId!=3" :goods-id="goodsId" />
 
 		<!-- 商品SKU弹窗 -->
-		<SkuPopup v-if="!isLoading" v-model="showSkuPopup" :source=source :info_by_key=info_by_key :skuMode="skuMode"
-			:poolId="poolId" :bigId="bigId" :group_order_id="group_order_id" :LuckyFreeId="LuckyFreeId" :goods="goods"
-			@addCart="onAddCart" :type="type" :status="timeStatus" />
+		<SkuPopup v-if="!isLoading" v-model="showSkuPopup" :vip_group_order_id="vip_group_order_id" :source=source
+			:info_by_key=info_by_key :skuMode="skuMode" :poolId="poolId" :bigId="bigId" :group_order_id="group_order_id"
+			:LuckyFreeId="LuckyFreeId" :goods="goods" @addCart="onAddCart" :type="type" :status="timeStatus" />
 		<!-- 商品评价 -->
 		<Comment v-if="!isLoading" :goods-id="goods.goods_id" :limit="2" />
 
@@ -335,7 +335,8 @@
 				bigId: '',
 				group_order_id: 0,
 				info_by_key: '',
-				source: ''
+				source: '',
+				vip_group_order_id: 0,
 			}
 		},
 
@@ -369,6 +370,12 @@
 			// 大会员
 			if (options.source) {
 				this.source = options.source;
+			}
+			if (options.vip_group_order_id) {
+				this.vip_group_order_id = options.vip_group_order_id
+				uni.setStorageSync('vip_group_order_id', options.vip_group_order_id)
+			} else {
+				uni.setStorageSync('vip_group_order_id', 0)
 			}
 			this.getCommon();
 			// 加载页面数据
@@ -419,7 +426,6 @@
 						GoodsApi.detail(app.goodsId)
 							.then(result => {
 								app.goods = result.data.detail
-								console.log(result, 'resultresult');
 								// if (result.status == 500) {
 								// 	uni.navigateBack()
 								// }
@@ -509,15 +515,17 @@
 		onShareAppMessage() {
 			const app = this
 			// 构建页面参数
-			const params = app.$getShareUrlParams({
-				goodsId: app.goodsId,
-			})
-
-			if (this.type == "seckill") {
+			let pages = getCurrentPages() //获取加载的页面
+			let currentPage = pages[pages.length - 1] //获取当前页面的对象
+			let options = currentPage.options //如果要获取url中所带的参数可以查看options
+			console.log(options, 'options');
+			const params = app.$getShareUrlParams(options)
+			console.log(`/pages/goods/detail?${params}`);
+			if (app.type == "seckill") {
 				return {
 					title: app.goods.goods_name,
 					path: `/pages/goods/detail?${params}`,
-					imageUrl: App.$vm.globalData.setting.SeckillShareImageId.preview_url
+					imageUrl: app.goods.goods_image
 				}
 			} else {
 				return {

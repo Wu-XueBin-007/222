@@ -2,8 +2,9 @@
 	<goods-sku-popup :value="value" @input="onChangeValue" border-radius="20" :custom-action="findGoodsInfo"
 		:mode="skuMode" :info_by_key=info_by_key :goodsId=goods.goods_id :defaultPrice="goods.goods_price_min"
 		:defaultStock="goods.stock_total" :maskCloseAble="true" @open="openSkuPopup" @close="closeSkuPopup"
-		@add-cart="addCart" @buy-now="buyNow" :priceColor="type=='product'?'#EF343D':'#DD1010'"
-		:buyNowBackgroundColor="type=='product'?'#EF343D':(((status==0||status==2)&&type=='seckill')?'#999999':'#DD1010')"
+		:vip_group_order_id="vip_group_order_id" @add-cart="addCart" @buy-now="buyNow"
+		:priceColor="type=='product'?'#EF343D  ':'#DD1010'"
+		:buyNowBackgroundColor="type=='product'?'#EF343D  ':(((status==0||status==2)&&type=='seckill')?'#999999':'#DD1010')"
 		:buyNowText="type=='seckill'?(status==0?'未开始':(status==1?'立即购买':'已结束')):(info_by_key?'立即签约':'立即购买')" />
 </template>
 
@@ -73,13 +74,17 @@
 				type: String,
 				default: ''
 			},
+			vip_group_order_id: {
+				type: Number,
+				default: 0
+			}
 		},
 
 		data() {
 			return {}
 		},
-
 		created() {
+
 			const app = this
 			const {
 				goods
@@ -202,7 +207,6 @@
 						children.push({
 							name: specValue.spec_value
 						})
-						console.log(children, 131)
 					})
 					specData.push({
 						name: group.spec_name,
@@ -219,6 +223,7 @@
 			},
 
 			closeSkuPopup() {
+				// this.$emit('closeSkuPopup')
 				// //console.log("监听 - 关闭sku组件")
 			},
 
@@ -264,7 +269,7 @@
 							info_by_key: this.info_by_key, //成为创始合伙人/成为团长
 							bigId: this.bigId,
 							source: this.source,
-
+							vip_group_order_id: this.vip_group_order_id
 						})
 					} else {
 						this.$navTo('pages/checkout/index', {

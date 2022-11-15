@@ -208,7 +208,7 @@
 					margin: 24upx 12upx 20upx 10upx;
 					.goods_priceL{
 						font-size:22upx;
-						color: #EF343D;
+						color: #EF343D  ;
 						text{
 							font-size: 40upx;
 						}

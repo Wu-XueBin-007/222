@@ -1,32 +1,32 @@
 <template>
-<view class="boxs">	
-	<view class="member">
-		<view class="memberMainT">
-			<view class="memberImg">
-				<image :src="userInfo.big_vip_user.user.avatar_url"></image>
-			</view>
-			<view class="memberInfo">
-				<view class="memberName">
-					<view class="vipName">
-						{{userInfo.big_vip_user.user.nick_name}}
+	<view class="boxs">
+		<view class="member">
+			<view class="memberMainT">
+				<view class="memberImg">
+					<image :src="userInfo.big_vip_user.user.avatar_url"></image>
+				</view>
+				<view class="memberInfo">
+					<view class="memberName">
+						<view class="vipName">
+							{{userInfo.big_vip_user.user.nick_name}}
+						</view>
+						<view class="vipIcon">
+							<image src="../../static/member_icon.png" v-if="userInfo.big_vip_user.is_vip==1"></image>
+							<!-- <image src="../../static/un_memeber_icon.png" v-if="userInfo.big_vip_user.is_vip==0"></image> -->
+						</view>
 					</view>
-					<view class="vipIcon">
-						<image src="../../static/member_icon.png" v-if="userInfo.big_vip_user.is_vip==1"></image>
-						<!-- <image src="../../static/un_memeber_icon.png" v-if="userInfo.big_vip_user.is_vip==0"></image> -->
+					<view class="memberTime" v-if="userInfo.big_vip_user.is_vip==1">
+						到期时间：{{userInfo.big_vip_user.expire_time}}
+					</view>
+					<view class="memberTime" v-if="userInfo.big_vip_user.is_vip==0">
+						您还不是大会员哦~
 					</view>
 				</view>
-				<view class="memberTime" v-if="userInfo.big_vip_user.is_vip==1">
-					到期时间：{{userInfo.big_vip_user.expire_time}}
-				</view>
-				<view class="memberTime" v-if="userInfo.big_vip_user.is_vip==0">
-					您还不是大会员哦~
-				</view>
 			</view>
-		</view>
-		<!-- <view class="renewBtn" v-if="userInfo.big_vip_user.is_vip==1">
+			<!-- <view class="renewBtn" v-if="userInfo.big_vip_user.is_vip==1">
 			立即续费
 		</view> -->
-		<!-- <view class="purchasePrice" v-if="userInfo.big_vip_user.is_vip==1">
+			<!-- <view class="purchasePrice" v-if="userInfo.big_vip_user.is_vip==1">
 			<view class="purchasePriceL">
 				<view class="price">
 					<text>￥</text>
@@ -45,48 +45,48 @@
 				</view>
 			</view>
 		</view> -->
-		<view :class="['privilege',status==true?'unprivilege':'']">
-			<view class="privilegeT">
-				大会员尊享3大特权
-			</view>
-			<view class="privilegeA">
-				<view class="recharge">
-					<view class="rechargeT">
-						<image src="../../static/icon-recharge.png"></image>
+			<view :class="['privilege',status==true?'unprivilege':'']">
+				<view class="privilegeT">
+					大会员尊享3大特权
+				</view>
+				<view class="privilegeA">
+					<view class="recharge">
+						<view class="rechargeT">
+							<image src="../../static/icon-recharge.png"></image>
+						</view>
+						<view class="rechargeInfo">
+							<view class="rechargeInfoT">话费充值9折</view>
+							<view class="rechargeInfoB">200元话费/月</view>
+						</view>
 					</view>
-					<view class="rechargeInfo">
-						<view class="rechargeInfoT">话费充值9折</view>
-						<view class="rechargeInfoB">200元话费/月</view>
+					<view class="recharge">
+						<view class="rechargeT">
+							<image src="../../static/icon-free.png"></image>
+						</view>
+						<view class="rechargeInfo">
+							<view class="rechargeInfoT">专区免单</view>
+							<view class="rechargeInfoB">每月4次免单</view>
+						</view>
+					</view>
+					<view class="recharge">
+						<view class="rechargeT">
+							<image src="../../static/icon-ticket.png"></image>
+						</view>
+						<view class="rechargeInfo">
+							<view class="rechargeInfoT">高铁火车9折</view>
+							<view class="rechargeInfoB">优惠24次/年</view>
+						</view>
 					</view>
 				</view>
-				<view class="recharge">
-					<view class="rechargeT">
-						<image src="../../static/icon-free.png"></image>
+				<view class="checkE" @click="toEquity">
+					<view>
+						查看会员权益
 					</view>
-					<view class="rechargeInfo">
-						<view class="rechargeInfoT">首单免单</view>
-						<view class="rechargeInfoB">专区首单免单</view>
-					</view>
-				</view>
-				<view class="recharge">
-					<view class="rechargeT">
-						<image src="../../static/icon-ticket.png"></image>
-					</view>
-					<view class="rechargeInfo">
-						<view class="rechargeInfoT">高铁火车9折</view>
-						<view class="rechargeInfoB">优惠24次/年</view>
+					<view class="morebtn">
+						<image src="../../static/more.png"></image>
 					</view>
 				</view>
-			</view>
-			<view class="checkE" @click="toEquity">
-				<view>
-					查看会员权益
-				</view>
-				<view class="morebtn">
-					<image src="../../static/more.png"></image>
-				</view>
-			</view>
-			<!-- <view class="openvip">
+				<!-- <view class="openvip">
 				<view class="openvipT">
 					开通大会员专区首单免费
 				</view>
@@ -97,41 +97,44 @@
 					</view>
 				</view>
 			</view> -->
-			<!-- <view class="otherB">
+				<!-- <view class="otherB">
 				<image src="../../static/arc.png"></image>
 				
 			</view> -->
-			<!-- <view class="other">
+				<!-- <view class="other">
 			    <image src="../../static/back_bottom.png"></image>	
 			</view> -->
-		</view>
-		<view class="other">
-		    <image src="../../static/back_bottomB.png"></image>	
-			<view class="vipbtn" v-if="userInfo.big_vip_user.is_vip==1" @click="openMember">
-				<image src="../../static/vip_btn.png"></image>
-				<view class="vipM">
-					￥{{userInfo.setting.vip_price}}/年, 不回本退差价
+			</view>
+			<view class="other">
+				<image src="../../static/back_bottomB.png"></image>
+				<view class="vipbtn" v-if="userInfo.big_vip_user.is_vip==1" @click="openMember">
+					<image src="../../static/vip_btn.png"></image>
+					<view class="vipM">
+						￥{{userInfo.setting.vip_price}}/年, 不回本退差价
+					</view>
 				</view>
 			</view>
-		</view>
-		<!-- <view class="otherB">
+			<!-- <view class="otherB">
 			<image src="../../static/arc.png"></image>
 		</view> -->
-		
-		<view class="otherM">
-			
-		</view>
-		<!-- <view v-if="userInfo.big_vip_user.is_vip==0" class="" style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;height: 49%; background-image: url(../../static/vipback.png);z-index: -1;">
+
+			<view class="otherM">
+
+			</view>
+			<!-- <view v-if="userInfo.big_vip_user.is_vip==0" class="" style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;height: 49%; background-image: url(../../static/vipback.png);z-index: -1;">
 			
 		</view>
 		<view v-if="userInfo.big_vip_user.is_vip==1" class="" style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;height: 46%; background-image: url(../../static/vipback.png);z-index: -1;">
 			
 		</view> -->
-		<!-- <image v-if="userInfo.big_vip_user.is_vip==0" style="position: fixed;top: 0;left: 0;right: 0;bottom: 0; z-index: -1; width: 100%; height: 84%;" src="../../static/vipback.png"></image> -->
-		<image style="position: fixed;top: 0;left: 0;right: 0;bottom: 0; z-index: -1; width: 100%; height: 48%;" src="../../static/vipback.png"></image>
-		<view style="position:fixed; top: 0 ;right: 0;bottom: 0;left: 0;background: linear-gradient(180deg, #FBF8F3 0%, #F8F8F6 100%);z-index: -99;"></view>
+			<!-- <image v-if="userInfo.big_vip_user.is_vip==0" style="position: fixed;top: 0;left: 0;right: 0;bottom: 0; z-index: -1; width: 100%; height: 84%;" src="../../static/vipback.png"></image> -->
+			<image style="position: fixed;top: 0;left: 0;right: 0;bottom: 0; z-index: -1; width: 100%; height: 48%;"
+				src="../../static/vipback.png"></image>
+			<view
+				style="position:fixed; top: 0 ;right: 0;bottom: 0;left: 0;background: linear-gradient(180deg, #FBF8F3 0%, #F8F8F6 100%);z-index: -99;">
+			</view>
+		</view>
 	</view>
-</view>
 </template>
 
 <script>
@@ -140,16 +143,16 @@
 	import * as CheckoutApi from '@/api/checkout'
 	const App = getApp()
 	export default {
-		data(){
-			return{
-				balanceLog:[],
-				page:1,
-				limit:6,
-				bottomFlag:true,
-				topFlag:true,
-				status:false,
-				userInfo:[],
-				goodsId:''
+		data() {
+			return {
+				balanceLog: [],
+				page: 1,
+				limit: 6,
+				bottomFlag: true,
+				topFlag: true,
+				status: false,
+				userInfo: [],
+				goodsId: ''
 			}
 		},
 		onLoad(options) {
@@ -160,7 +163,7 @@
 		},
 		onPullDownRefresh() {
 			// 下拉
-			if(!this.topFlag){
+			if (!this.topFlag) {
 				return false;
 			}
 			// this.getgivemap();
@@ -171,7 +174,7 @@
 		},
 		onReachBottom() {
 			// 触底
-			if(!this.bottomFlag){
+			if (!this.bottomFlag) {
 				return false;
 			}
 			this.page = this.page + 1;
@@ -179,10 +182,10 @@
 			this.status = "loading";
 			// clearInterval(this.timeOut)
 			this.getbalanceLog();
-			
-		
+
+
 		},
-		methods:{
+		methods: {
 			// getbalanceLog(flag){
 			// 	var obj={};
 			// 	obj.page=this.page;
@@ -206,35 +209,35 @@
 			// 			}
 			// 			if(this.page != 1){
 			// 				this.balanceLog = this.balanceLog.concat(res.data.balance_log.data)
-							
-							
+
+
 			// 			}else{
 			// 				this.balanceLog = res.data.balance_log.data
-							
+
 			// 			}
-						
+
 			// 		}
 			// 	})
 			// }
-			getUserinfo(){
-				memberApi.userInfo().then(res=>{
+			getUserinfo() {
+				memberApi.userInfo().then(res => {
 					console.log(res)
 					this.userInfo = res.data
 					this.goodsId = res.data.setting.vip_goods_id
 				})
 			},
-			toRecord(){
+			toRecord() {
 				uni.navigateTo({
-					url:'./invitation'
+					url: './invitation'
 				})
 			},
-			toEquity(){
+			toEquity() {
 				console.log(111)
 				uni.navigateTo({
-					url:'./Equitydetails'
+					url: './Equitydetails'
 				})
 			},
-			openMember(){
+			openMember() {
 				// console.log(123)
 				// let obj = {}
 				// obj.mode = 'buyNow'
@@ -244,63 +247,70 @@
 				// CheckoutApi.submit(obj).then(res=>{
 				// 	console,log(res)
 				// })
-				
+
 				const params = {
-				  delivery: this.curDelivery || 0,
-				  couponId: this.selectCouponId || 0,
-				  isUsePoints: this.isUsePoints ? 1 : 0,
+					delivery: this.curDelivery || 0,
+					couponId: this.selectCouponId || 0,
+					isUsePoints: this.isUsePoints ? 1 : 0,
 				}
 				// 请求api
 				CheckoutApi.submit('buyNow', this.getRequestParam())
-				  .then(result => {
-				    // this.initData(result.data)
-					let order_on = result.data.order_on
-					console.log(result.data.order_on,12)
-					uni.navigateTo({
-						url:'./pay?order_on=' + order_on
+					.then(result => {
+						// this.initData(result.data)
+						let order_on = result.data.order_on
+						console.log(result.data.order_on, 12)
+						uni.navigateTo({
+							url: './pay?order_on=' + order_on
+						})
 					})
-				  })
-				  .catch(err => err)
-				  
+					.catch(err => err)
+
 			},
 			getRequestParam() {
-			  const app = this
-			  const { options } = app
-			  // 结算模式的固定参数
-			  const modeParam = {}
-			  // 结算模式: 立即购买
-			  
-			  modeParam.goodsId = this.goodsId
-			  modeParam.goodsNum = 1
-			  modeParam.goodsSkuId = 0
-			 
-			  // 结算模式: 购物车
-			
-			  // 订单结算参数(用户选择)
-			  const orderParam = {
-			    // delivery: app.curDelivery || 0,
-			    // couponId: app.selectCouponId || 0,
-			    // isUsePoints: app.isUsePoints ? 1 : 0,
-			  }
-			  return { ...orderParam, ...modeParam }
+				const app = this
+				const {
+					options
+				} = app
+				// 结算模式的固定参数
+				const modeParam = {}
+				// 结算模式: 立即购买
+
+				modeParam.goodsId = this.goodsId
+				modeParam.goodsNum = 1
+				modeParam.goodsSkuId = 0
+
+				// 结算模式: 购物车
+
+				// 订单结算参数(用户选择)
+			 const orderParam = {
+					// delivery: app.curDelivery || 0,
+					// couponId: app.selectCouponId || 0,
+					// isUsePoints: app.isUsePoints ? 1 : 0,
+				}
+				return {
+					...orderParam,
+					...modeParam
+				}
 			}
 		}
-		
+
 	}
 </script>
 
 <style scoped lang="scss">
-	.boxs{
+	.boxs {
 		width: 100%;
 		height: 100%;
 		// background-image:url(../../static/vipback.png) ;
 		// background-image: url(../../static/vipback.png);
 	}
-	.member{
+
+	.member {
 		// height: 1400upx;
 		height: 100%;
 	}
-	.memberMainT{
+
+	.memberMainT {
 		/* margin: 20upx auto 0; */
 		width: 750upx;
 		height: 130upx;
@@ -311,49 +321,58 @@
 		margin-bottom: 40upx;
 		// position: relative;
 	}
-    .memberImg{
+
+	.memberImg {
 		width: 90upx;
 		height: 90upx;
 		background-color: white;
 		border-radius: 50upx;
 		margin: 0 0 0 40upx;
-		image{
+
+		image {
 			width: 100%;
 			height: 100%;
 			border-radius: 50upx;
 		}
 	}
-	.memberInfo{
+
+	.memberInfo {
 		width: 600upx;
 		margin: 0 0 0 20upx;
 	}
-	.memberName{
+
+	.memberName {
 		width: 600upx;
 		display: flex;
 		justify-content: flex-start;
 	}
-	.vipName{
+
+	.vipName {
 		color: #333333;
 		outline-offset: 32upx;
 		font-weight: bold;
 	}
-	.vipIcon{
+
+	.vipIcon {
 		width: 80upx;
 		height: 40upx;
-		image{
+
+		image {
 			width: 100%;
 			height: 100%;
 		}
 	}
-	.memberTime{
+
+	.memberTime {
 		// width: 264upx;
 		height: 34upx;
 		color: #4F2A03;
 		font-size: 24upx;
 		font-weight: 400;
-		
+
 	}
-	.renewBtn{
+
+	.renewBtn {
 		width: 134upx;
 		height: 48upx;
 		text-align: center;
@@ -366,7 +385,8 @@
 		top: 60upx;
 		font-size: 26upx;
 	}
-	.purchasePrice{
+
+	.purchasePrice {
 		width: 702upx;
 		height: 200upx;
 		margin: 0 auto 0;
@@ -377,12 +397,14 @@
 		// position: relative;
 		// top: 0;
 	}
-	.purchasePriceL{
+
+	.purchasePriceL {
 		width: 300upx;
 		height: 150upx;
 		margin: 40upx 0 0 40upx;
 	}
-	.price{
+
+	.price {
 		width: 208upx;
 		height: 66upx;
 		// text-align: center;
@@ -393,35 +415,42 @@
 		display: flex;
 		justify-content: flex-start;
 	}
-	.priceL{
+
+	.priceL {
 		font-size: 60upx;
 	}
-	.consumption{
+
+	.consumption {
 		color: #4F2A03;
 		font-weight: 400;
 		font-size: 24upx;
 	}
-	.purchasePriceR{
+
+	.purchasePriceR {
 		width: 96upx;
 		height: 100upx;
 		margin: 50upx 40upx 0 0;
 	}
-	.recordT{
+
+	.recordT {
 		width: 48upx;
 		height: 48upx;
 		margin: 0 0 0 24upx;
-		image{
+
+		image {
 			width: 100%;
 			height: 100%;
 		}
 	}
-	.recordM{
+
+	.recordM {
 		width: 96upx;
 		height: 34upx;
 		font-size: 24upx;
 		color: #A27748;
 	}
-	.privilege{
+
+	.privilege {
 		width: 738upx;
 		height: 550upx;
 		background-image: url(../../static/black_back.png);
@@ -429,9 +458,10 @@
 		margin: -24rpx auto 0;
 		// position: absolute;
 		// top: 340upx;
-		
+
 	}
-	.unprivilege{
+
+	.unprivilege {
 		width: 738upx;
 		height: 538upx;
 		background-image: url(../../static/black_back.png);
@@ -439,42 +469,49 @@
 		margin: -24rpx auto 0;
 		// position: absolute;
 		// top: 340upx;
-		
+
 	}
-	.privilegeT{
+
+	.privilegeT {
 		width: 260upx;
 		color: #A27748;
 		margin: 0 auto;
 		font-size: 30upx;
 		padding-top: 20upx;
 	}
-	.privilegeA{
+
+	.privilegeA {
 		display: flex;
 		justify-content: space-between;
 		// margin: 20upx 0 0 0;
 		// padding-top: 60upx;
 		padding: 60upx 60upx 24upx;
 	}
-	.recharge{
+
+	.recharge {
 		width: 192upx;
 		height: 200upx;
 		// margin-left: 60upx;
 	}
-	.rechargeT{
+
+	.rechargeT {
 		width: 84upx;
 		height: 84upx;
 		margin: 0 0 0 54upx;
-		image{
+
+		image {
 			width: 100%;
 			height: 100%;
 		}
 	}
-	.rechargeInfo{
+
+	.rechargeInfo {
 		width: 192upx;
 		height: 68upx;
-		
+
 	}
-	.rechargeInfoT{
+
+	.rechargeInfoT {
 		width: 192upx;
 		height: 40upx;
 		color: #EBDCC8;
@@ -483,7 +520,8 @@
 		text-align: center;
 		margin: 12upx 0 0 0;
 	}
-	.rechargeInfoB{
+
+	.rechargeInfoB {
 		width: 192upx;
 		height: 34upx;
 		color: #FFFFFF;
@@ -491,7 +529,8 @@
 		font-weight: 300;
 		text-align: center;
 	}
-	.checkE{
+
+	.checkE {
 		width: 184upx;
 		height: 34upx;
 		margin: 0 auto;
@@ -503,15 +542,18 @@
 		text-align: center;
 		z-index: 1;
 	}
-	.morebtn{
+
+	.morebtn {
 		width: 40upx;
 		height: 40upx;
-		image{
+
+		image {
 			width: 100%;
 			height: 100%;
 		}
 	}
-	.openvip{
+
+	.openvip {
 		width: 642upx;
 		height: 268upx;
 		margin: 20upx auto;
@@ -519,7 +561,8 @@
 		border: 1px solid #56555A;
 		opacity: 1;
 	}
-	.openvipT{
+
+	.openvipT {
 		width: 352upx;
 		height: 44upx;
 		margin: 20upx auto;
@@ -527,20 +570,23 @@
 		color: #EDC69A;
 		font-weight: bold;
 	}
-	.openvipB{
+
+	.openvipB {
 		width: 546upx;
 		height: 156upx;
 		margin: 20upx 0 0 48upx;
 		// background-image: url(../../static/free.png);
 		position: relative;
-		image{
+
+		image {
 			width: 100%;
 			height: 100%;
 			// z-index: -1;
 		}
-		
+
 	}
-	.openvipM{
+
+	.openvipM {
 		width: 288upx;
 		// height: 104upx;
 		font-size: 32upx;
@@ -551,43 +597,51 @@
 		position: absolute;
 		top: 0;
 	}
-	.otherB{
+
+	.otherB {
 		width: 750upx;
 		height: 50upx;
-		image{
+
+		image {
 			width: 100%;
 			height: 100%;
 		}
 	}
-	.other{
+
+	.other {
 		width: 750upx;
 		height: 206upx;
 		margin-top: -188rpx;
 		padding-top: 40rpx;
 		position: relative;
 		z-index: 0;
+
 		// background-image: url(../../static/back_bottomB.png);
-		image{
+		image {
 			width: 100%;
 			height: 100%;
 		}
 	}
-	.vipbtn{
+
+	.vipbtn {
 		width: 506upx;
 		height: 112upx;
 		margin: 10rpx auto 0;
 		position: absolute;
 		bottom: 16upx;
 		left: 135upx;
-		image{
+
+		image {
 			width: 100%;
 			height: 100%;
 			// margin-top: 10upx;
 		}
+
 		// background-image: url(../../static/vip_btn.png);
 		// background-size: 750upx 112upx;
 	}
-	.vipM{
+
+	.vipM {
 		width: 400upx;
 		height: 66upx;
 		color: #A57344;
@@ -599,9 +653,11 @@
 		top: 0;
 		left: 58upx;
 	}
-	.otherM{
+
+	.otherM {
 		width: 750upx;
 		height: calc(100% - 592px);
-		background: linear-gradient(180deg, #FBF8F3 0%, #F8F8F6 100%);;
+		background: linear-gradient(180deg, #FBF8F3 0%, #F8F8F6 100%);
+		;
 	}
 </style>

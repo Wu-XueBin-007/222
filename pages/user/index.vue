@@ -2,7 +2,7 @@
 	<view v-if="!isLoading" class="container" :style="{'box-sizing': 'border-box'}">
 		<!-- <head-nav title="个人中心" :backFlag="false" color="white" backGround="linear-gradient(270deg, #FF5A5E, #DF6BAE)" backType="user" fontSize="36"></head-nav> -->
 		<view class="head"
-			:style="{'padding-top':navInfo.paddingTop+'px','height':info_by_key.area_good_id&&info_by_key.city_good_id?'650rpx':'538rpx'}">
+			:style="{'padding-top':navInfo.paddingTop+'px','height':Number(info_by_key.area_good_id)&&Number(info_by_key.city_good_id)?'650rpx':'538rpx'}">
 			<image src="../../static/mine/backImage.png" class="headBack"></image>
 			<view class="headT">
 				<view class="imgWrap" @click="handleLogin">
@@ -49,7 +49,7 @@
 					<!-- <view class="headItemT">{{token_price?token_price:(isLogin?0:'---')}}</view> -->
 					<view class="headItemT">{{userInfo.cert_total_price?userInfo.cert_total_price:(isLogin?0:'---')}}
 					</view>
-					<view class="headItemB">通证</view>
+					<view class="headItemB">权益积分</view>
 				</view>
 				<view class="headItem" @click="toProfit">
 					<view class="headItemT">
@@ -64,7 +64,7 @@
 				</view>
 			</view>
 			<!-- 创业合伙人 团长 -->
-			<view v-if="info_by_key.area_good_id&&info_by_key.city_good_id" class="operation">
+			<view v-if="Number(info_by_key.area_good_id)&&Number(info_by_key.city_good_id)" class="operation">
 				<view @click="onTargetDetail(info_by_key.area_good_id,1)" class="operationitem">
 					<image class="partner operationitemimg" src="../../static/partner.png" mode=""></image>
 					<text class="tx_title">成为{{info_by_key.area_name}} </text>
@@ -77,7 +77,7 @@
 		</view>
 
 		<view class="orderWrapBox" :style="{'position': 'relative','z-index': '999'}">
-			<view class="" v-if="bigVip.big_vip_switch==1">
+			<!-- <view class="" v-if="bigVip.big_vip_switch==1">
 				<view class="majorMember" v-if="!showMember">
 					<view class="majorMemberT">
 						<view class="majorMemberTL">
@@ -116,7 +116,7 @@
 						我的权益
 					</view>
 				</view>
-			</view>
+			</view> -->
 			<view class="orderWrap" style="margin: -20rpx auto 0;">
 				<view class="orderWrapHead" @click="onTargetOrder(orderNavbar[4])">
 					<view class="orderWrapHeadL">我的订单</view>
@@ -161,8 +161,6 @@
 					</view>
 				</view>
 			</view>
-
-
 
 			<view class="orderWrap" style="margin-top: 30rpx;">
 				<view class="orderWrapHead">
@@ -556,8 +554,9 @@
 				// uni.navigateTo({
 				// 	url:'/pageMember/pages/index/Myrights'
 				// })
+				let vip_price = this.bigVip.vip_price || 188
 				uni.navigateTo({
-					url: '/pageMember/pages/index/report'
+					url: '/pageMember/pages/index/report?vip_price=' + vip_price
 				})
 			},
 			copy(e) {

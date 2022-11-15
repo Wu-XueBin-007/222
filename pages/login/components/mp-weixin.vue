@@ -89,12 +89,12 @@
 				};
 				obj.isParty = true;
 				obj.type = 1;
-
-				if (APP.globalData.shareId) {
-					obj.superior_user_id = APP.globalData.shareId;
-				}
+				// if (APP.globalData.shareId) {
+				// 	obj.superior_user_id = APP.globalData.shareId;
+				// }
 				let superior_user_id = this.$store.state.user.superior_user_id;
 				obj.superior_user_id = superior_user_id
+				console.log(superior_user_id, 'superior_user_id');
 				store.dispatch('Login', obj)
 					.then(result => {
 						// 显示登录成功
