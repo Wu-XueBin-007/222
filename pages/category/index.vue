@@ -75,7 +75,10 @@
 									</view> -->
 									<!-- 商品价格 -->
 									<view class="desc_footer">
-										<text class="price_x">¥{{ item.goods_price_min }}</text>
+										<text class="price_x"> ￥<text
+												style="font-size: 38rpx;font-weight: 700;font-family: 'PingFang SC';font-style: normal;">{{item.goods_price_min.split('.')[0]}}<text
+													style="font-size:20rpx;font-weight: 700;">.{{item.goods_price_min.split('.')[1]}}</text>
+											</text></text>
 										<!-- 										<text class="price_y col-9"
 											v-if="item.line_price_min > 0">¥{{ item.line_price_min }}</text> -->
 
@@ -107,14 +110,14 @@
 						</view>
 					</view>
 				</view>
-				<empty v-if="!goodslist.length" :isLoading="isLoading" />
+				<empty v-if="!goodslist.length&&!isLoading" :isLoading="isLoading" />
 				<!-- </view> -->
 				<!-- </mescroll-body> -->
 				<!-- 				<uni-load-more bg-color="rgb(240, 240, 240)" :status="loadStatus">
 				</uni-load-more> -->
 			</scroll-view>
 		</view>
-		<empty v-if="!list.length" :isLoading="isLoading" />
+		<empty v-if="!list.length&&!isLoading" :isLoading="isLoading" />
 		<!-- 商品SKU弹窗 -->
 		<SkuPopup v-if="showSkuPopup" @closeSkuPopup='closeSkuPopup' v-model="showSkuPopup"
 			:vip_group_order_id="vip_group_order_id" :source=source :info_by_key=info_by_key :skuMode="skuMode"
@@ -837,7 +840,7 @@
 				font-family: 'PingFang SC';
 				font-style: normal;
 				font-weight: 700;
-				font-size: 38rpx;
+				font-size: 20rpx;
 				color: #F97112;
 			}
 

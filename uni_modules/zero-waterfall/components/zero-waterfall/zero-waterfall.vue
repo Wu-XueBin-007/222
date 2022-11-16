@@ -2,18 +2,22 @@
 	<view class="container">
 		<view class="waterfall_left">
 			<view class="waterfall_item" v-for="(item,index) in listLeft" :key="index" :data-id="item.goods_id"
-					@click="onTargetGoodsList" v-if="item.goods_id">
+				@click="onTargetGoodsList" v-if="item.goods_id">
 				<view class="item_img">
 					<!-- <image :src="item.url" mode="widthFix" @load="considerPush"></image> -->
-					<zero-lazy-load :image="item.goods_image" :imgMode='imgMode' @load='considerPush' @error='considerPush'>
+					<zero-lazy-load :image="item.goods_image" :imgMode='imgMode' @load='considerPush'
+						@error='considerPush'>
 					</zero-lazy-load>
 				</view>
-				<view  class="item_info">
+				<view class="item_info">
 					<view class="item_info_title">{{item.goods_name}}</view>
 					<!-- <view class="item_info_note">{{item.note}}</view> -->
 					<view class="item_info_note">
 						<view class="item_info_price">
-							￥<text>{{item.goods_price_min}}</text>
+							￥<text
+								style="font-size: 38rpx;font-weight: 700;font-family: 'PingFang SC';font-style: normal;">{{item.goods_price_min.split('.')[0]}}<text
+									style="font-size:20rpx;font-weight: 700;">.{{item.goods_price_min.split('.')[1]}}</text>
+							</text>
 						</view>
 						<!-- <view class="item_info_price" v-if="item.line_price_min>0">
 							￥<text>{{item.line_price_min}}</text>
@@ -32,17 +36,21 @@
 		</view>
 		<view class="waterfall_right">
 			<view class="waterfall_item" v-for="(item,index) in listRight" :key="index" :data-id="item.goods_id"
-					@click="onTargetGoodsList" v-if="item.goods_id">
+				@click="onTargetGoodsList" v-if="item.goods_id">
 				<view class="item_img">
 					<!-- <image :src="item.url" mode="widthFix" @load="considerPush"></image> -->
-					<zero-lazy-load :image="item.goods_image" :imgMode='imgMode' @load='considerPush' @error='considerPush'>
+					<zero-lazy-load :image="item.goods_image" :imgMode='imgMode' @load='considerPush'
+						@error='considerPush'>
 					</zero-lazy-load>
 				</view>
 				<view class="item_info">
 					<view class="item_info_title">{{item.goods_name}}</view>
 					<view class="item_info_note">
 						<view class="item_info_price">
-							￥<text>{{item.goods_price_min}}</text>
+							￥<text
+								style="font-size: 38rpx;font-weight: 700;font-family: 'PingFang SC';font-style: normal;">{{item.goods_price_min.split('.')[0]}}<text
+									style="font-size:20rpx;font-weight: 700;">.{{item.goods_price_min.split('.')[1]}}</text>
+							</text>
 						</view>
 						<!-- <view class="item_info_price" v-if="item.line_price_min>0">
 							￥<text>{{item.line_price_min}}</text>
@@ -88,14 +96,14 @@
 			}
 		},
 		watch: {
-		 list: {
-			handler (newValue, oldValue) {
-				    let newarr = [...this.listLeft,...this.listRight]
-					this.newList = newValue.slice(newarr?newarr.length:0);
+			list: {
+				handler(newValue, oldValue) {
+					let newarr = [...this.listLeft, ...this.listRight]
+					this.newList = newValue.slice(newarr ? newarr.length : 0);
 					this.considerPush()
-			},
-			immediate: true
-		 }
+				},
+				immediate: true
+			}
 		},
 		mounted() {
 			// this.init()
@@ -215,23 +223,27 @@
 				padding: 0 10upx;
 				margin-bottom: 20upx;
 				justify-content: space-between;
-				.item_info_sales{
+
+				.item_info_sales {
 					font-size: 22upx;
 					color: #878787;
 					// margin-top: 18upx;
 					line-height: 22upx;
 				}
-				 .item_info_price {
+
+				.item_info_price {
 					font-size: 22upx;
 					// font-weight: bold;
 					line-height: 22upx;
-					color: #F97112  ;
+					color: #F97112;
 					margin-right: 18upx;
-					text{
+
+					text {
 						font-size: 36upx;
 						font-weight: bold;
 					}
 				}
+
 				.item_info_texts {
 					font-size: 22upx;
 					// font-weight: bold;
@@ -240,7 +252,7 @@
 					text-decoration: line-through;
 				}
 			}
-			
+
 		}
 
 	}

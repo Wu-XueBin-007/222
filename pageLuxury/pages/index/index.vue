@@ -101,7 +101,7 @@
 				</view>
 			</u-popup>
 		</view>
-		<view class="advertisement" v-if="isFinish">
+		<!-- <view class="advertisement" v-if="isFinish">
 			<view class="advertisementImage">
 				<image src="../../static/vip_backimg.png" mode=""></image>
 			</view>
@@ -121,9 +121,9 @@
 					<image src="../../static/more.png" mode=""></image>
 				</view>
 			</view>
-		</view>
+		</view> -->
 
-		<view class="advertisement2" v-else>
+		<!-- <view class="advertisement2" v-else>
 			<view class="advertisementImage">
 				<image src="../../static/notvip_backimg.png" mode=""></image>
 			</view>
@@ -145,7 +145,7 @@
 					</view>
 				</view>
 			</view>
-		</view>
+		</view> -->
 		<!-- 权益消费额度 -->
 		<!-- <helpTip v-if="helpTipState" @close='helpTipColse'  :title="helpTipTitle" :content="helpTipContent"></helpTip> -->
 		<!-- <view v-if="userInfo.team_level == 2||userInfo.team_level == 3" class="EquityLines">

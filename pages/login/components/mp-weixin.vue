@@ -117,7 +117,6 @@
 			// 获取微信用户信息(新版)
 			getUserProfile() {
 				const app = this
-
 				wx.canIUse('getUserProfile') && wx.getUserProfile({
 					lang: 'zh_CN',
 					desc: '获取用户相关信息',
@@ -127,6 +126,7 @@
 						//console.log('用户同意了授权')
 						//console.log('userInfo：', userInfo)
 						// 授权成功事件
+						console.log(userInfo, 'userInfo');
 						app.userMsg = userInfo;
 						app.onAuthSuccess(userInfo)
 					},

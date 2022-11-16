@@ -402,7 +402,7 @@
 
 			// 金刚区
 			btn_give(item) {
-				if (item.url) {
+				if (item.url != '//') {
 					uni.navigateTo({
 						url: item.url
 					})

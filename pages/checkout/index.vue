@@ -170,12 +170,12 @@
 		<!-- v-if="bigId!=''" -->
 		<!-- 高奢 -->
 		<view class="pay-method flow-all-money b-f m-top20" v-if="bigId==2">
-			<view class="flow-all-list dis-flex">
+			<!-- 			<view class="flow-all-list dis-flex">
 				<text class="flex-five">权益选择</text>
-			</view>
+			</view> -->
 			<!-- 权益选择 -->
 
-			<view class="pay-item dis-flex flex-x-between" @click="freeChoice(3)">
+			<!-- <view class="pay-item dis-flex flex-x-between" @click="freeChoice(3)">
 				<view class="item-left dis-flex flex-y-center">
 					<view class="item-left_icon wechat">
 					</view>
@@ -186,10 +186,10 @@
 				<view class="item-right col-m" v-if="is_free == 3">
 					<text class="iconfont icon-check"></text>
 				</view>
-			</view>
+			</view> -->
 
 
-			<view class="pay-item dis-flex flex-x-between" @click="freeChoice(0)">
+			<!-- <view class="pay-item dis-flex flex-x-between" @click="freeChoice(0)">
 				<view class="item-left dis-flex flex-y-center">
 					<view class="item-left_icon wechat">
 					</view>
@@ -200,11 +200,11 @@
 				<view class="item-right col-m" v-if="is_free == 0">
 					<text class="iconfont icon-check"></text>
 				</view>
-			</view>
+			</view> -->
 
 
 			<!-- 邀请好友获得免单 -->
-			<view class="pay-item dis-flex flex-x-between" @click="freeChoice(1)">
+			<!-- <view class="pay-item dis-flex flex-x-between" @click="freeChoice(1)">
 				<view class="item-left dis-flex flex-y-center">
 					<view class="item-left_icon balance">
 					</view>
@@ -215,7 +215,7 @@
 				<view class="item-right col-m" v-if="is_free == 1">
 					<text class="iconfont icon-check"></text>
 				</view>
-			</view>
+			</view> -->
 
 			<view class="pay-method flow-all-money b-f m-top20" style="padding: 40rpx;" v-if="is_free==0">
 				<view style="margin: 0 auto; color: #999999; font-size: 26rpx; border-radius: 20upx;">
@@ -227,7 +227,7 @@
 		</view>
 
 		<!-- 大会员 -->
-		<view class="pay-method flow-all-money b-f m-top20" v-if="source">
+		<view class="pay-method flow-all-money b-f m-top20" v-if="bigId==1">
 			<view class="flow-all-list dis-flex">
 				<text class="flex-five">权益选择</text>
 			</view>
@@ -237,7 +237,7 @@
 					<view class="item-left_icon wechat">
 					</view>
 					<view class="item-left_text">
-						正常购买
+						正常购买/参与拼团
 					</view>
 				</view>
 				<view class="item-right col-m" v-if="is_free == 0">
@@ -252,7 +252,7 @@
 					<view class="item-left_icon balance">
 					</view>
 					<view class="item-left_text">
-						<text>成团购买</text>
+						<text>发起拼团</text>
 					</view>
 				</view>
 				<view class="item-right col-m" v-if="is_free == 1">
@@ -268,7 +268,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="pay-method flow-all-money b-f m-top20" style="padding: 40rpx;" v-if="is_free==1">
+		<view class="pay-method flow-all-money b-f m-top20" style="padding: 40rpx;" v-if="is_free==1&&bigId==1">
 			<view style="display: flex;justify-content: center;">
 				<image style="width: 80rpx;height: 80rpx;" src="../../static/home/ask.png" mode=""></image>
 				<image style="width: 80rpx;height: 80rpx;margin-left: 96rpx;" src="../../static/home/ask.png" mode="">
@@ -534,20 +534,28 @@
 		 */
 		onLoad(options) {
 			this.options = options;
-			if (this.options.poolId) {
-				this.poolId = this.options.poolId
+			if (options.poolId) {
+				this.poolId = options.poolId
 			}
-			if (this.options.bigId) {
-				this.bigId = this.options.bigId;
+			if (options.bigId) {
+				/**
+				 * bigId '' 空是普通商品
+				 * bigId 1 是会员专区过来的
+				 * bigId 2 是高奢专区过来的
+				 * */
+				this.bigId = options.bigId;
 			}
-			if (this.options.group_order_id) {
-				this.group_order_id = this.options.group_order_id
+			if (options.group_order_id) {
+				this.group_order_id = options.group_order_id
 			}
-			if (this.options.info_by_key) {
-				this.info_by_key = this.options.info_by_key
+			if (options.info_by_key) {
+				this.info_by_key = options.info_by_key
 			}
-			if (this.options.source) {
-				this.source = this.options.source
+			if (options.source) {
+				this.source = options.source
+			}
+			if (options.source) {
+				this.bigId = options.bigId
 			}
 
 		},
@@ -683,7 +691,9 @@
 
 						}).catch(err => {
 							setTimeout(function() {
-								uni.navigateBack()
+								if (err.result.status != 401) {
+									uni.navigateBack()
+								}
 							}, 1000)
 
 						})
@@ -704,7 +714,9 @@
 							}
 						}).catch(err => {
 							setTimeout(function() {
-								uni.navigateBack()
+								if (err.result.status != 401) {
+									uni.navigateBack()
+								}
 							}, 1000)
 						})
 				} else {
@@ -726,30 +738,11 @@
 						// .catch(err => err)
 						.catch(err => {
 							setTimeout(function() {
-								uni.navigateBack()
+								if (err.result.status != 401) {
+									uni.navigateBack()
+								}
 							}, 1000)
 							console.log(err)
-							//   if(err.result.message=='该商品仅限大会员购买'){
-							// 	  uni.showModal({
-							// 	  	title:'提示',
-							// 		content:err.result.message,
-							// 		success:function(res){
-							// 			if(res.confirm){
-							// 				uni.redirectTo({
-							// 					url:'../../pageMember/pages/index/index'
-							// 				})
-							// 			}else if(res.cancel){
-							// 				console.log('用户点击了取消')
-							// 		uni.navigateBack({
-							// 			delta:-1
-							// 		})
-							// 			}
-							// 		}
-							// 	  })
-
-
-							//   }
-							// this.showModalStatus3 = true
 						})
 						.finally(res => {
 
@@ -962,27 +955,6 @@
 								if (errData.is_created) {
 									app.navToMyOrder(errData.order_on)
 									return false
-								} else {
-									if (err.result.message == '您已没有首单资格哦') {
-										uni.showModal({
-											title: '提示',
-											content: err.result.message,
-											success: function(res) {
-												if (res.confirm) {
-													console.log(errData.is_jump, 11)
-													uni.redirectTo({
-														url: errData.is_jump
-													})
-													// uni.redirectTo({
-													// 	url:'/pageLuxury/pages/index/index?group_order_id=0'
-													// })
-												} else if (res.cancel) {
-													console.log('用户点击取消');
-												}
-											}
-										})
-									}
-
 								}
 
 							}
@@ -1022,7 +994,6 @@
 
 			// 订单提交成功后回调
 			onSubmitCallback(result) {
-				console.log(result, 'result');
 				const app = this;
 				app.disabled = false
 				//清除大会员推广id
@@ -1091,7 +1062,7 @@
 						form.is_vip_free = app.is_free;
 					}
 					if (app.bigId != '' || app.bigId != 1) {
-						form.is_free = this.is_free
+						form.is_free = 0 //this.is_free
 						form.group_order_id = this.group_order_id
 					}
 				}
