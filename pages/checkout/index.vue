@@ -232,12 +232,12 @@
 				<text class="flex-five">权益选择</text>
 			</view>
 			<!-- 权益选择 -->
-			<view class="pay-item dis-flex flex-x-between" @click="freeChoice(0)">
+			<view v-if="vip_group_order_id==0" class="pay-item dis-flex flex-x-between" @click="freeChoice(0)">
 				<view class="item-left dis-flex flex-y-center">
 					<view class="item-left_icon wechat">
 					</view>
 					<view class="item-left_text">
-						正常购买/参与拼团
+						正常购买
 					</view>
 				</view>
 				<view class="item-right col-m" v-if="is_free == 0">
@@ -252,7 +252,7 @@
 					<view class="item-left_icon balance">
 					</view>
 					<view class="item-left_text">
-						<text>发起拼团</text>
+						<text>{{vip_group_order_id==0?'发起拼团':'参与拼团'}}</text>
 					</view>
 				</view>
 				<view class="item-right col-m" v-if="is_free == 1">
@@ -268,7 +268,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="pay-method flow-all-money b-f m-top20" style="padding: 40rpx;" v-if="is_free==1&&bigId==1">
+		<view class="pay-method flow-all-money b-f m-top20" style="padding: 40rpx;" v-if="is_free==1&&bigId==1&&vip_group_order_id==0">
 			<view style="display: flex;justify-content: center;">
 				<image style="width: 80rpx;height: 80rpx;" src="../../static/home/ask.png" mode=""></image>
 				<image style="width: 80rpx;height: 80rpx;margin-left: 96rpx;" src="../../static/home/ask.png" mode="">
@@ -513,7 +513,8 @@
 				message: '',
 				showMember: '', //0不是大会员 1是大会员
 				info_by_key: 0,
-				source: ''
+				source: '',
+				vip_group_order_id:0
 			}
 		},
 		filters: {
@@ -536,6 +537,10 @@
 			this.options = options;
 			if (options.poolId) {
 				this.poolId = options.poolId
+			}
+			if(options.vip_group_order_id!=0){
+				this.is_free = 1
+				this.vip_group_order_id = options.vip_group_order_id
 			}
 			if (options.bigId) {
 				/**
@@ -1058,9 +1063,10 @@
 						form.LuckyFreeId = options.LuckyFreeId
 					}
 					// 大会员
-					if (app.source) {
-						form.is_vip_free = app.is_free;
+					if (app.bigId==1) {
+						app.vip_group_order_id!=0?form.is_vip_free = 0:form.is_vip_free = app.is_free;
 					}
+					// 高奢
 					if (app.bigId != '' || app.bigId != 1) {
 						form.is_free = 0 //this.is_free
 						form.group_order_id = this.group_order_id

@@ -101,79 +101,23 @@
 				</view>
 			</u-popup>
 		</view>
-		<!-- <view class="advertisement" v-if="isFinish">
-			<view class="advertisementImage">
-				<image src="../../static/vip_backimg.png" mode=""></image>
-			</view>
-			<view class="advertisementL">
-				<view class="advertisementLT">
-					恭喜你已成为会员
+		<!--会员  -->
+		<view class="membersList">
+			 <image class="membersType" v-if="user_quota.user_level==0" src="../../static/img_pthy_gsmp.png" mode=""></image>
+			 <image class="membersType" v-if="user_quota.user_level==1" src="../../static/img_lz_gsmp.png" mode=""></image>
+			 <image class="membersType" v-if="user_quota.user_level==2" src="../../static/img_hz_gsmp.png" mode=""></image>
+			  <!-- <image class="membersType" v-if="user_quota.user_level==3" src="../../static/img_hhr.png" mode=""></image> -->
+			 <view class="rightProgress">
+			 	<text class="cumulative">累计消费{{user_quota.user_level||0}}元，升级蓝钻还需消费{{user_quota.gap||0}}元</text>
+				<view class="Progress">
+					<view class="ProgressItem"></view>
 				</view>
-				<view class="advertisementLB">
-					您已累计消费满{{bigUser.consumption}}
+				<view class="ProgressNum">
+					{{user_quota.user_quota||0}}/{{user_quota.is_auto_upgrade==1?980:2980}}
 				</view>
-			</view>
-			<view class="advertisementR" @click="getEquity">
-				<view class="advertisementRL">
-					查看我的权益
-				</view>
-				<view class="advertisementRR">
-					<image src="../../static/more.png" mode=""></image>
-				</view>
-			</view>
-		</view> -->
+			 </view>
+		</view>
 
-		<!-- <view class="advertisement2" v-else>
-			<view class="advertisementImage">
-				<image src="../../static/notvip_backimg.png" mode=""></image>
-			</view>
-			<view class="advertisementL">
-				成为会员进度
-			</view>
-			<view class="advertisementR">
-				<view class="advertisementRT">
-					<progress :percent="pgList" border-radius="6" backgroundColor="#FFF4E1" activeColor="#D99B5F"
-						stroke-width="4" />
-				</view>
-
-				<view class="advertisementRB">
-					<view class="advertisementRBL">
-						累计消费(元)
-					</view>
-					<view class="advertisementRBR">
-						{{bigUser.consumption}}/{{setting.Luxury_upgrade_consum}}
-					</view>
-				</view>
-			</view>
-		</view> -->
-		<!-- 权益消费额度 -->
-		<!-- <helpTip v-if="helpTipState" @close='helpTipColse'  :title="helpTipTitle" :content="helpTipContent"></helpTip> -->
-		<!-- <view v-if="userInfo.team_level == 2||userInfo.team_level == 3" class="EquityLines">
-			<view class="EquityLinesTitle">
-				权益消费额度 
-				<u-icon @click="shoWequity" name="question-circle"></u-icon>
-			</view>
-			<view class="lines">
-				<view class="combination">
-					<text class="combinationTitle">年度总额度(单位：元)</text>
-					<text class="combinationNum">{{equities.all||0}}</text>
-				</view>
-				<view class="remainingAmount">
-					<text class="combinationTitle">年度已用额度(单位：元)</text>
-					<text class="combinationNum">{{equities.used||0}}</text>
-				</view>
-			</view>
-			<view style="margin-top: 16rpx;" class="lines">
-				<view class="combination">
-					<text class="combinationTitle">年度剩余额度(单位：元)</text>
-					<text class="combinationNum">{{equities.balance||0}}</text>
-				</view>
-				<view class="remainingAmount">
-					<text class="combinationTitle">待发放额度(单位：元)</text>
-					<text class="combinationNum">{{equities.wait||0}}</text>
-				</view>
-			</view>
-		</view> -->
 		<!-- 页面头部 -->
 		<view class="header">
 			<search class="search" :tips="options.search ? options.search : '搜索商品'" @event="handleSearch" />
@@ -354,7 +298,8 @@
 				userInfo: {},
 				helpTipState: false,
 				helpTipTitle: '',
-				helpTipContent: ''
+				helpTipContent: '',
+				user_quota:{}
 			}
 		},
 
@@ -373,7 +318,8 @@
 		onShow() {
 			this.getRule()
 			this.getDetail()
-			this.getbigvip()
+			// this.getbigvip()
+			this.getuser_quota()
 			this.getUserInfo()
 
 		},
@@ -439,7 +385,6 @@
 				if (this.invite_user_id) {
 					obj.invite_user_id = this.invite_user_id
 				}
-
 				memberApi.index(obj).then(res => {
 					this.bigUser = res.data.big_vip_user;
 					this.setting = res.data.setting;
@@ -455,6 +400,13 @@
 					} else if (this.bigUser.is_vip == 1) {
 						this.isFinish = true;
 					}
+				})
+			},
+			getuser_quota(){
+				var obj = {}
+				LuxuryApi.user_quota(obj).then(res=>{
+					console.log(res,'resresres');
+					this.user_quota = res.data
 				})
 			},
 			getDetail() {
@@ -698,6 +650,8 @@
 	.goods-list {
 		padding: 4rpx;
 		box-sizing: border-box;
+		display: flex;
+		flex-wrap: wrap;
 	}
 
 	// 单列显示
@@ -783,6 +737,7 @@
 	.goods-list.column-2 {
 		.goods-item {
 			width: 50%;
+			
 		}
 	}
 
@@ -824,7 +779,7 @@
 		.detail {
 			padding: 8rpx;
 			background: #fff;
-
+            height: 162rpx;
 			.goods-name {
 				// height: 64rpx;
 				max-height: 64rpx;
@@ -1323,6 +1278,63 @@
 		image {
 			width: 100%;
 			height: 100%;
+		}
+	}
+	.membersList{
+		width:calc(100% - 60rpx);
+		height: 144rpx;
+		background: linear-gradient(90deg, #333844 0%, #5A5D68 100%);
+		box-shadow: inset 0px 0px 16rpx rgba(255, 255, 255, 0.4);
+		border-radius: 20rpx;
+		display: flex;
+		padding: 20rpx 30rpx;
+		box-sizing: border-box;
+		margin: 30rpx auto 30rpx;
+		align-items: center;
+		.membersType{
+			width: 108rpx;
+			height: 124rpx;
+		}
+		.rightProgress{
+			flex: 1;
+			margin-left: 30rpx;
+			.cumulative{
+				font-family: 'PingFang SC';
+				font-style: normal;
+				font-weight: 400;
+				font-size: 24rpx;
+				color: #DDDDDD;
+				margin: 10rpx 0;
+				line-height: 34rpx;
+			}
+			.Progress{
+				width: 100%;
+				height: 6px;
+				position: relative;
+				background: #6E707B;
+				border-radius: 8rpx;
+				margin: 8rpx 0;
+				.ProgressItem{
+					width: 100%;
+					height: 100%;
+					position: absolute;
+					top: 0;
+					left: 0;
+					background: linear-gradient(90deg, #EFD4C1 0%, #FEFBFF 100%);
+					border-radius: 8rpx;
+					z-index: 2;
+					width: 124rpx;
+				}
+			}
+			.ProgressNum{
+				font-family: 'PingFang SC';
+				font-style: normal;
+				font-weight: 400;
+				font-size: 24rpx;
+				line-height: 34rpx;
+				/* 图形_D */
+				color: #999999;
+			}
 		}
 	}
 </style>

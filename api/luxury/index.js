@@ -16,7 +16,8 @@ const api = {
   balanceLog:'bigvip.index/balance_log',
   todoCounts:'order/todoCounts',
   bigVipdetail: 'bigvip.index/detail',
-	equities:'user/equities'
+	equities:'user/equities',
+	user_quota:'user/user_quota'
 }
 // 大会员二维码
 export function code(params) {
@@ -84,4 +85,9 @@ export const bigviplist = (data) =>{
 // 权益消费额度
 export const equities = (data) =>{
 	return request.post(api.equities, data) 
+}
+
+// 高奢额度
+export const user_quota = (data) =>{
+	return request.post(api.user_quota, data) 
 }

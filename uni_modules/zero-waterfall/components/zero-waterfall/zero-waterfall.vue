@@ -27,7 +27,6 @@
 					<!--  #ifdef  MP-WEIXIN -->
 					<slot name="slot{{item.goods_id}}" />
 					<!--  #endif -->
-
 					<!-- #ifndef  MP-WEIXIN -->
 					<slot v-bind="item" />
 					<!-- #endif -->
@@ -106,7 +105,7 @@
 			}
 		},
 		mounted() {
-			// this.init()
+			this.init()
 		},
 
 		methods: {
@@ -124,7 +123,7 @@
 				this.listLeft = [];
 				this.listRight = [];
 				if (this.newList.length != 0) {
-					// this.listLeft.push(this.newList.shift()); //触发排列
+					this.listLeft.push(this.newList.shift()); //触发排列
 					// this.listRight.push(this.newList[1]); //触发排列
 				}
 
