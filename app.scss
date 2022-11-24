@@ -7,7 +7,14 @@ page {
    --main-color:#333333/* 标题 */
 }
 
-
+.flex{
+	display: flex;
+}
+.ct{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 
 
 @-webkit-keyframes rotate {

@@ -12,11 +12,18 @@
 			<u-popup v-model="showRule" mode="bottom" @close="close" @open="open">
 				<view class=""
 					style="font-size: 36upx;color: #404040;text-align: center;padding-top: 30upx;font-weight: bold;">
-					专区规则
+					
 				</view>
 				<view style="max-height: 740upx;">
-					<view v-html="rules" style="padding: 30upx;box-sizing: border-box;">
-
+					<view class="drill">
+						<view @click="drillIndex=0"  class="blueDiamond Diamond" :class="drillIndex==0?'Diamondsel':''">
+							蓝钻规则
+						</view>
+						<view @click="drillIndex=1"  class="redDiamond Diamond" :class="drillIndex==1?'Diamondsel':''" >
+							红钻规则
+						</view>
+					</view>
+					<view v-html="drillIndex==0?rules.blueRules:rules.redRules" style="padding: 30upx;box-sizing: border-box;">
 					</view>
 				</view>
 			</u-popup>
@@ -101,23 +108,51 @@
 				</view>
 			</u-popup>
 		</view>
-		<!--会员  -->
-		<view class="membersList">
-			 <image class="membersType" v-if="user_quota.user_level==0" src="../../static/img_pthy_gsmp.png" mode=""></image>
-			 <image class="membersType" v-if="user_quota.user_level==1" src="../../static/img_lz_gsmp.png" mode=""></image>
-			 <image class="membersType" v-if="user_quota.user_level==2" src="../../static/img_hz_gsmp.png" mode=""></image>
+		<!-- 会员开始  -->
+		   <!-- 普通会员 -->
+		<view v-if="user_quota.is_auto_upgrade ==0" class="membersList">
+			 <image class="membersType"  src="../../static/img_pthy_gsmp.png" mode=""></image>
 			  <!-- <image class="membersType" v-if="user_quota.user_level==3" src="../../static/img_hhr.png" mode=""></image> -->
 			 <view class="rightProgress">
-			 	<text class="cumulative">累计消费{{user_quota.user_level||0}}元，升级蓝钻还需消费{{user_quota.gap||0}}元</text>
+			 	<text class="cumulative">累计消费{{user_quota.user_quota||0}}元，升级蓝钻还需消费{{user_quota.gap||0}}元</text>
 				<view class="Progress">
-					<view class="ProgressItem"></view>
+					<view :style=[styleOBJ] class="ProgressItem"></view>
 				</view>
 				<view class="ProgressNum">
-					{{user_quota.user_quota||0}}/{{user_quota.is_auto_upgrade==1?980:2980}}
+					{{user_quota.user_quota||0}}/980
 				</view>
 			 </view>
 		</view>
-
+		<!-- 蓝砖 -->
+		<view v-if="user_quota.is_auto_upgrade ==1" class="membersList">
+			 
+			 <image class="membersType"  src="../../static/img_lz_gsmp.png" mode=""></image>
+			  <!-- <image class="membersType" v-if="user_quota.user_level==3" src="../../static/img_hhr.png" mode=""></image> -->
+			 <view class="rightProgress">
+			 	<text class="cumulative">累计消费{{user_quota.user_quota||0}}元，升级红钻还需消费{{user_quota.gap||0}}元</text>
+				<view class="Progress">
+					<view :style=[styleOBJ] class="ProgressItem"></view>
+				</view>
+				<view class="ProgressNum">
+					{{user_quota.user_quota||0}}/2980
+				</view>
+			 </view>
+		</view>
+		<!-- 红砖 -->
+		<view v-if="user_quota.is_auto_upgrade ==2" class="membersList">
+			 <image class="membersType"  src="../../static/img_hz_gsmp.png" mode=""></image>
+			  <!-- <image class="membersType" v-if="user_quota.user_level==3" src="../../static/img_hhr.png" mode=""></image> -->
+			 <view class="rightProgress">
+			 	<text class="cumulative">累计消费{{user_quota.user_quota||0}}元</text>
+				<view class="Progress">
+					<view :style=[styleOBJ] class="ProgressItem"></view>
+				</view>
+				<view class="ProgressNum">
+					您目前已是最尊贵的红钻用户了！！
+				</view>
+			 </view>
+		</view>
+<!-- 会员结束  -->
 		<!-- 页面头部 -->
 		<view class="header">
 			<search class="search" :tips="options.search ? options.search : '搜索商品'" @event="handleSearch" />
@@ -285,7 +320,7 @@
 				showOrder: false,
 				isRanks: false,
 				isFinish: false,
-				rules: '',
+				rules: {},
 				orderList: {},
 				poster_image: {},
 				team: {},
@@ -299,7 +334,9 @@
 				helpTipState: false,
 				helpTipTitle: '',
 				helpTipContent: '',
-				user_quota:{}
+				user_quota:{},
+				drillIndex:0,
+				styleOBJ:{}
 			}
 		},
 
@@ -376,8 +413,10 @@
 			},
 			getRule() {
 				LuxuryApi.rule().then(res => {
-					console.log(res)
-					this.rules = res.data.rule.replace(/<img/g, "<img style='width: 100%;'");
+					console.log(res,'rule')
+					res.data.blueRules.replace(/<img/g, "<img style='width: 100%;'");
+					res.data.redRules.replace(/<img/g, "<img style='width: 100%;'");
+					this.rules = res.data
 				})
 			},
 			getbigvip() {
@@ -405,14 +444,31 @@
 			getuser_quota(){
 				var obj = {}
 				LuxuryApi.user_quota(obj).then(res=>{
-					console.log(res,'resresres');
-					this.user_quota = res.data
+					// res.data.user_quota = 1980
+						let styleobj = {
+							0:{
+								"background": "linear-gradient(90deg, #EFD4C1 0%, #FEFBFF 100%);",
+								"width":(res.data.user_quota/980)*100+'%'
+							},
+							1:{
+								"background": "linear-gradient(90deg, #B8D7FA 0%, #FEFBFF 100%)",
+								"width":(res.data.user_quota/2980)*100+'%'
+							},
+							2:{
+								"background": "linear-gradient(90deg, #F7AFC1 0%, #FEFBFF 100%);",
+								"width":'100%'
+							}
+						}
+					
+					this.user_quota = res.data;
+					this.styleOBJ = styleobj[res.data['is_auto_upgrade']]
 				})
 			},
 			getDetail() {
 				LuxuryApi.detail({
-					group_order_id: this.group_order_id
+					group_order_id: this.group_order_id,
 				}).then(res => {
+					console.log('poster_image',res);
 					this.poster_image = res.data.poster_image;
 					this.team = res.data.team;
 					if (JSON.stringify(this.team) != '{}') {
@@ -888,6 +944,36 @@
 		position: relative;
 		background-color: #FFFFFF;
 		padding-top: 24upx;
+		.drill {
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+			border-bottom: 1px solid #EEEEEE;
+			padding-bottom: 20rpx;
+			.Diamond{
+				font-family: 'PingFang SC';
+				font-style: normal;
+				font-weight: 700;
+				font-size: 32rpx;
+				line-height: 44rpx;
+				color: #666666;
+				&.Diamondsel{
+					color: #F97112;
+					position: relative;
+					&::after{
+						content: '';
+						position: absolute;
+						bottom: -20rpx;
+						left: 50%;
+						margin-left: -35rpx;
+						width: 70rpx;
+						height: 6rpx;
+						background: #F97112;
+					}
+				}
+			}
+		}
+	
 
 		.banrC {
 			margin: 0 auto 0;
@@ -1315,7 +1401,6 @@
 				border-radius: 8rpx;
 				margin: 8rpx 0;
 				.ProgressItem{
-					width: 100%;
 					height: 100%;
 					position: absolute;
 					top: 0;
@@ -1323,7 +1408,10 @@
 					background: linear-gradient(90deg, #EFD4C1 0%, #FEFBFF 100%);
 					border-radius: 8rpx;
 					z-index: 2;
-					width: 124rpx;
+					width: 0;
+					transition: all 0.3s; 
+					max-width: 100%;
+					min-width: 0;
 				}
 			}
 			.ProgressNum{

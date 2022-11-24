@@ -57,7 +57,7 @@ export const create = (mode, data) => {
 
 // 获取活动信息
 export const detail = (data) => {
-  return request.post(api.detail, data)
+  return request.get(api.detail, data)
 }
 
 // 获取大会员邀请列表

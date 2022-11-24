@@ -61,6 +61,33 @@
 				</template>
 			</view>
 			<!-- 金刚区 end-->
+			<!-- 通证信息 -->
+			<view v-if="passMessage.token_price&&passMessage.token_increase&&passMessage.name" class="pass">
+				<view class="passL">
+					<view class="passMessageL">
+						<image src="../../static/home/pass.png"></image>
+					</view>
+					<view class="passMessageR">
+						<!-- {{passMessage.name}} -->
+						BLCXF
+					</view>
+					
+					<!-- <view class="passData" v-if="showPass">
+						￥{{passMessage.token_price}}
+					</view> -->
+				</view>
+				<view class="ct" v-if="passMessage.token_increase">
+					<view class="passData" v-if="passMessage.token_price">
+						￥{{passMessage.token_price}}
+					</view>
+					<view v-else style="margin-left: 20rpx; margin-top: 16rpx;font-size: 24rpx;">￥--</view>
+					<view class="passR">
+						+{{passMessage.token_increase}}
+					</view>
+					
+				</view>
+			</view>
+			<!-- 通证信息 end -->
 		</view>
 
 		<!-- 秒杀 -->
@@ -161,7 +188,7 @@
 	import * as articleApi from "@/api/article/index.js"
 	import * as seckillApi from '@/api/seckill/seckill.js'
 	import {
-		detail
+		detail,blockChina
 	} from "@/api/common.js"
 	import store from '@/store'
 	const App = getApp()
@@ -208,7 +235,8 @@
 				hour: 0,
 				minute: 0,
 				second: 0,
-				isLoading: false
+				isLoading: false,
+				passMessage:{}
 			}
 		},
 
@@ -225,6 +253,7 @@
 			this.getRandomList();
 			this.getseckilltime()
 			this.getPageData();
+			this.getPass();
 		},
 
 		watch: {
@@ -283,7 +312,22 @@
 					url: "/pageSecKill/seckillList/seckillList"
 				})
 			},
+          getPass() {
+				blockChina().then(res => {
+	
+						this.passMessage = res.data.data
+						this.showPass = true
+					})
+					.catch(err => {
+						if (err.status == 500) {
 
+						}
+						this.showPass = true
+					})
+					.finally(res => {
+						this.showPass = true
+					})
+			},
 			getseckilltime() {
 				seckillApi.seckilltime().then(res => {
 					this.seckilltime = res.data.list && res.data.list[0];
@@ -1096,7 +1140,7 @@
 	.newMain {
 		width: 702upx;
 		margin: 24upx auto 0;
-		background-color: #FFFFFF;
+		// background-color: #FFFFFF;
 		border-radius: 20upx;
 	}
 
@@ -1104,7 +1148,7 @@
 		// padding: 30upx 0;
 		/* display: flex;
 		justify-content: space-between; */
-		background-color: #FFFFFF;
+		// background-color: #FFFFFF;
 		margin-top: 40upx;
 	}
 
@@ -2028,14 +2072,15 @@
 
 	.pass {
 		width: 702upx;
-		height: 66upx;
-		margin: 20upx auto 0;
-		background-color: white;
-		border-radius: 10upx;
+		height: 80rpx;
+		margin: 36rpx auto 0;
 		padding-left: 20upx;
 		padding-right: 12upx;
 		display: flex;
+		align-items: center;
 		justify-content: space-between;
+		background: linear-gradient(180deg, #f0f3f7 0%, rgba(245, 249, 255, 0.5) 100%);
+		border-radius: 20rpx;
 	}
 
 	.passL {
@@ -2054,6 +2099,8 @@
 		width: 36upx;
 		height: 36upx;
 		margin-top: 16upx;
+		margin-left: 30rpx;
+		// margin-right: 20rpx;
 	}
 
 	.passMessageL>image {
@@ -2073,27 +2120,28 @@
 	}
 
 	.passData {
-		height: 34upx;
-		margin-top: 16upx;
-		margin-left: 16upx;
-		font-size: 24upx;
-		color: #333333;
+		font-family: 'PingFang SC';
+		font-style: normal;
 		font-weight: 400;
-		line-height: 34upx;
-		text-align: center;
+		font-size: 28rpx;
+		line-height: 20px;
+		/* identical to box height */
+		color: #666666;
+		margin-right: 20rpx;
 	}
 
 	.passR {
-		width: 130upx;
-		height: 42upx;
-		background-color: #FFF2F2;
+		// width: 120rpx;
+		padding:0 16rpx;
+		// height: 40rpx;
 		color: #EF343D;
-		line-height: 42upx;
-		border-radius: 6upx;
+		// line-height: 42upx;
 		margin: 12upx 0;
 		text-align: center;
 		font-size: 24upx;
 		font-weight: 500;
-
+		background: #FEF1F1;
+		border: 2rpx solid #F24C4C;
+		border-radius: 8rpx;
 	}
 </style>

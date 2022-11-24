@@ -13,12 +13,12 @@ const api = {
   inviteList:'bigvip.index/get_my_invite_list',
   balanceLog:'bigvip.index/balance_log',
   todoCounts:'order/todoCounts',
-     userInfo:'bigvip.index/index',
-	 goodsLists:'goods/list',
-	 invitationCode:'bigvip.index',
-	 Cash:'bigvip.index/balance_log',
-	 invitationList:'bigvip.index/get_my_invite_list',
-	 upgradeRecord:'bigvip.index/upgrade_log'
+ userInfo:'bigvip.index/index',
+ goodsLists:'goods/list',
+ invitationCode:'bigvip.index',
+ Cash:'bigvip.index/balance_log',
+ invitationList:'bigvip.index/get_my_invite_list',
+ upgradeRecord:'bigvip.index/upgrade_log'
 }
 
 
