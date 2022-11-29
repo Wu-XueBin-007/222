@@ -71,7 +71,7 @@
 						<!-- {{passMessage.name}} -->
 						BLCXF
 					</view>
-					
+
 					<!-- <view class="passData" v-if="showPass">
 						￥{{passMessage.token_price}}
 					</view> -->
@@ -84,7 +84,7 @@
 					<view class="passR">
 						+{{passMessage.token_increase}}
 					</view>
-					
+
 				</view>
 			</view>
 			<!-- 通证信息 end -->
@@ -188,7 +188,8 @@
 	import * as articleApi from "@/api/article/index.js"
 	import * as seckillApi from '@/api/seckill/seckill.js'
 	import {
-		detail,blockChina
+		detail,
+		blockChina
 	} from "@/api/common.js"
 	import store from '@/store'
 	const App = getApp()
@@ -223,7 +224,7 @@
 				seckillGoodsBanner: [],
 				loading: false,
 				loadStatus: 'more',
-				page: 1,
+				page: 0,
 				limit: 15,
 				bottomFlag: true,
 				back: false,
@@ -236,7 +237,7 @@
 				minute: 0,
 				second: 0,
 				isLoading: false,
-				passMessage:{}
+				passMessage: {}
 			}
 		},
 
@@ -312,9 +313,9 @@
 					url: "/pageSecKill/seckillList/seckillList"
 				})
 			},
-          getPass() {
+			getPass() {
 				blockChina().then(res => {
-	
+
 						this.passMessage = res.data.data
 						this.showPass = true
 					})
@@ -511,7 +512,11 @@
 			},
 			getJgoodslist(flag) {
 				if (this.requestSwitch) return;
+				console.log(this.page, 'this.page');
 				if (!this.requestSwitch) this.page = this.page + 1;
+				if (flag) {
+					this.page = 1
+				}
 				this.bottomFlag = false;
 				this.loadStatus = "loading";
 				this.requestSwitch = true;
@@ -520,6 +525,7 @@
 				obj.page = this.page;
 				obj.limit = this.limit;
 				obj.if_selected = 1;
+				console.log(obj, 'obj');
 				goodsApi.list(obj).then(res => {
 					this.requestSwitch = false
 					if (res.status == 200) {
@@ -539,10 +545,8 @@
 						}
 						if (this.page != 1) {
 							this.JgoodsList = this.JgoodsList.concat(res.data.list.data);
-							this.JgoodsList.splice() //触发更新
 						} else {
 							this.JgoodsList = res.data.list.data;
-							this.JgoodsList.splice() //触发更新
 						}
 
 					}
@@ -2132,7 +2136,7 @@
 
 	.passR {
 		// width: 120rpx;
-		padding:0 16rpx;
+		padding: 0 16rpx;
 		// height: 40rpx;
 		color: #EF343D;
 		// line-height: 42upx;

@@ -277,7 +277,7 @@
 				bigUser: {},
 				setting: {},
 				pgList: 0,
-				
+
 			}
 		},
 
@@ -339,7 +339,7 @@
 					obj.invite_user_id = this.invite_user_id
 				}
 				memberApi.index(obj).then(res => {
-					console.log(res,'res');
+					console.log(res, 'res');
 					this.bigUser = res.data.big_vip_user;
 					this.setting = res.data.setting;
 					// this.rules=res.data.setting.rules.replace(/<img/g,"<img style='width: 100%;'");
@@ -361,7 +361,7 @@
 				obj.group_order_id = this.vip_group_order_id;
 				LuxuryApi.bigVipdetail(obj).then(res => {
 					console.log(res, 123)
-					this.poster_image = res.data.poster_image;
+					// this.poster_image = res.data.poster_image;
 					this.team = res.data.team;
 					if (JSON.stringify(this.team) != '{}') {
 						console.log(1)
@@ -376,9 +376,9 @@
 				const app = this
 				return new Promise((resolve, reject) => {
 					LuxuryApi.index({
-						invite_user_id:0
+						invite_user_id: 0
 					}).then(res => {
-						console.log('info_by_key',res);
+						console.log('info_by_key', res);
 						app.poster_image = res.data.setting.banner_image
 						resolve(res)
 					}).catch(reject)
@@ -838,7 +838,7 @@
 			position: fixed;
 			top: 557rpx;
 			right: 0;
-			background-color: #EF343D  ;
+			background-color: #EF343D;
 			width: 112upx;
 			height: 66rpx;
 			line-height: 66rpx;
