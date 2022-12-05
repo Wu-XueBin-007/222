@@ -166,8 +166,8 @@
 							<!-- 商品价格 -->
 							<view class="desc_footer">
 								<text class="price_x">¥{{ item.goods_price_min }}</text>
-								<text class="price_y col-9"
-									v-if="item.line_price_min > 0">¥{{ item.line_price_min }}</text>
+								<!-- <text class="price_y col-9"
+									v-if="item.line_price_min > 0">¥{{ item.line_price_min }}</text> -->
 								<!-- <uni-tag :inverted="true" text="拼团免单" type="error" /> -->
 								<text class="uni_tag ct">
 									拼团免单
@@ -192,11 +192,11 @@
 							<text class="goods-price f-30 col-m">￥ <text
 									style="font-size: 36rpx;font-weight: bold;">{{ item.goods_price_min }}</text>
 							</text>
-							<text v-if="item.line_price_min > 0"
-								class="line-price col-9 f-24">￥{{ item.line_price_min }}</text>
-								<text class="uni_tag ct">
-									拼团免单
-								</text>
+							<!-- <text v-if="item.line_price_min > 0"
+								class="line-price col-9 f-24">￥{{ item.line_price_min }}</text> -->
+							<text class="uni_tag ct">
+								拼团免单
+							</text>
 						</view>
 					</view>
 				</view>
@@ -285,7 +285,7 @@
 				bigUser: {},
 				setting: {},
 				pgList: 0,
-inverted: false,
+				inverted: false,
 			}
 		},
 
@@ -731,12 +731,17 @@ inverted: false,
 
 		.desc_footer {
 			font-size: 24rpx;
-            display: flex;
+			display: flex;
 			align-items: center;
+
 			.price_x {
 				margin-right: 16rpx;
 				color: #f03c3c;
 				font-size: 30rpx;
+			}
+
+			.uni_tag {
+				margin-left: 0;
 			}
 
 			.price_y {
@@ -745,20 +750,22 @@ inverted: false,
 
 		}
 	}
-			.uni_tag{
-				    font-size: 20rpx;
-				    font-weight: 200;
-				    padding: 2rpx 6rpx;
-				    color: #fff;
-				    border-radius: 6rpx;
-				    border-width: 2rpx;
-				    border-style: solid;
-				    cursor: pointer;
-				color: #e43d33;
-				background-color: #fff;
-				border-color: #e43d33;
-				margin-left: 10rpx;
-			}
+
+	.uni_tag {
+		font-size: 20rpx;
+		font-weight: 200;
+		padding: 2rpx 6rpx;
+		color: #fff;
+		border-radius: 6rpx;
+		border-width: 2rpx;
+		border-style: solid;
+		cursor: pointer;
+		color: #e43d33;
+		background-color: #fff;
+		border-color: #e43d33;
+		margin-left: 10rpx;
+	}
+
 	// 平铺显示
 	.goods-list.column-2 {
 		.goods-item {
@@ -817,6 +824,7 @@ inverted: false,
 			.detail-price {
 				display: flex;
 				align-items: center;
+
 				.goods-price {
 					margin-right: 8rpx;
 				}
