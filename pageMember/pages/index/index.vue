@@ -11,8 +11,8 @@
 			</view>
 		</view>
 		<view class="banr">
-			<view v-if="poster_image.preview_url" class="banrC">
-				<image :src="poster_image.preview_url" mode=""></image>
+			<view v-if="banner_image.preview_url" class="banrC">
+				<image :src="banner_image.preview_url" mode=""></image>
 			</view>
 			<!-- 			<view class="banrRule" @click="checkRule">
 				专区规则
@@ -226,6 +226,7 @@
 	import * as GoodsApi from '@/api/goods'
 	import * as LuxuryApi from '@/api/luxury'
 	import * as memberApi from "@/api/member/index.js";
+
 	import {
 		getEmptyPaginateObj,
 		getMoreListData
@@ -271,7 +272,7 @@
 				isFinish: false,
 				rules: '',
 				orderList: [],
-				poster_image: {},
+				banner_image: {},
 				team: {},
 				vip_group_order_id: 0,
 				bigUser: {},
@@ -361,7 +362,7 @@
 				obj.group_order_id = this.vip_group_order_id;
 				LuxuryApi.bigVipdetail(obj).then(res => {
 					console.log(res, 123)
-					// this.poster_image = res.data.poster_image;
+					// this.banner_image = res.data.banner_image;
 					this.team = res.data.team;
 					if (JSON.stringify(this.team) != '{}') {
 						console.log(1)
@@ -379,7 +380,7 @@
 						invite_user_id: 0
 					}).then(res => {
 						console.log('info_by_key', res);
-						app.poster_image = res.data.setting.banner_image
+						app.banner_image = res.data.setting.banner_image
 						resolve(res)
 					}).catch(reject)
 				})
