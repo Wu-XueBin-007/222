@@ -194,6 +194,9 @@
 							</text>
 							<text v-if="item.line_price_min > 0"
 								class="line-price col-9 f-24">￥{{ item.line_price_min }}</text>
+								<text class="uni_tag ct">
+									拼团免单
+								</text>
 						</view>
 					</view>
 				</view>
@@ -738,6 +741,9 @@ inverted: false,
 			.price_y {
 				text-decoration: line-through;
 			}
+
+		}
+	}
 			.uni_tag{
 				    font-size: 20rpx;
 				    font-weight: 200;
@@ -750,11 +756,8 @@ inverted: false,
 				color: #e43d33;
 				background-color: #fff;
 				border-color: #e43d33;
-				margin-left: 20rpx;
+				margin-left: 10rpx;
 			}
-		}
-	}
-
 	// 平铺显示
 	.goods-list.column-2 {
 		.goods-item {
@@ -811,6 +814,8 @@ inverted: false,
 			}
 
 			.detail-price {
+				display: flex;
+				align-items: center;
 				.goods-price {
 					margin-right: 8rpx;
 				}
