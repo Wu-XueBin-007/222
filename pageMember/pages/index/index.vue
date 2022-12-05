@@ -168,6 +168,10 @@
 								<text class="price_x">¥{{ item.goods_price_min }}</text>
 								<text class="price_y col-9"
 									v-if="item.line_price_min > 0">¥{{ item.line_price_min }}</text>
+								<!-- <uni-tag :inverted="true" text="拼团免单" type="error" /> -->
+								<text class="uni_tag ct">
+									拼团免单
+								</text>
 							</view>
 						</view>
 					</view>
@@ -277,7 +281,7 @@
 				bigUser: {},
 				setting: {},
 				pgList: 0,
-
+inverted: false,
 			}
 		},
 
@@ -723,7 +727,8 @@
 
 		.desc_footer {
 			font-size: 24rpx;
-
+            display: flex;
+			align-items: center;
 			.price_x {
 				margin-right: 16rpx;
 				color: #f03c3c;
@@ -732,6 +737,20 @@
 
 			.price_y {
 				text-decoration: line-through;
+			}
+			.uni_tag{
+				    font-size: 20rpx;
+				    font-weight: 200;
+				    padding: 2rpx 6rpx;
+				    color: #fff;
+				    border-radius: 6rpx;
+				    border-width: 2rpx;
+				    border-style: solid;
+				    cursor: pointer;
+				color: #e43d33;
+				background-color: #fff;
+				border-color: #e43d33;
+				margin-left: 20rpx;
 			}
 		}
 	}
