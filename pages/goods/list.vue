@@ -178,7 +178,11 @@
 					sortPrice: Number(app.sortPrice),
 					categoryId: app.options.categoryId || 0,
 					goodsName: app.options.search || '',
-					page: pageNo
+					page: pageNo,
+				}
+				// 会员专区
+				if (app.options.if_big_vip){
+					param.if_big_vip = app.options.if_big_vip
 				}
 				if (app.options.type == "hot") {
 					param.if_hot = 1;

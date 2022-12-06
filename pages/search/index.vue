@@ -37,7 +37,8 @@
     data() {
       return {
         historySearch: [],
-        searchValue: ''
+        searchValue: '',
+		beforePage:''
       }
     },
 
@@ -47,6 +48,8 @@
     onLoad(options) {
       // 获取历史搜索
       this.historySearch = this.getHistorySearch()
+	  var pages = getCurrentPages();//当前页
+	  	this.beforePage = pages[pages.length - 2].route;//上个页面、
     },
 	onShareAppMessage() {
 		const app = this
@@ -92,7 +95,14 @@
           // 记录历史搜索
           this.setHistory(searchValue)
           // 跳转到商品列表页
-          this.$navTo('pages/goods/list', { search: searchValue })
+		  // pageMember/pages/index/index
+		  let obj = {
+			  search: searchValue
+		  }
+		  if (this.beforePage == 'pageMember/pages/index/index'){
+			  obj.if_big_vip = 1
+		  }
+          this.$navTo('pages/goods/list',obj)
         }
       },
 
