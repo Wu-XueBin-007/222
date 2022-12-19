@@ -1,7 +1,7 @@
 <template>
 	<view class="number-box">
-		<view class="u-icon-minus" @touchstart.prevent="btnTouchStart('minus')" @touchend.stop.prevent="clearTimer" :class="{ 'u-icon-disabled': disabled || inputVal <= min }"
-		    :style="{
+		<view class="u-icon-minus" @touchstart.prevent="btnTouchStart('minus')" @touchend.stop.prevent="clearTimer"
+			:class="{ 'u-icon-disabled': disabled || inputVal <= min }" :style="{
 				background: bgColor,
 				height: inputHeight + 'rpx',
 				color: color,
@@ -10,17 +10,17 @@
 			}">
 			<view :style="'font-size:'+(Number(size)+10)+'rpx'" class="num-btn">-</view>
 		</view>
-		<input :disabled="disabledInput || disabled" :cursor-spacing="getCursorSpacing" :class="{ 'u-input-disabled': disabled }"
-		    v-model="inputVal" class="u-number-input" @blur="onBlur"
-		    type="number" :style="{
+		<input :disabled="disabledInput || disabled" :cursor-spacing="getCursorSpacing"
+			:class="{ 'u-input-disabled': disabled }" v-model="inputVal" class="u-number-input" @blur="onBlur"
+			type="number" :style="{
 				color: color,
 				fontSize: size + 'rpx',
 				background: bgColor,
 				height: inputHeight + 'rpx',
 				width: inputWidth + 'rpx',
 			}" />
-		<view class="u-icon-plus" @touchstart.prevent="btnTouchStart('plus')" @touchend.stop.prevent="clearTimer" :class="{ 'u-icon-disabled': disabled || inputVal >= max }"
-		    :style="{
+		<view class="u-icon-plus" @touchstart.prevent="btnTouchStart('plus')" @touchend.stop.prevent="clearTimer"
+			:class="{ 'u-icon-disabled': disabled || inputVal >= max }" :style="{
 				background: bgColor,
 				height: inputHeight + 'rpx',
 				color: color,
@@ -147,17 +147,17 @@
 			positiveInteger: {
 				type: Boolean,
 				default: true
-			}
+			},
 		},
 		watch: {
 			value(v1, v2) {
 				// 只有value的改变是来自外部的时候，才去同步inputVal的值，否则会造成循环错误
-				if(!this.changeFromInner) {
+				if (!this.changeFromInner) {
 					this.inputVal = v1;
 					// 因为inputVal变化后，会触发this.handleChange()，在其中changeFromInner会再次被设置为true，
 					// 造成外面修改值，也导致被认为是内部修改的混乱，这里进行this.$nextTick延时，保证在运行周期的最后处
 					// 将changeFromInner设置为false
-					this.$nextTick(function(){
+					this.$nextTick(function() {
 						this.changeFromInner = false;
 					})
 				}
@@ -171,9 +171,9 @@
 				if (tmp && v1 >= this.min && v1 <= this.max) value = v1;
 				else value = v2;
 				// 判断是否只能输入大于等于0的整数
-				if(this.positiveInteger) {
+				if (this.positiveInteger) {
 					// 小于0，或者带有小数点，
-					if(v1 < 0 || String(v1).indexOf('.') !== -1) {
+					if (v1 < 0 || String(v1).indexOf('.') !== -1) {
 						value = v2;
 						// 双向绑定input的值，必须要使用$nextTick修改显示的值
 						this.$nextTick(() => {
@@ -269,21 +269,21 @@
 				// 新增stepFirst开始
 				// 减
 				if (type === 'minus') {
-					if(this.stepFirst > 0 && this.inputVal == this.stepFirst){
+					if (this.stepFirst > 0 && this.inputVal == this.stepFirst) {
 						value = this.min;
-					}else{
+					} else {
 						value = this.calcMinus(this.inputVal, this.step);
 					}
 				} else if (type === 'plus') {
-					if(this.stepFirst > 0 && this.inputVal < this.stepFirst){
+					if (this.stepFirst > 0 && this.inputVal < this.stepFirst) {
 						value = this.stepFirst;
-					}else{
+					} else {
 						value = this.calcPlus(this.inputVal, this.step);
 					}
 				}
-				if (value > this.max ) {
+				if (value > this.max) {
 					value = this.max;
-				}else if (value < this.min) {
+				} else if (value < this.min) {
 					value = this.min;
 				}
 				// 新增stepFirst结束
@@ -304,7 +304,7 @@
 					val = this.min;
 				}
 				// 新增stepFirst开始
-				if(this.stepFirst > 0 && this.inputVal < this.stepFirst && this.inputVal>0){
+				if (this.stepFirst > 0 && this.inputVal < this.stepFirst && this.inputVal > 0) {
 					val = this.stepFirst;
 				}
 				// 新增stepFirst结束
@@ -316,7 +316,7 @@
 			handleChange(value, type) {
 				if (this.disabled) return;
 				// 清除定时器，避免造成混乱
-				if(this.innerChangeTimer) {
+				if (this.innerChangeTimer) {
 					clearTimeout(this.innerChangeTimer);
 					this.innerChangeTimer = null;
 				}
@@ -385,10 +385,10 @@
 		color: #c8c9cc !important;
 		background-color: #f2f3f5 !important;
 	}
-	.num-btn{
-		font-weight:550;
+
+	.num-btn {
+		font-weight: 550;
 		position: relative;
-		top:-4rpx;
+		top: -4rpx;
 	}
-	
 </style>

@@ -53,7 +53,8 @@
 									style="font-size: 28rpx; color: #333; line-height: 50rpx; font-weight: bold;">数量</text>
 							</view>
 							<view style="flex: 4;text-align: right;">
-								<number-box :min="minBuyNum" :max="maxBuyNum" :step="stepBuyNum" v-model="selectNum"
+								<number-box :bigId=bigId :disabled=disabled :disabledInput=disabledInput
+									:min="minBuyNum" :max="maxBuyNum" :step="stepBuyNum" v-model="selectNum"
 									:positive-integer="true">
 								</number-box>
 							</view>
@@ -319,7 +320,12 @@
 			vip_group_order_id: {
 				Type: Number,
 				default: 0
-			}
+			},
+			// 空 普通商品 1会员商品 2高瑟
+			bigId: {
+				type: String,
+				default: ''
+			},
 		},
 		data() {
 			return {
@@ -338,11 +344,17 @@
 				},
 				rules,
 				Region: {}, //地区
-				agreeFlag: false
+				agreeFlag: false,
+				disabled: false,
+				disabledInput: false
 			};
 		},
 		onReady() {
 			this.$refs.uForm.setRules(this.rules)
+			if (this.bigId == 1) {
+				this.disabledInput = true;
+				this.disabled = true
+			}
 		},
 		mounted() {
 			that = this;
@@ -815,7 +827,7 @@
 							font-weight: 500;
 
 							.price-content {
-								color: #EF343D  ;
+								color: #EF343D;
 								margin-bottom: 10rpx;
 
 								.sign {
@@ -889,8 +901,8 @@
 									box-sizing: border-box;
 
 									&.actived {
-										border-color: #EF343D  ;
-										color: #EF343D  ;
+										border-color: #EF343D;
+										color: #EF343D;
 									}
 
 									&.noactived {
@@ -951,11 +963,11 @@
 
 					&.add-cart {
 						background-color: #ffffff;
-						border: 3rpx solid #EF343D  ;
+						border: 3rpx solid #EF343D;
 					}
 
 					&.buy {
-						background: #EF343D  ;
+						background: #EF343D;
 					}
 				}
 
@@ -968,7 +980,7 @@
 					text-align: center;
 					font-weight: bold;
 					font-size: 28rpx;
-					background: #EF343D  ;
+					background: #EF343D;
 					border-radius: 46rpx;
 				}
 
@@ -981,7 +993,7 @@
 					text-align: center;
 					font-weight: bold;
 					font-size: 28rpx;
-					background: #EF343D  ;
+					background: #EF343D;
 					border-radius: 46rpx;
 				}
 
@@ -989,18 +1001,18 @@
 					width: 342rpx;
 					height: 80rpx;
 					// border-radius: 38rpx;
-					color: #EF343D  ;
+					color: #EF343D;
 					line-height: 80rpx;
 					text-align: center;
 					font-weight: bold;
 					font-size: 28rpx;
 					border-radius: 46rpx;
-					border: 3rpx solid #EF343D  ;
+					border: 3rpx solid #EF343D;
 				}
 
 				.sure.add-cart {
 					background-color: #ffffff;
-					border: 3rpx solid #EF343D  ;
+					border: 3rpx solid #EF343D;
 				}
 			}
 		}

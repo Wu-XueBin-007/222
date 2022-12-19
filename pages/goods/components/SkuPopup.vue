@@ -3,7 +3,7 @@
 		:mode="skuMode" :info_by_key=info_by_key :goodsId=goods.goods_id :defaultPrice="goods.goods_price_min"
 		:defaultStock="goods.stock_total" :maskCloseAble="true" @open="openSkuPopup" @close="closeSkuPopup"
 		:vip_group_order_id="vip_group_order_id" @add-cart="addCart" @buy-now="buyNow"
-		:priceColor="type=='product'?'#EF343D  ':'#DD1010'"
+		:priceColor="type=='product'?'#EF343D  ':'#DD1010'" :bigId=bigId
 		:buyNowBackgroundColor="type=='product'?'#EF343D  ':(((status==0||status==2)&&type=='seckill')?'#999999':'#DD1010')"
 		:buyNowText="type=='seckill'?(status==0?'未开始':(status==1?'立即购买':'已结束')):(info_by_key?'立即签约':'立即购买')" />
 </template>
