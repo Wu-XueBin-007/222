@@ -16,6 +16,7 @@
 		 * 初始化完成时触发
 		 */
 		onLaunch(options) {
+
 			//console.log(options, 'options');
 			// #ifdef MP-WEIXIN
 			if (options.query.scene) {
