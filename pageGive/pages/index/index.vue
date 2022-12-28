@@ -70,7 +70,6 @@
 					已结束
 					<!-- <text>{{countdownTime | dateFormat}}</text> -->
 				</view>
-
 				<scroll-view scroll-x="true"
 					style="display: flex;white-space: nowrap;width: 100%;box-sizing: border-box;overflow: scroll;">
 					<view class="giveBTB" v-if="givemap.status!=3">
@@ -616,7 +615,7 @@
 				width: 186upx;
 				height: 60upx;
 				line-height: 60upx;
-				background-color: #EF343D  ;
+				background-color: #EF343D;
 				color: #FFFFFF;
 				border-radius: 30upx;
 				margin: 16upx auto 24upx;
@@ -664,7 +663,7 @@
 				width: 160upx;
 				height: 60upx;
 				line-height: 60upx;
-				background-color: #EF343D  ;
+				background-color: #EF343D;
 				color: #FFFFFF;
 				border-radius: 30upx;
 				margin: 16upx auto 24upx;
@@ -814,7 +813,7 @@
 			text-align: center;
 			font-size: 26upx;
 			color: #FFFFFF;
-			background-color: #EF343D  ;
+			background-color: #EF343D;
 			border-radius: 30upx;
 		}
 

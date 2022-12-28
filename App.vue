@@ -78,7 +78,7 @@
 						t.globalData.windowHeight = windowHeight;
 						// 获取状态栏的高度
 						let statusBarHeight = res.statusBarHeight;
-						//#ifdef MP-WEIXIN
+						//#ifdef MP
 						// 根据胶囊的位置计算导航栏的高度
 						let realHeight = (rect.top - statusBarHeight) * 2 + rect.height + statusBarHeight;
 						t.globalData.navH = realHeight;
@@ -92,8 +92,8 @@
 						// 根据胶囊的位置计算文字的行高以及距离状态栏的位置
 						let lineHeight = 40;
 						//#endif
-						t.globalData.lineHeight = lineHeight;
-						t.globalData.paddingTop = statusBarHeight;
+						t.globalData.lineHeight = lineHeight || 0;
+						t.globalData.paddingTop = statusBarHeight || 0;
 						// 根据胶囊的位置计算距离右侧的宽度，用于设置返回按钮至左侧的距离
 						let leftDistance = windowWidth - rect.right;
 						t.globalData.leftDistance = leftDistance;

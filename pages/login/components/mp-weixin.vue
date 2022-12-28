@@ -8,9 +8,17 @@
 			</view>
 			<view class="auth-title">申请获取以下权限</view>
 			<view class="auth-subtitle">获得你的公开信息（昵称、头像等）</view>
+			<!-- #ifdef MP-WEIXIN -->
 			<view class="login-btn" v-if="navIndex==1">
 				<button class="button btn-normal" @click.stop="getUserProfile">授权登录</button>
 			</view>
+			<!-- #endif -->
+			<!-- #ifdef MP-QQ -->
+			<view class="login-btn" v-if="navIndex==1">
+				<button open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="button btn-normal">授权登录</button>
+			</view>
+			<!-- #endif -->
+
 			<view class="no-login-btn" v-if="navIndex==1">
 				<button class="button btn-normal" @click="handleCancel">暂不登录</button>
 			</view>
@@ -33,7 +41,7 @@
 				// 提交到后端，用于换取openid
 				code: '',
 				navIndex: 1,
-				userMsg: {}
+				userMsg: {},
 			}
 		},
 
@@ -114,9 +122,20 @@
 					})
 					.finally(() => app.isLoading = false)
 			},
+			//#ifdef MP-QQ
+			getUserInfo(e) {
+				let userInfo = e.detail.userInfo
+				console.log(userInfo, 'userInfo');
+				// this.userMsg = userInfo;
+				// this.onAuthSuccess(userInfo)
+			},
+			//#endif
 			// 获取微信用户信息(新版)
 			getUserProfile() {
-				const app = this
+				console.log(1111);
+				const app = this;
+
+				//#ifdef MP-WEIXIN
 				wx.canIUse('getUserProfile') && wx.getUserProfile({
 					lang: 'zh_CN',
 					desc: '获取用户相关信息',
@@ -134,6 +153,8 @@
 						//console.log('用户拒绝了授权')
 					}
 				})
+				//#endif
+
 			},
 
 			// 授权成功事件
