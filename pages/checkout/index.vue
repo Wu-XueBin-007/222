@@ -106,6 +106,17 @@
 					<text v-else class="">无卡券可用</text>
 				</view>
 			</view>
+			<view class="flow-all-list dis-flex">
+				<text class="flex-five">账户余额：</text>
+				<view class="flex-five t-r">
+					<view v-if="userInfo.balance > 0" @click="handleShowBalancePopup()">
+						<text class="col-m" v-if="order.cardVoucherName">{{ order.cardVoucherName }}</text>
+						<text class="col-m" v-else>{{ userInfo.balance?userInfo.balance:'0' }}</text>
+						<text class="right-arrow iconfont icon-arrow-right"></text>
+					</view>
+					<text v-else class="">0</text>
+				</view>
+			</view>
 			<!-- 积分抵扣 -->
 			<view v-if="order.isAllowPoints" class="points flow-all-list dis-flex flex-y-center">
 				<view class="block-left flex-five" @click="handleShowPoints()">
@@ -268,7 +279,8 @@
 				</view>
 			</view>
 		</view>
-		<view class="pay-method flow-all-money b-f m-top20" style="padding: 40rpx;" v-if="is_free==1&&bigId==1&&vip_group_order_id==0">
+		<view class="pay-method flow-all-money b-f m-top20" style="padding: 40rpx;"
+			v-if="is_free==1&&bigId==1&&vip_group_order_id==0">
 			<view style="display: flex;justify-content: center;">
 				<image style="width: 80rpx;height: 80rpx;" src="../../static/home/ask.png" mode=""></image>
 				<image style="width: 80rpx;height: 80rpx;margin-left: 96rpx;" src="../../static/home/ask.png" mode="">
@@ -328,6 +340,64 @@
 			</scroll-view>
 		</u-modal>
 
+		<!-- 账户余额弹出框 -->
+		<u-popup v-model="showBalancePopup" mode="bottom" v-if="options.mode!='integral'&&options.mode!='gift'">
+			<view class="popup__coupon">
+				<view class="coupon__title f-30 balanceTitle">
+					<view class="">
+						<text style="font-size: 32rpx;">余额</text> {{' '}} <text style="font-size: 24rpx;">
+							(剩余{{userInfo.balance?userInfo.balance:'0'}})</text>
+					</view>
+					<view class="rule">
+						使用规则
+					</view>
+				</view>
+
+				<!-- 余额列表 -->
+				<view class="coupon-list">
+					<scroll-view :scroll-y="true" style="height: 565rpx;">
+						<radio-group v-if="radioVal!=='customizeUse'" @change='radioChange' class="radioGroup">
+							<label class="radio">
+								<radio color='#f73131' value="outUse" /><text>暂不使用余额</text>
+							</label>
+
+							<label class="radio">
+								<radio color='#f73131' value="Use" />抵扣<text
+									style="color: #f73131;">¥{{deduction}}</text>
+							</label>
+							<label class="radio">
+								<radio color='#f73131' value="customizeUse" /><text>自定义余额</text>
+							</label>
+						</radio-group>
+						<view v-else class="customizeBalance">
+							<checkbox-group @change="checkboxChange">
+								<label>
+									<checkbox value="cb" checked="true" />自定义余额
+								</label>
+							</checkbox-group>
+
+							<view class="BalanceContent">
+								<view class="ct">
+									<text>使用</text>
+									<input class="inp" type="number" @input="numberFixedDigit" v-model="deduction" />
+									<text>余额,抵 <text>{{deduction}}元</text> </text>
+								</view>
+								<view class="description">
+									本单您可以使用<text>{{deduction}}</text>余额哦!
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</view>
+				<!-- 确定 -->
+				<view class="coupon__do_not dis-flex flex-y-center flex-x-center" style="margin-top: 20upx;">
+					<view style="background: #ff5060;color: white;border: none;"
+						class="control dis-flex flex-y-center flex-x-center bgred" @click="handleNotUseBalance()">
+						<text class="f-26">确定</text>
+					</view>
+				</view>
+			</view>
+		</u-popup>
 		<!-- 优惠券弹出框 -->
 		<u-popup v-model="showPopup" mode="bottom" v-if="options.mode!='integral'&&options.mode!='gift'">
 			<view class="popup__coupon">
@@ -452,7 +522,7 @@
 	import * as giveApi from "@/api/give/index.js"
 	const CouponColors = ['red', 'blue', 'violet', 'yellow']
 	import * as memberApi from "@/api/member/index.js";
-
+	import * as UserApi from '@/api/user'
 	export default {
 		data() {
 			return {
@@ -514,7 +584,13 @@
 				showMember: '', //0不是大会员 1是大会员
 				info_by_key: 0,
 				source: '',
-				vip_group_order_id:0
+				vip_group_order_id: 0,
+				userInfo: {},
+				showBalancePopup: false,
+				radioVal: 'Use',
+				checkboxValue1: '',
+				checked: '',
+				deduction: 0
 			}
 		},
 		filters: {
@@ -538,7 +614,7 @@
 			if (options.poolId) {
 				this.poolId = options.poolId
 			}
-			if(options.vip_group_order_id!=0){
+			if (options.vip_group_order_id != 0) {
 				this.is_free = 1
 				this.vip_group_order_id = options.vip_group_order_id
 			}
@@ -562,7 +638,7 @@
 			if (options.source) {
 				this.bigId = options.bigId
 			}
-
+			this.getUserInfo()
 		},
 
 		/**
@@ -611,6 +687,54 @@
 					}
 				})
 			},
+			handler(val) {
+				this.$nextTick(() => {
+					console.log(val, 'val');
+					if (val < 0) {
+						this.deduction = 0;
+						return
+					}
+					if (val < this.deduction || val > 0) {
+						this.deduction = val
+					}
+					if (this.order.orderTotalPrice * (10 / 100) > this.userInfo.balance) {
+						this.deduction = +userInfo.balance.toFixed(2);
+					} else {
+						this.deduction = (this.order.orderTotalPrice * (10 / 100)).toFixed(2)
+					}
+				})
+			},
+			numberFixedDigit(e) {
+				let val = +e.detail.value;
+				this.handler(val.toFixed(2))
+			},
+			checkboxChange(e) {
+				console.log(e);
+				let val = e.detail.value
+				if (val.length == 0) {
+					this.radioVal = 'Use'
+				}
+			},
+			// 获取当前用户信息
+			getUserInfo() {
+				const app = this
+
+				UserApi.info()
+					.then(result => {
+						app.userInfo = result.data.userInfo
+					})
+					.catch(err => {
+						console.log(err);
+					})
+
+			},
+			radioChange(e) {
+				let val = e.detail.value;
+				this.radioVal = val;
+			},
+
+
+
 			getbigvip() {
 				memberApi.index().then(res => {
 					let data = res.data
@@ -627,7 +751,8 @@
 				if (this.options.mode == "integral") {
 					obj.data = {};
 					obj.data.receiving_name = this.order.address.name;
-					obj.data.receiving_area = this.order.address.region.province + this.order.address.region.city + this
+					obj.data.receiving_area = this.order.address.region.province + this.order.address.region.city +
+						this
 						.order.address.region.region + " " + this.order.address.detail;
 					obj.data.receiving_mobile = this.order.address.phone;
 					orderAdd(obj)
@@ -763,7 +888,8 @@
 				order
 			}) {
 				const app = this
-				app.order = order
+				app.order = order;
+				this.handler()
 				// 显示错误信息
 				// if (order.hasError) {
 				//   app.$toast(order.errorMsg)
@@ -821,6 +947,11 @@
 				this.showPoints = true
 			},
 
+			// 显示账户余额说明
+			handleShowPoints() {
+				this.showPoints = true
+			},
+
 			// 显示优惠券弹窗
 			handleShowPopup() {
 				this.showPopup = true
@@ -828,6 +959,11 @@
 			// 显示优惠券弹窗
 			handleShowPopup1() {
 				this.showPopup1 = true
+			},
+
+			// 显示账户余额弹窗
+			handleShowBalancePopup() {
+				this.showBalancePopup = true
 			},
 
 			// 选择优惠券
@@ -867,6 +1003,18 @@
 				// 隐藏优惠券弹层
 				app.showPopup = false
 			},
+
+
+			// 不使用余额
+			handleNotUseBalance() {
+				const app = this
+				// app.selectCouponId = 0
+				// // 重新获取订单信息
+				// app.getOrderData()
+				// 隐藏优惠券弹层
+				app.showBalancePopup = false
+			},
+
 			handleNotUseCoupon1() {
 				let app = this
 				app.order.cardVoucherName = "";
@@ -1043,13 +1191,15 @@
 				} = app;
 				let vip_group_order_id = uni.getStorageSync('vip_group_order_id') || 0;
 				// 表单数据
+				let balance_money = +app.deduction || 0
 				const form = {
 					delivery: app.curDelivery,
 					payType: 0,
 					couponId: app.selectCouponId || 0,
 					isUsePoints: app.isUsePoints ? 1 : 0,
 					remark: app.remark || '',
-					vip_group_order_id
+					vip_group_order_id,
+					balance_money: balance_money.toFixed(2)
 				}
 
 				// 创建订单-立即购买
@@ -1063,8 +1213,8 @@
 						form.LuckyFreeId = options.LuckyFreeId
 					}
 					// 大会员
-					if (app.bigId==1) {
-						app.vip_group_order_id!=0?form.is_vip_free = 0:form.is_vip_free = app.is_free;
+					if (app.bigId == 1) {
+						app.vip_group_order_id != 0 ? form.is_vip_free = 0 : form.is_vip_free = app.is_free;
 					}
 					// 高奢
 					if (app.bigId != '' || app.bigId != 1) {
@@ -1133,5 +1283,55 @@
 		line-height: 92upx;
 		font-size: 28upx;
 		color: white;
+	}
+
+	.balanceTitle {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border-bottom: 1rpx solid #f1f1f1;
+		padding-bottom: 30rpx;
+	}
+
+	.rule {
+		color: #999999;
+		font-size: 28rpx;
+	}
+
+	.radioGroup {
+		display: flex;
+		// align-items: center;
+		flex-direction: column;
+		// align-items: flex-start;	
+
+		.radio {
+			margin: 20rpx 0;
+			font-size: 28rpx;
+			transform: scale(0.9);
+			display: flex;
+			align-items: center;
+		}
+	}
+
+	.BalanceContent {
+		background: #f4f4f4;
+		border-radius: 10rpx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-top: 40rpx;
+		padding: 20rpx 0;
+
+		.inp {
+			width: 100rpx;
+			border-bottom: 1rpx solid #c5c5c5;
+			text-align: center;
+		}
+
+		.description {
+			font-size: 20rpx;
+			color: #c5c5c5;
+			margin-top: 20rpx;
+		}
 	}
 </style>
