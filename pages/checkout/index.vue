@@ -106,17 +106,20 @@
 					<text v-else class="">无卡券可用</text>
 				</view>
 			</view>
-			<view class="flow-all-list dis-flex">
-				<text class="flex-five">账户余额：</text>
+			<!-- <view class="flow-all-list dis-flex">
+				<text class="flex-five">账户余额: <text v-if="userInfo.balance > 0">({{userInfo.balance}})</text></text>
 				<view class="flex-five t-r">
-					<view v-if="userInfo.balance > 0" @click="handleShowBalancePopup()">
-						<text class="col-m" v-if="order.cardVoucherName">{{ order.cardVoucherName }}</text>
-						<text class="col-m" v-else>{{ userInfo.balance?userInfo.balance:'0' }}</text>
+					<view v-if="userInfo.balance == 0">
+						<text>无余额可用</text>
+					</view>
+					<view v-else @click="handleShowBalancePopup()">
+						<text>请选择</text>
+						
 						<text class="right-arrow iconfont icon-arrow-right"></text>
 					</view>
-					<text v-else class="">0</text>
+
 				</view>
-			</view>
+			</view> -->
 			<!-- 积分抵扣 -->
 			<view v-if="order.isAllowPoints" class="points flow-all-list dis-flex flex-y-center">
 				<view class="block-left flex-five" @click="handleShowPoints()">
@@ -379,7 +382,7 @@
 							<view class="BalanceContent">
 								<view class="ct">
 									<text>使用</text>
-									<input class="inp" type="number" @input="numberFixedDigit" v-model="deduction" />
+									<input class="inp" type="number" @change="numberFixedDigit" v-model="deduction" />
 									<text>余额,抵 <text>{{deduction}}元</text> </text>
 								</view>
 								<view class="description">
@@ -609,7 +612,7 @@
 		/**
 		 * 生命周期函数--监听页面加载
 		 */
-		onLoad(options) {
+		async onLoad(options) {
 			this.options = options;
 			if (options.poolId) {
 				this.poolId = options.poolId
@@ -638,7 +641,7 @@
 			if (options.source) {
 				this.bigId = options.bigId
 			}
-			this.getUserInfo()
+
 		},
 
 		/**
@@ -688,21 +691,34 @@
 				})
 			},
 			handler(val) {
-				this.$nextTick(() => {
-					console.log(val, 'val');
+				if (val) {
+					let Price = (this.order.orderTotalPrice * (10 / 100)).toFixed(2)
 					if (val < 0) {
 						this.deduction = 0;
 						return
 					}
-					if (val < this.deduction || val > 0) {
-						this.deduction = val
+
+					if (val > Price) {
+						this.deduction = Price
+						return
 					}
+					console.log(val, this.deduction);
+					if (val < this.deduction || val > 0) {
+						// this.$nextTick(() => {
+						this.deduction = val;
+						return
+						// })
+					}
+				} else {
+					// this.userInfo.balance用户余额
+					// this.order.orderTotalPrice * (10 / 100) 商品百分十
 					if (this.order.orderTotalPrice * (10 / 100) > this.userInfo.balance) {
-						this.deduction = +userInfo.balance.toFixed(2);
+						this.deduction = +this.userInfo.balance.toFixed(2);
 					} else {
 						this.deduction = (this.order.orderTotalPrice * (10 / 100)).toFixed(2)
 					}
-				})
+				}
+
 			},
 			numberFixedDigit(e) {
 				let val = +e.detail.value;
@@ -718,23 +734,22 @@
 			// 获取当前用户信息
 			getUserInfo() {
 				const app = this
-
-				UserApi.info()
-					.then(result => {
-						app.userInfo = result.data.userInfo
-					})
-					.catch(err => {
-						console.log(err);
-					})
-
+				new Promise(function(resolve, reject) {
+					UserApi.info()
+						.then(result => {
+							app.userInfo = result.data.userInfo;
+							resolve(result)
+						})
+						.catch(err => {
+							reject(err)
+							console.log(err);
+						})
+				});
 			},
 			radioChange(e) {
 				let val = e.detail.value;
 				this.radioVal = val;
 			},
-
-
-
 			getbigvip() {
 				memberApi.index().then(res => {
 					let data = res.data
@@ -884,11 +899,12 @@
 			},
 
 			// 初始化数据
-			initData({
+			async initData({
 				order
 			}) {
 				const app = this
 				app.order = order;
+				await this.getUserInfo()
 				this.handler()
 				// 显示错误信息
 				// if (order.hasError) {
@@ -928,7 +944,7 @@
 				}
 				// 结算模式: 购物车
 				if (options.mode === 'cart') {
-					modeParam.cartIds = options.cartIds
+					modeParam.cartIds = options.cartIds;
 				}
 				// 订单结算参数(用户选择)
 				const orderParam = {
@@ -1012,7 +1028,10 @@
 				// // 重新获取订单信息
 				// app.getOrderData()
 				// 隐藏优惠券弹层
-				app.showBalancePopup = false
+				app.showBalancePopup = false;
+				if (this.radioVal == 'Use') {
+
+				}
 			},
 
 			handleNotUseCoupon1() {

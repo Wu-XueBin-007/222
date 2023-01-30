@@ -15,7 +15,7 @@
 			<!-- #endif -->
 			<!-- #ifdef MP-QQ -->
 			<view class="login-btn" v-if="navIndex==1">
-				<button open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="button btn-normal">授权登录</button>
+				<button open-type="getUserInfo" @getuserinfo="getUserInfo" class="button btn-normal">授权登录</button>
 			</view>
 			<!-- #endif -->
 
@@ -125,16 +125,15 @@
 			//#ifdef MP-QQ
 			getUserInfo(e) {
 				let userInfo = e.detail.userInfo
-				console.log(userInfo, 'userInfo');
-				// this.userMsg = userInfo;
-				// this.onAuthSuccess(userInfo)
+				console.log(userInfo, 'qq登录');
+				this.userMsg = userInfo;
+				this.onAuthSuccess(userInfo)
 			},
 			//#endif
 			// 获取微信用户信息(新版)
 			getUserProfile() {
 				console.log(1111);
 				const app = this;
-
 				//#ifdef MP-WEIXIN
 				wx.canIUse('getUserProfile') && wx.getUserProfile({
 					lang: 'zh_CN',

@@ -145,7 +145,7 @@
 		<!-- 首页推荐 -->
 		<view class="home-recommend">
 			<zero-waterfall ref="waterfall" :list="JgoodsList" v-if="JgoodsList.length>0">
-				<!--  #ifdef  MP-WEIXIN -->
+				<!--  #ifdef  MP -->
 				<view v-for="(item, index) of JgoodsList" :key="index" slot="slot{{item.goods_id}}">
 					<view class="cnt">
 						<view class="text">{{ item.extra }}</view>
@@ -153,7 +153,7 @@
 				</view>
 				<!--  #endif -->
 
-				<!-- #ifndef  MP-WEIXIN -->
+				<!-- #ifndef  MP -->
 				<template v-slot:default="item">
 					<view class="cnt">
 						<view class="text">{{ item.extra }}</view>
