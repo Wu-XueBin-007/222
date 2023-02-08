@@ -67,14 +67,14 @@
 				<image src="../../static/home/select_act.png" class="payWayItemR" v-if="payIndex==0"></image>
 				<image src="../../static/home/select.png" class="payWayItemR" v-else></image>
 			</view>
-			<!-- <view class="payWayItem" @click="changeNav" data-index="1">
+			<view class="payWayItem" @click="changeNav" data-index="1">
 				<view class="payWayItemL">
 					<image src="../../static/home/wallet_icon.png" mode="widthFix"></image>
 					<view>我的钱包支付<text>（可用余额：{{userInfo.balance ? userInfo.balance : 0}}）</text></view>
 				</view>
 				<image src="../../static/home/select_act.png" class="payWayItemR" v-if="payIndex==1"></image>
 				<image src="../../static/home/select.png" class="payWayItemR" v-else></image>
-			</view> -->
+			</view>
 		</view>
 		<!-- <view class="tips">不支持取消拼团</view> -->
 		<view class="sureFooter">

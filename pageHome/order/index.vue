@@ -211,7 +211,8 @@
 		}, {
 			name: `待评价`,
 			value: 'comment'
-		}
+		},
+
 	]
 
 	export default {
