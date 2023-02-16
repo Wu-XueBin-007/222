@@ -16,8 +16,9 @@
 		 * 初始化完成时触发
 		 */
 		onLaunch(options) {
+
 			//console.log(options, 'options');
-			// #ifdef MP-WEIXIN
+			// #ifdef MP
 			if (options.query.scene) {
 				//console.log('scene', options.query.scene);
 				this.globalData.shareId = options.query.scene;
@@ -37,7 +38,6 @@
 			// #ifdef APP-PLUS
 			var args = plus.runtime.arguments;
 			if (args) {
-
 				// 处理args参数，如直达到某新页面等  
 				var arr = args.split('shareId=');
 				this.globalData.shareId = arr[1];
@@ -46,9 +46,11 @@
 		},
 		methods: {
 			getInfo() {
-				Rapi.info().then(setting => {
-					this.globalData.setting = setting.data.storeInfo
-				})
+				if (JSON.stringify(this.globalData.setting) === '{}') {
+					Rapi.info().then(setting => {
+						this.globalData.setting = setting.data.storeInfo
+					})
+				}
 			},
 			getTime(time, desc, type) {
 				let dates = new Date(time);
@@ -76,7 +78,7 @@
 						t.globalData.windowHeight = windowHeight;
 						// 获取状态栏的高度
 						let statusBarHeight = res.statusBarHeight;
-						//#ifdef MP-WEIXIN
+						//#ifdef MP
 						// 根据胶囊的位置计算导航栏的高度
 						let realHeight = (rect.top - statusBarHeight) * 2 + rect.height + statusBarHeight;
 						t.globalData.navH = realHeight;
@@ -90,8 +92,8 @@
 						// 根据胶囊的位置计算文字的行高以及距离状态栏的位置
 						let lineHeight = 40;
 						//#endif
-						t.globalData.lineHeight = lineHeight;
-						t.globalData.paddingTop = statusBarHeight;
+						t.globalData.lineHeight = lineHeight || 0;
+						t.globalData.paddingTop = statusBarHeight || 0;
 						// 根据胶囊的位置计算距离右侧的宽度，用于设置返回按钮至左侧的距离
 						let leftDistance = windowWidth - rect.right;
 						t.globalData.leftDistance = leftDistance;

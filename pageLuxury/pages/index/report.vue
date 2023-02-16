@@ -123,7 +123,7 @@
 	}
 	.reportItemR{
 		font-size: 30upx;
-		color: #EF343D;
+		color: #EF343D  ;
 		font-weight: bold;
 		line-height: 84upx;
 	}

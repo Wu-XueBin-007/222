@@ -2,7 +2,7 @@
 	<view v-if="!isLoading" class="container" :style="{'box-sizing': 'border-box'}">
 		<!-- <head-nav title="个人中心" :backFlag="false" color="white" backGround="linear-gradient(270deg, #FF5A5E, #DF6BAE)" backType="user" fontSize="36"></head-nav> -->
 		<view class="head"
-			:style="{'padding-top':navInfo.paddingTop+'px','height':info_by_key.area_good_id&&info_by_key.city_good_id?'650rpx':'538rpx'}">
+			:style="{'padding-top':navInfo.paddingTop+'px','height':Number(info_by_key.area_good_id)&&Number(info_by_key.city_good_id)?'650rpx':'538rpx'}">
 			<image src="../../static/mine/backImage.png" class="headBack"></image>
 			<view class="headT">
 				<view class="imgWrap" @click="handleLogin">
@@ -49,7 +49,7 @@
 					<!-- <view class="headItemT">{{token_price?token_price:(isLogin?0:'---')}}</view> -->
 					<view class="headItemT">{{userInfo.cert_total_price?userInfo.cert_total_price:(isLogin?0:'---')}}
 					</view>
-					<view class="headItemB">通证</view>
+					<view class="headItemB">权益积分</view>
 				</view>
 				<view class="headItem" @click="toProfit">
 					<view class="headItemT">
@@ -64,7 +64,7 @@
 				</view>
 			</view>
 			<!-- 创业合伙人 团长 -->
-			<view v-if="info_by_key.area_good_id&&info_by_key.city_good_id" class="operation">
+			<view v-if="Number(info_by_key.area_good_id)&&Number(info_by_key.city_good_id)" class="operation">
 				<view @click="onTargetDetail(info_by_key.area_good_id,1)" class="operationitem">
 					<image class="partner operationitemimg" src="../../static/partner.png" mode=""></image>
 					<text class="tx_title">成为{{info_by_key.area_name}} </text>
@@ -77,7 +77,7 @@
 		</view>
 
 		<view class="orderWrapBox" :style="{'position': 'relative','z-index': '999'}">
-			<view class="" v-if="bigVip.big_vip_switch==1">
+			<!-- <view class="" v-if="bigVip.big_vip_switch==1">
 				<view class="majorMember" v-if="!showMember">
 					<view class="majorMemberT">
 						<view class="majorMemberTL">
@@ -116,18 +116,18 @@
 						我的权益
 					</view>
 				</view>
-			</view>
+			</view> -->
 			<view class="orderWrap" style="margin: -20rpx auto 0;">
-				<view class="orderWrapHead" @click="onTargetOrder(orderNavbar[4])">
-					<view class="orderWrapHeadL">我的订单</view>
-					<image src="../../static/icon/more_gray.png" class="orderWrapHeadR"></image>
+				<view class="orderWrapHead">
+					<view class="orderWrapHeadL">订单</view>
+					<!-- 	<image src="../../static/icon/more_gray.png" class="orderWrapHeadR"></image>-->
 				</view>
 				<view class="orderWrapCon">
 					<view class="orderItem" v-for="(item,index) in orderNavbar" :key="index"
 						@click="onTargetOrder(item)">
 						<view style="position: relative;">
 							<image :src="item.icon"></image>
-							<view v-if="index==0&&orderCoun.payment&&orderCoun.payment!=0" style="position: absolute;top: -20rpx;left: 34rpx;color: #FFFFFF;background-color: #ee0a24;border-radius: 999px;
+							<!-- 							<view v-if="index==0&&orderCoun.payment&&orderCoun.payment!=0" style="position: absolute;top: -20rpx;left: 34rpx;color: #FFFFFF;background-color: #ee0a24;border-radius: 999px;
     z-index: 99;padding: 0 10rpx;font-size: 24rpx;text-align: center;">
 								{{orderCoun.payment?orderCoun.payment:'0'}}
 							</view>
@@ -138,18 +138,17 @@
 							<view v-if="index==2&&orderCoun.delivery&&orderCoun.delivery!=0" style="position: absolute;top: -20rpx;left: 36rpx;color: #FFFFFF;background-color: #ee0a24;border-radius: 999px;
 	z-index: 99;padding: 0 10rpx;font-size: 24rpx;text-align: center;">
 								{{orderCoun.delivery?orderCoun.delivery:'0'}}
-							</view>
+							</view> -->
 						</view>
 						<text style="color: #999999;">{{item.name}}</text>
 					</view>
 				</view>
 			</view>
-			<view class="orderWrap" style="margin-top: 30rpx;">
+			<!-- 			<view class="orderWrap" style="margin-top: 30rpx;">
 				<view class="orderWrapHead">
 					<view
 						style="font-size: 30rpx;line-height: 28rpx;color: #000000;font-weight: 700;font-family: PingFang;">
 						购票订单</view>
-					<!-- <image src="../../static/icon/more_gray.png" class="orderWrapHeadR"></image> -->
 				</view>
 				<view class="orderWrapCon2">
 					<view class="orderItem" v-for="(item,index) in orderTicket" :key="index"
@@ -160,9 +159,7 @@
 						<text>{{item.name}}</text>
 					</view>
 				</view>
-			</view>
-
-
+			</view> -->
 
 			<view class="orderWrap" style="margin-top: 30rpx;">
 				<view class="orderWrapHead">
@@ -243,34 +240,34 @@
 
 		{
 			id: 'payment',
-			name: '待付款',
+			name: '我的订单',
 			icon: '../../static/mine/waitPay.png',
 			count: 0
 		},
-		{
-			id: 'received',
-			name: '待发货',
-			icon: '../../static/mine/daifahuo.png',
-			count: 0
-		},
-		{
-			id: 'delivery',
-			name: '待收货',
-			icon: '../../static/mine/daishouhuo.png',
-			count: 0
-		},
-		{
-			id: 'comment',
-			name: '待评价',
-			icon: '../../static/mine/daipinjia.png',
-			count: 0
-		},
-		{
-			id: 'all',
-			name: '售后',
-			icon: '../../static/mine/shouhou.png',
-			count: 0
-		},
+		// {
+		// 	id: 'received',
+		// 	name: '待发货',
+		// 	icon: '../../static/mine/daifahuo.png',
+		// 	count: 0
+		// },
+		// {
+		// 	id: 'delivery',
+		// 	name: '待收货',
+		// 	icon: '../../static/mine/daishouhuo.png',
+		// 	count: 0
+		// },
+		// {
+		// 	id: 'comment',
+		// 	name: '待评价',
+		// 	icon: '../../static/mine/daipinjia.png',
+		// 	count: 0
+		// },
+		// {
+		// 	id: 'all',
+		// 	name: '售后',
+		// 	icon: '../../static/mine/shouhou.png',
+		// 	count: 0
+		// },
 
 	]
 	// 购票订单操作
@@ -574,9 +571,14 @@
 			},
 			toUrls(e) {
 				let url = e.target.dataset.path || e.currentTarget.dataset.path;
-				if (url) {
+				if (url !== true) {
 					uni.navigateTo({
 						url: url
+					})
+				} else {
+					uni.showToast({
+						icon: 'none',
+						title: '此功能暂未开放,敬请期待！'
 					})
 				}
 			},
@@ -816,11 +818,9 @@
 				this.$navTo('pageHome/wallet/index')
 			},
 
-			// 跳转到订单页
+			// 跳转到订单列表页
 			onTargetOrder(item) {
-				this.$navTo('pageHome/order/index', {
-					dataType: item.id
-				})
+				this.$navTo('pageHome/orderCenter/orderCenter')
 			},
 			// 跳转到订单页
 			onTargetOrders(item) {

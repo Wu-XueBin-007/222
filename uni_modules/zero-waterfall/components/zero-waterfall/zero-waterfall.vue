@@ -2,10 +2,11 @@
 	<view class="container">
 		<view class="waterfall_left">
 			<view class="waterfall_item" v-for="(item,index) in listLeft" :key="index" :data-id="item.goods_id"
-					@click="onTargetGoodsList" v-if="item.goods_id">
+				@click="onTargetGoodsList" v-if="item.goods_id">
 				<view class="item_img">
 					<!-- <image :src="item.url" mode="widthFix" @load="considerPush"></image> -->
-					<zero-lazy-load :image="item.goods_image" :imgMode='imgMode' @load='considerPush' @error='considerPush'>
+					<zero-lazy-load :image="item.goods_image" :imgMode='imgMode' @load='considerPush'
+						@error='considerPush'>
 					</zero-lazy-load>
 				</view>
 				<view class="item_info">
@@ -13,7 +14,10 @@
 					<!-- <view class="item_info_note">{{item.note}}</view> -->
 					<view class="item_info_note">
 						<view class="item_info_price">
-							￥<text>{{item.goods_price_min}}</text>
+							￥<text
+								style="font-size: 38rpx;font-weight: 700;font-family: 'PingFang SC';font-style: normal;">{{item.goods_price_min.split('.')[0]}}<text
+									style="font-size:20rpx;font-weight: 700;">.{{item.goods_price_min.split('.')[1]}}</text>
+							</text>
 						</view>
 						<!-- <view class="item_info_price" v-if="item.line_price_min>0">
 							￥<text>{{item.line_price_min}}</text>
@@ -23,7 +27,6 @@
 					<!--  #ifdef  MP-WEIXIN -->
 					<slot name="slot{{item.goods_id}}" />
 					<!--  #endif -->
-
 					<!-- #ifndef  MP-WEIXIN -->
 					<slot v-bind="item" />
 					<!-- #endif -->
@@ -32,17 +35,21 @@
 		</view>
 		<view class="waterfall_right">
 			<view class="waterfall_item" v-for="(item,index) in listRight" :key="index" :data-id="item.goods_id"
-					@click="onTargetGoodsList" v-if="item.goods_id">
+				@click="onTargetGoodsList" v-if="item.goods_id">
 				<view class="item_img">
 					<!-- <image :src="item.url" mode="widthFix" @load="considerPush"></image> -->
-					<zero-lazy-load :image="item.goods_image" :imgMode='imgMode' @load='considerPush' @error='considerPush'>
+					<zero-lazy-load :image="item.goods_image" :imgMode='imgMode' @load='considerPush'
+						@error='considerPush'>
 					</zero-lazy-load>
 				</view>
 				<view class="item_info">
 					<view class="item_info_title">{{item.goods_name}}</view>
 					<view class="item_info_note">
 						<view class="item_info_price">
-							￥<text>{{item.goods_price_min}}</text>
+							￥<text
+								style="font-size: 38rpx;font-weight: 700;font-family: 'PingFang SC';font-style: normal;">{{item.goods_price_min.split('.')[0]}}<text
+									style="font-size:20rpx;font-weight: 700;">.{{item.goods_price_min.split('.')[1]}}</text>
+							</text>
 						</view>
 						<!-- <view class="item_info_price" v-if="item.line_price_min>0">
 							￥<text>{{item.line_price_min}}</text>
@@ -88,10 +95,14 @@
 			}
 		},
 		watch: {
-			list(newValue, oldValue) {
-				this.newList = newValue.slice(oldValue.length);
-				this.considerPush()
-			},
+			list: {
+				handler(newValue, oldValue) {
+					let newarr = [...this.listLeft, ...this.listRight]
+					this.newList = newValue.slice(newarr ? newarr.length : 0);
+					this.considerPush()
+				},
+				immediate: true
+			}
 		},
 		mounted() {
 			this.init()
@@ -107,7 +118,8 @@
 			},
 			// 触发重新排列
 			init() {
-				this.newList = [...this.list];
+				// this.newList = [...this.list];
+				// console.log(3333);
 				this.listLeft = [];
 				this.listRight = [];
 				if (this.newList.length != 0) {
@@ -127,7 +139,7 @@
 
 			// 计算排列
 			considerPush() {
-				// console.log(123456,"加载",this.newList.length)
+				// console.log(123456,"加载",this.newList)
 				// if(!this.loadFlag){
 				// 	return false;
 				// }
@@ -152,7 +164,6 @@
 						this.listRight.push(this.newList.shift());
 					}
 					// this.loadFlag = true;
-					// console.log(this.loadFlag)
 				});
 
 			},
@@ -211,23 +222,27 @@
 				padding: 0 10upx;
 				margin-bottom: 20upx;
 				justify-content: space-between;
-				.item_info_sales{
+
+				.item_info_sales {
 					font-size: 22upx;
 					color: #878787;
 					// margin-top: 18upx;
 					line-height: 22upx;
 				}
-				 .item_info_price {
+
+				.item_info_price {
 					font-size: 22upx;
 					// font-weight: bold;
 					line-height: 22upx;
-					color: #EF343D;
+					color: #F97112;
 					margin-right: 18upx;
-					text{
+
+					text {
 						font-size: 36upx;
 						font-weight: bold;
 					}
 				}
+
 				.item_info_texts {
 					font-size: 22upx;
 					// font-weight: bold;
@@ -236,7 +251,7 @@
 					text-decoration: line-through;
 				}
 			}
-			
+
 		}
 
 	}

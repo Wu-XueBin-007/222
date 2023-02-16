@@ -36,7 +36,6 @@
 		<view style="box-sizing: border-box;padding: 0 30upx;margin-top: 10upx;color: #999999;">5、确认收货后，佣金实时到账，若佣金到账后，则不可退换货；</view>
 		<view style="box-sizing: border-box;padding: 0 30upx;margin-top: 10upx;color: #999999;">6、如果疑问请联系客服咨询；</view> -->
 		<view class="conWraps" style="padding: 30rpx;" v-html="commonL.withdrawal_rules">
-
 		</view>
 		<view class="successMark" v-if="successFlag" @click="hideSuccess"></view>
 		<view class="successCon" v-if="successFlag">
@@ -241,6 +240,7 @@
 						//console.log(res)
 						if (res.confirm) {
 							let flag = false;
+							
 							// if(_this.account_number || _this.imgInfo.file_id){
 							// 	flag = true;
 							// }
@@ -272,6 +272,7 @@
 									// })
 									_this.successFlag = true;
 									_this.successTxt = "成功";
+									_this.getPageData();
 									// setTimeout(()=>{
 									// 	let url = "/pageHome/distribution/withdrawal/index";
 									// 	// let query = _this.type == 1 ? 2 : 1

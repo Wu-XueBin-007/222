@@ -458,7 +458,7 @@
 		background-color: #FFF6F7;
 		border-radius: 0 40upx 40upx 0;
 		font-size: 26upx;
-		color: #EF343D;
+		color: #EF343D  ;
 		font-weight: bold;
 		text-align: center;
 		line-height: 60upx;

@@ -175,7 +175,7 @@
 		margin: 220upx auto 24upx;
 		width: 540upx;
 		height: 80upx;
-		background-color: #EF343D;
+		background-color: #EF343D  ;
 		color: #FFFFFF;
 		font-size: 26upx;
 		text-align: center;

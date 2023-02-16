@@ -1,15 +1,7 @@
 <template>
 	<mescroll-body ref="mescrollRef" :sticky="true" @init="mescrollInit" :down="{ native: true }" @down="downCallback"
 		:up="upOption" @up="upCallback">
-		<!-- 页面头部 -->
-		<view class="header">
-			<search class="search" :tips="options.search ? options.search : '搜索商品'" @event="handleSearch" />
-			<!-- 切换列表显示方式 -->
-			<view class="show-view" @click="handleShowView">
-				<text class="iconfont icon-view-tile" v-if="showView"></text>
-				<text class="iconfont icon-view-list" v-else></text>
-			</view>
-		</view>
+
 		<view class="banr">
 			<view class="banrC">
 				<image :src="poster_image.preview_url" mode=""></image>
@@ -20,11 +12,18 @@
 			<u-popup v-model="showRule" mode="bottom" @close="close" @open="open">
 				<view class=""
 					style="font-size: 36upx;color: #404040;text-align: center;padding-top: 30upx;font-weight: bold;">
-					专区规则
+					
 				</view>
 				<view style="max-height: 740upx;">
-					<view v-html="rules" style="padding: 30upx;box-sizing: border-box;">
-
+					<view class="drill">
+						<view @click="drillIndex=0"  class="blueDiamond Diamond" :class="drillIndex==0?'Diamondsel':''">
+							蓝钻规则
+						</view>
+						<view @click="drillIndex=1"  class="redDiamond Diamond" :class="drillIndex==1?'Diamondsel':''" >
+							红钻规则
+						</view>
+					</view>
+					<view v-html="drillIndex==0?rules.blueRules:rules.redRules" style="padding: 30upx;box-sizing: border-box;">
 					</view>
 				</view>
 			</u-popup>
@@ -78,8 +77,8 @@
 
 										<!-- v-if="item.is_free==1&&item.is_inviter==1" -->
 										<!-- #ifdef MP-WEIXIN -->
-										<button open-type="share" @click="group_order_id = item.group_order_id" v-if="item.is_free==1&&item.is_inviter==1"
-											class="shareBtn">
+										<button open-type="share" @click="group_order_id = item.group_order_id"
+											v-if="item.is_free==1&&item.is_inviter==1" class="shareBtn">
 											<view class="specialOrderItemBRBR2">邀请好友</view>
 										</button>
 										<!-- #endif -->
@@ -109,48 +108,58 @@
 				</view>
 			</u-popup>
 		</view>
-		<view class="advertisement" v-if="isFinish">
-			<view class="advertisementImage">
-				<image src="../../static/vip_backimg.png" mode=""></image>
-			</view>
-			<view class="advertisementL">
-				<view class="advertisementLT">
-					恭喜你已成为会员
+		<!-- 会员开始  -->
+		   <!-- 普通会员 -->
+		<view v-if="user_quota.is_auto_upgrade ==0" class="membersList">
+			 <image class="membersType"  src="../../static/img_pthy_gsmp.png" mode=""></image>
+			  <!-- <image class="membersType" v-if="user_quota.user_level==3" src="../../static/img_hhr.png" mode=""></image> -->
+			 <view class="rightProgress">
+			 	<text class="cumulative">累计消费{{user_quota.user_quota||0}}元，升级蓝钻还需消费{{user_quota.gap||0}}元</text>
+				<view class="Progress">
+					<view :style=[styleOBJ] class="ProgressItem"></view>
 				</view>
-				<view class="advertisementLB">
-					您已累计消费满{{bigUser.consumption}}
+				<view class="ProgressNum">
+					{{user_quota.user_quota||0}}/980
 				</view>
-			</view>
-			<view class="advertisementR" @click="getEquity">
-				<view class="advertisementRL">
-					查看我的权益
-				</view>
-				<view class="advertisementRR">
-					<image src="../../static/more.png" mode=""></image>
-				</view>
-			</view>
+			 </view>
 		</view>
-		<view class="advertisement2" v-else>
-			<view class="advertisementImage">
-				<image src="../../static/notvip_backimg.png" mode=""></image>
-			</view>
-			<view class="advertisementL">
-				成为会员进度
-			</view>
-			<view class="advertisementR">
-				<view class="advertisementRT">
-					<progress :percent="pgList" border-radius="6" backgroundColor="#FFF4E1" activeColor="#D99B5F"
-						stroke-width="4" />
+		<!-- 蓝砖 -->
+		<view v-if="user_quota.is_auto_upgrade ==1" class="membersList">
+			 
+			 <image class="membersType"  src="../../static/img_lz_gsmp.png" mode=""></image>
+			  <!-- <image class="membersType" v-if="user_quota.user_level==3" src="../../static/img_hhr.png" mode=""></image> -->
+			 <view class="rightProgress">
+			 	<text class="cumulative">累计消费{{user_quota.user_quota||0}}元，升级红钻还需消费{{user_quota.gap||0}}元</text>
+				<view class="Progress">
+					<view :style=[styleOBJ] class="ProgressItem"></view>
 				</view>
-
-				<view class="advertisementRB">
-					<view class="advertisementRBL">
-						累计消费(元)
-					</view>
-					<view class="advertisementRBR">
-						{{bigUser.consumption}}/{{setting.Luxury_upgrade_consum}}
-					</view>
+				<view class="ProgressNum">
+					{{user_quota.user_quota||0}}/2980
 				</view>
+			 </view>
+		</view>
+		<!-- 红砖 -->
+		<view v-if="user_quota.is_auto_upgrade ==2" class="membersList">
+			 <image class="membersType"  src="../../static/img_hz_gsmp.png" mode=""></image>
+			  <!-- <image class="membersType" v-if="user_quota.user_level==3" src="../../static/img_hhr.png" mode=""></image> -->
+			 <view class="rightProgress">
+			 	<text class="cumulative">累计消费{{user_quota.user_quota||0}}元</text>
+				<view class="Progress">
+					<view :style=[styleOBJ] class="ProgressItem"></view>
+				</view>
+				<view class="ProgressNum">
+					您目前已是最尊贵的红钻用户了！！
+				</view>
+			 </view>
+		</view>
+<!-- 会员结束  -->
+		<!-- 页面头部 -->
+		<view class="header">
+			<search class="search" :tips="options.search ? options.search : '搜索商品'" @event="handleSearch" />
+			<!-- 切换列表显示方式 -->
+			<view class="show-view" @click="handleShowView">
+				<text class="iconfont icon-view-tile" v-if="showView"></text>
+				<text class="iconfont icon-view-list" v-else></text>
 			</view>
 		</view>
 		<!-- 排序标签 -->
@@ -242,7 +251,8 @@
 				</view>
 			</view>
 			<view class="ranksR">
-				<image v-for="(item,index) in 4" :kry="index" class="potL" :src="item.user.avatar_url?item.user.avatar_url:'../../static/icon_ask.png'" mode="">
+				<image v-for="(item,index) in 4" :kry="index" class="potL"
+					:src="item.user.avatar_url?item.user.avatar_url:'../../static/icon_ask.png'" mode="">
 				</image>
 				<!-- <image class="potL" src="../../static/icon_ask.png" mode=""></image>
 			<image class="potL" src="../../static/icon_ask.png" mode=""></image>
@@ -250,6 +260,12 @@
 
 			</view>
 		</view>
+		<uni-popup background-color="#fff" ref="popup" type="center">
+			<view class="popup-content"><text class="text">权益消费额度：
+					1、购买合伙人身份可获得权益消费额度9800元/年，连续3年
+					2、购买团长身份可获得权益消费额度2980元/年，连续3年
+					3、权益消费额度可在高奢名品区购买商品</text></view>
+		</uni-popup>
 	</mescroll-body>
 </template>
 
@@ -259,17 +275,22 @@
 	import * as GoodsApi from '@/api/goods'
 	import * as LuxuryApi from '@/api/luxury'
 	import * as memberApi from "@/api/member/index.js";
+
 	import {
 		getEmptyPaginateObj,
 		getMoreListData
 	} from '@/utils/app'
 	import Search from '@/components/search'
-
+	import {
+		checkLogin
+	} from '@/utils/app'
+	import * as UserApi from '@/api/user'
 	const pageSize = 15
 	const showViewKey = 'GoodsList-ShowView';
 	export const isObj = (o) => {
 		return Object.prototype.toString.call(o).slice(8, -1) === 'Object'
 	}
+
 	export default {
 		components: {
 			MescrollBody,
@@ -299,7 +320,7 @@
 				showOrder: false,
 				isRanks: false,
 				isFinish: false,
-				rules: '',
+				rules: {},
 				orderList: {},
 				poster_image: {},
 				team: {},
@@ -307,7 +328,15 @@
 				bigUser: {},
 				setting: {},
 				pgList: 0,
-				show: false
+				show: false,
+				equities: {}, //权益消费额度
+				userInfo: {},
+				helpTipState: false,
+				helpTipTitle: '',
+				helpTipContent: '',
+				user_quota:{},
+				drillIndex:0,
+				styleOBJ:{}
 			}
 		},
 
@@ -326,7 +355,10 @@
 		onShow() {
 			this.getRule()
 			this.getDetail()
-			this.getbigvip()
+			// this.getbigvip()
+			this.getuser_quota()
+			this.getUserInfo()
+
 		},
 		methods: {
 			close() {
@@ -334,6 +366,42 @@
 			},
 			open() {
 
+			},
+			shoWequity() {
+				this.helpTipState = true;
+				this.helpTipTitle = '权益消费额度：'
+				this.helpTipContent =
+					`1、购买合伙人身份可获得权益消费额度9800元/年，连续3年
+				2、购买团长身份可获得权益消费额度2980元/年，连续3年
+				3、权益消费额度可在高奢名品区购买商品
+				`
+				console.log(2222);
+				// this.$refs.popup.open('center')
+			},
+			// 获取当前用户信息
+			getUserInfo() {
+				const app = this
+				UserApi.info()
+					.then(result => {
+						let userInfo = result.data.userInfo
+						app.userInfo = userInfo
+						if (userInfo.team_level == 2 || userInfo.team_level == 3) {
+							app.getequities()
+						}
+					})
+					.catch(err => {
+						console.log(err);
+					})
+			},
+			// 获取权益额度
+			getequities() {
+				LuxuryApi.equities().then(res => {
+					this.equities = res.data
+					console.log(res, 'equities');
+				})
+			},
+			helpTipColse() {
+				this.helpTipState = false
 			},
 			checkRule() {
 				this.showRule = true;
@@ -345,8 +413,10 @@
 			},
 			getRule() {
 				LuxuryApi.rule().then(res => {
-					console.log(res)
-					this.rules = res.data.rule.replace(/<img/g, "<img style='width: 100%;'");
+					console.log(res,'rule')
+					res.data.blueRules.replace(/<img/g, "<img style='width: 100%;'");
+					res.data.redRules.replace(/<img/g, "<img style='width: 100%;'");
+					this.rules = res.data
 				})
 			},
 			getbigvip() {
@@ -354,7 +424,6 @@
 				if (this.invite_user_id) {
 					obj.invite_user_id = this.invite_user_id
 				}
-
 				memberApi.index(obj).then(res => {
 					this.bigUser = res.data.big_vip_user;
 					this.setting = res.data.setting;
@@ -372,8 +441,34 @@
 					}
 				})
 			},
+			getuser_quota(){
+				var obj = {}
+				LuxuryApi.user_quota(obj).then(res=>{
+					// res.data.user_quota = 1980
+						let styleobj = {
+							0:{
+								"background": "linear-gradient(90deg, #EFD4C1 0%, #FEFBFF 100%);",
+								"width":(res.data.user_quota/980)*100+'%'
+							},
+							1:{
+								"background": "linear-gradient(90deg, #B8D7FA 0%, #FEFBFF 100%)",
+								"width":(res.data.user_quota/2980)*100+'%'
+							},
+							2:{
+								"background": "linear-gradient(90deg, #F7AFC1 0%, #FEFBFF 100%);",
+								"width":'100%'
+							}
+						}
+					
+					this.user_quota = res.data;
+					this.styleOBJ = styleobj[res.data['is_auto_upgrade']]
+				})
+			},
 			getDetail() {
-				LuxuryApi.detail({group_order_id:this.group_order_id}).then(res => {
+				LuxuryApi.detail({
+					group_order_id: this.group_order_id,
+				}).then(res => {
+					console.log('poster_image',res);
 					this.poster_image = res.data.poster_image;
 					this.team = res.data.team;
 					if (JSON.stringify(this.team) != '{}') {
@@ -514,7 +609,7 @@
 		onShareAppMessage() {
 			// 构建分享参数
 			console.log("/pageLuxury/pages/index/index?" + this.$getShareUrlParams() + "&group_order_id=" + this
-					.group_order_id);
+				.group_order_id);
 			return {
 				title: "高奢名品",
 				path: "/pageLuxury/pages/index/index?" + this.$getShareUrlParams() + "&group_order_id=" + this
@@ -611,6 +706,8 @@
 	.goods-list {
 		padding: 4rpx;
 		box-sizing: border-box;
+		display: flex;
+		flex-wrap: wrap;
 	}
 
 	// 单列显示
@@ -696,6 +793,7 @@
 	.goods-list.column-2 {
 		.goods-item {
 			width: 50%;
+			
 		}
 	}
 
@@ -737,7 +835,7 @@
 		.detail {
 			padding: 8rpx;
 			background: #fff;
-
+            height: 162rpx;
 			.goods-name {
 				// height: 64rpx;
 				max-height: 64rpx;
@@ -759,10 +857,123 @@
 		}
 	}
 
+	.popup-content {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 15px;
+		height: 50px;
+		background-color: #fff;
+	}
+
+	.EquityLines {
+		width: 100%;
+		padding: 0 22rpx;
+		box-sizing: border-box;
+		margin: 24rpx 0;
+		background: #FFFFFF;
+		padding-bottom: 24rpx;
+
+		.EquityLinesTitle {
+			font-size: 30rpx;
+			font-family: PingFang SC-Bold, PingFang SC;
+			font-weight: bold;
+			color: #333333;
+			padding: 20rpx 0;
+			position: relative;
+
+			&::after {
+				content: '';
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				height: 2rpx;
+				background: #F8F8F8;
+				border-radius: 0px 0px 0px 0px;
+				opacity: 1;
+			}
+		}
+
+		.lines {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+
+			.combination,
+			.remainingAmount {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			.combinationTitle {
+				color: #999999;
+				font-size: 24rpx;
+				font-family: PingFang SC-Regular, PingFang SC;
+				font-weight: 400;
+				margin-bottom: 6rpx;
+			}
+
+			.combinationNum {
+				font-size: 32rpx;
+				font-family: DINbek-Medium, DINbek;
+				font-weight: 500;
+				color: #333333;
+				font-weight: 500;
+				color: #333333;
+			}
+
+			.combination {
+				border-right: 2rpx solid #F8F8F8;
+				display: flex;
+				margin-left: 20rpx;
+				margin-top: 20rpx;
+			}
+
+			.remainingAmount {
+				display: flex;
+				margin-left: 62rpx;
+			}
+		}
+	}
+
 	.banr {
 		position: relative;
 		background-color: #FFFFFF;
 		padding-top: 24upx;
+		.drill {
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+			border-bottom: 1px solid #EEEEEE;
+			padding-bottom: 20rpx;
+			.Diamond{
+				font-family: 'PingFang SC';
+				font-style: normal;
+				font-weight: 700;
+				font-size: 32rpx;
+				line-height: 44rpx;
+				color: #666666;
+				&.Diamondsel{
+					color: #F97112;
+					position: relative;
+					&::after{
+						content: '';
+						position: absolute;
+						bottom: -20rpx;
+						left: 50%;
+						margin-left: -35rpx;
+						width: 70rpx;
+						height: 6rpx;
+						background: #F97112;
+					}
+				}
+			}
+		}
+	
 
 		.banrC {
 			margin: 0 auto 0;
@@ -1153,6 +1364,65 @@
 		image {
 			width: 100%;
 			height: 100%;
+		}
+	}
+	.membersList{
+		width:calc(100% - 60rpx);
+		height: 144rpx;
+		background: linear-gradient(90deg, #333844 0%, #5A5D68 100%);
+		box-shadow: inset 0px 0px 16rpx rgba(255, 255, 255, 0.4);
+		border-radius: 20rpx;
+		display: flex;
+		padding: 20rpx 30rpx;
+		box-sizing: border-box;
+		margin: 30rpx auto 30rpx;
+		align-items: center;
+		.membersType{
+			width: 108rpx;
+			height: 124rpx;
+		}
+		.rightProgress{
+			flex: 1;
+			margin-left: 30rpx;
+			.cumulative{
+				font-family: 'PingFang SC';
+				font-style: normal;
+				font-weight: 400;
+				font-size: 24rpx;
+				color: #DDDDDD;
+				margin: 10rpx 0;
+				line-height: 34rpx;
+			}
+			.Progress{
+				width: 100%;
+				height: 6px;
+				position: relative;
+				background: #6E707B;
+				border-radius: 8rpx;
+				margin: 8rpx 0;
+				.ProgressItem{
+					height: 100%;
+					position: absolute;
+					top: 0;
+					left: 0;
+					background: linear-gradient(90deg, #EFD4C1 0%, #FEFBFF 100%);
+					border-radius: 8rpx;
+					z-index: 2;
+					width: 0;
+					transition: all 0.3s; 
+					max-width: 100%;
+					min-width: 0;
+				}
+			}
+			.ProgressNum{
+				font-family: 'PingFang SC';
+				font-style: normal;
+				font-weight: 400;
+				font-size: 24rpx;
+				line-height: 34rpx;
+				/* 图形_D */
+				color: #999999;
+			}
 		}
 	}
 </style>

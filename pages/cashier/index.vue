@@ -38,7 +38,7 @@
 					</view>
 				</view>
 
-				<view v-if='(!(order.is_big_vip||order.is_luxury_free))&&loading' class="caShier-item-list"
+				<!-- 				<view v-if='order.is_big_vip&&loading&&is_free==0' class="caShier-item-list"
 					@click="btn_payTa(PayTypeEnum.BALANCE.value)">
 					<view class="caShier-item-icon" style="display: flex;align-items: center;">
 						<image src="../../static/icon/icon_ye.png" mode="widthFix"></image>
@@ -47,12 +47,23 @@
 					<view class="coupons-item-chbox">
 						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.BALANCE.value"></checkbox>
 					</view>
-				</view>
+				</view> -->
+				<!-- 团长或者创客 并且选中权益额度兑换显示 -->
+				<!-- <view v-if='(userInfo.team_level == 2||userInfo.team_level == 3)&&loading&&is_free==3'
+					class="caShier-item-list" @click="btn_payTa(PayTypeEnum.ConsumptionQuota.value)">
+					<view class="caShier-item-icon" style="display: flex;align-items: center;">
+						<image src="../../static/icon/consumption.png" mode="widthFix"></image>
+						<text>{{PayTypeEnum.ConsumptionQuota.name}}（可用余额：{{userInfo.equities ? userInfo.equities : 0}}）</text>
+					</view>
+					<view class="coupons-item-chbox">
+						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.ConsumptionQuota.value">
+						</checkbox>
+					</view>
+				</view> -->
 			</view>
 		</view>
 
 		<view class="caShier-footer">
-
 			<view class="caShier-footer-btn" @click="btn_backTran">
 				支付
 			</view>
@@ -82,7 +93,7 @@
 		wxPayment,
 		zfbPayment
 	} from '@/utils/app'
-
+	import * as GoodsApi from '@/api/goods'
 	export default {
 		data() {
 			return {
@@ -101,7 +112,8 @@
 				timer: null,
 				userInfo: {},
 				type: 1,
-				loading: false
+				loading: false,
+				is_free: 0,
 				// test2:"",
 				// test3:"",
 				// test4:"",
@@ -119,6 +131,9 @@
 			} else {
 				this.order_id = parseInt(options.order_id);
 				this.type = 1;
+			}
+			if (options.is_free) {
+				this.is_free = options.is_free
 			}
 			// this.test4 = this.order_id;
 			detail().then(res => {
@@ -206,6 +221,7 @@
 						this.userInfo = result.data.userInfo;
 					})
 			},
+
 			getOrderDetail() {
 				const app = this
 				app.isLoading = true
@@ -338,7 +354,6 @@
 			},
 			btn_payTa(type) {
 				this.paymentType = type;
-
 			},
 			btn_backTran() {
 				const app = this
@@ -355,14 +370,34 @@
 					paymentType = 40;
 				}
 				// #endif
-				if (paymentType == PayTypeEnum.BALANCE.value) {
+				if (paymentType == PayTypeEnum.BALANCE.value || paymentType == PayTypeEnum.ConsumptionQuota.value) {
 					uni.showModal({
 						content: "确认支付吗?",
 						success: res => {
 							if (res.confirm) {
-								if (this.type == 2) {
-									OrderApi.mergePay(app.order_id, paymentType)
-										.then(result => app.onSubmitCallback(result))
+								if (app.type == 2) {
+									// 权益消费支付
+									if (paymentType == PayTypeEnum.ConsumptionQuota.value && parseInt(app
+											.userInfo.equities) < parseInt(app.order.pay_price)) {
+										// 权益消费额度不足 微信支付
+										paymentType = 20
+										uni.showToast({
+											icon: 'none',
+											title: '权益消费额度不足,将使用微信支付补差额',
+											success: () => {
+												setTimeout(() => {
+													OrderApi.mergePay(app.order_id,
+															paymentType)
+														.then(result => app
+															.onSubmitCallback(result))
+													return
+												}, 2500)
+											}
+										})
+									}
+									if (paymentType == 20) return;
+									OrderApi.mergePay(app.order_id, paymentType).then(result => app
+										.onSubmitCallback(result))
 								} else {
 									OrderApi.pay(app.order_id, paymentType)
 										.then(result => app.onSubmitCallback(result))
@@ -379,7 +414,6 @@
 							.then(result => app.onSubmitCallback(result))
 					}
 				}
-
 			},
 			// 订单提交成功后回调
 			onSubmitCallback(result) {
@@ -404,7 +438,8 @@
 						})
 				}
 				// 余额支付
-				if (result.data.pay_type == PayTypeEnum.BALANCE.value) {
+				if (result.data.pay_type == PayTypeEnum.BALANCE.value || result.data.pay_type == PayTypeEnum
+					.ConsumptionQuota.value) {
 					app.$success('支付成功')
 					app.disabled = false
 					setTimeout(() => {

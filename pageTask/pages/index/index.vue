@@ -321,7 +321,7 @@
 	}
 	.possessMore{
 		font-size: 30upx;
-		color: #EF343D;
+		color: #EF343D  ;
 		position: relative;
 	}
 	.possessMore::after{
@@ -334,7 +334,7 @@
 		/* transform: translateX(-50%); */
 		transform: translateX(-50%);
 		border-radius: 10upx;
-		background-color: #EF343D;
+		background-color: #EF343D  ;
 	}
 	.taskMainR{
 		font-size: 24upx;
@@ -387,7 +387,7 @@
 	.taskMainItemC{
 		height: 54upx;
 		border-radius: 0 34upx 34upx 0;
-		background-color: #EF343D;
+		background-color: #EF343D  ;
 		display: inline-block;
 		font-size: 28upx;
 		color: #FFFFFF;
@@ -462,7 +462,7 @@
 		margin-top: 26upx;
 		font-size: 28upx;
 		color: #FFFFFF;
-		background-color: #EF343D;
+		background-color: #EF343D  ;
 		padding: 8upx 20upx;
 		border-radius: 28upx;
 		display: inline-block;

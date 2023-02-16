@@ -5,7 +5,7 @@
 			<view class="commonHead"
 				:style="{'height':navInfo.lineHeight+'px','line-height':navInfo.lineHeight+'px','background':color,'-webkit-text-fill-color':'transparent','-webkit-background-clip':'text'}">
 				<view class="commonHeadLBack" @click="back" v-if="backFlag" :style="{'background':backL}">
-					<image src="/static/icon/back_white.png"></image>
+					<image :style="{filter:backBlack?'brightness(0.5)':''}" src="/static/icon/back_white.png"></image>
 				</view>
 				{{title}}
 			</view>
@@ -24,12 +24,16 @@
 				default: '',
 			},
 			backFlag: {
-			 type: Boolean,
+				type: Boolean,
 				default: true
 			},
 			backGround: {
-			 type: String,
+				type: String,
 				default: "white"
+			},
+			backBlack: {
+				type: Boolean,
+				default: false
 			},
 			color: {
 				type: String,

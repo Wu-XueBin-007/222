@@ -70,7 +70,6 @@
 					已结束
 					<!-- <text>{{countdownTime | dateFormat}}</text> -->
 				</view>
-
 				<scroll-view scroll-x="true"
 					style="display: flex;white-space: nowrap;width: 100%;box-sizing: border-box;overflow: scroll;">
 					<view class="giveBTB" v-if="givemap.status!=3">

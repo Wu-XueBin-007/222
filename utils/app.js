@@ -135,6 +135,7 @@ export const navTo = (url, query = {}) => {
  */
 export const setCartTotalNum = (value) => {
 	uni.setStorageSync('cartTotalNum', Number(value))
+	setCartTabBadge()
 }
 
 /**

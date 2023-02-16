@@ -3,7 +3,13 @@ import request from '@/utils/request'
 // api地址
 const api = {
 	login: 'passport/login',
+	// #ifdef MP-WEIXIN
 	mpWxLogin: 'passport/mpWxLogin',
+	// #endif
+	// #ifdef MP-QQ
+	mpWxLogin: 'passport/mpQqLogin',
+	// #endif
+	mpQqLoginL: 'passport/mpQqLogin',
 	captcha: 'passport/captcha',
 	sendSmsCaptcha: 'passport/sendSmsCaptcha',
 	wxMobileDecrypt: 'passport/wxMobileDecrypt'
@@ -15,10 +21,14 @@ export function login(data) {
 	return request.post(api.login, data)
 }
 
+
 // 微信小程序快捷登录
 export function mpWxLogin(data, option) {
+	console.log(data, 'mpWxLoginoption');
+	console.log(option, 'mpWxLoginoption');
 	return request.post(api.mpWxLogin, data, option)
 }
+
 
 // 微信小程序自动获取手机号
 export function wxMobileDecrypt(data, option) {

@@ -549,7 +549,7 @@
 								color: #333333;
 								text{
 									font-size: 26upx;
-									color: #EF343D;
+									color: #EF343D  ;
 									margin-left: 12upx;
 									font-weight: bold;
 								}
@@ -588,7 +588,7 @@
 		.invitatB{
 			width: 530upx;
 			height: 80upx;
-			background-color: #EF343D;
+			background-color: #EF343D  ;
 			color: #FFFFFF;
 			text-align: center;
 			line-height: 80upx;
@@ -618,7 +618,7 @@
 				height: 80upx;
 				line-height: 80upx;
 				text-align: center;
-				background-color: #EF343D;
+				background-color: #EF343D  ;
 				border-radius: 40upx;
 				font-size: 26upx;
 				font-weight: bold;

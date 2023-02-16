@@ -224,7 +224,7 @@
 
 					.goods_priceL {
 						font-size: 22upx;
-						color: #EF343D;
+						color: #EF343D  ;
 
 						text {
 							font-size: 40upx;

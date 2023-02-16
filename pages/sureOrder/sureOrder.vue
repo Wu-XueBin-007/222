@@ -1,12 +1,15 @@
 <template>
 	<view style="padding-bottom: 118upx;">
 		<!-- <nav-head title="确认订单"></nav-head> -->
-		<seckill-nav title="订单结算" backGround="rage(0,0,0,1)" :fontSize="30" backL="transparent" color="#000000"></seckill-nav>
+		<seckill-nav title="订单结算" backGround="rage(0,0,0,1)" :fontSize="30" backL="transparent" color="#000000">
+		</seckill-nav>
 		<view class="addressWrap" @click="onSelectAddress">
 			<image src="../../static/home/address_icon.png" class="addressWrapL"></image>
 			<view class="addressWrapC" v-if="addressObj.address_id">
-				
-				<view class="addressWrapCB">{{addressObj.region.province+addressObj.region.city+addressObj.region.region+addressObj.detail}}</view>
+
+				<view class="addressWrapCB">
+					{{addressObj.region.province+addressObj.region.city+addressObj.region.region+addressObj.detail}}
+				</view>
 				<view class="addressWrapCT">
 					<view class="addressWrapCTL">{{addressObj.name}}</view>
 					<view class="addressWrapCTR">{{addressObj.phone}}</view>
@@ -27,14 +30,14 @@
 						<view class="orderMsgConRT">{{info.order_info.goods.goods_name}}</view>
 						<view class="orderMsgConRBB"><text>￥{{info.order_info.goods.goods_price}}</text></view>
 					</view>
-					
+
 					<view class="orderMsgConRB">
 						<view class="orderMsgConRBT">x1</view>
-						
+
 					</view>
 				</view>
 			</view>
-			
+
 			<view class="priceBox">
 				共1件商品,合计<text>：￥{{info.order_info?info.order_info.goods.goods_price:0}}</text>
 			</view>
@@ -52,7 +55,7 @@
 				<view class="sendWayL">
 					拼团订单暂不支持取消
 				</view>
-				
+
 			</view>
 		</view>
 		<view class="payWay">
@@ -79,14 +82,14 @@
 				<view class="surePriceL">
 					实付款:
 				</view>
-				
+
 				<view class="surePriceR">
 					￥<text>{{info.order_info?info.order_info.goods.goods_price:0}}</text>
 				</view>
 			</view>
 			<view class="submit" @click="submit">确认支付</view>
 		</view>
-		
+
 	</view>
 </template>
 
@@ -97,27 +100,31 @@
 	import * as collageApi from "@/api/collage/collage.js";
 	import * as UserApi from "@/api/user.js";
 	import {
-		wxPayment,zfbPayment
+		wxPayment,
+		zfbPayment
 	} from '@/utils/app'
 	const App = getApp();
 	export default {
 		data() {
 			return {
-				info:{},
-				payIndex:0,
-				addressObj:{},
-				groupid:0,
-				orderid:0,
-				reqFlag:true,
-				userInfo:{}
+				info: {},
+				payIndex: 0,
+				addressObj: {},
+				groupid: 0,
+				orderid: 0,
+				reqFlag: true,
+				userInfo: {}
 			}
 		},
-		components:{seckillNav,navHead},
+		components: {
+			seckillNav,
+			navHead
+		},
 		onLoad(options) {
-			if(options.orderid){
+			if (options.orderid) {
 				this.orderid = options.orderid;
 				this.getDetail();
-			}else{
+			} else {
 				this.info = App.$vm.globalData.goodsData;
 			}
 			this.getUserInfo();
@@ -128,62 +135,67 @@
 		methods: {
 			// 获取会员信息
 			getUserInfo() {
-			  UserApi.info()
-			    .then(result => {
-			      this.userInfo = result.data.userInfo;
-			    })
+				UserApi.info()
+					.then(result => {
+						this.userInfo = result.data.userInfo;
+					})
 			},
-			getDetail(){
-				collageApi.info({order_no:this.orderid}).then(res=>{
+			getDetail() {
+				collageApi.info({
+					order_no: this.orderid
+				}).then(res => {
 					console.log(res)
 					this.info = res.data;
 				})
 			},
 			onSelectAddress() {
-			  this.$navTo('pages/address/index', { from: 'checkout' })
+				this.$navTo('pages/address/index', {
+					from: 'checkout'
+				})
 			},
-			changeNav(e){
+			changeNav(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
 				this.payIndex = index;
 			},
-			getAddress(){
+			getAddress() {
 				addressApi.defaults()
-					.then(res=>{
+					.then(res => {
 						//console.log(res)
-						if(res.data.detail){
+						if (res.data.detail) {
 							this.addressObj = res.data.detail;
 						}
-						
+
 					})
 			},
-			submit(){
-				if(!this.addressObj.address_id){
+			submit() {
+				if (!this.addressObj.address_id) {
 					this.$toast("请先选择收货地址")
 					return false;
 				}
-				if(this.payIndex==1){
+				if (this.payIndex == 1) {
 					uni.showModal({
-						content:"确认支付",
-						success:res=>{
-							if(res.confirm){
+						content: "确认支付",
+						success: res => {
+							if (res.confirm) {
 								let obj = {};
 								obj.order_no = this.orderid;
 								obj.address_id = this.addressObj.address_id;
-								if(this.payIndex==0){
+								if (this.payIndex == 0) {
 									obj.pay_type = 20;
-								}else if(this.payIndex==1){
+								} else if (this.payIndex == 1) {
 									obj.pay_type = 10;
 								}
 								this.reqFlag = false;
-								collageApi.pay(obj).then(res=>{
+								collageApi.pay(obj).then(res => {
 									console.log(res)
-									if(res.data.pay_type == 10){
+									if (res.data.pay_type == 10) {
 										this.$success("支付成功");
 										setTimeout(() => {
 											this.navToMyOrder()
 										}, 2500)
-									}else if(res.data.pay_type == 20){
-										res.data.payment.timeStamp = res.data.payment.timeStamp.toString();
+									} else if (res.data.pay_type == 20) {
+										res.data.payment.timeStamp = res.data.payment.timeStamp
+											.toString();
 										wxPayment(res.data.payment)
 											.then(() => {
 												this.$success('支付成功')
@@ -197,31 +209,31 @@
 												this.$error('订单未支付')
 											})
 											.finally(() => {
-												
+
 											})
 									}
 								})
 							}
 						}
 					})
-				}else{
+				} else {
 					let obj = {};
 					obj.order_no = this.orderid;
 					obj.address_id = this.addressObj.address_id;
-					if(this.payIndex==0){
+					if (this.payIndex == 0) {
 						obj.pay_type = 20;
-					}else if(this.payIndex==1){
+					} else if (this.payIndex == 1) {
 						obj.pay_type = 10;
 					}
 					this.reqFlag = false;
-					collageApi.pay(obj).then(res=>{
+					collageApi.pay(obj).then(res => {
 						console.log(res)
-						if(res.data.pay_type == 10){
+						if (res.data.pay_type == 10) {
 							this.$success("支付成功");
 							setTimeout(() => {
 								this.navToMyOrder()
 							}, 1500)
-						}else if(res.data.pay_type == 20){
+						} else if (res.data.pay_type == 20) {
 							res.data.payment.timeStamp = res.data.payment.timeStamp.toString();
 							wxPayment(res.data.payment)
 								.then(() => {
@@ -236,17 +248,17 @@
 									this.$error('订单未支付')
 								})
 								.finally(() => {
-									
+
 								})
 						}
 					})
 				}
 			},
-			
-			navToMyOrder(){
+
+			navToMyOrder() {
 				// this.$navTo('pages/myCollage/myCollage');
 				uni.redirectTo({
-					url:"/pageHome/myCollage/myCollage"
+					url: "/pageHome/myCollage/myCollage"
 				})
 			}
 		}
@@ -254,15 +266,15 @@
 </script>
 
 <style scoped>
-	.tips{
+	.tips {
 		font-size: 28upx;
 		line-height: 28upx;
 		color: #E60012;
 		margin-top: 36upx;
 		text-align: center;
 	}
-	
-	.sureFooter{
+
+	.sureFooter {
 		position: fixed;
 		left: 0;
 		bottom: 0;
@@ -273,27 +285,32 @@
 		display: flex;
 		justify-content: flex-end;
 	}
-	.surePrice{
+
+	.surePrice {
 		display: flex;
 		align-items: center;
 		margin-right: 24upx;
 	}
-	.surePriceL{
+
+	.surePriceL {
 		font-size: 30upx;
 		color: #333333;
 		font-weight: bold;
-		
+
 	}
-	.surePriceR{
+
+	.surePriceR {
 		font-size: 30upx;
 		font-weight: bold;
 		color: #EF343D;
 	}
-	.surePriceR text{
+
+	.surePriceR text {
 		font-size: 44upx;
 		color: #EF343D;
 	}
-	.submit{
+
+	.submit {
 		width: 244upx;
 		height: 80upx;
 		line-height: 80upx;
@@ -304,7 +321,8 @@
 		font-size: 34upx;
 		font-weight: bold;
 	}
-	.distribution{
+
+	.distribution {
 		width: 702upx;
 		margin: 30upx auto 0;
 		padding: 24upx 24upx;
@@ -313,7 +331,8 @@
 		/* box-shadow: 0 2upx 10upx 2upx rgba(153, 153, 153, 0.5); */
 		border-radius: 20upx;
 	}
-	.payWay{
+
+	.payWay {
 		width: 702upx;
 		margin: 30upx auto 0;
 		padding: 24upx 28upx;
@@ -322,44 +341,51 @@
 		/* box-shadow: 0 2upx 10upx 2upx rgba(153, 153, 153, 0.5); */
 		border-radius: 20upx;
 	}
-	.payWayItem{
+
+	.payWayItem {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		/* margin-top: 28upx; */
 		padding: 20upx 0;
 	}
-	.payWayItem:nth-child(1){
+
+	.payWayItem:nth-child(1) {
 		margin-top: 0;
 	}
-	.payWayItemL{
+
+	.payWayItemL {
 		display: flex;
 		align-items: center;
 	}
-	.payWayItemL>image{
+
+	.payWayItemL>image {
 		width: 60upx;
 		margin-right: 12upx;
 	}
-	.payWayItemL>view{
+
+	.payWayItemL>view {
 		font-size: 30upx;
 		line-height: 30upx;
 		color: #000000;
 		font-weight: bold;
 	}
-	.payWayItemL>view>text{
+
+	.payWayItemL>view>text {
 		color: #666666;
 		font-size: 28upx;
 		line-height: 28upx;
 		font-weight: 500;
 	}
-	.payWayItemR{
+
+	.payWayItemR {
 		width: 36upx;
 		height: 36upx;
 	}
-	
-	
-	
-	.sendWay{
+
+
+
+	.sendWay {
 		padding: 24upx 0;
 		margin-top: 20upx;
 		display: flex;
@@ -367,13 +393,16 @@
 		justify-content: space-between;
 		/* border-top: 2upx solid #e5e5e5; */
 	}
-	.sendWayL,.sendWayR{
+
+	.sendWayL,
+	.sendWayR {
 		font-size: 28upx;
 		line-height: 28upx;
 		color: #333333;
 		font-weight: bold;
 	}
-	.priceBox{
+
+	.priceBox {
 		text-align: right;
 		font-size: 28upx;
 		line-height: 28upx;
@@ -382,14 +411,15 @@
 		/* border-top: 2upx solid #e5e5e5; */
 		padding: 40upx 0 0;
 	}
-	.priceBox>text{
+
+	.priceBox>text {
 		font-size: 28upx;
 		line-height: 28upx;
 		color: #E60012;
 	}
-	
-	
-	.orderMsg{
+
+
+	.orderMsg {
 		width: 702upx;
 		margin: 30upx auto 0;
 		padding: 24upx 24upx;
@@ -398,44 +428,52 @@
 		/* box-shadow: 0 2upx 10upx 2upx rgba(153, 153, 153, 0.5); */
 		border-radius: 20upx;
 	}
-	.orderMsgHead{
+
+	.orderMsgHead {
 		display: flex;
 		align-items: center;
 	}
-	.orderMsgHead>image{
+
+	.orderMsgHead>image {
 		width: 28upx;
 		height: 28upx;
 		margin-right: 22upx;
 	}
-	.orderMsgHead>text{
+
+	.orderMsgHead>text {
 		font-size: 28upx;
 		line-height: 28upx;
 		color: 24upx;
 	}
-	.orderMsgCon{
+
+	.orderMsgCon {
 		/* margin-top: 20upx; */
 		display: flex;
 		align-items: center;
 	}
-	.orderMsgConL{
+
+	.orderMsgConL {
 		width: 180upx;
 		height: 180upx;
 		margin-right: 24upx;
 		border-radius: 20upx;
 	}
-	.orderMsgConR{
+
+	.orderMsgConR {
 		display: flex;
 		flex-direction: column;
 		/* justify-content: space-between; */
 		height: 140upx;
 		width: 68%;
 	}
-	.orderMsgConRM{
+
+	.orderMsgConRM {
 		display: flex;
 		justify-content: space-between;
 		height: 82upx;
 	}
-	.orderMsgConRT{
+
+	.orderMsgConRT {
 		font-size: 28upx;
 		font-weight: bold;
 		line-height: 36upx;
@@ -448,30 +486,34 @@
 		line-clamp: 2;
 		-webkit-box-orient: vertical;
 	}
-	.orderMsgConRB{
+
+	.orderMsgConRB {
 		display: flex;
 		justify-content: flex-end;
 		color: #666666;
 		font-size: 28upx;
 		margin-top: 20upx;
 	}
-	.orderMsgConRBT{
+
+	.orderMsgConRBT {
 		font-size: 26upx;
 		line-height: 26upx;
 		color: #333333;
 	}
-	.orderMsgConRBB{
-		 /* margin-top: 8upx; */
+
+	.orderMsgConRBB {
+		/* margin-top: 8upx; */
 	}
-	.orderMsgConRBB>text{
+
+	.orderMsgConRBB>text {
 		color: #333333;
 		font-size: 28upx;
 		line-height: 26upx;
 		font-weight: bold;
 	}
-	
-	
-	.addressWrap{
+
+
+	.addressWrap {
 		width: 702upx;
 		margin: 30upx auto 0;
 		padding: 24upx 24upx;
@@ -483,24 +525,28 @@
 		align-items: center;
 		/* justify-content: space-between; */
 	}
-	.addressWrapL{
+
+	.addressWrapL {
 		width: 40upx;
 		height: 40upx;
 		margin-right: 26upx;
 	}
-	.addressWrapC{
+
+	.addressWrapC {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		width: calc(100% - 102upx);
 		margin-right: 30upx;
 	}
-	.addressWrapCT{
+
+	.addressWrapCT {
 		display: flex;
 		align-items: center;
 		margin-top: 16upx;
 	}
-	.addressWrapCTL{
+
+	.addressWrapCTL {
 		font-size: 26upx;
 		line-height: 24upx;
 		font-family: PingFang;
@@ -508,14 +554,16 @@
 		color: #666666;
 		margin-right: 30upx;
 	}
-	.addressWrapCTR{
+
+	.addressWrapCTR {
 		font-size: 26upx;
 		line-height: 24upx;
 		font-family: PingFang;
 		font-weight: 400;
 		color: #666666;
 	}
-	.addressWrapCB{
+
+	.addressWrapCB {
 		font-size: 30upx;
 		/* line-height: 24upx; */
 		font-family: PingFang;
@@ -524,9 +572,10 @@
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		
+
 	}
-	.addressWrapR{
+
+	.addressWrapR {
 		width: 10upx;
 		height: 18upx;
 	}

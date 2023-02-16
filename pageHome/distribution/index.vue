@@ -390,10 +390,10 @@
 		// line-height: 64rpx;
 		text-align: center;
 		color: black;
-		// background-color: #EF343D;
+		// background-color: #EF343D  ;
 		border-radius: 60rpx;
 		// background: linear-gradient(to right, #f9211c, #ff6335);
-		// border: 2upx solid #EF343D;
+		// border: 2upx solid #EF343D  ;
 	}
 
 	.distribution {

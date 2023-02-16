@@ -1,7 +1,8 @@
 <template>
 	<view style="padding: 30upx;background: white;">
-		<rich-text
-			:nodes="info_by_key?(info_by_key==1?info.cooperation_agreement_of_area:info.cooperation_agreement_of_head):info.mobile_recharge_count">
+		<rich-text v-if="!info_by_key" :nodes="info.mobile_recharge_count">
+		</rich-text>
+		<rich-text v-if="info_by_key" :nodes="info_by_key==1?settingdetail.cooperation_agreement_of_area:settingdetail.cooperation_agreement_of_head">
 		</rich-text>
 		<view @click="back"
 			style="width: 380upx;height: 60upx;border-radius: 12upx;margin: 30upx auto 0;font-size: 28upx;color: white;background: #ff5060;text-align: center;line-height: 60upx;">
@@ -11,20 +12,25 @@
 
 <script>
 	import {
-		detail
+		detail,
+		settingdetail
 	} from "@/api/common.js"
+
 	export default {
 		data() {
 			return {
 				info: {},
-				info_by_key: ''
+				info_by_key: '',
+				settingdetail:{}
 			}
 		},
 		onLoad(options) {
 			if (options.info_by_key) {
 				this.info_by_key = options.info_by_key
+				this.getSettingDetail()
+			}else{
+				this.getDetail()
 			}
-			this.getDetail()
 		},
 		onShareAppMessage() {
 			const app = this
@@ -59,6 +65,12 @@
 						//console.log(res)
 						this.info = res.data.detail;
 					})
+			},
+			getSettingDetail(){
+				settingdetail({'key':'agent'}).then(res=>{
+					console.log(res,'resres');
+					this.settingdetail = res.data.values
+				})
 			},
 			back() {
 				uni.navigateBack({

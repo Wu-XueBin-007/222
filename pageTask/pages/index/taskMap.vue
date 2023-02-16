@@ -20,7 +20,7 @@
 				<button open-type="contact">联系客服</button>
 			</view>
 		</view>
-		<view style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background:#EF343D ;z-index: -1;" catchtouchmove="true"></view>
+		<view style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background:#EF343D   ;z-index: -1;" catchtouchmove="true"></view>
 	</view>
 </template>
 
@@ -77,7 +77,7 @@
 
 <style scoped>
 	.taskMap{
-		background-color: #EF343D;
+		background-color: #EF343D  ;
 	}
 	.taskMap-main{
 		width: 578upx;
@@ -113,7 +113,7 @@
 	.taskMapBtn{
 		width: 284upx;
 		height: 80upx;
-		background-color: #EF343D;
+		background-color: #EF343D  ;
 		text-align: center;
 		line-height: 80upx;
 		border-radius: 40upx;

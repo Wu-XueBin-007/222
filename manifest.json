@@ -1,11 +1,9 @@
 {
-    /* "name" : "生态链生活",
-    "appid" : "__UNI__1902AE4", */
-	"name" : "融汇商城",
+    "name" : "融汇链生活",
     "appid" : "__UNI__984591A",
     "description" : "链生活",
-    "versionName" : "2.1.6",
-    "versionCode" : 216,
+    "versionName" : "2.1.7",
+    "versionCode" : 217,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -132,8 +130,7 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        /* "appid" : "wx08be90c34e57e984", 生态链生活 */ 
-		"appid" : "wxf6e53452d7dc1b06",/* 融汇链生活*/
+        "appid" : "wxf6e53452d7dc1b06",
         "setting" : {
             "urlCheck" : true,
             "es6" : false,
@@ -159,5 +156,11 @@
     "uniStatistics" : {
         "enable" : false
     },
-    "fallbackLocale" : "zh-Hans"
+    "fallbackLocale" : "zh-Hans",
+    "mp-qq" : {
+        "appid" : "1112268056",
+        "setting" : {
+            "es6" : true
+        }
+    }
 }

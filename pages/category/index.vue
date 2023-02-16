@@ -1,7 +1,14 @@
 <template>
 	<view class="container">
-		<!-- 搜索框 -->
-		<!-- <search tips="搜索商品" @event="$navTo('pages/search/index')" /> -->
+		<!-- 页面头部 -->
+		<view class="header">
+			<search class="search" :tips="options.search ? options.search : '搜索商品'" @event="handleSearch" />
+			<!-- 切换列表显示方式 -->
+			<!-- 			<view class="show-view" @click="handleShowView">
+				<text class="iconfont icon-view-tile" v-if="showView"></text>
+				<text class="iconfont icon-view-list" v-else></text>
+			</view> -->
+		</view>
 
 		<!-- 分类样式：一级分类(大图) 10 -->
 		<view class="cate-content" v-if="templet.style == 10 && list.length > 0">
@@ -34,54 +41,122 @@
 			<!-- 左侧 一级分类 -->
 			<scroll-view class="cate-left f-28" :scroll-y="true" :style="{ height: `${scrollHeight}px` }">
 				<text class="type-nav" :class="{ selected: curIndex == index }" v-for="(item, index) in list"
-					:key="index" @click="handleSelectNav(index)">{{ item.name }}</text>
+					:key="index" @click="handleSelectNav(item,index)">{{ item.name }}</text>
 			</scroll-view>
 
 			<!-- 右侧 二级分类 -->
-			<scroll-view class="cate-right b-f" :scroll-top="scrollTop" :scroll-y="true"
+			<scroll-view @scrolltolower='upCallback' class="cate-right b-f" :scroll-top="scrollTop" :scroll-y="true"
 				:style="{ height: `${scrollHeight}px` }">
-				<view v-if="list[curIndex]">
-					<view class="cate-right-cont">
-						<view class="cate-two-box" v-for="(item, idx) in list[curIndex].children" :key="idx"
-							@click="onTargetGoodsList(item.category_id)">
-							<view>{{item.name}}</view>
-							<view class="cate-cont-box">
-
-								<view class="flex-three" v-for="(pitem, pidx) in item.children" :key="pidx"
-									@click.stop="onTargetGoodsList(pitem.category_id)"
-									v-if="item.children&&item.children.length>0">
-									<view class="cate-img">
-										<image v-if="pitem.image" :src="pitem.image.preview_url"></image>
+				<!-- 				<mescroll-body ref="mescrollRef" :sticky="true" @init="mescrollInit" :down="{ native: true }"
+					@down="downCallback" :up="upOption" @up="upCallback"> -->
+				<!-- 商品列表 -->
+				<view class="goods-list clearfix" :class="['column-' + (showView ? '1' : '2')]">
+					<view class="goods-item" v-for="(item, index) in goodslist" :key="index"
+						@click="onTargetDetail(item.goods_id)">
+						<!-- 单列显示 -->
+						<view v-if="showView" class="dis-flex">
+							<!-- 商品图片 -->
+							<view class="goods-item_left">
+								<image class="image" :src="item.goods_image"></image>
+							</view>
+							<view class="goods-item_right">
+								<!-- 商品名称 -->
+								<view class="goods-name twolist-hidden">
+									<text>{{ item.goods_name }}</text>
+								</view>
+								<view class="goods-item_desc">
+									<!-- 商品卖点 -->
+									<view class="desc-selling_point dis-flex">
+										<!-- <text class="onelist-hidden">{{ item.selling_point }}</text> -->
 									</view>
-									<text>{{ pitem.name }}</text>
+									<!-- 商品销量 -->
+									<!-- 									<view class="desc-goods_sales dis-flex">
+										<text>已售{{ item.goods_sales }}件</text>
+									</view> -->
+									<!-- 商品价格 -->
+									<view class="desc_footer">
+										<text class="price_x"> ￥<text
+												style="font-size: 38rpx;font-weight: 700;font-family: 'PingFang SC';font-style: normal;">{{item.goods_price_min.split('.')[0]}}<text
+													style="font-size:20rpx;font-weight: 700;">.{{item.goods_price_min.split('.')[1]}}</text>
+											</text></text>
+										<!-- 										<text class="price_y col-9"
+											v-if="item.line_price_min > 0">¥{{ item.line_price_min }}</text> -->
+
+										<view @click.stop="onShowSkuPopup(2,item.goods_id)" class="shoppcart">
+											<image src="../../static/icon_gwc.png" mode=""></image>
+										</view>
+									</view>
+								</view>
+							</view>
+						</view>
+						<!-- 多列显示 -->
+						<view v-else class="multi">
+							<!-- 商品图片 -->
+							<view class="goods-image">
+								<image class="image" mode="aspectFill" :src="item.goods_image"></image>
+							</view>
+							<view class="detail">
+								<!-- 商品标题 -->
+								<view class="goods-name twolist-hidden">
+									{{ item.goods_name }}
+								</view>
+								<!-- 商品价格 -->
+								<view class="detail-price onelist-hidden">
+									<text class="goods-price f-30 col-m">￥{{ item.goods_price_min }}</text>
+									<text v-if="item.line_price_min > 0"
+										class="line-price col-9 f-24">￥{{ item.line_price_min }}</text>
 								</view>
 							</view>
 						</view>
 					</view>
 				</view>
+				<empty v-if="!goodslist.length&&!isLoading" :isLoading="isLoading" />
+				<!-- </view> -->
+				<!-- </mescroll-body> -->
+				<!-- 				<uni-load-more bg-color="rgb(240, 240, 240)" :status="loadStatus">
+				</uni-load-more> -->
 			</scroll-view>
 		</view>
-		<empty v-if="!list.length" :isLoading="isLoading" />
+		<empty v-if="!list.length&&!isLoading" :isLoading="isLoading" />
+		<!-- 商品SKU弹窗 -->
+		<SkuPopup v-if="showSkuPopup" @closeSkuPopup='closeSkuPopup' v-model="showSkuPopup"
+			:vip_group_order_id="vip_group_order_id" :source=source :info_by_key=info_by_key :skuMode="skuMode"
+			:poolId="poolId" :bigId="bigId" :group_order_id="group_order_id" :LuckyFreeId="LuckyFreeId" :goods="goods"
+			:type="type" :status="timeStatus" />
 	</view>
 </template>
 
 <script>
-	import {
-		setCartTabBadge
-	} from '@/utils/app'
 	import SettingKeyEnum from '@/common/enum/setting/Key'
 	import SettingModel from '@/common/model/Setting'
 	import * as CategoryApi from '@/api/category'
+	import empty from '@/components/empty'
+	import MescrollBody from '@/components/mescroll-uni/mescroll-body.vue'
+	import MescrollMixin from '@/components/mescroll-uni/mescroll-mixins'
+	import * as GoodsApi from '@/api/goods'
+	import {
+		getEmptyPaginateObj,
+		getMoreListData
+	} from '@/utils/app'
 	import Search from '@/components/search'
-	import Empty from '@/components/empty'
-
+	const pageSize = 15
+	const showViewKey = 'GoodsList-ShowView';
 	const App = getApp()
-
+	let pageNo = 1
+	import SkuPopup from '../goods/components/SkuPopup'
+	import * as CartApi from '@/api/cart'
+	import {
+		setCartTotalNum,
+		setCartTabBadge
+	} from '@/utils/app'
 	export default {
 		components: {
 			Search,
-			Empty
+			empty,
+			MescrollBody,
+			SkuPopup,
 		},
+		mixins: [MescrollMixin],
 		data() {
 			return {
 				// 列表高度
@@ -95,17 +170,62 @@
 				// 分类模板设置
 				templet: {},
 				// 正在加载中
-				isLoading: true
+				isLoading: true,
+				showView: true, // 列表显示方式 (true列表、false平铺)
+				sortType: 'all', // 排序类型
+				sortPrice: false, // 价格排序 (true高到低 false低到高)
+				options: {}, // 当前页面参数
+				goodslist: [], // 商品列表数据
+				requestSwitch: false,
+				loadStatus: 'more',
+				bottomFlag: true,
+				// 显示/隐藏SKU弹窗
+				showSkuPopup: false,
+				vip_group_order_id: 0,
+				source: '',
+				info_by_key: '',
+				// 模式 1:都显示 2:只显示购物车 3:只显示立即购买
+				skuMode: 1,
+				poolId: '',
+				bigId: '',
+				group_order_id: 0,
+				LuckyFreeId: '',
+				// 商品详情
+				goods: {},
+				// 购物车总数量
+				cartTotal: 0,
+				// product:商品 seckill:秒杀
+				type: "product",
+				timeStatus: 0,
+				goodsId: 0,
+				total: 0
+				// 上拉加载配置
+				// upOption: {
+				// 	// 首次自动执行
+				// 	auto: true,
+				// 	// 每页数据的数量; 默认10
+				// 	page: {
+				// 		size: pageSize
+				// 	},
+				// 	// 数量要大于4条才显示无更多数据
+				// 	noMoreSize: 4,
+				// }
+
 			}
 		},
 
 		/**
 		 * 生命周期函数--监听页面加载
 		 */
-		onLoad() {
+		onLoad(options) {
 			const app = this
+			// 获取页面数据
+			app.getPageData()
 			// 设置分类列表高度
 			app.setListHeight()
+			// 记录options
+			this.options = options
+			// 设置默认列表显示方式
 		},
 
 		/**
@@ -113,13 +233,199 @@
 		 */
 		onShow() {
 			const app = this
-			// 获取页面数据
-			app.getPageData()
 			// 更新购物车角标
 			setCartTabBadge()
 		},
+		watch: {
+			showSkuPopup() {
+				if (this.showSkuPopup) {
+					uni.hideTabBar()
+				} else {
+					uni.showTabBar();
+				}
+			},
+		},
 
 		methods: {
+			/**
+			 * 上拉加载的回调 (页面初始化时也会执行一次)
+			 * 其中page.num:当前页 从1开始, page.size:每页数据条数,默认10
+			 * @param {Object} page
+			 */
+			upCallback() {
+				if (!this.bottomFlag) {
+					return false;
+				}
+				const app = this;
+				if (this.requestSwitch) return;
+				this.requestSwitch = true;
+				// 设置列表数据
+				app.getGoodsList()
+					.then(list => {
+						this.requestSwitch = false
+						app.goodslist = list;
+						pageNo++
+
+						// app.mescroll.endBySize(curPageLen, totalSize)
+					})
+					.catch((err) => console.log(err, 222)).finally(() => app.isLoading = false)
+			},
+
+			// 获取商品信息
+			getGoodsDetail() {
+				const app = this
+				return new Promise((resolve, reject) => {
+					if (app.type == 'product') {
+						GoodsApi.detail(app.goodsId)
+							.then(result => {
+								app.goods = result.data.detail
+								// if (result.status == 500) {
+								// 	uni.navigateBack()
+								this.showSkuPopup = !this.showSkuPopup;
+								resolve(result)
+							})
+							.catch(reject)
+					} else {
+						seckillApi.goodsDetails({
+								goodsId: app.goodsId,
+								timeId: app.timeId
+							})
+							.then(result => {
+								app.surplusFlag = result.data.activity_status;
+								let startTime = result.data.time_info.start_hour.split(":");
+								let endTime = result.data.time_info.end_hour.split(":");
+								let nowTime = new Date();
+								let startNum = Number(startTime[0]) * 60 * 60 + Number(startTime[1]) * 60;
+								let endNum = Number(endTime[0]) * 60 * 60 + Number(endTime[1]) * 60;
+								let nowNum = Number(nowTime.getHours()) * 60 * 60 + Number(nowTime
+									.getMinutes()) * 60 + Number(nowTime.getSeconds());
+								if (nowNum < startNum && nowNum < endNum) {
+									// 未开始
+									result.data.detail.surplusTime = startNum - nowNum;
+									app.timeStatus = 0;
+								} else if (nowNum >= startNum && nowNum < endNum) {
+									// 进行中
+									result.data.detail.surplusTime = endNum - nowNum;
+									app.timeStatus = 1;
+								} else if (nowNum >= startNum && nowNum >= endNum) {
+									// 已结束
+									result.data.detail.surplusTime = 0;
+									app.timeStatus = 2;
+								}
+								result.data.detail.timeId = app.timeId;
+								app.goods = result.data.detail
+								resolve(result)
+							})
+							.catch(reject)
+					}
+
+				})
+			},
+			/**
+			 * 显示/隐藏SKU弹窗
+			 * @param {skuMode} 模式 1:都显示 2:只显示购物车 3:只显示立即购买
+			 */
+			onShowSkuPopup(skuMode = 1, goodsId) {
+				this.skuMode = skuMode;
+				this.goodsId = goodsId;
+				this.getGoodsDetail()
+
+			},
+
+
+			// 设置默认列表显示方式
+			setShowView() {
+				this.showView = uni.getStorageSync(showViewKey) || false
+			},
+
+			/**
+			 * 获取商品列表
+			 * @param {number} pageNo 页码
+			 */
+			getGoodsList() {
+				const app = this
+				let categoryId = app.list[app.curIndex].category_id
+				console.log(categoryId, 'app.category_id')
+				console.log(pageNo, 'pageNo')
+				let param = {
+					sortType: app.sortType,
+					sortPrice: Number(app.sortPrice),
+					categoryId,
+					goodsName: app.options.search || '',
+					page: pageNo
+				}
+				if (app.options.type == "hot") {
+					param.if_hot = 1;
+				} else if (app.options.type == "special") {
+					param.if_special_offer = 1;
+				}
+				return new Promise((resolve, reject) => {
+					GoodsApi.list(param)
+						.then(result => {
+							console.log(result, 'result');
+							const last_page = result.data.list.last_page;
+							if (last_page != pageNo && last_page > 0) {
+								app.bottomFlag = true;
+								app.loadStatus = "more";
+							} else {
+								pageNo = last_page || 1;
+								app.bottomFlag = false;
+								app.loadStatus = "normal";
+							}
+
+							// 合并新数据
+							const newList = [
+								...app.goodslist || [],
+								...result.data.list.data || []
+							];
+							resolve(newList);
+						})
+						.catch(reject)
+				})
+			},
+
+			// 切换排序方式
+			handleSortType(newSortType) {
+				const app = this
+				const newSortPrice = newSortType === 'price' ? !app.sortPrice : true
+				app.sortType = newSortType
+				app.sortPrice = newSortPrice
+				// 刷新列表数据
+				app.goodslist = getEmptyPaginateObj()
+				app.mescroll.resetUpScroll()
+			},
+
+			// 切换列表显示方式
+			handleShowView() {
+				const app = this
+				app.showView = !app.showView
+				uni.setStorageSync(showViewKey, app.showView)
+			},
+
+			// 跳转商品详情页
+			onTargetDetail(goodsId) {
+				this.$navTo('pages/goods/detail', {
+					goodsId
+				})
+			},
+
+			/**
+			 * 商品搜索
+			 */
+			handleSearch() {
+				const searchPageUrl = 'pages/search/index'
+				// 判断来源页面
+				let pages = getCurrentPages()
+				if (pages.length > 1 &&
+					pages[pages.length - 2].route === searchPageUrl) {
+					uni.navigateBack()
+					return
+				}
+				// 跳转到商品搜索页
+				this.$navTo(searchPageUrl)
+			},
+
+
 
 			/**
 			 * 获取页面数据
@@ -139,6 +445,7 @@
 						app.initTemplet(result[0])
 						// 初始化分类列表数据
 						app.initCategory(result[1])
+						app.upCallback()
 					})
 					.finally(() => app.isLoading = false)
 			},
@@ -174,10 +481,15 @@
 			},
 
 			// 一级分类：选中分类
-			handleSelectNav(index) {
+			handleSelectNav(item, index) {
 				const app = this
 				app.curIndex = index
-				app.scrollTop = 0
+				app.scrollTop = 0;
+				this.goodslist = [];
+				pageNo = 1;
+				app.bottomFlag = true;
+				app.isLoading = true
+				app.upCallback()
 			},
 
 			// 跳转至商品列表页
@@ -225,6 +537,7 @@
 <style lang="scss" scoped>
 	.cate-content {
 		background: #F3F3F3;
+		display: flex;
 	}
 
 	.cate-wrapper {
@@ -289,15 +602,16 @@
 		width: 200upx;
 		color: #444;
 		height: 100%;
-		// background: #f8f8f8;
+		margin-left: 20rpx // background: #f8f8f8;
 	}
 
 	.cate-right {
 		display: flex;
 		flex-direction: column;
-		width: 550upx;
+		// width: 550upx;
 		height: 100%;
 		overflow: hidden;
+		width: calc(100% - 240rpx);
 	}
 
 	.cate-right-cont {
@@ -327,17 +641,23 @@
 	.type-nav.selected {
 		color: #333333;
 		background: #fff;
+		border-radius: 8rpx 0px 0px 8rpx;
 	}
 
 	.type-nav.selected::after {
 		content: "";
 		position: absolute;
-		width: 0;
-		height: 90upx;
+		width: 6rpx;
+		height: 36rpx;
 		top: 0;
 		left: 0;
-		transform: translateX(-50%);
-		border-left: 8upx solid #ff5060;
+		// transform: translateX(-50%);
+		/* 主色 */
+		transform: translateY(50%);
+		margin-top: 0%;
+		background: #F97112;
+		border-radius: 0px 4rpx 4rpx 0px;
+		margin-top: 9rpx;
 	}
 
 	.cate-cont-box {
@@ -369,5 +689,245 @@
 	.cate-two-box {
 		width: 100%;
 		padding: 0 10px;
+	}
+
+	// 页面头部
+	.header {
+		display: flex;
+		align-items: center;
+		background-color: #fff;
+
+		// 搜索框
+		.search {
+			flex: 1;
+		}
+
+		// 切换显示方式
+		.show-view {
+			width: 60rpx;
+			height: 60rpx;
+			line-height: 60rpx;
+			font-size: 36rpx;
+			color: #505050;
+		}
+	}
+
+	// 排序组件
+	.store-sort {
+		position: sticky;
+		top: var(--window-top);
+		display: flex;
+		padding: 20rpx 0;
+		font-size: 28rpx;
+		background: #fff;
+		color: #000;
+		z-index: 99;
+
+		.sort-item {
+			flex-basis: 33.3333%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 50rpx;
+
+			&.active {
+				color: #e49a3d;
+			}
+		}
+
+		.sort-item-price .price-arrow {
+			margin-left: 20rpx;
+			font-size: 24rpx;
+			color: #000;
+
+			.icon {
+				&.active {
+					color: #e49a3d;
+				}
+
+				&.up {
+					margin-bottom: -16rpx;
+				}
+
+				&.down {
+					margin-top: -16rpx;
+				}
+			}
+
+		}
+
+	}
+
+	// 商品列表
+	.goods-list {
+		padding: 4rpx;
+		box-sizing: border-box;
+		padding-bottom: 40rpx;
+	}
+
+	// 单列显示
+	.goods-list.column-1 {
+		.goods-item {
+			width: 100%;
+			height: 180rpx;
+			padding: 20rpx;
+			box-sizing: border-box;
+			background: #fff;
+			line-height: 1.6;
+			margin: 13px 0;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+
+		.goods-item_left {
+			display: flex;
+			width: 300rpx;
+			background: #fff;
+			align-items: center;
+
+			.image {
+				display: block;
+				width: 180rpx;
+				height: 180rpx;
+				border-radius: 20rpx;
+				margin-right: 20rpx;
+			}
+		}
+
+		.goods-item_right {
+			position: relative;
+			// width: 450rpx;
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+
+			.goods-name {
+				margin-top: 10rpx;
+				height: 64rpx;
+				line-height: 1.3;
+				white-space: normal;
+				color: #484848;
+				font-size: 26rpx;
+			}
+		}
+
+		.goods-item_desc {
+			margin-top: 8rpx;
+		}
+
+		.desc-selling_point {
+			width: 263rpx;
+			font-size: 24rpx;
+			color: #e49a3d;
+		}
+
+		.desc-goods_sales {
+			color: #999;
+			font-size: 24rpx;
+		}
+
+		.desc_footer {
+			font-size: 24rpx;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+
+			.price_x {
+				margin-right: 16rpx;
+				font-family: 'PingFang SC';
+				font-style: normal;
+				font-weight: 700;
+				font-size: 20rpx;
+				color: #F97112;
+			}
+
+			.shoppcart {
+				width: 52rpx;
+				height: 52rpx;
+				background: #F97112;
+				border-radius: 26rpx;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				image {
+					width: 38rpx;
+					height: 36rpx;
+				}
+
+			}
+
+			.price_y {
+				text-decoration: line-through;
+			}
+		}
+	}
+
+	// 平铺显示
+	.goods-list.column-2 {
+		.goods-item {
+			width: 50%;
+		}
+	}
+
+	.multi {
+		box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+	}
+
+	.goods-item {
+		float: left;
+		box-sizing: border-box;
+		padding: 6rpx;
+
+		.goods-image {
+			position: relative;
+			width: 100%;
+			height: 0;
+			padding-bottom: 100%;
+			overflow: hidden;
+			background: #fff;
+
+			&:after {
+				content: '';
+				display: block;
+				margin-top: 100%;
+			}
+
+			.image {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				-o-object-fit: cover;
+				object-fit: cover;
+			}
+		}
+
+		.detail {
+			padding: 8rpx;
+			background: #fff;
+
+			.goods-name {
+				height: 64rpx;
+				line-height: 32rpx;
+				white-space: normal;
+				color: #484848;
+				font-size: 26rpx;
+			}
+
+			.detail-price {
+				.goods-price {
+					margin-right: 8rpx;
+				}
+
+				.line-price {
+					text-decoration: line-through;
+				}
+			}
+		}
 	}
 </style>

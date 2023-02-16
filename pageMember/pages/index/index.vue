@@ -11,8 +11,8 @@
 			</view>
 		</view>
 		<view class="banr">
-			<view class="banrC">
-				<image :src="poster_image.preview_url" mode=""></image>
+			<view v-if="banner_image.preview_url" class="banrC">
+				<image :src="banner_image.preview_url" mode=""></image>
 			</view>
 			<!-- 			<view class="banrRule" @click="checkRule">
 				专区规则
@@ -166,8 +166,12 @@
 							<!-- 商品价格 -->
 							<view class="desc_footer">
 								<text class="price_x">¥{{ item.goods_price_min }}</text>
-								<text class="price_y col-9"
-									v-if="item.line_price_min > 0">¥{{ item.line_price_min }}</text>
+								<!-- <text class="price_y col-9"
+									v-if="item.line_price_min > 0">¥{{ item.line_price_min }}</text> -->
+								<!-- <uni-tag :inverted="true" text="拼团免单" type="error" /> -->
+								<text class="uni_tag ct">
+									拼团免单
+								</text>
 							</view>
 						</view>
 					</view>
@@ -188,8 +192,11 @@
 							<text class="goods-price f-30 col-m">￥ <text
 									style="font-size: 36rpx;font-weight: bold;">{{ item.goods_price_min }}</text>
 							</text>
-							<text v-if="item.line_price_min > 0"
-								class="line-price col-9 f-24">￥{{ item.line_price_min }}</text>
+							<!-- <text v-if="item.line_price_min > 0"
+								class="line-price col-9 f-24">￥{{ item.line_price_min }}</text> -->
+							<text class="uni_tag ct">
+								拼团免单
+							</text>
 						</view>
 					</view>
 				</view>
@@ -226,6 +233,7 @@
 	import * as GoodsApi from '@/api/goods'
 	import * as LuxuryApi from '@/api/luxury'
 	import * as memberApi from "@/api/member/index.js";
+
 	import {
 		getEmptyPaginateObj,
 		getMoreListData
@@ -237,6 +245,7 @@
 	export const isObj = (o) => {
 		return Object.prototype.toString.call(o).slice(8, -1) === 'Object'
 	}
+	import * as settingApi from '@/api/ticket/setting'
 	export default {
 		components: {
 			MescrollBody,
@@ -270,12 +279,13 @@
 				isFinish: false,
 				rules: '',
 				orderList: [],
-				poster_image: {},
+				banner_image: {},
 				team: {},
 				vip_group_order_id: 0,
 				bigUser: {},
 				setting: {},
 				pgList: 0,
+				inverted: false,
 			}
 		},
 
@@ -315,6 +325,7 @@
 			}
 			this.getbigvip()
 			this.getDetail()
+			this.get_banner_image()
 		},
 		methods: {
 			close() {
@@ -335,8 +346,8 @@
 				if (this.invite_user_id) {
 					obj.invite_user_id = this.invite_user_id
 				}
-
 				memberApi.index(obj).then(res => {
+					console.log(res, 'res');
 					this.bigUser = res.data.big_vip_user;
 					this.setting = res.data.setting;
 					// this.rules=res.data.setting.rules.replace(/<img/g,"<img style='width: 100%;'");
@@ -358,7 +369,7 @@
 				obj.group_order_id = this.vip_group_order_id;
 				LuxuryApi.bigVipdetail(obj).then(res => {
 					console.log(res, 123)
-					this.poster_image = res.data.poster_image;
+					// this.banner_image = res.data.banner_image;
 					this.team = res.data.team;
 					if (JSON.stringify(this.team) != '{}') {
 						console.log(1)
@@ -367,6 +378,18 @@
 						console.log(2)
 						this.isRanks = false;
 					}
+				})
+			},
+			get_banner_image() {
+				const app = this
+				return new Promise((resolve, reject) => {
+					LuxuryApi.index({
+						invite_user_id: 0
+					}).then(res => {
+						console.log('info_by_key', res);
+						app.banner_image = res.data.setting.banner_image
+						resolve(res)
+					}).catch(reject)
 				})
 			},
 			getOrderList() {
@@ -542,7 +565,7 @@
 					})
 				}
 				return {
-					title: filterItem[0].user.nick_name + '邀请您参与免单',
+					title: filterItem[0].user.nick_name + '邀请你5人成团全员免单，还送权益积分',
 					path: "/pageMember/pages/index/index?" + this.$getShareUrlParams() + "&vip_group_order_id=" + this
 						.vip_group_order_id,
 					imageUrl: filterItem[0].goods[0].goods_image
@@ -708,6 +731,8 @@
 
 		.desc_footer {
 			font-size: 24rpx;
+			display: flex;
+			align-items: center;
 
 			.price_x {
 				margin-right: 16rpx;
@@ -715,10 +740,30 @@
 				font-size: 30rpx;
 			}
 
+			.uni_tag {
+				margin-left: 0;
+			}
+
 			.price_y {
 				text-decoration: line-through;
 			}
+
 		}
+	}
+
+	.uni_tag {
+		font-size: 20rpx;
+		font-weight: 200;
+		padding: 2rpx 6rpx;
+		color: #fff;
+		border-radius: 6rpx;
+		border-width: 2rpx;
+		border-style: solid;
+		cursor: pointer;
+		color: #e43d33;
+		background-color: #fff;
+		border-color: #e43d33;
+		margin-left: 10rpx;
 	}
 
 	// 平铺显示
@@ -777,6 +822,9 @@
 			}
 
 			.detail-price {
+				display: flex;
+				align-items: center;
+
 				.goods-price {
 					margin-right: 8rpx;
 				}
