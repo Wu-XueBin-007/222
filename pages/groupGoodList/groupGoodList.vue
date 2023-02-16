@@ -3,7 +3,7 @@
 		<!-- <view class="head">
 			立即参团
 		</view> -->
-		<view style="">
+		<view class="top">
 			<!-- <view class="head">
 				<view class="headL">
 					<view class="headLBack" @click="back">
@@ -17,146 +17,116 @@
 				</button>
 				#endif
 			</view> -->
-			<nav-head v-if="showStaic" title="幸运拼团" backGround="rage(0,0,0,0.01)" :fontSize="30" backL="transparent" color="white"></nav-head>
-			<seckill-nav v-else  backGround="rage(0,0,0,1)" :fontSize="30" backL="transparent" color="#000000"></seckill-nav>
-			<view class="searchWrap">
+
+			<nav-head v-if="showStaic" title="幸运拼团" backGround="rage(0,0,0,0.01)" :fontSize="30" backL="transparent"
+				color="white"></nav-head>
+			<seckill-nav v-else backGround="rage(0,0,0,1)" :fontSize="30" backL="transparent" color="#000000">
+			</seckill-nav>
+			<view class="banner">
+				<image class="bannerImg"
+					src="https://oss.gzrhhj.com/10001/20230209/1c71924a826aff99464990a32cd9da62.png">
+				</image>
+				<view class="rightfix">
+					<navigator url='/pageHome/IncomeDetail/IncomeDetail' class="income ct">
+						收益明细
+					</navigator>
+					<navigator url='/pageHome/ruleDetails/ruleDetails' class="rule ct">
+						规则详情
+					</navigator>
+				</view>
+			</view>
+			<!-- 			<view class="searchWrap">
 				<image src="/static/icon/search_gray.png" class="searchIcon"></image>
 				<input type="text" v-model="keyword" placeholder="融汇生活" class="searchInp" />
 				<view class="searchBtn" @click="searchVal">搜索</view>
-			</view>
+			</view> -->
 			<view class="collageUser" v-if="collageList.length>0">
-					<!-- <view class="collageUserHead">
+				<!-- <view class="collageUserHead">
 						<view class="collageUserHeadL">正在拼团</view>
 					</view> -->
-					<swiper :indicator-dots="false" :autoplay="true" :interval="2000" :duration="1000" :circular="true" :vertical="true" style="height: 120upx;">
-						<swiper-item v-for="(item,index) in collageList" :key="index">
-							<view class="collageUserCon">
-								<view class="collageUserConL">
-									<image :src="item.user.avatar_url"></image>
-									<view>{{item.user.nick_name}}</view>
+				<swiper :indicator-dots="false" :autoplay="true" :interval="2000" :duration="1000" :circular="true"
+					:vertical="true" style="height: 120upx;">
+					<swiper-item v-for="(item,index) in collageList" :key="index">
+						<view class="collageUserCon">
+							<view class="collageUserConL">
+								<image :src="item.user.avatar_url"></image>
+								<view>{{item.user.nick_name}}</view>
+							</view>
+							<view class="collageUserConR">
+								<view class="collageUserConRL">
+									<view class="collageUserConRLT">还差<text>{{item.surplusNum}}人</text>拼成</view>
+									<view class="collageUserConRLB">剩余{{item.surplusTime | dateFormat}}</view>
 								</view>
-								<view class="collageUserConR">
-									<view class="collageUserConRL">
-										<view class="collageUserConRLT">还差<text>{{item.surplusNum}}人</text>拼成</view>
-										<view class="collageUserConRLB">剩余{{item.surplusTime | dateFormat}}</view>
-									</view>
-									<view class="collageUserConRR" @click="toJoinCollage" :data-index="index">
-										<view class="collageUserConRRL">立即参团</view>
-										<!-- <image src="../../static/icon/more_white.png"></image> -->
-									</view>
+								<view class="collageUserConRR" @click="toJoinCollage" :data-index="index">
+									<view class="collageUserConRRL">立即参团</view>
+									<!-- <image src="../../static/icon/more_white.png"></image> -->
 								</view>
-							</view>
-						</swiper-item>
-					</swiper>
-					
-				</view>
-			<view style="background-color: #F8F8F8;border-radius: 20upx 20upx 0 0;">
-				
-					<!-- <view class="collageUser">
-						<view class="collageUserHead">
-							<view class="collageUserHeadL">拼团流程</view>
-						</view>
-						<view class="collageWay">
-							<view class="collageWayItem">
-								<view>参与拼团</view>
-								<view>{{list[collageIndex].num}}人成团</view>
-							</view>
-							<image src="../../static/icon/more_gray.png" class="collageWayImg"></image>
-							<view class="collageWayItem">
-								<view>拼中发货</view>
-								<view>未中退款</view>
-							</view>
-							<image src="../../static/icon/more_gray.png" class="collageWayImg"></image>
-							<view class="collageWayItem">
-								<view>拼中得商品</view>
-								<view>未拼中得现金红包</view>
 							</view>
 						</view>
-					</view>
-					<view class="collageKnow">
-						<view class="collageKnowL">拼团须知</view>
-						<view class="collageKnowR" @click="checkCollage">
-							<text>查看</text>
-							<image src="/static/icon/more_gray.png"></image>
-						</view>
-					</view> -->
-					<view class="productWrap">
-						<view class="productWrapHead">
-							<view :class="['productWrapHeadItem',index==collageIndex?'active':'']" :data-index="index" :key="index" @click="taggleCollage" v-for="(item,index) in list" v-if="index<3">
-								<view class="" style="z-index: 99;">
-									{{item.name}}
-								</view>
-								<image src="../../static/icon/icon_bjleft.png" mode="" v-if="index==0&&index==collageIndex"></image>
-								<image src="../../static/icon/icon_bjcont.png" mode="" v-if="index==1&&index==collageIndex"></image>
-								<image src="../../static/icon/icon_bjright.png" mode="" v-if="index==2&&index==collageIndex"></image>
-							</view>
-							
-						</view>
-						<view class="productWrapCon">
-							<view class="productWrapConBox" v-if="productList.length>0">
-								<view class="productWrapConItem" v-for="(item,index) in productList" :key="index" :data-index="index" @click="toDetail">
-									<view class="productWrapConItemT">
-										<!-- <view class="productWrapConItemTT">幸运拼团</view> -->
-										<view class="productWrapConItemTImg" :style="{'background-image': 'url('+item.goods_image+')'}"></view>
-									</view>
-									<view class="productWrapConItemB">
-										<view class="productWrapConItemBT">{{item.goods_name}}</view>
-										<view class="productWrapConItemBB">
-											<view class="productWrapConItemBBL">
-												<!-- <view class="productWrapConItemBBLTxt">参团价</view> -->
-												<view class="productWrapConItemBBLPrice">
-													<text>￥</text>{{item.goods_price}}
-												</view>
-											</view>
-											<view class="productWrapConItemBBR">
-												<view class="productWrapConItemBBRL">
-													<text>马上抢</text>
-													<image src="../../static/icon/icon_right.png"></image>
-												</view>
-												<view class="productWrapConItemBBRR">
-													{{item.num}}人成团
-												</view>
-											</view>
-										</view>
-									</view>
-								</view>
-							</view>
-							
-							<u-empty v-if="productList.length==0"></u-empty>
-							
-						</view>
-					</view>
-					
-				</view>
-				<view class="collageMoreMark" @click="hideMark" v-if="showFlag"></view>
-				<view class="collageMore" v-if="showFlag">
-					<view class="collageMoreCon">
-						<view class="collageMoreConHead">可参与的拼团</view>
-						<scroll-view scroll-y="true" style="max-height: 548upx;">
-							<view class="collageMoreItem" v-for="(item,index) in collageMoreList" :key="index">
-								<image :src="item.user.avatar_url" class="collageMoreItemL"></image>
-								<view class="collageMoreItemC">
-									<view class="collageMoreItemCT">{{item.user.nick_name}}</view>
-									<view class="collageMoreItemCB">
-										还差<text>{{item.surplusNum}}</text>人
-									</view>
-								</view>
-								<view class="collageMoreItemR">
-									<view class="collageMoreItemRCon" :data-index="index" @click="toJoinCollageByAll">
-										<text>去参团</text>
-										<image src="../../static/home/more_pink.png"></image>
-									</view>
-								</view>
-							</view>
-						</scroll-view>
-					</view>
-					<view class="close_icon" @click="hideMark">
-						<image src="../../static/home/close_icon.png"></image>
-					</view>
-					
-				</view>
+					</swiper-item>
+				</swiper>
+
 			</view>
-			
+			<view class="collageUser" v-else>
+				<swiper :indicator-dots="false" :autoplay="true" :interval="2000" :duration="1000" :circular="true"
+					:vertical="true" style="height: 120upx;">
+					<swiper-item>
+						<view class="collageUserCon">
+							<view class="collageUserConL">
+								<view class="openData" style="border-radius: 50%;">
+									<open-data type="userAvatarUrl"></open-data>
+								</view>
+
+								<view class="">
+									<!-- <open-data type="userNickName"></open-data> -->
+									<view class="NotInvolved">当前您未参与拼团</view>
+								</view>
+							</view>
+							<view class="collageUserConR">
+								<view class="collageUserConRL">
+									<view class="collageUserConRLT"></view>
+									<view class="collageUserConRLB"></view>
+								</view>
+								<view class="collageUserConRR" @click="toJoinCollage" :data-index="index">
+									<view class="collageUserConRRL">我的抢购</view>
+									<!-- <image src="../../static/icon/more_white.png"></image> -->
+								</view>
+							</view>
+						</view>
+					</swiper-item>
+				</swiper>
+
+			</view>
+
+			<view class="collageMoreMark" @click="hideMark" v-if="showFlag"></view>
+			<view class="collageMore" v-if="showFlag">
+				<view class="collageMoreCon">
+					<view class="collageMoreConHead">可参与的拼团</view>
+					<scroll-view scroll-y="true" style="max-height: 548upx;">
+						<view class="collageMoreItem" v-for="(item,index) in collageMoreList" :key="index">
+							<image :src="item.user.avatar_url" class="collageMoreItemL"></image>
+							<view class="collageMoreItemC">
+								<view class="collageMoreItemCT">{{item.user.nick_name}}</view>
+								<view class="collageMoreItemCB">
+									还差<text>{{item.surplusNum}}</text>人
+								</view>
+							</view>
+							<view class="collageMoreItemR">
+								<view class="collageMoreItemRCon" :data-index="index" @click="toJoinCollageByAll">
+									<text>去参团</text>
+									<image src="../../static/home/more_pink.png"></image>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</view>
+				<view class="close_icon" @click="hideMark">
+					<image src="../../static/home/close_icon.png"></image>
+				</view>
+
+			</view>
+		</view>
+
 		<!-- <u-popup v-model="showAgree" mode="bottom"  @close="close" @open="open">
 			<view style="max-height: 700upx;">
 				<view v-html="list[collageIndex].content" style="padding: 30upx;box-sizing: border-box;">
@@ -168,6 +138,96 @@
 		<view class="toTop" v-if="showTo" @click="toTop">
 			<image src="../../static/home/icon_top.png"></image>
 			<!-- <view>返回顶部</view> -->
+		</view>
+		<view style="background-color: #F8F8F8;border-radius: 20upx 20upx 0 0;">
+			<!-- <view class="collageUser">
+					<view class="collageUserHead">
+						<view class="collageUserHeadL">拼团流程</view>
+					</view>
+					<view class="collageWay">
+						<view class="collageWayItem">
+							<view>参与拼团</view>
+							<view>{{list[collageIndex].num}}人成团</view>
+						</view>
+						<image src="../../static/icon/more_gray.png" class="collageWayImg"></image>
+						<view class="collageWayItem">
+							<view>拼中发货</view>
+							<view>未中退款</view>
+						</view>
+						<image src="../../static/icon/more_gray.png" class="collageWayImg"></image>
+						<view class="collageWayItem">
+							<view>拼中得商品</view>
+							<view>未拼中得现金红包</view>
+						</view>
+					</view>
+				</view>
+				<view class="collageKnow">
+					<view class="collageKnowL">拼团须知</view>
+					<view class="collageKnowR" @click="checkCollage">
+						<text>查看</text>
+						<image src="/static/icon/more_gray.png"></image>
+					</view>
+				</view> -->
+			<view class="productWrap">
+				<view class="productWrapHead">
+					<view :class="['productWrapHeadItem',index==collageIndex?'active':'']" :data-index="index"
+						:key="index" @click="taggleCollage" v-for="(item,index) in list" v-if="index<3">
+						<view class="" style="z-index: 99;">
+							{{item.name}}
+						</view>
+						<image src="../../static/icon/icon_bjleft.png" mode="" v-if="index==0&&index==collageIndex">
+						</image>
+						<image src="../../static/icon/icon_bjcont.png" mode="" v-if="index==1&&index==collageIndex">
+						</image>
+						<image src="../../static/icon/icon_bjright.png" mode="" v-if="index==2&&index==collageIndex">
+						</image>
+					</view>
+
+				</view>
+				<view class="productWrapCon">
+					<view class="productWrapConBox" v-if="productList.length>0">
+						<view class="productWrapConItem" v-for="(item,index) in productList" :key="index"
+							:data-index="index" @click="toDetail">
+							<view class="productWrapConItemT">
+								<!-- <view class="productWrapConItemTT">幸运拼团</view> -->
+								<view class="productWrapConItemTImg"
+									:style="{'background-image': 'url('+item.goods_image+')'}"></view>
+							</view>
+							<view class="productWrapConItemB">
+								<view class="productWrapConItemBT">{{item.goods_name}}</view>
+								<view class="spell">
+									{{item.sale_num}}人已拼成
+								</view>
+								<view class="productWrapConItemBB">
+									<view class="productWrapConItemBBL">
+										<!-- <view class="productWrapConItemBBLTxt">参团价</view> -->
+										<view class="productWrapConItemBBLPrice ct">
+											<image
+												src="https://oss.gzrhhj.com/10001/20230209/895c6338f18ddc72060c11bede37ff2b.png"
+												mode=""></image>
+											<text>{{item.num}}人拼￥：</text><text
+												style="font-size: 40rpx;">{{item.goods_price}}</text>
+										</view>
+									</view>
+									<view class="productWrapConItemBBR ct">
+										<view class="productWrapConItemBBRL">
+											<text>马上抢</text>
+											<!-- <image src="../../static/icon/icon_right.png"></image> -->
+										</view>
+										<!-- <view class="productWrapConItemBBRR">
+											{{item.num}}人成团
+										</view> -->
+									</view>
+								</view>
+							</view>
+						</view>
+					</view>
+
+					<u-empty v-if="productList.length==0"></u-empty>
+
+				</view>
+			</view>
+
 		</view>
 	</view>
 </template>
@@ -181,23 +241,23 @@
 	export default {
 		data() {
 			return {
-				list:[],
-				keyword:"",
-				collageIndex:0,
-				productList:[],
-				page:1,
-				showAgree:false,
-				collageList:[],
-				collagePage:1,
-				moreFlag:false,
-				collageMoreFlag:false,
-				collageMoreList:[],
-				showFlag:false,
-				reqFlag:true,
-				Timer:null,
-				showTo:false,
-				showStaic:true,
-				windowHeight:[],
+				list: [],
+				keyword: "",
+				collageIndex: 0,
+				productList: [],
+				page: 1,
+				showAgree: false,
+				collageList: [],
+				collagePage: 1,
+				moreFlag: false,
+				collageMoreFlag: false,
+				collageMoreList: [],
+				showFlag: false,
+				reqFlag: true,
+				Timer: null,
+				showTo: false,
+				showStaic: true,
+				windowHeight: [],
 				navInfo: {
 					leftDistance: 0,
 					lineHeight: 0,
@@ -206,7 +266,10 @@
 				},
 			}
 		},
-		components:{navHead,seckillNav},
+		components: {
+			navHead,
+			seckillNav
+		},
 		onLoad() {
 			let obj = {};
 			obj.leftDistance = App.globalData.leftDistance;
@@ -216,22 +279,22 @@
 			this.navInfo = obj;
 		},
 		onPageScroll(e) {
-				// 获取页面高度
+			// 获取页面高度
 			uni.getSystemInfo({
-				success:res=>{
-					this.windowHeight=res.windowHeight
+				success: res => {
+					this.windowHeight = res.windowHeight
 				}
 			})
-			
+
 			if (e.scrollTop >= this.windowHeight) {
 				this.showTo = true;
 			} else {
 				this.showTo = false;
 			}
-			if(e.scrollTop<=this.navInfo.navH){
-				this.showStaic=true;
-			}else{
-				this.showStaic=false;
+			if (e.scrollTop <= this.navInfo.navH) {
+				this.showStaic = true;
+			} else {
+				this.showStaic = false;
 			}
 		},
 		onShow() {
@@ -268,7 +331,7 @@
 			}
 		},
 		onReachBottom() {
-			if(!this.moreFlag){
+			if (!this.moreFlag) {
 				return false;
 			}
 			this.moreFlag = false;
@@ -279,14 +342,14 @@
 			clearInterval(this.Timer);
 		},
 		methods: {
-			hideMark(){
+			hideMark() {
 				this.reqFlag = true;
 				this.showFlag = false;
 				this.collageMoreList = [];
 				this.collagePage = 1;
 			},
-			loadMoreCollage(){
-				if(!this.reqFlag){
+			loadMoreCollage() {
+				if (!this.reqFlag) {
 					return false;
 				}
 				this.reqFlag = false;
@@ -294,163 +357,169 @@
 				let obj = {};
 				obj.category_id = this.list[this.collageIndex].id;
 				obj.page = this.collagePage;
-				goodsApi.taskListAll(obj).then(res=>{
-					if(this.collagePage == 1){
-						this.collageMoreList = res.data.list.data.map(cur=>{
+				goodsApi.taskListAll(obj).then(res => {
+					if (this.collagePage == 1) {
+						this.collageMoreList = res.data.list.data.map(cur => {
 							cur.surplusNum = cur.num - cur.current_num;
 							return cur;
 						});
-					}else{
-						this.collageMoreList = this.collageMoreList.concat(res.data.list.data.map(cur=>{
+					} else {
+						this.collageMoreList = this.collageMoreList.concat(res.data.list.data.map(cur => {
 							cur.surplusNum = cur.num - cur.current_num;
 							return cur;
 						}));
 					}
-					if(this.collagePage < res.data.list.last_page){
+					if (this.collagePage < res.data.list.last_page) {
 						this.collageMoreFlag = true;
-					}else{
+					} else {
 						this.collageMoreFlag = false;
 					}
 					this.reqFlag = true;
-				}).catch(err=>{
+				}).catch(err => {
 					this.reqFlag = true;
 				})
 			},
-			toJoinCollage(e){
+			toJoinCollage(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
-				
+				if (this.collageList.length > 0) {
+					uni.navigateTo({
+						url: "/pages/collageDetail/collageDetail?groupid=" + this.collageList[index].id
+					})
+				} else {
+					// uni.navigateTo({
+					// 	url: "/pages/collageDetail/collageDetail"
+					// })
+				}
+
+			},
+			toJoinCollageByAll(e) {
+				let index = e.target.dataset.index || e.currentTarget.dataset.index;
+
 				uni.navigateTo({
-					url:"/pages/collageDetail/collageDetail?groupid="+this.collageList[index].id
+					url: "/pages/collageDetail/collageDetail?groupid=" + this.collageMoreList[index].id
 				})
 			},
-			toJoinCollageByAll(e){
-				let index = e.target.dataset.index || e.currentTarget.dataset.index;
-				
-				uni.navigateTo({
-					url:"/pages/collageDetail/collageDetail?groupid="+this.collageMoreList[index].id
-				})
-			},
-			getCollageList(){
+			getCollageList() {
 				let obj = {};
 				obj.category_id = this.list[this.collageIndex].id;
-				goodsApi.taskList(obj).then(res=>{
+				goodsApi.taskList(obj).then(res => {
 					console.log(res)
-					this.collageList = res.data.list.map(cur=>{
-						cur.surplusTime = cur.expire_time*1000 - new Date().getTime();
+					this.collageList = res.data.list.map(cur => {
+						cur.surplusTime = cur.expire_time * 1000 - new Date().getTime();
 						cur.surplusNum = cur.num - cur.current_num;
-						this.Timer = setInterval(()=>{
-							cur.surplusTime = cur.expire_time*1000 - new Date().getTime();
-							if(cur.surplusTime<=0){
+						this.Timer = setInterval(() => {
+							cur.surplusTime = cur.expire_time * 1000 - new Date().getTime();
+							if (cur.surplusTime <= 0) {
 								clearInterval(this.Timer);
 								let j = null;
-								for(let i=0;i<this.groupList.length;i++){
-									if(this.groupList[i].id == cur.id){
+								for (let i = 0; i < this.groupList.length; i++) {
+									if (this.groupList[i].id == cur.id) {
 										j = i;
 									}
 								}
-								if(j!==null){
-									this.groupList.splice(j,1);
+								if (j !== null) {
+									this.groupList.splice(j, 1);
 								}
 							}
-						},1000)
+						}, 1000)
 						return cur;
 					});
 				})
 			},
-			toDetail(e){
+			toDetail(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
 				uni.navigateTo({
-					url:"/pages/groupGoodDetails/groupGoodDetails?proid="+this.productList[index].id
+					url: "/pages/groupGoodDetails/groupGoodDetails?proid=" + this.productList[index].id
 				})
 			},
-			searchVal(){
+			searchVal() {
 				this.page = 1;
 				this.getList();
 			},
-			close(e){
+			close(e) {
 				console.log("close")
 			},
-			open(e){
+			open(e) {
 				console.log("open")
 			},
-			toTop(){
+			toTop() {
 				uni.pageScrollTo({
-					scrollTop:0
+					scrollTop: 0
 				})
 			},
-			checkCollage(){
+			checkCollage() {
 				this.showAgree = true;
 			},
-			taggleCollage(e){
+			taggleCollage(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
 				this.collageIndex = index;
 				this.page = 1;
 				this.getProductList();
 				this.getCollageList();
 			},
-			back(){
+			back() {
 				let page = getCurrentPages();
 				console.log(page);
-				if(page.length == 1){
+				if (page.length == 1) {
 					uni.switchTab({
-						url:"/pages/index/index"
+						url: "/pages/index/index"
 					})
-				}else{
+				} else {
 					uni.navigateBack({
-						delta:1
+						delta: 1
 					})
 				}
 			},
-			getList(){
-				goodsApi.list().then(res=>{
+			getList() {
+				goodsApi.list().then(res => {
 					console.log(res)
-					this.list = res.data.list.map(cur=>{
-						cur.content = cur.content.replace(/<img/g,"<img style='width: 100%;'");
+					this.list = res.data.list.map(cur => {
+						cur.content = cur.content.replace(/<img/g, "<img style='width: 100%;'");
 						return cur;
 					});
 					this.getProductList();
 					this.getCollageList();
 				})
 			},
-			getProductList(){
+			getProductList() {
 				let obj = {};
 				obj.page = this.page;
-				if(this.keyword.trim()){
+				if (this.keyword.trim()) {
 					obj.keyword = this.keyword;
 				}
 				obj.category_id = this.list[this.collageIndex].id;
-				goodsApi.goodsList(obj).then(res=>{
-					console.log(res)
-					uni.stopPullDownRefresh();
-					if(this.page == 1){
-						this.productList = res.data.list.data.map(cur=>{
-							cur.goods_price = Number(cur.goods_price);
-							cur.num=this.list[this.collageIndex].num
-							return cur;
-						});
-					}else{
-						this.productList = this.productList.concat(res.data.list.data.map(cur=>{
-							cur.goods_price = Number(cur.goods_price);
-							cur.num=this.list[this.collageIndex].num
-							return cur;
-						}));
-					}
-					if(this.page < res.data.list.last_page){
-						this.moreFlag = true;
-					}else{
-						this.moreFlag = false;
-					}
-				})
-				.catch(err=>{
-					uni.stopPullDownRefresh();
-				})
+				goodsApi.goodsList(obj).then(res => {
+						console.log(res)
+						uni.stopPullDownRefresh();
+						if (this.page == 1) {
+							this.productList = res.data.list.data.map(cur => {
+								cur.goods_price = Number(cur.goods_price);
+								cur.num = this.list[this.collageIndex].num
+								return cur;
+							});
+						} else {
+							this.productList = this.productList.concat(res.data.list.data.map(cur => {
+								cur.goods_price = Number(cur.goods_price);
+								cur.num = this.list[this.collageIndex].num
+								return cur;
+							}));
+						}
+						if (this.page < res.data.list.last_page) {
+							this.moreFlag = true;
+						} else {
+							this.moreFlag = false;
+						}
+					})
+					.catch(err => {
+						uni.stopPullDownRefresh();
+					})
 			}
 		}
 	}
 </script>
 
-<style scoped>
-	.collageMoreMark{
+<style scoped lang="scss">
+	.collageMoreMark {
 		width: 100%;
 		height: 100%;
 		position: fixed;
@@ -459,31 +528,35 @@
 		right: 0;
 		bottom: 0;
 		z-index: 99;
-		background: rgba(0,0,0,.5);
+		background: rgba(0, 0, 0, .5);
 	}
-	.collageMore{
+
+	.collageMore {
 		width: 680upx;
 		position: fixed;
 		left: 50%;
 		top: 50%;
-		transform: translate(-50%,-50%);
+		transform: translate(-50%, -50%);
 		z-index: 100;
 	}
-	.collageMoreCon{
+
+	.collageMoreCon {
 		width: 680upx;
 		box-sizing: border-box;
 		background: #fee7e9;
 		border-radius: 20upx;
 		padding: 50upx 30upx;
 	}
-	.collageMoreConHead{
+
+	.collageMoreConHead {
 		font-size: 34upx;
 		line-height: 34upx;
 		color: #595757;
 		margin-bottom: 40upx;
 		text-align: center;
 	}
-	.collageMoreItem{
+
+	.collageMoreItem {
 		width: 620upx;
 		box-sizing: border-box;
 		padding: 12upx 16upx;
@@ -494,13 +567,15 @@
 		display: flex;
 		align-items: center;
 	}
-	.collageMoreItemL{
+
+	.collageMoreItemL {
 		width: 60upx;
 		height: 60upx;
 		border-radius: 50%;
 		margin-right: 20upx;
 	}
-	.collageMoreItemC{
+
+	.collageMoreItemC {
 		width: calc(100% - 244upx);
 		height: 60upx;
 		display: flex;
@@ -508,22 +583,26 @@
 		justify-content: space-between;
 		margin-right: 20upx;
 	}
-	.collageMoreItemCT{
+
+	.collageMoreItemCT {
 		font-size: 28upx;
 		line-height: 28upx;
 		color: #595757;
 	}
-	.collageMoreItemCB{
+
+	.collageMoreItemCB {
 		font-size: 24upx;
 		line-height: 24upx;
 		color: #595757;
 	}
-	.collageMoreItemCB>text{
+
+	.collageMoreItemCB>text {
 		color: #FE5960;
 		font-size: 24upx;
 		line-height: 24upx;
 	}
-	.collageMoreItemR{
+
+	.collageMoreItemR {
 		width: 142upx;
 		height: 38upx;
 		border-radius: 20upx;
@@ -531,7 +610,8 @@
 		padding: 2upx;
 		box-sizing: border-box;
 	}
-	.collageMoreItemRCon{
+
+	.collageMoreItemRCon {
 		width: 138upx;
 		height: 34upx;
 		border-radius: 18upx;
@@ -540,30 +620,34 @@
 		align-items: center;
 		justify-content: center;
 	}
-	.collageMoreItemRCon>text{
+
+	.collageMoreItemRCon>text {
 		font-size: 24upx;
 		line-height: 34upx;
 		color: #FF5F60;
 		margin-right: 8upx;
 	}
-	.collageMoreItemRCon>image{
+
+	.collageMoreItemRCon>image {
 		width: 10upx;
 		height: 20upx;
 	}
-	.close_icon{
+
+	.close_icon {
 		margin-top: 90upx;
 		display: flex;
 		justify-content: center;
 	}
-	.close_icon>image{
+
+	.close_icon>image {
 		width: 60upx;
 		height: 60upx;
 	}
-	
-	
-	
-	
-	.toTop{
+
+
+
+
+	.toTop {
 		width: 108rpx;
 		height: 108rpx;
 		position: fixed;
@@ -575,24 +659,35 @@
 		justify-content: center;
 		border-radius: 50%;
 	}
-	.toTop>image{
+
+	.toTop>image {
 		width: 108upx;
-		height:108upx;
+		height: 108upx;
 	}
-	.toTop>view{
+
+	.toTop>view {
 		font-size: 32upx;
 		line-height: 32upx;
 		text-align: center;
 		color: #595757;
 	}
-	
-	
-	.productWrapConItemB{
+
+
+	.productWrapConItemB {
 		padding: 16upx 4upx 0 10upx;
 		box-sizing: border-box;
 		margin-left: 24upx;
 	}
-	.productWrapConItemBT{
+
+	.productWrapConItemB .spell {
+		color: #999999;
+		font-family: 'PingFang SC';
+		font-style: normal;
+		font-weight: 400;
+		font-size: 24rpx;
+	}
+
+	.productWrapConItemBT {
 		font-size: 28upx;
 		font-weight: bold;
 		line-height: 40upx;
@@ -603,92 +698,118 @@
 		overflow: hidden;
 		height: 80upx;
 	}
-	.productWrapConItemBB{
-		width: 304upx;
-		height: 82upx;
-		
-		/* line-height: 82upx; */
-		background-color: #F23A3A;
+
+	.productWrapConItemBB {
+		width: 420rpx;
+		height: 68rpx;
+
+		background: linear-gradient(97.79deg, #F4C774 61.06%, #FBE7C2 100%);
+		border-radius: 20px;
 		border-radius: 50upx;
 		margin-top: 32upx;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
-	.productWrapConItemBBL{
+
+	.productWrapConItemBBL {
 		/* display: flex; */
 		/* align-items: flex-end; */
-		margin-left: 20upx;
-		margin-right: 24rpx;
+		// margin-left: 20upx;
+		// margin-right: 24rpx;
 	}
-	.productWrapConItemBBLTxt{
+
+	.productWrapConItemBBLTxt {
 		font-size: 24upx;
 		line-height: 24upx;
 		color: #FFFFFF;
 		margin-right: 20upx;
 	}
-	.productWrapConItemBBLPrice{
+
+	.productWrapConItemBBLPrice {
 		display: flex;
-		align-items: flex-end;
-		font-size: 36upx;
+		// align-items: flex-end;
+		font-size: 40rpx;
 		line-height: 28upx;
 		color: #FFFFFF;
 		font-weight: bold;
+		position: relative;
+		width: 286rpx;
+		height: 68rpx;
+		z-index: 2;
+		// background: #F23A3A;
 	}
-	.productWrapConItemBBLPrice>text{
+
+	.productWrapConItemBBLPrice>text {
 		font-weight: bold;
 		color: #FFFFFF;
 		font-size: 24upx;
 		line-height: 24upx;
+		z-index: 2;
 	}
-	.productWrapConItemBBR{
+
+	.productWrapConItemBBLPrice>image {
+		width: 286rpx;
+		height: 68rpx;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	.productWrapConItemBBR {
 		width: 164upx;
 		height: 75upx;
-		border-radius: 38upx;
-		background-color: #FFFFFF;
-		color: #333333;
-		margin: 1.5upx 2upx 1.5upx 2upx;
-		/* background: linear-gradient(120deg, #FF5F60, #DF6BAC); */
+		font-family: 'PingFang SC';
+		font-style: normal;
+		font-weight: 700;
+		font-size: 32rpx;
+		color: #947256;
 	}
-	
-	.productWrapConItemBBRL{
+
+	.productWrapConItemBBRL {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		height: 30upx;
 		margin-top: 4upx;
 	}
-	.productWrapConItemBBRL>text{
-		font-size: 24upx;
-		height: 30upx;
-		line-height: 30upx;
-		color: #333333;
+
+	.productWrapConItemBBRL>text {
+		font-family: 'PingFang SC';
+		font-style: normal;
+		font-weight: 700;
+		font-size: 32rpx;
+		color: #947256;
 	}
-	.productWrapConItemBBRL>image{
+
+	.productWrapConItemBBRL>image {
 		width: 14upx;
 		height: 14upx;
 		margin-left: 2upx;
 		vertical-align: top;
 	}
-	.productWrapConItemBBRR{
+
+	.productWrapConItemBBRR {
 		height: 30upx;
 		text-align: center;
 		font-size: 24upx;
 		margin-top: 4upx;
 	}
-	
-	.productWrapConBox{
+
+	.productWrapConBox {
 		/* display: flex; */
 		/* flex-wrap: wrap; */
 	}
-	.productWrapConItem{
+
+	.productWrapConItem {
 		width: 702upx;
 		margin: 0 auto 24upx;
 		display: flex;
-		background-color: #FFFFFF;
+		// background-color: #FFFFFF;
 		border-radius: 20upx;
-		padding: 24upx;
+		// padding: 24upx;
 	}
+
 	/* .productWrapConItem:nth-child(1),
 	.productWrapConItem:nth-child(2){
 		margin-top: 0;
@@ -696,9 +817,9 @@
 	.productWrapConItem:nth-child(2n+2){
 		margin-right: 0;
 	} */
-	.productWrapConItemT{
-		width: 214upx;
-		height: 214upx;
+	.productWrapConItemT {
+		width: 240rpx;
+		height: 240rpx;
 		box-sizing: border-box;
 		/* background-image: url(../../static/home/collageProductBack.png); */
 		/* background-position: 0 0;
@@ -706,7 +827,8 @@
 		padding: 0 4upx 4upx;
 		border-radius: 20upx;
 	}
-	.productWrapConItemTT{
+
+	.productWrapConItemTT {
 		width: 100%;
 		box-sizing: border-box;
 		height: 36upx;
@@ -715,31 +837,34 @@
 		color: white;
 		font-size: 20upx;
 	}
-	.productWrapConItemTImg{
-		width: 214upx;
-		height: 214upx;
-		border-radius: 20upx;
+
+	.productWrapConItemTImg {
+		width: 240rpx;
+		height: 240rpx;
+		border-radius: 40rpx;
 		background-position: center;
 		background-size: cover;
 	}
-	
-	
-	
-	.productWrap{
+
+
+
+	.productWrap {
 		width: 100%;
-		margin: 24upx auto 0;
+		// margin: 24upx auto 0;
 	}
-	.productWrapHead{
+
+	.productWrapHead {
 		width: 100%;
 		height: 92upx;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		background: linear-gradient(180deg, #E2E2E2 0%, #F8F8F8 100%);
-		box-shadow: inset 0px 1px 0px 1px #FFFFFF;
-		border-radius: 20upx 20upx 0 0;
+		// box-shadow: inset 0px 1px 0px 1px #FFFFFF;
+		// border-radius: 20upx 20upx 0 0;
 	}
-	.productWrapHeadItem{
+
+	.productWrapHeadItem {
 		width: 254upx;
 		height: 92upx;
 		border-radius: 20upx 20upx 0 0;
@@ -751,16 +876,20 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 30upx;
+		font-size: 28rpx;
 		color: #999999;
 		font-weight: bold;
 		position: relative;
 	}
-	.productWrapHeadItem.active{
-		color: #fe5960; 
+
+	.productWrapHeadItem.active {
+		color: #333333;
+		font-weight: 900;
+		font-size: 32rpx;
 		/* background: white; */
 	}
-	.productWrapHeadItem image{
+
+	.productWrapHeadItem image {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -768,19 +897,21 @@
 		height: 92upx;
 		/* z-index: -1; */
 	}
-	.productWrapCon{
+
+	.productWrapCon {
 		width: 100%;
 		/* height: 500upx; */
-		/* background: white; */
+		background: white;
 		transform: translateY(-10upx);
-		border-radius: 20upx;
+		// border-radius: 20upx;
 		padding: 18upx;
 		box-sizing: border-box;
+		padding-bottom: 10rpx;
 	}
-	
-	
-	
-	.collageKnow{
+
+
+
+	.collageKnow {
 		width: 702upx;
 		padding: 20upx 16upx;
 		background: #FFFFFF;
@@ -791,51 +922,59 @@
 		justify-content: space-between;
 		margin: 40upx auto 0;
 	}
-	.collageKnowL{
+
+	.collageKnowL {
 		font-size: 30upx;
 		color: #FF5F60;
 	}
-	.collageKnowR{
+
+	.collageKnowR {
 		display: flex;
 		align-items: center;
 	}
-	.collageKnowR>text{
+
+	.collageKnowR>text {
 		font-size: 28upx;
 		line-height: 28upx;
 		color: #999999;
 		margin-right: 10upx;
 	}
-	.collageKnowR>image{
+
+	.collageKnowR>image {
 		width: 12upx;
 		height: 20upx;
 	}
-	
-	.collageWay{
+
+	.collageWay {
 		padding: 20upx 0;
 		display: flex;
 		align-items: center;
 		justify-content: space-around;
 	}
-	.collageWayItem{
+
+	.collageWayItem {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 	}
-	.collageWayItem>view{
+
+	.collageWayItem>view {
 		font-size: 24upx;
 		line-height: 24upx;
 		color: #575759;
 	}
-	.collageWayItem>view:nth-child(1){
+
+	.collageWayItem>view:nth-child(1) {
 		margin-bottom: 10upx;
 	}
-	.collageWayImg{
+
+	.collageWayImg {
 		width: 14upx;
 		height: 26upx;
 	}
-	
-	
-	.collageUser{
+
+
+	.collageUser {
 		width: 702upx;
 		margin: 24upx auto 0;
 		height: 120upx;
@@ -844,51 +983,73 @@
 		padding: 0 16upx;
 		box-sizing: border-box;
 		background: linear-gradient(180deg, #FFF2E3 0%, #FFE8D5 100%);
+		margin-top: 0;
 	}
-	.collageUserHead{
+
+	.collageUserHead {
 		padding: 20upx 0 10upx;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		border-bottom: 2upx solid rgba(153, 153, 153, .5);
 	}
-	.collageUserHeadL{
+
+	.collageUserHeadL {
 		font-size: 30upx;
 		color: #FF5F60;
 		font-weight: 400;
 	}
-	.collageUserHeadR{
+
+	.collageUserHeadR {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		width: 54%;
 	}
-	.collageUserHeadR>text{
+
+	.collageUserHeadR>text {
 		font-size: 28upx;
 		color: #999999;
 		margin-right: 10upx;
 	}
-	.collageUserHeadR>image{
+
+	.collageUserHeadR>image {
 		width: 12upx;
 		height: 20upx;
 	}
-	.collageUserCon{
+
+	.collageUserCon {
 		padding: 20upx 0 20upx;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
-	.collageUserConL{
+
+	.collageUserConL {
 		display: flex;
 		align-items: center;
 	}
-	.collageUserConL>image{
+
+	.collageUserConL .NotInvolved {
+		font-size: 12px;
+		color: #633A19;
+	}
+
+	.collageUserConL>image {
 		width: 80upx;
 		height: 80upx;
 		border-radius: 50%;
 		margin-right: 18upx;
 	}
-	.collageUserConL>view{
+
+	.collageUserConL>.openData {
+		width: 80upx;
+		height: 80upx;
+		border-radius: 50%;
+		margin-right: 18upx;
+	}
+
+	.collageUserConL>view {
 		font-size: 28upx;
 		font-weight: bold;
 		color: #333333;
@@ -897,36 +1058,42 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	.collageUserConR{
+
+	.collageUserConR {
 		display: flex;
 		align-items: center;
 		width: 54%;
 		justify-content: space-between;
 	}
-	.collageUserConRL{
+
+	.collageUserConRL {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: flex-end;
 	}
-	.collageUserConRLT{
+
+	.collageUserConRLT {
 		font-size: 24upx;
 		line-height: 24upx;
 		color: #333333;
 		margin-bottom: 4upx;
 	}
-	.collageUserConRLT>text{
+
+	.collageUserConRLT>text {
 		font-size: 24upx;
 		line-height: 24upx;
 		color: #FE5960;
 	}
-	.collageUserConRLB{
+
+	.collageUserConRLB {
 		font-size: 24upx;
 		line-height: 24upx;
 		color: #333333;
 		margin-top: 14upx;
 	}
-	.collageUserConRR{
+
+	.collageUserConRR {
 		width: 160upx;
 		height: 64upx;
 		line-height: 64upx;
@@ -938,21 +1105,23 @@
 		justify-content: center;
 		margin-left: 18upx;
 	}
-	.collageUserConRR>view{
+
+	.collageUserConRR>view {
 		font-size: 26upx;
 		color: white;
 		line-height: 64upx;
 		height: 64upx;
 		margin-right: 6upx;
 	}
-	.collageUserConRR>image{
+
+	.collageUserConRR>image {
 		width: 8upx;
 		height: 16upx;
 	}
-	
-	
-	
-	.searchWrap{
+
+
+
+	.searchWrap {
 		width: 702upx;
 		height: 70upx;
 		padding: 6upx 6upx 6upx 26upx;
@@ -962,12 +1131,14 @@
 		border-radius: 36upx;
 		margin: 48upx auto 0;
 	}
-	.searchIcon{
+
+	.searchIcon {
 		width: 30upx;
 		height: 30upx;
 		margin-right: 12upx;
 	}
-	.searchBtn{
+
+	.searchBtn {
 		width: 116upx;
 		height: 56upx;
 		line-height: 56upx;
@@ -976,36 +1147,45 @@
 		font-weight: bold;
 		color: #FFFFFF;
 		border-radius: 70upx;
-		background-color: #EF343D  ;
+		background-color: #EF343D;
 		/* background: linear-gradient(to right , rgba(255,95,96,.2) , rgba(222,107,173,.2)); */
 		margin-left: 12upx;
 	}
-	.searchInp{
+
+	.searchInp {
 		width: calc(100% - 152upx);
 		height: 100%;
 		font-size: 24upx;
 		color: #A7A7A7;
 		border: none;
 	}
-	
-	
-	.back{
+
+
+	.back {
 		width: 100%;
 		min-height: 100vh;
-		background-color: #EF343D  ;
-		/* background: linear-gradient(to right , rgba(255,95,96,.2) , rgba(222,107,173,.2)); */
+		// background: linear-gradient(180deg, #EF343D 0%, rgba(239, 164, 52, 0.38) 100%);
 	}
-	.head{
+
+	.top {
+		width: 100%;
+		background: linear-gradient(180deg, #EF343D 0%, rgba(239, 164, 52, 0.38) 100%);
+		padding-bottom: 30rpx;
+	}
+
+	.head {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		padding-right: 32upx;
 	}
-	.headL{
+
+	.headL {
 		display: flex;
 		align-items: center;
 	}
-	.headLBack{
+
+	.headLBack {
 		width: 70upx;
 		height: 36upx;
 		display: flex;
@@ -1016,11 +1196,13 @@
 		margin-right: 14upx;
 		align-items: center;
 	}
-	.headLBack>image{
+
+	.headLBack>image {
 		width: 16upx;
 		height: 28upx;
 	}
-	.headLTxt{
+
+	.headLTxt {
 		font-size: 40upx;
 		font-family: PingFang;
 		font-weight: bold;
@@ -1029,12 +1211,65 @@
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 	}
-	.headR{
+
+	.headR {
 		width: 34upx;
 		height: 38upx;
 		background: transparent;
 		padding: 0;
 		margin: 0;
 		line-height: 0;
+	}
+
+	.banner {
+		width: 702rpx;
+		// padding: 40rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-bottom: 30rpx;
+		position: relative;
+		margin: 0 auto;
+		margin-top: 20rpx;
+
+		.rightfix {
+			position: absolute;
+			right: 0;
+			top: 50%;
+			transform: translateY(-50%);
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			color: #FFFFFF;
+			font-family: 'PingFang SC';
+			font-style: normal;
+			font-style: normal;
+			font-weight: 700;
+			font-size: 28rpx;
+
+			.income {
+				width: 172rpx;
+				height: 60rpx;
+				background: rgba(240, 126, 29, 0.6);
+				backdrop-filter: blur(10rpx);
+				/* Note: backdrop-filter has minimal browser support */
+				border-radius: 30rpx 0px 0px 30rpx;
+				margin-bottom: 30rpx;
+			}
+
+			.rule {
+				width: 172rpx;
+				height: 60rpx;
+				background: rgba(242, 58, 58, 0.6);
+				backdrop-filter: blur(10rpx);
+				/* Note: backdrop-filter has minimal browser support */
+				border-radius: 30rpx 0px 0px 30rpx;
+			}
+		}
+
+		.bannerImg {
+			width: 702rpx;
+			height: 292rpx;
+		}
 	}
 </style>

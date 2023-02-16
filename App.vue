@@ -18,7 +18,7 @@
 		onLaunch(options) {
 
 			//console.log(options, 'options');
-			// #ifdef MP-WEIXIN
+			// #ifdef MP
 			if (options.query.scene) {
 				//console.log('scene', options.query.scene);
 				this.globalData.shareId = options.query.scene;

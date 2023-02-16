@@ -1,5 +1,24 @@
 <template>
 	<view class="container" :style="{'box-sizing': 'border-box'}">
+		<!--弹出框  -->
+		<view class="home-popup2" v-if="showModalStatus3" catchtouchmove="true">
+			<view class="home-box2" @click="getLq">
+				<image src="https://oss.gzrhhj.com/10001/20230210/f9122b69809d8e0eae66e696406b442e.png" mode="widthFix">
+				</image>
+				<view class="buyBtn ct">
+					立即抢购
+				</view>
+			</view>
+			<view class="home-popup2-close" @click="box_close3">
+				<image src="../../static/home/icon_close.png" mode=""></image>
+			</view>
+		</view>
+
+		<view v-if="showModalStatus3"
+			style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: rgba(0,0,0,.5);z-index: 999;backdrop-filter: blur(5px);"
+			catchtouchmove="true"></view>
+		<!-- 充值卡 end-->
+		<!--弹出框  -->
 		<view class="header" :style="{'height': navInfo.navH+'px','padding-top':navInfo.paddingTop+'px'}">
 			<!-- #ifdef MP-WEIXIN -->
 			<view class="heads2">
@@ -165,13 +184,16 @@
 				@clickLoadMore='getJgoodslist'>
 			</uni-load-more>
 		</view>
-		<!-- #ifdef MP-WEIXIN -->
+		<!-- #ifdef MP -->
 		<button open-type="contact" style="opacity: 1;">
 			<view class="home-kf">
 				<image src="../../static/home/icon_kf.png" mode=""></image>
 			</view>
 		</button>
 		<!-- #endif -->
+		<navigator v-if="!back" hover-class="none" url="/pages/groupGoodList/groupGoodList" class="toincome">
+			<image src="https://oss.gzrhhj.com/10001/20230210/ce59576f8a6526d5daac5d8081933579.png" mode=""></image>
+		</navigator>
 		<view class="home-returnTop" v-if="back" @click="btn_top">
 			<image src="../../static/home/icon_zd.png" mode=""></image>
 		</view>
@@ -237,7 +259,8 @@
 				minute: 0,
 				second: 0,
 				isLoading: false,
-				passMessage: {}
+				passMessage: {},
+				showModalStatus3: true
 			}
 		},
 
@@ -313,9 +336,20 @@
 					url: "/pageSecKill/seckillList/seckillList"
 				})
 			},
+			box_close3() {
+				this.showModalStatus3 = false;
+			},
+			getLq() {
+				let app = this;
+				uni.navigateTo({
+					url: '/pages/groupGoodList/groupGoodList',
+					success() {
+						app.showModalStatus3 = false;
+					}
+				})
+			},
 			getPass() {
 				blockChina().then(res => {
-
 						this.passMessage = res.data.data
 						this.showPass = true
 					})
@@ -1487,6 +1521,20 @@
 		justify-content: center;
 	}
 
+	.toincome {
+		position: fixed;
+		bottom: 304upx;
+		right: 16rpx;
+		width: 100rpx;
+		height: 100rpx;
+	}
+
+	.toincome>image {
+		width: 100rpx;
+		height: 100rpx;
+		// vertical-align: top;
+	}
+
 	.home-kf>image {
 		width: 48rpx;
 		height: 48rpx;
@@ -2050,10 +2098,27 @@
 		left: 50%;
 		transform: translate(-50%, -50%);
 		z-index: 2000;
+
+		.buyBtn {
+			width: 294rpx;
+			height: 76rpx;
+			background: linear-gradient(44.16deg, #FBE7C2 24.8%, #F4C774 113.57%);
+			backdrop-filter: blur(5px);
+			/* Note: backdrop-filter has minimal browser support */
+			border-radius: 44rpx;
+			color: #895124;
+			font-weight: 700;
+			font-size: 36rpx;
+			position: absolute;
+			bottom: 80rpx;
+			left: 50%;
+			transform: translateX(-50%);
+		}
 	}
 
 	.home-box2 {
 		width: 100%;
+		position: relative;
 		// height: 512upx;
 	}
 
@@ -2072,6 +2137,7 @@
 		width: 100%;
 		height: 100%;
 		vertical-align: top;
+		margin-top: 60rpx;
 	}
 
 	.pass {

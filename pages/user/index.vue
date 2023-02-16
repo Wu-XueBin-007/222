@@ -118,16 +118,16 @@
 				</view>
 			</view> -->
 			<view class="orderWrap" style="margin: -20rpx auto 0;">
-				<view class="orderWrapHead" @click="onTargetOrder(orderNavbar[4])">
-					<view class="orderWrapHeadL">我的订单</view>
-					<image src="../../static/icon/more_gray.png" class="orderWrapHeadR"></image>
+				<view class="orderWrapHead">
+					<view class="orderWrapHeadL">订单</view>
+					<!-- 	<image src="../../static/icon/more_gray.png" class="orderWrapHeadR"></image>-->
 				</view>
 				<view class="orderWrapCon">
 					<view class="orderItem" v-for="(item,index) in orderNavbar" :key="index"
 						@click="onTargetOrder(item)">
 						<view style="position: relative;">
 							<image :src="item.icon"></image>
-							<view v-if="index==0&&orderCoun.payment&&orderCoun.payment!=0" style="position: absolute;top: -20rpx;left: 34rpx;color: #FFFFFF;background-color: #ee0a24;border-radius: 999px;
+							<!-- 							<view v-if="index==0&&orderCoun.payment&&orderCoun.payment!=0" style="position: absolute;top: -20rpx;left: 34rpx;color: #FFFFFF;background-color: #ee0a24;border-radius: 999px;
     z-index: 99;padding: 0 10rpx;font-size: 24rpx;text-align: center;">
 								{{orderCoun.payment?orderCoun.payment:'0'}}
 							</view>
@@ -138,18 +138,17 @@
 							<view v-if="index==2&&orderCoun.delivery&&orderCoun.delivery!=0" style="position: absolute;top: -20rpx;left: 36rpx;color: #FFFFFF;background-color: #ee0a24;border-radius: 999px;
 	z-index: 99;padding: 0 10rpx;font-size: 24rpx;text-align: center;">
 								{{orderCoun.delivery?orderCoun.delivery:'0'}}
-							</view>
+							</view> -->
 						</view>
 						<text style="color: #999999;">{{item.name}}</text>
 					</view>
 				</view>
 			</view>
-			<view class="orderWrap" style="margin-top: 30rpx;">
+			<!-- 			<view class="orderWrap" style="margin-top: 30rpx;">
 				<view class="orderWrapHead">
 					<view
 						style="font-size: 30rpx;line-height: 28rpx;color: #000000;font-weight: 700;font-family: PingFang;">
 						购票订单</view>
-					<!-- <image src="../../static/icon/more_gray.png" class="orderWrapHeadR"></image> -->
 				</view>
 				<view class="orderWrapCon2">
 					<view class="orderItem" v-for="(item,index) in orderTicket" :key="index"
@@ -160,7 +159,7 @@
 						<text>{{item.name}}</text>
 					</view>
 				</view>
-			</view>
+			</view> -->
 
 			<view class="orderWrap" style="margin-top: 30rpx;">
 				<view class="orderWrapHead">
@@ -241,34 +240,34 @@
 
 		{
 			id: 'payment',
-			name: '待付款',
+			name: '我的订单',
 			icon: '../../static/mine/waitPay.png',
 			count: 0
 		},
-		{
-			id: 'received',
-			name: '待发货',
-			icon: '../../static/mine/daifahuo.png',
-			count: 0
-		},
-		{
-			id: 'delivery',
-			name: '待收货',
-			icon: '../../static/mine/daishouhuo.png',
-			count: 0
-		},
-		{
-			id: 'comment',
-			name: '待评价',
-			icon: '../../static/mine/daipinjia.png',
-			count: 0
-		},
-		{
-			id: 'all',
-			name: '售后',
-			icon: '../../static/mine/shouhou.png',
-			count: 0
-		},
+		// {
+		// 	id: 'received',
+		// 	name: '待发货',
+		// 	icon: '../../static/mine/daifahuo.png',
+		// 	count: 0
+		// },
+		// {
+		// 	id: 'delivery',
+		// 	name: '待收货',
+		// 	icon: '../../static/mine/daishouhuo.png',
+		// 	count: 0
+		// },
+		// {
+		// 	id: 'comment',
+		// 	name: '待评价',
+		// 	icon: '../../static/mine/daipinjia.png',
+		// 	count: 0
+		// },
+		// {
+		// 	id: 'all',
+		// 	name: '售后',
+		// 	icon: '../../static/mine/shouhou.png',
+		// 	count: 0
+		// },
 
 	]
 	// 购票订单操作
@@ -572,9 +571,14 @@
 			},
 			toUrls(e) {
 				let url = e.target.dataset.path || e.currentTarget.dataset.path;
-				if (url) {
+				if (url !== true) {
 					uni.navigateTo({
 						url: url
+					})
+				} else {
+					uni.showToast({
+						icon: 'none',
+						title: '此功能暂未开放,敬请期待！'
 					})
 				}
 			},
@@ -814,11 +818,9 @@
 				this.$navTo('pageHome/wallet/index')
 			},
 
-			// 跳转到订单页
+			// 跳转到订单列表页
 			onTargetOrder(item) {
-				this.$navTo('pageHome/order/index', {
-					dataType: item.id
-				})
+				this.$navTo('pageHome/orderCenter/orderCenter')
 			},
 			// 跳转到订单页
 			onTargetOrders(item) {
