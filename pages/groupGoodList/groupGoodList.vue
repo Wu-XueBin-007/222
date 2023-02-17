@@ -87,10 +87,11 @@
 									<view class="collageUserConRLT"></view>
 									<view class="collageUserConRLB"></view>
 								</view>
-								<view class="collageUserConRR" @click="toJoinCollage" :data-index="index">
+								<navigator class="collageUserConRR" url="/pageHome/myCollage/myCollage"
+									:data-index="index">
 									<view class="collageUserConRRL">我的抢购</view>
 									<!-- <image src="../../static/icon/more_white.png"></image> -->
-								</view>
+								</navigator>
 							</view>
 						</view>
 					</swiper-item>

@@ -1,7 +1,7 @@
 <template>
 	<view style="height: 100vh;">
 		<nav-head title="我的拼团" backGround="#F23A3A" backL="transparent" color="white"></nav-head>
-		
+
 		<view :style="{'height': 'calc(100% - '+navInfo.navH+'px)'}" class="conWrapBox">
 			<view class="headWrap">
 				<view class="head">
@@ -13,9 +13,11 @@
 				</view>
 			</view>
 			<view style="display: flex;height: calc(100% - 88upx);">
-				<swiper :indicator-dots="false" :autoplay="false" :interval="3000" :duration="1000" style="height: 100%;width: 100%;" @change="changeSwiper" :current="headIndex">
+				<swiper :indicator-dots="false" :autoplay="false" :interval="3000" :duration="1000"
+					style="height: 100%;width: 100%;" @change="changeSwiper" :current="headIndex">
 					<swiper-item v-for="index of 5" style="height: 100%;">
-						<scroll-view :scroll-y="true" @scrolltolower="loadMore" class="con" style="height: 100%;padding-top: 30upx;">
+						<scroll-view :scroll-y="true" @scrolltolower="loadMore" class="con"
+							style="height: 100%;padding-top: 30upx;">
 							<view class="conItem" v-for="(item,index) in list" :key="index" v-if="list.length>0">
 								<!-- <view class="conItemT">
 									<view class="conItemTL">
@@ -32,9 +34,11 @@
 								</view> -->
 								<view :class="['conItemB',(headIndex==1||headIndex==2)?'active':'']" v-if="item.goods">
 									<image :src="item.goods.goods_image" class="conItemBL"></image>
-									<image src="../../static/home/prize_icon.png" class="prize" v-if="item.have_prize==1&&headIndex!=3&&headIndex!=4"></image>
-									<view class="" v-if="item.have_prize==1&&headIndex!=3&&headIndex!=4" style="position: absolute;left: 24upx;top: 24upx;width: 180upx;height: 180upx;border-radius: 20upx;background-color:rgba(0, 0, 0, 0.2);">
-										
+									<image src="../../static/home/prize_icon.png" class="prize"
+										v-if="item.have_prize==1&&headIndex!=3&&headIndex!=4"></image>
+									<view class="" v-if="item.have_prize==1&&headIndex!=3&&headIndex!=4"
+										style="position: absolute;left: 24upx;top: 24upx;width: 180upx;height: 180upx;border-radius: 20upx;background-color:rgba(0, 0, 0, 0.2);">
+
 									</view>
 									<view class="conItemBR">
 										<view class="conItemBRT">
@@ -51,7 +55,7 @@
 											</view>
 										</view>
 									</view>
-									
+
 								</view>
 								<view class="collageMain">
 									<view class="collageMainL" v-if="headIndex==0">
@@ -74,12 +78,17 @@
 									</view>
 								</view>
 								<view class="collageBtn">
-									
+
 									<!-- <image src="../../static/home/prize_icon_no.png" class="prize" v-if="item.have_prize==0&&headIndex!=3&&headIndex!=4"></image> -->
-									<view class="conItemBRBCheckDetail2" v-if="item.have_prize==1&&headIndex!=3&&headIndex!=4" :data-index="index" @click="handleTargetExpress(item.order_id)">查看物流</view>
-									<view class="conItemBRBCheckDetail" v-if="item.have_prize==-1||headIndex==3||headIndex==4" :data-index="index" @click="toDetail">查看详情</view>
-									
-									<view class="conItemBRBCheckDetail1" v-else :data-index="index" @click="toDetail">查看详情</view>
+									<view class="conItemBRBCheckDetail2"
+										v-if="item.have_prize==1&&headIndex!=3&&headIndex!=4" :data-index="index"
+										@click="handleTargetExpress(item.order_id)">查看物流</view>
+									<view class="conItemBRBCheckDetail"
+										v-if="item.have_prize==-1||headIndex==3||headIndex==4" :data-index="index"
+										@click="toDetail">查看详情</view>
+
+									<view class="conItemBRBCheckDetail1" v-else :data-index="index" @click="toDetail">
+										查看详情</view>
 								</view>
 							</view>
 							<view style="padding-top: 100upx;" v-if="list.length==0">
@@ -97,22 +106,25 @@
 	import navHead from "@/components/navHead.vue";
 	import * as collageApi from "@/api/collage/collage.js";
 	const App = getApp();
+	let falg = false;
 	export default {
 		data() {
 			return {
-				headIndex:0,
-				page:1,
-				list:[],
-				moreFlag:false,
-				navInfo:{
-					leftDistance:0,
-					lineHeight:0,
-					navH:0,
-					paddingTop:0
+				headIndex: 0,
+				page: 1,
+				list: [],
+				moreFlag: false,
+				navInfo: {
+					leftDistance: 0,
+					lineHeight: 0,
+					navH: 0,
+					paddingTop: 0
 				}
 			}
 		},
-		components:{navHead},
+		components: {
+			navHead
+		},
 		onLoad() {
 			let obj = {};
 			obj.leftDistance = App.globalData.leftDistance;
@@ -136,78 +148,84 @@
 			console.log(e)
 			console.log(App.$vm.globalData.setting)
 			let type = e.target.dataset.type;
-			if(type){
+			if (type) {
 				let index = e.target.dataset.index;
-				console.log(index,this.list[index])
+				console.log(index, this.list[index])
 				return {
-					title:"拼团详情",
-					path:"/pages/collageDetail/collageDetail?groupid="+this.list[index].group_task_id,
-					imageUrl:App.$vm.globalData.setting.GroupShareImageId.preview_url
+					title: "拼团详情",
+					path: "/pages/collageDetail/collageDetail?groupid=" + this.list[index].group_task_id,
+					imageUrl: App.$vm.globalData.setting.GroupShareImageId.preview_url
 				}
-			}else{
+			} else {
 				return {
-					title:"我的拼团",
-					path:"/pageHome/myCollage/myCollage",
-					imageUrl:App.$vm.globalData.setting.GroupShareImageId.preview_url
+					title: "我的拼团",
+					path: "/pageHome/myCollage/myCollage",
+					imageUrl: App.$vm.globalData.setting.GroupShareImageId.preview_url
 				}
 			}
 		},
 		methods: {
-			loadMore(){
-				if(!this.moreFlag){
+			loadMore() {
+				if (!this.moreFlag) {
 					return false;
 				}
 				this.moreFlag = false;
 				this.page = this.page + 1;
 				this.getList();
 			},
-			changeSwiper(e){
+			changeSwiper(e) {
 				console.log(e)
 				this.headIndex = e.detail.current;
 				this.page = 1;
 				this.list = [];
 				this.getList();
 			},
-			copyOrderNo(e){
+			copyOrderNo(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
 				uni.setClipboardData({
-					data:this.list[index].order_no.toString()
+					data: this.list[index].order_no.toString()
 				})
 			},
-			toMyWallet(){
+			toMyWallet() {
 				this.$navTo('pageHome/wallet/index')
 			},
-			toDetail(e){
+			toDetail(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
-				let type=Number(this.headIndex) + 1
+				let type = Number(this.headIndex) + 1
 				uni.navigateTo({
-					url:"/pageHome/collageOrderDetail/collageOrderDetail?orderid="+this.list[index].id+"&orderId="+this.list[index].order_id+"&type="+type
+					url: "/pageHome/collageOrderDetail/collageOrderDetail?orderid=" + this.list[index].id +
+						"&orderId=" + this.list[index].order_id + "&type=" + type
 				})
 			},
-			handleTargetExpress(orderId){
+			handleTargetExpress(orderId) {
 				console.log(orderId)
-				  this.$navTo('pageHome/express/express', { orderId: orderId})
+				this.$navTo('pageHome/express/express', {
+					orderId: orderId
+				})
 			},
-			changeNav(e){
+			changeNav(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
 				this.headIndex = index;
 				this.page = 1;
 				this.getList();
 			},
-			getList(){
+			getList() {
 				let obj = {};
 				obj.type = Number(this.headIndex) + 1;
 				obj.page = this.page;
-				collageApi.orderList(obj).then(res=>{
+				if (falg) return;
+				falg = true
+				collageApi.orderList(obj).then(res => {
+					falg = false
 					console.log(res)
-					if(this.page == 1){
+					if (this.page == 1) {
 						this.list = res.data.list.data;
-					}else{
+					} else {
 						this.list = this.list.concat(res.data.list.data);
 					}
-					if(res.data.list.last_page > this.page){
+					if (res.data.list.last_page > this.page) {
 						this.moreFlag = true;
-					}else{
+					} else {
 						this.moreFlag = false;
 					}
 				})
@@ -217,21 +235,23 @@
 </script>
 
 <style scoped>
-	.conWrapBox{
+	.conWrapBox {
 		/* padding-top: 50upx; */
 		box-sizing: border-box;
 	}
-	.conItemTLTxt{
+
+	.conItemTLTxt {
 		font-size: 24upx;
 		color: #595656;
 	}
-	
-	.con{
+
+	.con {
 		width: 100%;
 		padding: 0 16upx 16upx;
 		box-sizing: border-box;
 	}
-	.conItem{
+
+	.conItem {
 		width: 702upx;
 		/* height: 412upx; */
 		background: #FFFFFF;
@@ -241,20 +261,24 @@
 		/* padding: 0 24upx; */
 		border-radius: 20upx;
 	}
-	.conItemT{
+
+	.conItemT {
 		padding: 26upx 0 16upx;
 		border-bottom: 2upx solid #E5E5E5;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
-	.conItem:last-child{
+
+	.conItem:last-child {
 		margin-bottom: 0;
 	}
-	.conItemTL{
+
+	.conItemTL {
 		display: flex;
 	}
-	.conItemTLImg{
+
+	.conItemTLImg {
 		width: 40upx;
 		height: 40upx;
 		border-radius: 50%;
@@ -264,39 +288,47 @@
 		/* position: relative; */
 		margin-left: -16upx;
 	}
-	.conItemTLImg:nth-child(1){
+
+	.conItemTLImg:nth-child(1) {
 		margin-left: 0;
 	}
-	.conItemTR{
+
+	.conItemTR {
 		display: flex;
 		align-items: center;
 	}
-	.conItemTR>text{
+
+	.conItemTR>text {
 		font-size: 28upx;
 		line-height: 28upx;
 		color: #595656;
 		margin-right: 20upx;
 	}
-	.conItemTRShare{
+
+	.conItemTRShare {
 		padding: 0;
 		margin: 0;
 		background: transparent;
 		line-height: 0;
 		border-radius: 0;
 	}
-	.conItemTRShare>image{
+
+	.conItemTRShare>image {
 		width: 28upx;
 		height: 28upx;
 	}
-	.conItemB{
+
+	.conItemB {
 		padding: 24upx;
 		display: flex;
 		position: relative;
 	}
-	.conItemB.active{
+
+	.conItemB.active {
 		padding: 24upx;
 	}
-	.prize{
+
+	.prize {
 		position: absolute;
 		width: 122upx;
 		height: 122upx;
@@ -304,22 +336,26 @@
 		bottom: 54upx;
 		z-index: 9;
 	}
-	.conItemBL{
+
+	.conItemBL {
 		width: 180upx;
 		height: 180upx;
 		border-radius: 20upx;
 		margin-right: 24upx;
 	}
-	.conItemBR{
+
+	.conItemBR {
 		width: calc(100% - 206upx);
 		/* height: 140upx; */
 	}
-	.conItemBRT{
+
+	.conItemBRT {
 		display: flex;
 		justify-content: space-between;
 		height: 82upx;
 	}
-	.conItemBRTT{
+
+	.conItemBRTT {
 		font-size: 28upx;
 		line-height: 36upx;
 		font-weight: bold;
@@ -337,49 +373,58 @@
 		line-clamp: 2;
 		-webkit-box-orient: vertical;
 	}
-	.conItemBRTB>text{
+
+	.conItemBRTB>text {
 		font-size: 28upx;
 		line-height: 36upx;
 		color: #333333;
 		font-weight: bold;
 	}
-	.conItemBRB{
+
+	.conItemBRB {
 		margin-top: 20upx;
 		display: flex;
 		justify-content: flex-end;
 	}
-	.conItemBRP{
+
+	.conItemBRP {
 		font-size: 28upx;
 		color: #666666;
 	}
-	.conItemBRC{
+
+	.conItemBRC {
 		display: flex;
 		width: 100%;
 		align-items: center;
 		justify-content: space-between;
 		margin-bottom: 22upx;
 	}
-	.conItemBRCL{
+
+	.conItemBRCL {
 		font-size: 22upx;
 		line-height: 22upx;
 		color: #999999;
 	}
-	.conItemBRCR{
+
+	.conItemBRCR {
 		font-size: 22upx;
 		line-height: 22upx;
 		color: #FF5F60;
 	}
-	.conItemBRB{
+
+	.conItemBRB {
 		font-size: 28upx;
 		line-height: 36upx;
 		color: #999999;
 	}
-	.conItemBRB>text{
+
+	.conItemBRB>text {
 		color: #E60012;
 		font-size: 28upx;
 		line-height: 36upx;
 	}
-	.conItemBRB1{
+
+	.conItemBRB1 {
 		display: flex;
 		align-items: center;
 		font-size: 28upx;
@@ -387,12 +432,13 @@
 		color: #999999;
 		justify-content: space-between;
 	}
+
 	/* .conItemBRB1>text:nth-child(1){
 		font-size: 28upx;
 		line-height: 28upx;
 		color: #999999;
 	} */
-	.conItemBRB1>text:last-child{
+	.conItemBRB1>text:last-child {
 		/* padding: 0 16upx; */
 		box-sizing: border-box;
 		height: 28upx;
@@ -404,10 +450,10 @@
 		/* margin-left: 16upx; */
 		font-size: 28upx;
 	}
-	
-	
-	
-	.headWrap{
+
+
+
+	.headWrap {
 		width: 750upx;
 		height: 88upx;
 		box-sizing: border-box;
@@ -417,13 +463,15 @@
 		/* padding: 2upx; */
 		margin: 0 auto 0;
 	}
-	.head{
+
+	.head {
 		width: 750upx;
 		height: 88upx;
 		display: flex;
 		align-items: center;
 	}
-	.headItem{
+
+	.headItem {
 		width: 20%;
 		height: 88upx;
 		line-height: 88upx;
@@ -432,16 +480,19 @@
 		color: #333333;
 		text-align: center;
 	}
-	.headItem.active{
+
+	.headItem.active {
 		/* background: linear-gradient(45deg, #FF5F60 0%, #DF6BAA 100%); */
 		color: #F23A3A;
 		font-weight: bold;
 	}
-	.collageMain{
+
+	.collageMain {
 		display: flex;
 		justify-content: space-between;
 	}
-	.collageMainL{
+
+	.collageMainL {
 		width: 120upx;
 		height: 60upx;
 		background-color: #F3F3F3;
@@ -452,36 +503,41 @@
 		text-align: center;
 		line-height: 60upx;
 	}
-	.collageMainL2{
+
+	.collageMainL2 {
 		width: 120upx;
 		height: 60upx;
 		background-color: #FFF6F7;
 		border-radius: 0 40upx 40upx 0;
 		font-size: 26upx;
-		color: #EF343D  ;
+		color: #EF343D;
 		font-weight: bold;
 		text-align: center;
 		line-height: 60upx;
 	}
-	.collageMainR{
+
+	.collageMainR {
 		font-size: 28upx;
 		color: #666666;
 		font-weight: bold;
 		margin-right: 24upx;
 		line-height: 60upx;
 	}
-	.collageMainR text{
+
+	.collageMainR text {
 		color: #333333;
 	}
-	.collageBtn{
+
+	.collageBtn {
 		display: flex;
 		justify-content: flex-end;
 		margin-top: 40upx;
 		padding-right: 24upx;
 		padding-bottom: 24upx;
 	}
-	.conItemBRBCheckDetail{
-		width: 	176upx;
+
+	.conItemBRBCheckDetail {
+		width: 176upx;
 		height: 80upx;
 		line-height: 80upx;
 		box-sizing: border-box;
@@ -495,8 +551,9 @@
 		right: 0;
 		bottom: 24upx; */
 	}
-	.conItemBRBCheckDetail1{
-		width: 	176upx;
+
+	.conItemBRBCheckDetail1 {
+		width: 176upx;
 		height: 80upx;
 		line-height: 80upx;
 		box-sizing: border-box;
@@ -510,8 +567,9 @@
 		right: 142upx;
 		bottom: 24upx; */
 	}
-	.conItemBRBCheckDetail2{
-		width: 	176upx;
+
+	.conItemBRBCheckDetail2 {
+		width: 176upx;
 		height: 80upx;
 		line-height: 80upx;
 		box-sizing: border-box;
