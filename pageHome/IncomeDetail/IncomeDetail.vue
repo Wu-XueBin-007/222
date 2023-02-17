@@ -176,6 +176,10 @@
 </script>
 
 <style lang="scss">
+	::-webkit-scrollbar {
+		display: none
+	}
+
 	.back {
 		width: 100%;
 		min-height: 100vh;
