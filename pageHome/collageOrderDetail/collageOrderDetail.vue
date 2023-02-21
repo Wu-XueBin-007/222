@@ -186,14 +186,14 @@
 		onShareAppMessage() {
 			let app = this;
 			console.log("/pages/collageDetail/collageDetail?" + app.$getShareUrlParams({
-				groupid: app.groupid
+				groupid: app.info.group_task_id
 			}));
 			return {
 				title: "拼团详情",
 				path: "/pages/collageDetail/collageDetail?" + app.$getShareUrlParams({
-					groupid: app.groupid
+					groupid: app.info.group_task_id
 				}),
-				imageUrl: App.$vm.globalData.setting.GroupShareImageId.preview_url
+				// imageUrl: App.$vm.globalData.setting.GroupShareImageId.preview_url
 			}
 		},
 		onPullDownRefresh() {
