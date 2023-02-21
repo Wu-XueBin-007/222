@@ -139,7 +139,9 @@
 						wait_profit,
 						release_profit,
 						dynamic_active
-					} = res;
+					} = res.data;
+					console.log(res, 'res');
+					console.log(dynamic_active, 'dynamic_active');
 					this.all_profit = all_profit || 0;
 					this.wait_profit = wait_profit || 0;
 					this.release_profit = release_profit || 0;
