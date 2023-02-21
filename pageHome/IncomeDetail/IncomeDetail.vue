@@ -38,7 +38,7 @@
 				</view>
 			</scroll-view>
 		</view>
-		<view v-if="isLoading" class="listBox">
+		<view class="listBox">
 			<view v-for="(item) in Income_list" class="listLi">
 				<view class="static">
 					<text>{{item.describe}}</text>
@@ -46,8 +46,9 @@
 				</view>
 				<text class="staticNum">{{item.money>0?'+'+item.money:item.money}}</text>
 			</view>
-			<empty v-if="Income_list.length == 0" :isLoading="isLoading"></empty>
+			<empty v-if='Income_list.length==0&&isLoading' :isLoading='Income_list.length!==0&&!isLoading'></empty>
 		</view>
+
 
 	</view>
 </template>
@@ -90,6 +91,18 @@
 						brand_id: 904,
 						brand_name: "间推抢购收益"
 					},
+					{
+						brand_id: 905,
+						brand_name: "股东收益"
+					},
+					{
+						brand_id: 906,
+						brand_name: "董事收益"
+					},
+					{
+						brand_id: 907,
+						brand_name: "合伙人收益"
+					}
 				],
 				brand_index: 0, // 当前选中的下标值
 				all_profit: 0, //总收益
@@ -147,7 +160,7 @@
 					let page = list.current_page;
 					this.page = page++;
 					this.Income_list = list.data || [];
-					this.isLoading = true
+					this.isLoading = true;
 				}).catch(err => {
 					console.log('grouplistcatch', err)
 				})
@@ -170,6 +183,7 @@
 				this.brand_index = index;
 				this.grouplist(index);
 				this.x = this.nav_list[index].left - this.contentScrollW / 2 + this.nav_list[index].width / 2;
+
 			}
 		}
 	}

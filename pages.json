@@ -810,6 +810,18 @@
 						"enablePullDownRefresh": false
 					}
 
+				}, {
+					"path": "make/make",
+					"style": {
+						"navigationBarTitleText": "天天赚",
+						"enablePullDownRefresh": false,
+						"navigationStyle": "custom",
+						"app-plus": {
+							"titleNView": false
+						},
+						"navigationBarTextStyle": "white"
+					}
+
 				}
 			]
 		},

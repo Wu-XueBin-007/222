@@ -30,6 +30,9 @@
 					<navigator url='/pageHome/IncomeDetail/IncomeDetail' class="income ct">
 						收益明细
 					</navigator>
+					<navigator url='/pageHome/make/make' class="income make ct">
+						天天赚
+					</navigator>
 					<navigator url='/pageHome/ruleDetails/ruleDetails' class="rule ct">
 						规则详情
 					</navigator>
@@ -1249,18 +1252,23 @@
 			font-size: 28rpx;
 
 			.income {
-				width: 172rpx;
-				height: 60rpx;
+				width: 150rpx;
+				height: 50rpx;
 				background: rgba(240, 126, 29, 0.6);
 				backdrop-filter: blur(10rpx);
 				/* Note: backdrop-filter has minimal browser support */
 				border-radius: 30rpx 0px 0px 30rpx;
-				margin-bottom: 30rpx;
+				margin-bottom: 16rpx;
+
+			}
+
+			.make {
+				background: #947256
 			}
 
 			.rule {
-				width: 172rpx;
-				height: 60rpx;
+				width: 150rpx;
+				height: 50rpx;
 				background: rgba(242, 58, 58, 0.6);
 				backdrop-filter: blur(10rpx);
 				/* Note: backdrop-filter has minimal browser support */
