@@ -2,6 +2,7 @@
 	<view class="distribution">
 		<head-nav title="我的团队" :backFlag="true" color="white" backGround="#03031D" backType="other" fontSize="36">
 		</head-nav>
+
 		<view class="headBanner">
 			<image class="headBg" src="../static/bg.png" mode=""></image>
 			<view class="textWrap">
@@ -16,9 +17,12 @@
 				<view class="memberList">
 					Member list
 				</view>
-				<view v-if="teamInfo.superior_user_info&&teamInfo.superior_user_info.user_id" @click="showMark"
+				<view v-if="teamInfo.superior_user_info&&teamInfo.superior_user_info.user_id&&false" @click="showMark"
 					class="referees">
 					<image class="refereesImg" src="../static/referees.png" mode=""></image> 我的推荐人
+				</view>
+				<view v-else @click="bindReferees" class="referees ct">
+					绑定推荐人
 				</view>
 				<template v-if="teamInfo.progress_meter_show"
 					style="margin-top: 20rpx;z-index: 2;display: flex;flex-direction: column;justify-content: center;">
@@ -32,6 +36,9 @@
 				</template>
 			</view>
 		</view>
+
+
+
 		<!-- tabs -->
 		<scroll-view class="scroll-view_H" :scroll-into-view='scroll_into_view' scroll-with-animation scroll-x="true">
 			<template v-for="(tab,index) in nav">
@@ -187,8 +194,22 @@
 					</view>
 				</view>
 			</view>
-			<image src="../../static/home/close_icon.png" class="topUserWrapB" @click="hideMark"></image>
+			<image src="../../static/home/close_icon.png" class="topUserWrapB" @click="hideMark1"></image>
 		</view>
+
+		<view class="mark" v-if="showAgree" @click="hideMark1"></view>
+		<view class="topUserWrap" v-if="showAgree">
+			<view class="topUserWrapT">
+				<view class="topUserWrapTT">修改用户上级</view>
+				<view class="topUserWrapTB">
+					<input class="input ct" type="number" min=0 v-model="superior" placeholder="请填写用户上级"></input>
+				</view>
+				<button class="btn ct" @click="update_superior" type="primary">修改</button>
+			</view>
+			<image src="../../static/home/close_icon.png" class="topUserWrapB" @click="hideMark1"></image>
+		</view>
+
+
 	</view>
 </template>
 
@@ -221,7 +242,9 @@
 				tabTopList: [],
 				tabTopCurrent: 0,
 				scroll_into_view: 'team_count',
-				navIndex: 0
+				navIndex: 0,
+				showAgree: false,
+				superior: ''
 			}
 		},
 		components: {
@@ -272,6 +295,16 @@
 					data: id.toString()
 				})
 			},
+			update_superior() {
+				UserApi.update_superior({
+						superior_user_id: this.superior
+					})
+					.then(result => {
+						console.log(result, 'result');
+					})
+			},
+			close() {},
+			open() {},
 			// TAB切换
 			checkIndex(index) {
 				this.navIndex = index;
@@ -286,6 +319,12 @@
 			// 隐藏 我的推荐人
 			hideMark() {
 				this.markFlag = false;
+			},
+			hideMark1() {
+				this.showAgree = false;
+			},
+			bindReferees() {
+				this.showAgree = true;
 			},
 			// 搜索
 			searchList() {
@@ -379,6 +418,21 @@
 	::-webkit-scrollbar {
 		width: 0;
 		height: 0;
+	}
+
+	.input {
+		border: 1rpx solid #dfdfdf;
+		height: 59rpx;
+		padding-left: 16rpx;
+		background: #d6d6d6;
+		border-radius: 10rpx;
+	}
+
+	.btn {
+		width: 200rpx;
+		height: 68rpx;
+		margin-top: 40rpx;
+		// width: 120rpx;
 	}
 
 	// 空数据按钮

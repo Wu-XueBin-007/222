@@ -18,7 +18,7 @@
 				#endif
 			</view> -->
 
-			<nav-head v-if="showStaic" title="幸运拼团" backGround="rage(0,0,0,0.01)" :fontSize="30" backL="transparent"
+			<nav-head v-if="showStaic" title=" " backGround="rage(0,0,0,0.01)" :fontSize="30" backL="transparent"
 				color="white"></nav-head>
 			<seckill-nav v-else backGround="rage(0,0,0,1)" :fontSize="30" backL="transparent" color="#000000">
 			</seckill-nav>
@@ -31,7 +31,7 @@
 						收益明细
 					</navigator>
 					<navigator url='/pageHome/make/make' class="income make ct">
-						天天赚
+						成员列表
 					</navigator>
 					<navigator url='/pageHome/ruleDetails/ruleDetails' class="rule ct">
 						规则详情

@@ -33,7 +33,7 @@
 			<scroll-view class="bottom_scroll" :scroll-x="true" :scroll-with-animation='true' :scroll-left="x">
 				<view class='nav' :class="brand_index == index?'cur':''" v-for="(item,index) in nav_list"
 					:key="item.index" @click='switchTap(index)'>
-					<view>{{item.brand_name}}</view>
+					<view>{{item.name}}</view>
 					<span></span>
 				</view>
 			</scroll-view>
@@ -71,39 +71,7 @@
 				contentScrollW: 0,
 				x: 0,
 				//测试数据,实际项目中引入自己的数据
-				nav_list: [{
-						brand_id: '',
-						brand_name: "全部"
-					},
-					{
-						brand_id: 901,
-						brand_name: "静态收益"
-					},
-					{
-						brand_id: 902,
-						brand_name: "抢购收益"
-					},
-					{
-						brand_id: 903,
-						brand_name: "直推抢购收益"
-					},
-					{
-						brand_id: 904,
-						brand_name: "间推抢购收益"
-					},
-					{
-						brand_id: 905,
-						brand_name: "股东收益"
-					},
-					{
-						brand_id: 906,
-						brand_name: "董事收益"
-					},
-					{
-						brand_id: 907,
-						brand_name: "合伙人收益"
-					}
-				],
+				nav_list: [],
 				brand_index: 0, // 当前选中的下标值
 				all_profit: 0, //总收益
 				wait_profit: 0, //待释放
@@ -119,26 +87,26 @@
 			seckillNav,
 			Empty
 		},
-		mounted() {
-			this.getScrollW()
-		},
+		mounted() {},
 
 		onShow() {
 			this.groupinfo();
-			this.grouplist()
+
 		},
 		onReachBottom() {
 			this.grouplist(this.brand_index)
 		},
 		methods: {
 			groupinfo() {
+
 				IncomeApi.groupinfo().then(res => {
 					// 收益明细上半部分
 					let {
 						all_profit,
 						wait_profit,
 						release_profit,
-						dynamic_active
+						dynamic_active,
+						nav
 					} = res.data;
 					console.log(res, 'res');
 					console.log(dynamic_active, 'dynamic_active');
@@ -146,15 +114,19 @@
 					this.wait_profit = wait_profit || 0;
 					this.release_profit = release_profit || 0;
 					this.dynamic_active = dynamic_active || 0;
+					this.nav_list = nav;
+					this.$nextTick(this.getScrollW)
+
 				}).catch(err => {
 					console.log('groupinfocatch', err)
 				})
 			},
 			grouplist(index = 0) {
 				let nav_list = this.nav_list;
+				console.log(nav_list, 'nav_list')
 				let parameter = {
 					page: this.page,
-					scene: nav_list[index].brand_id
+					scene: nav_list[index].scene
 				}
 				IncomeApi.grouplist(parameter).then(res => {
 					console.log(res)
@@ -180,6 +152,7 @@
 						this.nav_list[i].width = data[i].width
 					}
 				}).exec()
+				this.grouplist()
 			},
 			switchTap(index) {
 				this.brand_index = index;
