@@ -200,11 +200,11 @@
 		<view class="mark" v-if="showAgree" @click="hideMark1"></view>
 		<view class="topUserWrap" v-if="showAgree">
 			<view class="topUserWrapT">
-				<view class="topUserWrapTT">修改用户上级</view>
+				<view class="topUserWrapTT">绑定推荐人</view>
 				<view class="topUserWrapTB">
-					<input class="input ct" type="number" min=0 v-model="superior" placeholder="请填写用户上级"></input>
+					<input class="input ct" type="number" min=0 v-model="superior" placeholder="请绑定推荐人ID"></input>
 				</view>
-				<button class="btn ct" @click="update_superior" type="primary">修改</button>
+				<button class="btn ct" @click="update_superior" type="primary">绑定</button>
 			</view>
 			<image src="../../static/home/close_icon.png" class="topUserWrapB" @click="hideMark1"></image>
 		</view>
