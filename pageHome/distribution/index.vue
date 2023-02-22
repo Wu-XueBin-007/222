@@ -17,7 +17,7 @@
 				<view class="memberList">
 					Member list
 				</view>
-				<view v-if="teamInfo.superior_user_info&&teamInfo.superior_user_info.user_id&&false" @click="showMark"
+				<view v-if="teamInfo.superior_user_info&&teamInfo.superior_user_info.user_id" @click="showMark"
 					class="referees">
 					<image class="refereesImg" src="../static/referees.png" mode=""></image> 我的推荐人
 				</view>
