@@ -1,22 +1,29 @@
 <template>
-	<view class="box ">
-		<text class="text">
-			天天赚玩法说明：
-
-			抢购指定商品，五人成团，每天限购十次
-			中奖者，获得该商品，累计抽中五次商品，所有花销全额返还
-			未中奖者，即时返还本金，并获取一定金额的参予奖励
-
-		</text>
+	<view class="box">
+		<view v-html="group_rules" style="padding: 30upx;box-sizing: border-box;">
+		</view>
 	</view>
 </template>
 
 <script>
+	import * as settingApi from '@/api/ticket/setting'
 	export default {
 		data() {
 			return {
-
+				group_rules: ''
 			};
+		},
+		mounted() {
+			this.getCommon()
+		},
+		methods: {
+			getCommon() {
+				settingApi.detail().then(res => {
+					console.log(res);
+					this.group_rules = res.data.detail.group_rules.replace(/<img/g, "<img style='width: 100%;'");
+					console.log(this.group_rules, 'this.group_rules');
+				})
+			},
 		}
 	}
 </script>
@@ -25,10 +32,5 @@
 	.box {
 		width: 100%;
 		height: 100%;
-		padding: 20rpx;
-	}
-
-	.text {
-		// padding: 20rpx;
 	}
 </style>
