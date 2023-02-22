@@ -16,9 +16,12 @@
 				<view class="memberList">
 					Member list
 				</view>
-				<view v-if="teamInfo.superior_user_info&&teamInfo.superior_user_info.user_id" @click="showMark"
+				<view v-if="teamInfo.superior_user_info&&teamInfo.superior_user_info.user_id&&false" @click="showMark"
 					class="referees">
 					<image class="refereesImg" src="../static/referees.png" mode=""></image> 我的推荐人
+				</view>
+				<view v-else @click="bindReferees" class="referees ct">
+					绑定推荐人
 				</view>
 				<template v-if="teamInfo.progress_meter_show"
 					style="margin-top: 20rpx;z-index: 2;display: flex;flex-direction: column;justify-content: center;">
@@ -102,6 +105,18 @@
 			</view>
 			<image src="../../static/home/close_icon.png" class="topUserWrapB" @click="hideMark"></image>
 		</view>
+
+		<view class="mark" v-if="showAgree" @click="hideMark1"></view>
+		<view class="topUserWrap" v-if="showAgree">
+			<view class="topUserWrapT">
+				<view class="topUserWrapTT">绑定推荐人</view>
+				<view class="topUserWrapTB">
+					<input class="input ct" type="number" min=0 v-model="superior" placeholder="请绑定推荐人ID"></input>
+				</view>
+				<button class="btn ct" @click="update_superior" type="primary">绑定</button>
+			</view>
+			<image src="../../static/home/close_icon.png" class="topUserWrapB" @click="hideMark1"></image>
+		</view>
 	</view>
 </template>
 
@@ -134,7 +149,9 @@
 				tabTopList: [],
 				tabTopCurrent: 0,
 				scroll_into_view: 'team_count',
-				navIndex: 0
+				navIndex: 0,
+				showAgree: false,
+				superior: ''
 			}
 		},
 		components: {
@@ -192,9 +209,23 @@
 				this.scroll_into_view = this.nav[index].field;
 				this.getList();
 			},
+			update_superior() {
+				UserApi.update_superior({
+						superior_user_id: this.superior
+					})
+					.then(result => {
+						console.log(result, 'result');
+					})
+			},
 			// 我的推荐人
 			showMark() {
 				this.markFlag = true;
+			},
+			hideMark1() {
+				this.showAgree = false;
+			},
+			bindReferees() {
+				this.showAgree = true;
 			},
 			// 隐藏 我的推荐人
 			hideMark() {
@@ -292,6 +323,21 @@
 	::-webkit-scrollbar {
 		width: 0;
 		height: 0;
+	}
+
+	.input {
+		border: 1rpx solid #dfdfdf;
+		height: 59rpx;
+		padding-left: 16rpx;
+		background: #d6d6d6;
+		border-radius: 10rpx;
+	}
+
+	.btn {
+		width: 200rpx;
+		height: 68rpx;
+		margin-top: 40rpx;
+		// width: 120rpx;
 	}
 
 	// 空数据按钮

@@ -37,8 +37,6 @@
 			</view>
 		</view>
 
-
-
 		<!-- tabs -->
 		<scroll-view class="scroll-view_H" :scroll-into-view='scroll_into_view' scroll-with-animation scroll-x="true">
 			<template v-for="(tab,index) in nav">
