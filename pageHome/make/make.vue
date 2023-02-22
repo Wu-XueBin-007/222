@@ -210,10 +210,21 @@
 				this.getList();
 			},
 			update_superior() {
+				let app = this
 				UserApi.update_superior({
 						superior_user_id: this.superior
 					})
 					.then(result => {
+						if (result.status == 200) {
+							uni.showToast({
+								icon: "none",
+								title: '绑定成功',
+								success() {
+									app.showAgree = false;
+									app.getList()
+								}
+							})
+						}
 						console.log(result, 'result');
 					})
 			},
