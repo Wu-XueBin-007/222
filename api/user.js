@@ -12,7 +12,7 @@ const api = {
 	check_edit_password: 'user/check_edit_password',
 	profit: 'team/profit',
 	profit_record: 'team/profit_record',
-	update_superior: '/user/update_superior'
+	update_superior: 'user/update_superior'
 }
 
 // 当前登录的用户信息
@@ -32,7 +32,7 @@ export const update_superior = (param, option) => {
 		load: true, //（默认 true 说明：本接口是否提示加载动画）
 		...option
 	}
-	return request.get(api.update_superior, param, options)
+	return request.post(api.update_superior, param, options)
 }
 
 // 账户资产
