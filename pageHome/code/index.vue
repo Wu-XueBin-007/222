@@ -45,7 +45,7 @@
 			//console.log("/pageHome/code/index?" + app.$getShareUrlParams());
 			return {
 				// title: page.params.share_title,
-				path: "/pageHome/code/index?" + app.$getShareUrlParams()
+				path: "/pages/index/index?" + app.$getShareUrlParams()
 			}
 		},
 
@@ -61,7 +61,7 @@
 			} = app
 			return {
 				// title: page.params.share_title,
-				path: "/pageHome/code/index?" + app.$getShareUrlParams()
+				path: "/pages/index/index?" + app.$getShareUrlParams()
 			}
 		},
 

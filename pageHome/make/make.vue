@@ -48,7 +48,7 @@
 				<view class="">
 					<view class="allNum">
 						共<text style="color: red;">{{nav[navIndex].num}}</text>人
-						总参与<text style="color: red;margin-left: 10rpx;">{{nav[navIndex].pay_num}}</text>人
+						总参与<text style="color: red;margin-left: 10rpx;">{{nav[navIndex].pay_num}}</text>次
 					</view>
 				</view>
 				<view class="inpwrap">
@@ -75,8 +75,8 @@
 						</view>
 						<view class="member_id">
 							<text>ID:{{item.user_id}}</text>
-							<text>总参与:{{item.pay_num}}</text>
-							<text>团队:<text class="member_id_num">{{item.subordinate_count||0}}</text>人 </text>
+							<text>总参与:{{item.pay_num}}次</text>
+							<!-- <text>团队:<text class="member_id_num">{{item.subordinate_count||0}}</text> </text> -->
 						</view>
 					</view>
 					<view class="member_phone">
@@ -407,7 +407,7 @@
 		background: linear-gradient(0deg, #000000 0%, #27273C 100%);
 
 		.scroll-view-item_H {
-			width: 316rpx;
+			width: 188rpx;
 			display: inline-block;
 			text-align: center;
 			background: linear-gradient(0deg, #000000 0%, #27273C 100%);
@@ -419,7 +419,7 @@
 		.activite {
 			background: linear-gradient(0deg, #0A0A0F 0%, #C6836B 100%);
 			border-radius: 10px 0px 0px 0px;
-			width: 316rpx;
+			width: 188rpx;
 		}
 	}
 </style>
