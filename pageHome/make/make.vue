@@ -1,6 +1,6 @@
 <template>
 	<view class="distribution">
-		<head-nav title="天天赚" :backFlag="true" color="white" backGround="#03031D" backType="other" fontSize="36">
+		<head-nav title="天天赚" :backFlag="true" color="white" backGround="#03031D" backType="other" :fontSize="36">
 		</head-nav>
 		<view class="headBanner">
 			<image class="headBg" src="../static/bg.png" mode=""></image>
@@ -47,8 +47,8 @@
 			<view class="listHead">
 				<view class="">
 					<view class="allNum">
-						共<text style="color: red;">{{nav[navIndex].num}}</text>人
-						总参与<text style="color: red;margin-left: 10rpx;">{{nav[navIndex].pay_num}}</text>次
+						共<text style="color: red;">{{All}}</text>人
+						<!-- 总参与<text style="color: red;margin-left: 10rpx;">{{nav[navIndex].pay_num||0}}</text>次 -->
 					</view>
 				</view>
 				<view class="inpwrap">
@@ -60,6 +60,7 @@
 				</view>
 			</view>
 		</view>
+		<empty v-if='teamList.length==0&&isLoading' :isLoading='teamList.length!==0&&!isLoading'></empty>
 		<view v-if="teamList.length" style="padding: 0 24rpx;box-sizing: border-box;">
 			<view v-for="item in teamList" class="listWrap">
 				<view class="member_avater">
@@ -151,12 +152,24 @@
 				scroll_into_view: 'team_count',
 				navIndex: 0,
 				showAgree: false,
-				superior: ''
+				superior: '',
+				All: 0,
+				isLoading: false
 			}
 		},
 		components: {
-			headNav
+			headNav,
+			Empty
 		},
+		computed: {
+			All() {
+				let nav = this.nav;
+				let navIndex = this.navIndex;
+				console.log(nav[navIndex].num || 0, 'All');
+				return nav[navIndex].num || 0
+			}
+		},
+
 		onLoad() {
 			this.getPageData()
 			this.getList()
@@ -294,11 +307,15 @@
 						this.totalUser = res.data.userInfo.total;
 					})
 			},
-			async getList() {
-				let res = await API.group()
-				this.teamInfo = res.data.data;
-				this.nav = res.data.data.nav
-				this.getUserList();
+			getList() {
+				API.group().then((res) => {
+					this.teamInfo = res.data.data;
+					this.nav = res.data.data.nav;
+					console.log(this.nav, 'this.nav');
+					console.log(111);
+					this.$nextTick(this.getUserList)
+				})
+
 			},
 			getUserList() {
 				let obj = {};
@@ -309,6 +326,7 @@
 				let type = this.nav[this.navIndex].field;
 				obj.type = type
 				API.group_list(obj).then(res => {
+					console.log(222);
 					console.log(res)
 					if (this.page == 1) {
 						this.teamList = res.data.user_list.data;
@@ -320,6 +338,7 @@
 					} else {
 						this.moreFlag = false;
 					}
+					this.isLoading = true;
 				})
 			}
 		}

@@ -1,7 +1,7 @@
 <template>
 	<view class="withdrawal">
 		<head-nav title="提现" :backFlag="true" color="white" backGround="linear-gradient(90deg, #FF5F60, #DE6BAD)"
-			backType="other" fontSize="36"></head-nav>
+			backType="other" :fontSize="36"></head-nav>
 		<view class="headNav">
 			<view class="headNavT">
 				<view class="headNavTL">可提现余额</view>
@@ -240,7 +240,7 @@
 						//console.log(res)
 						if (res.confirm) {
 							let flag = false;
-							
+
 							// if(_this.account_number || _this.imgInfo.file_id){
 							// 	flag = true;
 							// }

@@ -1,6 +1,7 @@
 <template>
 	<view>
-		<head-nav title="团队收益" :backFlag="true" color="white" backGround="linear-gradient(90deg, #FF5F60, #DE6BAD)" backType="other" fontSize="36"></head-nav>
+		<head-nav title="团队收益" :backFlag="true" color="white" backGround="linear-gradient(90deg, #FF5F60, #DE6BAD)"
+			backType="other" :fontSize="36"></head-nav>
 		<view class="headNav">
 			<view class="headNavT">
 				<view class="headNavTL">累计团队收益金额</view>
@@ -12,7 +13,8 @@
 			</view>
 		</view>
 		<view class="conWrap">
-			<view class="conItem" v-for="(item,index) in info.month_profit" :key="index" :data-date="item.date" @click="toDetail">
+			<view class="conItem" v-for="(item,index) in info.month_profit" :key="index" :data-date="item.date"
+				@click="toDetail">
 				<view class="conItemT">
 					<view class="conItemTL">团队收益记录</view>
 					<image class="conItemTR" src="../../static/icon/more_gray.png"></image>
@@ -25,10 +27,10 @@
 				</view>
 			</view>
 		</view>
-		<u-popup v-model="showAgree" mode="bottom"  @close="close" @open="open">
+		<u-popup v-model="showAgree" mode="bottom" @close="close" @open="open">
 			<view style="max-height: 700upx;">
 				<view v-html="commonL.profit_rules" style="padding: 30upx;box-sizing: border-box;">
-					
+
 				</view>
 			</view>
 		</u-popup>
@@ -42,40 +44,43 @@
 	export default {
 		data() {
 			return {
-				info:{
-					count_profit:0,
-					month_profit:[]
+				info: {
+					count_profit: 0,
+					month_profit: []
 				},
-				showAgree:false,
-				commonL:{}
+				showAgree: false,
+				commonL: {}
 			}
 		},
-		components:{headNav},
+		components: {
+			headNav
+		},
 		onLoad() {
 			this.getList();
 			this.getCommon();
 		},
 		methods: {
-			toDetail(e){
+			toDetail(e) {
 				let date = e.target.dataset.date || e.currentTarget.dataset.date;
 				uni.navigateTo({
-					url:"/pageHome/profit/profitDetail/profitDetail?date="+date
+					url: "/pageHome/profit/profitDetail/profitDetail?date=" + date
 				})
 			},
-			showRule(){
+			showRule() {
 				console.log(123)
 				this.showAgree = true;
 			},
-			getCommon(){
+			getCommon() {
 				settingApi.detail().then(res => {
-					res.data.detail.profit_rules = res.data.detail.profit_rules.replace(/<img/g,"<img style='width:100%'");
+					res.data.detail.profit_rules = res.data.detail.profit_rules.replace(/<img/g,
+						"<img style='width:100%'");
 					this.commonL = res.data.detail
-				}).catch(err=>{})
+				}).catch(err => {})
 			},
-			close(){},
-			open(){},
-			getList(){
-				userApi.profit().then(res=>{
+			close() {},
+			open() {},
+			getList() {
+				userApi.profit().then(res => {
 					console.log(res)
 					this.info = res.data;
 				})
@@ -85,12 +90,13 @@
 </script>
 
 <style scoped>
-	.conWrap{
+	.conWrap {
 		width: 690rpx;
 		margin: 0 auto;
 		transform: translateY(-32rpx);
 	}
-	.conItem{
+
+	.conItem {
 		width: 100%;
 		background: white;
 		border-radius: 20rpx;
@@ -98,54 +104,62 @@
 		padding: 30rpx;
 		margin-bottom: 30rpx;
 	}
-	.conItemT{
-		
+
+	.conItemT {
+
 		margin-bottom: 30rpx;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
-	.conItemTL{
+
+	.conItemTL {
 		font-size: 28rpx;
 		line-height: 28rpx;
 		color: #686868;
 	}
-	.conItemTR{
+
+	.conItemTR {
 		width: 12rpx;
 		height: 22rpx;
 	}
-	.conItemB{
+
+	.conItemB {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
-	.conItemBL{
+
+	.conItemBL {
 		font-size: 28rpx;
 		line-height: 28rpx;
 		color: #999999;
 	}
-	.conItemBR{
+
+	.conItemBR {
 		font-size: 40rpx;
 		line-height: 40rpx;
 		display: flex;
 		align-items: baseline;
 		color: #FD6066;
 	}
-	.conItemBR>text{
+
+	.conItemBR>text {
 		font-size: 24rpx;
 		line-height: 24rpx;
 		color: #FD6066;
 	}
-	
-	
-	.headNav{
+
+
+	.headNav {
 		width: 100%;
 		height: 288rpx;
 		background: linear-gradient(90deg, #FF5F60, #DE6BAD);
 		box-sizing: border-box;
 		padding-top: 70rpx;
 	}
-	.headNavT{
+
+	.headNavT {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -153,12 +167,14 @@
 		padding: 0 30rpx;
 		margin-bottom: 30rpx;
 	}
-	.headNavTL{
+
+	.headNavTL {
 		font-size: 32rpx;
 		line-height: 32rpx;
 		color: white;
 	}
-	.headNavTR{
+
+	.headNavTR {
 		height: 40rpx;
 		box-sizing: border-box;
 		padding: 0 20rpx;
@@ -168,7 +184,8 @@
 		line-height: 36rpx;
 		color: white;
 	}
-	.headNavB{
+
+	.headNavB {
 		display: flex;
 		align-items: baseline;
 		box-sizing: border-box;
@@ -178,7 +195,8 @@
 		color: white;
 		height: 100rpx;
 	}
-	.headNavB>text{
+
+	.headNavB>text {
 		font-size: 60rpx;
 		line-height: 60rpx;
 		color: white;

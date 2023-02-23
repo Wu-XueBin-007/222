@@ -1527,6 +1527,25 @@
 		right: 16rpx;
 		width: 100rpx;
 		height: 100rpx;
+		animation: swipe 1s infinite;
+	}
+
+	@keyframes swipe {
+
+		0% {
+			transform: scale(0.8, 0.8);
+			opacity: 1;
+		}
+
+		25% {
+			transform: scale(1.3, 1.3);
+			opacity: 1;
+		}
+
+		100% {
+			transform: scale(0.8, 0.8);
+			opacity: 1;
+		}
 	}
 
 	.toincome>image {

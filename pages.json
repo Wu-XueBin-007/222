@@ -70,7 +70,7 @@
 					"titleNView": false
 				},
 				"navigationBarTextStyle": "white",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": false
 			}
 		},
 		{

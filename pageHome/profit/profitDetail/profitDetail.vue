@@ -1,6 +1,7 @@
 <template>
 	<view style="padding-top: 30rpx;">
-		<head-nav title="团队收益明细" :backFlag="true" color="white" backGround="linear-gradient(90deg, #FF5F60, #DE6BAD)" backType="other" fontSize="36"></head-nav>
+		<head-nav title="团队收益明细" :backFlag="true" color="white" backGround="linear-gradient(90deg, #FF5F60, #DE6BAD)"
+			backType="other" :fontSize="36"></head-nav>
 		<view class="msgItem" v-for="(item,index) in list" :key="index">
 			<view class="msgItemL">
 				<view class="msgItemLL msgItemLPT" v-if="item.order_source==50">拼</view>
@@ -36,19 +37,21 @@
 	export default {
 		data() {
 			return {
-				page:1,
-				date:'',
-				moreFlag:false,
-				list:[]
+				page: 1,
+				date: '',
+				moreFlag: false,
+				list: []
 			}
 		},
-		components:{headNav},
+		components: {
+			headNav
+		},
 		onLoad(options) {
 			this.date = options.date;
 			this.getList();
 		},
 		onReachBottom() {
-			if(!this.moreFlag){
+			if (!this.moreFlag) {
 				return false;
 			}
 			this.moreFlag = false;
@@ -62,37 +65,39 @@
 			this.getList();
 		},
 		methods: {
-			getList(){
+			getList() {
 				let obj = {};
 				obj.date = this.date;
 				obj.page = this.page;
-				userApi.profit_record(obj).then(res=>{
+				userApi.profit_record(obj).then(res => {
 					console.log(res)
 					uni.stopPullDownRefresh();
-					if(this.page == 1){
-						this.list = res.data.list.data.map(cur=>{
-							cur.pay_time = app.$vm.getTime(cur.pay_time*1000,"-","time");
+					if (this.page == 1) {
+						this.list = res.data.list.data.map(cur => {
+							cur.pay_time = app.$vm.getTime(cur.pay_time * 1000, "-", "time");
 							return cur;
 						})
-					}else{
-						this.list = this.list.concat(res.data.list.data.map(cur=>{
-							cur.pay_time = app.$vm.getTime(cur.pay_time*1000,"-","time");
+					} else {
+						this.list = this.list.concat(res.data.list.data.map(cur => {
+							cur.pay_time = app.$vm.getTime(cur.pay_time * 1000, "-", "time");
 							return cur;
 						}));
 					}
-					if(this.page < res.data.list.last_page){
+					if (this.page < res.data.list.last_page) {
 						this.moreFlag = true;
-					}else{
+					} else {
 						this.moreFlag = false;
 					}
-				}).catch(err=>{uni.stopPullDownRefresh();})
+				}).catch(err => {
+					uni.stopPullDownRefresh();
+				})
 			}
 		}
 	}
 </script>
 
 <style scoped>
-	.msgItem{
+	.msgItem {
 		width: 690rpx;
 		height: 80rpx;
 		box-sizing: border-box;
@@ -104,20 +109,24 @@
 		justify-content: space-between;
 		padding: 0 20rpx;
 	}
-	.msgItem:nth-child(1){
+
+	.msgItem:nth-child(1) {
 		margin-top: 0;
 	}
-	.msgItem:nth-child(2n+1){
+
+	.msgItem:nth-child(2n+1) {
 		background: #f5f5f5;
 	}
-	.msgItemL{
+
+	.msgItemL {
 		display: flex;
 		align-items: center;
 	}
-	.msgItemLL{
+
+	.msgItemLL {
 		width: 52rpx;
 		height: 52rpx;
-		
+
 		line-height: 52rpx;
 		text-align: center;
 		color: white;
@@ -126,50 +135,62 @@
 		border-radius: 50%;
 		margin-right: 30rpx;
 	}
-	.msgItemLPT{
+
+	.msgItemLPT {
 		background: linear-gradient(45deg, #FF5F60 0%, #DF6BAE 100%);
 	}
-	.msgItemLMS{
+
+	.msgItemLMS {
 		background: linear-gradient(45deg, #DC0303 0%, #FC6060 100%);
 	}
-	.msgItemLCP{
+
+	.msgItemLCP {
 		background: linear-gradient(45deg, #015EEA 0%, #00C0FA 100%);
 	}
-	.msgItemLSC{
+
+	.msgItemLSC {
 		background: linear-gradient(45deg, #7148B5 0%, #8769E9 50%, #715DD3 100%);
 	}
-	.msgItemLSY{
+
+	.msgItemLSY {
 		background: linear-gradient(45deg, #12D6DF 0%, #F70FFF 100%);
 	}
-	.msgItemLHF{
+
+	.msgItemLHF {
 		background: linear-gradient(45deg, #F28E26 0%, #FD644F 100%);
 	}
-	.msgItemLR{
+
+	.msgItemLR {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 	}
-	.msgItemLRT{
+
+	.msgItemLRT {
 		font-size: 28rpx;
 		line-height: 28rpx;
 		color: #686868;
 		margin-bottom: 8rpx;
 	}
-	.msgItemLRB{
+
+	.msgItemLRB {
 		font-size: 22rpx;
 		line-height: 22rpx;
 		color: #999999;
 	}
-	.msgItemR{
+
+	.msgItemR {
 		display: flex;
 		align-items: center;
 	}
-	.msgItemRL{
+
+	.msgItemRL {
 		width: 24rpx;
 		height: 24rpx;
 		margin-right: 20rpx;
 	}
-	.msgItemRR{
+
+	.msgItemRR {
 		font-size: 28rpx;
 		line-height: 28rpx;
 		color: #686868;

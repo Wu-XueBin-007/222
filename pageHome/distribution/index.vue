@@ -1,6 +1,6 @@
 <template>
 	<view class="distribution">
-		<head-nav title="我的团队" :backFlag="true" color="white" backGround="#03031D" backType="other" fontSize="36">
+		<head-nav title="我的团队" :backFlag="true" color="white" backGround="#03031D" backType="other" :fontSize="36">
 		</head-nav>
 
 		<view class="headBanner">

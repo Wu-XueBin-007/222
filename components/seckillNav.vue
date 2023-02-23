@@ -38,7 +38,7 @@
 				default: true
 			},
 			backGround: {
-			 type: String,
+				type: String,
 				default: "white"
 			},
 			color: {

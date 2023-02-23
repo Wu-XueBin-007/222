@@ -9,7 +9,7 @@
 					<view :class="['headItem',headIndex==1?'active':'']" data-index="1" @click="changeNav">已拼中</view>
 					<view :class="['headItem',headIndex==2?'active':'']" data-index="2" @click="changeNav">未拼中</view>
 					<view :class="['headItem',headIndex==3?'active':'']" data-index="3" @click="changeNav">拼团失败</view>
-					<view :class="['headItem',headIndex==4?'active':'']" data-index="4" @click="changeNav">已超时</view>
+					<!-- <view :class="['headItem',headIndex==4?'active':'']" data-index="4" @click="changeNav">已超时</view> -->
 				</view>
 			</view>
 			<view style="display: flex;height: calc(100% - 88upx);">
@@ -70,9 +70,9 @@
 									<view class="collageMainL" v-if="headIndex==3">
 										拼团失败
 									</view>
-									<view class="collageMainL" v-if="headIndex==4">
+									<!-- 									<view class="collageMainL" v-if="headIndex==4">
 										已超时
-									</view>
+									</view> -->
 									<view class="collageMainR">
 										拼团价：<text>￥{{item.order.pay_price}}</text>
 									</view>
@@ -472,7 +472,7 @@
 	}
 
 	.headItem {
-		width: 20%;
+		width: 25%;
 		height: 88upx;
 		line-height: 88upx;
 		font-size: 30upx;
