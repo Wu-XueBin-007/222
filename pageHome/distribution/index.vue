@@ -49,7 +49,7 @@
 			<view class="listHead">
 				<view class="">
 					<view class="allNum">
-						共<text style="color: red;">{{nav[navIndex].num}}</text>人
+						共<text style="color: red;">{{All}}</text>人
 					</view>
 				</view>
 				<view class="inpwrap">
@@ -61,6 +61,7 @@
 				</view>
 			</view>
 		</view>
+		<empty v-if='teamList.length==0&&isLoading' :isLoading='teamList.length!==0&&!isLoading'></empty>
 		<!-- <scroll-view style="height: calc(100vh - 878rpx);padding-bottom: 40rpx;box-sizing: border-box;" scroll-y="true"> -->
 		<view v-if="teamList.length" style="padding: 0 24rpx;box-sizing: border-box;">
 			<view v-for="item in teamList" class="listWrap">
@@ -242,11 +243,20 @@
 				scroll_into_view: 'team_count',
 				navIndex: 0,
 				showAgree: false,
-				superior: ''
+				superior: '',
+				isLoading: false
 			}
 		},
 		components: {
-			headNav
+			headNav,
+			Empty
+		},
+		computed: {
+			All() {
+				let nav = this.nav;
+				let navIndex = this.navIndex;
+				return nav[navIndex].num || 0
+			}
 		},
 		onLoad() {
 			this.getPageData()
@@ -388,10 +398,11 @@
 					})
 			},
 			async getList() {
-				let res = await API.my()
-				this.teamInfo = res.data.data;
-				this.nav = res.data.data.nav
-				this.getUserList();
+				API.my().then((res) => {
+					this.teamInfo = res.data.data;
+					this.nav = res.data.data.nav;
+					this.$nextTick(this.getUserList)
+				})
 			},
 			getUserList() {
 				let obj = {};
@@ -414,6 +425,7 @@
 						this.moreFlag = false;
 					}
 				})
+				this.isLoading = true;
 			}
 		}
 	}

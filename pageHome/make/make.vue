@@ -48,7 +48,7 @@
 				<view class="">
 					<view class="allNum">
 						共<text style="color: red;">{{All}}</text>人
-						<!-- 总参与<text style="color: red;margin-left: 10rpx;">{{nav[navIndex].pay_num||0}}</text>次 -->
+						总参与<text style="color: red;margin-left: 10rpx;">{{nav[navIndex].pay_num||0}}</text>次
 					</view>
 				</view>
 				<view class="inpwrap">
@@ -153,8 +153,7 @@
 				navIndex: 0,
 				showAgree: false,
 				superior: '',
-				All: 0,
-				isLoading: false
+				isLoading: false,
 			}
 		},
 		components: {
@@ -165,7 +164,6 @@
 			All() {
 				let nav = this.nav;
 				let navIndex = this.navIndex;
-				console.log(nav[navIndex].num || 0, 'All');
 				return nav[navIndex].num || 0
 			}
 		},
@@ -257,7 +255,6 @@
 			},
 			// 搜索
 			searchList() {
-				console.log(2222);
 				this.page = 1;
 				this.getUserList();
 			},
@@ -311,8 +308,6 @@
 				API.group().then((res) => {
 					this.teamInfo = res.data.data;
 					this.nav = res.data.data.nav;
-					console.log(this.nav, 'this.nav');
-					console.log(111);
 					this.$nextTick(this.getUserList)
 				})
 
@@ -326,8 +321,6 @@
 				let type = this.nav[this.navIndex].field;
 				obj.type = type
 				API.group_list(obj).then(res => {
-					console.log(222);
-					console.log(res)
 					if (this.page == 1) {
 						this.teamList = res.data.user_list.data;
 					} else {

@@ -3,7 +3,7 @@
 		<!--弹出框  -->
 		<view class="home-popup2" v-if="showModalStatus3" catchtouchmove="true">
 			<view class="home-box2" @click="getLq">
-				<image src="https://oss.gzrhhj.com/10001/20230210/f9122b69809d8e0eae66e696406b442e.png" mode="widthFix">
+				<image src="https://oss.gzrhhj.com/10001/20230223/ea5652cfa06bc6324fa4a096c0905d5e.png" mode="widthFix">
 				</image>
 				<view class="buyBtn ct">
 					立即抢购

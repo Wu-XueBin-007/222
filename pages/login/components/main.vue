@@ -1,26 +1,28 @@
 <template>
-	<view class="container" :style="{'background-image':'url('+(infos.loginBackground?infos.loginBackground.preview_url:'')+')'}">
+	<view class="container"
+		:style="{'background-image':'url('+(infos.loginBackground?infos.loginBackground.preview_url:'')+')'}">
 		<!-- 页面头部 -->
 		<view class="header">
 			<view class="title">
-				
+
 				<template v-if="!ForgetpasswordFlage&&!registerFlag">
-					<view @click="loginFlag=false"  class="tab-item" :class="!loginFlag?'selTabItem':''">
+					<view @click="loginFlag=false" class="tab-item" :class="!loginFlag?'selTabItem':''">
 						账号登录
 					</view>
-					<view @click="loginFlag=true" class="tab-item" :class="loginFlag?'selTabItem':''" >
+					<view @click="loginFlag=true" class="tab-item" :class="loginFlag?'selTabItem':''">
 						短信登录
 					</view>
 				</template>
 				<template v-if="ForgetpasswordFlage||registerFlag">
-					<view @click="loginFlag=false"  class="tab-item" :class="!loginFlag?'selTabItem':''">
+					<view @click="loginFlag=false" class="tab-item" :class="!loginFlag?'selTabItem':''">
 						{{registerFlag?'注册账号':"忘记密码"}}
 					</view>
-					<view @click="ForgetpasswordFlage=false;registerFlag=false" class="tab-item" :class="loginFlag?'selTabItem':''" >
+					<view @click="ForgetpasswordFlage=false;registerFlag=false" class="tab-item"
+						:class="loginFlag?'selTabItem':''">
 						返回登录
 					</view>
 				</template>
-				
+
 			</view>
 		</view>
 		<!-- 表单 -->
@@ -29,7 +31,8 @@
 				<view class="laber">
 					账号
 				</view>
-				<input class="form-item--input" type="number" v-model="mobile" maxlength="11" placeholder-class="pcs" placeholder="请输入手机号码" />
+				<input class="form-item--input" type="number" v-model="mobile" maxlength="11" placeholder-class="pcs"
+					placeholder="请输入手机号码" />
 			</view>
 			<!-- 图形验证码 -->
 			<view class="form-item" v-if="registerFlag || loginFlag||ForgetpasswordFlage">
@@ -48,11 +51,16 @@
 				<view class="laber">
 					{{ForgetpasswordFlage?'重置密码':"密码"}}
 				</view>
-				<input class="form-item--input" :type="isPassword" v-model="pass1" placeholder-class="pcs" placeholder="请输入密码" />
+				<input class="form-item--input" :type="isPassword" v-model="pass1" placeholder-class="pcs"
+					placeholder="请输入密码" />
 				<view class="Forgetpassword">
-					<image style="width: 48rpx;height: 48rpx;" v-if="!isnewPwd" @click="showPwd()" src="../../../static/icon_mm_kj.png" mode=""></image>
-					<image style="width: 48rpx;height: 48rpx;" v-else @click="showPwd()" src="../../../static/icon_mm_yc.png" mode=""></image>
-					<text v-if='!registerFlag&&!ForgetpasswordFlage' @click="ForgetpasswordFlage=true;registerFlag=false" style="margin-left: 18rpx;color: #999999;font-size: 24rpx;">忘记密码</text>
+					<image style="width: 48rpx;height: 48rpx;" v-if="!isnewPwd" @click="showPwd()"
+						src="../../../static/icon_mm_kj.png" mode=""></image>
+					<image style="width: 48rpx;height: 48rpx;" v-else @click="showPwd()"
+						src="../../../static/icon_mm_yc.png" mode=""></image>
+					<text v-if='!registerFlag&&!ForgetpasswordFlage'
+						@click="ForgetpasswordFlage=true;registerFlag=false"
+						style="margin-left: 18rpx;color: #999999;font-size: 24rpx;">忘记密码</text>
 				</view>
 			</view>
 			<!-- 短信验证码 -->
@@ -60,7 +68,8 @@
 				<view class="laber">
 					短信验证码
 				</view>
-				<input class="form-item--input" type="number" v-model="smsCode" maxlength="6" placeholder-class="pcs" placeholder="请输入短信验证码" />
+				<input class="form-item--input" type="number" v-model="smsCode" maxlength="6" placeholder-class="pcs"
+					placeholder="请输入短信验证码" />
 				<view class="form-item--parts">
 					<view class="captcha-sms" @click="handelSmsCaptcha()">
 						<text v-if="!smsState" class="activate">获取验证码</text>
@@ -68,20 +77,20 @@
 					</view>
 				</view>
 			</view>
-			<view class="form-item" v-show="registerFlag">
+			<!-- 			<view class="form-item" v-show="registerFlag">
 				<view class="laber">
-					邀请人手机号 
+					邀请人手机号
 				</view>
-				<input class="form-item--input" type="number"  v-model="pass2" placeholder="请输入邀请人手机号(选填)" />
-			</view>
-			
+				<input class="form-item--input" type="number" v-model="pass2" placeholder="请输入邀请人手机号(选填)" />
+			</view> -->
+
 			<!-- 登录按钮 -->
 			<view class="login-button" @click="handleLogin">
 				<text v-if="registerFlag">注册</text>
 				<text v-if="!registerFlag || ForgetpasswordFlage">登录</text>
 				<!-- <text v-if="ForgetpasswordFlage">登录</text> -->
 			</view>
-			
+
 			<view class="agreement">
 				<label class="all-radio">
 					<radio class="radio" :checked="agreementState" @click="radiochange" color="#F97112" />
@@ -97,8 +106,10 @@
 					《隐私协议》
 				</view>
 			</view>
-			<view class="newRegister" style="transform: translateX(-20rpx); color: #333333;margin-top: 30upx;display: flex;box-sizing: border-box;padding: 0 30upx;" v-if="!registerFlag">
-					还没有账号？<text @click="changeRegister" style="color: #F97112;">立即注册</text> 
+			<view class="newRegister"
+				style="transform: translateX(-20rpx); color: #333333;margin-top: 30upx;display: flex;box-sizing: border-box;padding: 0 30upx;"
+				v-if="!registerFlag">
+				还没有账号？<text @click="changeRegister" style="color: #F97112;">立即注册</text>
 			</view>
 		</view>
 	</view>
@@ -108,7 +119,10 @@
 	import store from '@/store'
 	import * as LoginApi from '@/api/login'
 	import * as commonApi from "@/api/home/rotation.js"
-	import {edit_password,check_edit_password} from "@/api/user.js"
+	import {
+		edit_password,
+		check_edit_password
+	} from "@/api/user.js"
 	import {
 		throttle,
 		debounce
@@ -122,7 +136,7 @@
 	// 表单验证场景
 	const GET_CAPTCHA = 10
 	const SUBMIT_LOGIN = 20
-
+	let handelSmsCaptcha = false
 	export default {
 		props: {
 			// 是否存在第三方用户信息
@@ -157,11 +171,11 @@
 				pass2: '',
 				loginFlag: false,
 				registerFlag: false,
-				infos:{},
-				ForgetpasswordFlage:false,
+				infos: {},
+				ForgetpasswordFlage: false,
 				agreementState: false,
-				isPassword:'password',
-				isnewPwd:false,
+				isPassword: 'password',
+				isnewPwd: false,
 			}
 		},
 		onShow() {
@@ -178,33 +192,33 @@
 		},
 
 		methods: {
-			showPwd(){
-				console.log(this.isnewPwd,'this.isnewPwd');
-				 if (this.isnewPwd) {
-					this.isPassword='password';
+			showPwd() {
+				console.log(this.isnewPwd, 'this.isnewPwd');
+				if (this.isnewPwd) {
+					this.isPassword = 'password';
 					this.isnewPwd = false;
-				  } else {
-					this.isPassword='text';
+				} else {
+					this.isPassword = 'text';
 					this.isnewPwd = true;
-				  }	
+				}
 			},
-			goRichtext(){
+			goRichtext() {
 				uni.navigateTo({
-					url:'/pageHome/setup/serviceAgreement'
+					url: '/pageHome/setup/serviceAgreement'
 				})
 			},
 			radiochange(e) {
 				this.agreementState = !this.agreementState;
 				uni.setStorageSync('agreementState', this.agreementState)
 			},
-			goPrivacyAgreement(){
+			goPrivacyAgreement() {
 				uni.navigateTo({
-					url:'/pageHome/setup/privacyAgreement'
+					url: '/pageHome/setup/privacyAgreement'
 				})
 			},
-			getInfo(){
+			getInfo() {
 				commonApi.info()
-					.then(res=>{
+					.then(res => {
 						//console.log(res)
 						this.infos = res.data.storeInfo;
 					})
@@ -214,8 +228,9 @@
 			},
 			changeRegister() {
 				this.registerFlag = true;
-				this.loginFlag = false
-				this.ForgetpasswordFlage = false
+				this.loginFlag = false;
+				handelSmsCaptcha = false;
+				this.ForgetpasswordFlage = false;
 			},
 			changeLogin() {
 				this.loginFlag = !this.loginFlag;
@@ -229,10 +244,17 @@
 
 			// 点击发送短信验证码
 			handelSmsCaptcha() {
-				const app = this
+				console.log('handelSmsCaptcha', handelSmsCaptcha);
+				if (handelSmsCaptcha) return;
+				handelSmsCaptcha = true;
+				const app = this;
+				console.log(!app.isLoading, '!app.isLoading', !app.smsState, '!app.smsState', app.formValidation(
+					GET_CAPTCHA), 'app.formValidation(GET_CAPTCHA)');
 				if (!app.isLoading && !app.smsState && app.formValidation(GET_CAPTCHA)) {
 					app.sendSmsCaptcha()
 					// app.getCaptcha()
+				} else {
+					handelSmsCaptcha = false;
 				}
 			},
 
@@ -243,12 +265,16 @@
 				if (scene === GET_CAPTCHA) {
 					if (!app.validteMobile(app.mobile) || !app.validteCaptchaCode(app.captchaCode)) {
 						return false
+					} else {
+						return true
 					}
 				}
 				// 验证提交登录
 				if (scene === SUBMIT_LOGIN) {
 					if (!app.validteMobile(app.mobile) || !app.validteSmsCode(app.smsCode)) {
 						return false
+					} else {
+						return true
 					}
 				}
 				return true
@@ -296,15 +322,24 @@
 							captchaCode: app.captchaCode,
 							mobile: app.mobile
 						}
-						
+
 					})
 					.then(result => {
 						// 显示发送成功
-						app.$toast(result.message)
+						app.$toast(result.message);
+
 						// 执行定时器
 						app.timer()
+					}).catch(err => {
+						uni.showToast({
+							icon: 'error',
+							title: '验证码发送失败'
+						})
 					})
-					.finally(() => app.isLoading = false)
+					.finally(() => {
+						handelSmsCaptcha = false;
+						app.isLoading = false;
+					})
 			},
 
 			// 执行定时器
@@ -324,11 +359,11 @@
 			// 点击登录
 			handleLogin() {
 				const app = this
-				if(app.loginFlag || app.registerFlag){
+				if (app.loginFlag || app.registerFlag) {
 					if (app.formValidation(SUBMIT_LOGIN)) {
 						app.submitLogin()
 					}
-				}else{
+				} else {
 					app.submitLogin()
 				}
 			},
@@ -338,25 +373,25 @@
 				const app = this
 				app.isLoading = true
 				let obj = {};
-				if(app.registerFlag||app.loginFlag){
+				if (app.registerFlag || app.loginFlag) {
 					obj.type = 1;
-				}else if(app.loginFlag){
+				} else if (app.loginFlag) {
 					obj.type = 1;
-				}else if(!app.loginFlag){
+				} else if (!app.loginFlag) {
 					obj.type = 2;
 				}
 				// #ifdef MP-WEIXIN
 				obj.type = 1;
 				// #endif
-				console.log(obj.type,'obj.type');
-				if(obj.type == 1){
+				console.log(obj.type, 'obj.type');
+				if (obj.type == 1) {
 					console.log('obj.type == 1');
 					obj.smsCode = app.smsCode;
 					obj.mobile = app.mobile;
 					obj.isParty = app.isParty;
 					obj.partyData = app.partyData;
-					console.log(app.pass2.trim(),'app.pass2.trim()');
-					if(app.registerFlag){
+					console.log(app.pass2.trim(), 'app.pass2.trim()');
+					if (app.registerFlag) {
 						// #ifdef APP-PLUS
 						if (!app.pass1.trim()) {
 							uni.showToast({
@@ -366,35 +401,35 @@
 							})
 							return false;
 						}
-						
-						if (!app.pass2.trim()) {
-							uni.showToast({
-								icon: 'none',
-								title: '请输入邀请人手机号',
-								duration: 2000
-							})
-							return false;
-						}
+
+						// if (!app.pass2.trim()) {
+						// 	uni.showToast({
+						// 		icon: 'none',
+						// 		title: '请输入邀请人手机号',
+						// 		duration: 2000
+						// 	})
+						// 	return false;
+						// }
 						obj.password = app.pass1.trim();
 						obj.superior_user_phone = app.pass2.trim()
 						// #endif
 					}
-					
-				}else if(obj.type == 2){
+
+				} else if (obj.type == 2) {
 					console.log('obj.type == 2');
 					obj.mobile = app.mobile;
 					obj.isParty = app.isParty;
 					obj.partyData = app.partyData;
-					
+
 					if (!app.pass1.trim()) {
 						uni.showToast({
 							icon: 'none',
-							title:app.ForgetpasswordFlage?'请输入重置密码':'请输入密码',
+							title: app.ForgetpasswordFlage ? '请输入重置密码' : '请输入密码',
 							duration: 2000
 						})
 						return false;
 					}
-					if(app.registerFlag){
+					if (app.registerFlag) {
 						if (!app.pass2.trim()) {
 							uni.showToast({
 								icon: 'none',
@@ -403,7 +438,7 @@
 							})
 							return false;
 						}
-						
+
 					}
 					obj.password = app.pass1.trim();
 				}
@@ -423,8 +458,8 @@
 				// 	obj.nick_name = app.nick_name;
 				// }
 				// // #endif
-				
-				if(!app.agreementState){
+
+				if (!app.agreementState) {
 					uni.showToast({
 						icon: 'none',
 						title: '请勾选同意后再进行下一步操作',
@@ -432,59 +467,61 @@
 					})
 					return false;
 				}
-				console.log(obj,'obj');
-				if(app.ForgetpasswordFlage){
-						if(!this.pass1.trim()){
+				console.log(obj, 'obj');
+				if (app.ForgetpasswordFlage) {
+					if (!this.pass1.trim()) {
+						uni.showToast({
+							icon: 'none',
+							title: "请输入密码"
+						})
+						return false;
+					}
+					// if(!this.pass2.trim()){
+					// 	uni.showToast({
+					// 		icon:'none',
+					// 		title:"请输入新密码"
+					// 	})
+					// 	return false;
+					// }
+					let obj = {};
+					obj.smsCode = app.smsCode;
+					obj.mobile = app.mobile;
+					obj.password = this.pass1;
+					// obj.password1 = this.pass1;
+					console.log(obj, 'objobjobj')
+					check_edit_password(obj)
+						.then(res => {
 							uni.showToast({
-								icon:'none',
-								title:"请输入密码"
+								icon: 'none',
+								title: "修改成功，请您重新登录",
+								duration: 2000
 							})
-							return false;
-						}
-						// if(!this.pass2.trim()){
-						// 	uni.showToast({
-						// 		icon:'none',
-						// 		title:"请输入新密码"
-						// 	})
-						// 	return false;
-						// }
-						let obj = {};
-						obj.smsCode = app.smsCode;
-						obj.mobile = app.mobile;
-						obj.password = this.pass1;
-						// obj.password1 = this.pass1;
-						console.log(obj,'objobjobj')
-						check_edit_password(obj)
-							.then(res=>{
-								uni.showToast({
-									icon:'none',
-									title:"修改成功，请您重新登录",
-									duration:2000
+							setTimeout(() => {
+								uni.removeStorageSync('AccessToken');
+								uni.removeStorageSync('AccessToken_expiry');
+								this.$store.state.token = '';
+								this.$store.state.user.token = '';
+								this.$store.state.user.userId = '';
+								uni.navigateBack({
+									delta: 2
 								})
-								setTimeout(()=>{
-									uni.removeStorageSync('AccessToken');
-									uni.removeStorageSync('AccessToken_expiry');
-									this.$store.state.token = '';
-									this.$store.state.user.token = '';
-									this.$store.state.user.userId = '';
-									uni.navigateBack({
-										delta:2
-									})
-								},1500)
+							}, 1500)
+						})
+						.catch(err => {
+							uni.showToast({
+								icon: 'none',
+								title: err.message,
+								duration: 2000
 							})
-							.catch(err=>{
-								uni.showToast({
-									icon:'none',
-									title:err.message,
-									duration:2000
-								})
-							})
-							return
+						})
+					return
 				}
-				if (this.loginFlag||this.registerFlag){
+
+				console.log(this.loginFlag || this.registerFlag, 'this.loginFlag||this.registerFlag');
+				if (!this.loginFlag || !this.registerFlag) {
 					store.dispatch('Login', obj)
 						.then(result => {
-							console.log(result,'result');
+							console.log(result, 'result');
 							// 显示登录成功
 							app.$toast(result.message)
 							// 跳转回原页面
@@ -527,11 +564,12 @@
 		background-size: 100% 100%;
 		background-position: 0 0;
 	}
-	.login-form{
+
+	.login-form {
 		display: flex;
 		align-items: center;
 		flex-direction: column;
-		
+
 	}
 
 	// 页面头部
@@ -545,8 +583,9 @@
 			width: 100%;
 			align-items: center;
 			justify-content: center;
+
 			// margin-top: 144rpx;
-			.tab-item{
+			.tab-item {
 				font-family: 'PingFang SC';
 				font-style: normal;
 				font-weight: 700;
@@ -554,19 +593,21 @@
 				color: #CCCCCC;
 				margin: 0 30rpx;
 			}
-			.tab-item.selTabItem{
+
+			.tab-item.selTabItem {
 				font-family: 'PingFang SC';
 				font-style: normal;
 				font-weight: 700;
 				font-size: 18px;
 				color: #333333;
 				position: relative;
-				&::after{
+
+				&::after {
 					content: '';
 					position: absolute;
 					bottom: -16rpx;
 					left: 0;
-					margin-left:calc(50% - 20rpx) ;
+					margin-left: calc(50% - 20rpx);
 					width: 40rpx;
 					height: 8rpx;
 					background: #F97112;
@@ -585,14 +626,15 @@
 	// 输入框元素
 	.form-item {
 		display: flex;
-		padding: 18rpx;
+		// padding: 10rpx;
 		margin-bottom: 40rpx;
 		background: #F9F9F9;
 		border-radius: 25px;
 		width: 335px;
 		height: 50px;
-		.laber{
-			padding: 30rpx 40rpx;
+
+		.laber {
+			padding: 30rpx 30rpx;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -602,7 +644,8 @@
 			font-size: 28rpx;
 			color: #333333;
 		}
-		.Forgetpassword{
+
+		.Forgetpassword {
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -634,7 +677,7 @@
 
 		// 短信验证码
 		.captcha-sms {
-			font-size: 22rpx;
+			font-size: 28rpx;
 			line-height: 50rpx;
 			padding-right: 20rpx;
 
@@ -683,9 +726,10 @@
 		.title {
 			font-size: 28rpx;
 			color: #666666;
-			
+
 		}
 	}
+
 	/* #ifdef APP-PLUS */
 	.agreement {
 		display: flex;
@@ -696,63 +740,70 @@
 		// transform: translateX(-40rpx);
 		// margin-left: -20rpx;
 	}
+
 	.all-radio {
 		/* width: 232upx; */
 		display: flex;
 		align-items: center;
 		margin-left: 38upx;
 	}
-	
+
 	.all-radio text:nth-child(1) {
 		font-size: 22upx;
 		color: #5B5B5B;
 	}
-	
+
 	.radio {
 		margin-bottom: -4upx;
 		transform: scale(0.76)
 	}
-	
+
 	.all-radio text {
 		font-size: 22upx;
 	}
+
 	.agreementText {
 		font-size: 22upx;
 		color: #F97112;
 		line-height: 54upx;
-	
+
 	}
-	.newRegister{
+
+	.newRegister {
 		font-family: 'PingFang SC';
 		font-style: normal;
 		font-weight: 400;
 		font-size: 24rpx;
 		color: #999999;
 	}
+
 	/* #endif */
-.pcs{
-	font-family: 'PingFang SC';
-	font-style: normal;
-	font-weight: 400;
-	font-size: 28rpx;
-	color: #CCCCCC;
-}
-.form-item--parts{
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-.logoWrap{
-	width: 120rpx;
-	height: 120rpx;
-	background: #F97112;
-	border-radius: 10px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	image{
-		width: 92rpx;
-		height: 70rpx;
+	.pcs {
+		font-family: 'PingFang SC';
+		font-style: normal;
+		font-weight: 400;
+		font-size: 28rpx;
+		color: #CCCCCC;
 	}
-}
+
+	.form-item--parts {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.logoWrap {
+		width: 120rpx;
+		height: 120rpx;
+		background: #F97112;
+		border-radius: 10px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		image {
+			width: 92rpx;
+			height: 70rpx;
+		}
+	}
 </style>
