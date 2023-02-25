@@ -48,7 +48,7 @@
 				<view class="">
 					<view class="allNum">
 						共<text style="color: red;">{{All}}</text>人
-						总参与<text style="color: red;margin-left: 10rpx;">{{nav[navIndex].pay_num||0}}</text>次
+						总参与<text style="color: red;margin-left: 10rpx;">{{participation}}</text>次
 					</view>
 				</view>
 				<view class="inpwrap">
@@ -154,19 +154,15 @@
 				showAgree: false,
 				superior: '',
 				isLoading: false,
+				All: 0,
+				participation: 0
 			}
 		},
 		components: {
 			headNav,
 			Empty
 		},
-		computed: {
-			All() {
-				let nav = this.nav;
-				let navIndex = this.navIndex;
-				return nav[navIndex].num || 0
-			}
-		},
+
 
 		onLoad() {
 			this.getPageData()
@@ -332,6 +328,10 @@
 						this.moreFlag = false;
 					}
 					this.isLoading = true;
+					let nav = this.nav;
+					let navIndex = this.navIndex;
+					this.All = nav[navIndex].num || 0;
+					this.participation = nav[navIndex].pay_num || 0;
 				})
 			}
 		}

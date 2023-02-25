@@ -221,20 +221,26 @@
 					obj.order_no = this.orderid;
 					obj.address_id = this.addressObj.address_id;
 					if (this.payIndex == 0) {
+
+						// #ifdef APP-PLUS
+						obj.pay_type = 40;
+						// #endif
+						// #ifdef MP-WEIXIN
 						obj.pay_type = 20;
+						// #endif
 					} else if (this.payIndex == 1) {
 						obj.pay_type = 10;
 					}
 					this.reqFlag = false;
 					collageApi.pay(obj).then(res => {
-						console.log(res)
 						if (res.data.pay_type == 10) {
 							this.$success("支付成功");
 							setTimeout(() => {
 								this.navToMyOrder()
 							}, 1500)
-						} else if (res.data.pay_type == 20) {
+						} else if (res.data.pay_type == 40 || res.data.pay_type == 20) {
 							res.data.payment.timeStamp = res.data.payment.timeStamp.toString();
+							console.log(res.data.payment, 'res.data.payment')
 							wxPayment(res.data.payment)
 								.then(() => {
 									this.$success('支付成功')

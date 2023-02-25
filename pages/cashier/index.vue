@@ -421,7 +421,7 @@
 				const app = this
 				// 发起微信支付
 				if (result.data.pay_type == PayTypeEnum.WECHAT.value || result.data.pay_type == 40) {
-					//console.log(result)
+					console.log('result', result)
 					wxPayment(result.data.payment)
 						.then(() => {
 							app.$success('支付成功')

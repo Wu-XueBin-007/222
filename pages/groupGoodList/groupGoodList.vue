@@ -24,7 +24,7 @@
 			</seckill-nav>
 			<view class="banner">
 				<image class="bannerImg"
-					src="https://oss.gzrhhj.com/10001/20230209/1c71924a826aff99464990a32cd9da62.png">
+					src="https://oss.gzrhhj.com/10001/20230224/951200f333b821609d18eb6ea204a7b4.png">
 				</image>
 				<view class="rightfix">
 					<navigator url='/pageHome/IncomeDetail/IncomeDetail' class="income ct">

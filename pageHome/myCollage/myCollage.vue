@@ -15,10 +15,10 @@
 			<view style="display: flex;height: calc(100% - 88upx);">
 				<swiper :indicator-dots="false" :autoplay="false" :interval="3000" :duration="1000"
 					style="height: 100%;width: 100%;" @change="changeSwiper" :current="headIndex">
-					<swiper-item v-for="index of 5" style="height: 100%;">
+					<swiper-item v-for="index of 4" style="height: 100%;">
 						<scroll-view :scroll-y="true" @scrolltolower="loadMore" class="con"
 							style="height: 100%;padding-top: 30upx;">
-							<view class="conItem" v-for="(item,index) in list" :key="index" v-if="list.length>0">
+							<view class="conItem" v-for="(item,index) in list" :key="index">
 								<!-- <view class="conItemT">
 									<view class="conItemTL">
 										<view class="conItemTLImg" v-if="item.record5&&item.record5.length>0" :style="{'background-image': 'url('+pitem.user.avatar_url+')'}" v-for="(pitem,pindex) in item.record5" :key="pindex"></view>
@@ -32,6 +32,7 @@
 										</button>
 									</view>
 								</view> -->
+
 								<view :class="['conItemB',(headIndex==1||headIndex==2)?'active':'']" v-if="item.goods">
 									<image :src="item.goods.goods_image" class="conItemBL"></image>
 									<image src="../../static/home/prize_icon.png" class="prize"
@@ -78,7 +79,6 @@
 									</view>
 								</view>
 								<view class="collageBtn">
-
 									<!-- <image src="../../static/home/prize_icon_no.png" class="prize" v-if="item.have_prize==0&&headIndex!=3&&headIndex!=4"></image> -->
 									<view class="conItemBRBCheckDetail2"
 										v-if="item.have_prize==1&&headIndex!=3&&headIndex!=4" :data-index="index"
@@ -228,6 +228,7 @@
 					} else {
 						this.moreFlag = false;
 					}
+					console.log(this.list, 'this.list');
 				})
 			}
 		}

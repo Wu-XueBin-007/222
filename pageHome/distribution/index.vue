@@ -251,13 +251,7 @@
 			headNav,
 			Empty
 		},
-		computed: {
-			All() {
-				let nav = this.nav;
-				let navIndex = this.navIndex;
-				return nav[navIndex].num || 0
-			}
-		},
+
 		onLoad() {
 			this.getPageData()
 			this.getList()
@@ -425,6 +419,9 @@
 						this.moreFlag = false;
 					}
 				})
+				let nav = this.nav;
+				let navIndex = this.navIndex;
+				this.All = nav[navIndex].num || 0;
 				this.isLoading = true;
 			}
 		}
