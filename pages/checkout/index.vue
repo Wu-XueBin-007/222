@@ -117,7 +117,6 @@
 						
 						<text class="right-arrow iconfont icon-arrow-right"></text>
 					</view>
-
 				</view>
 			</view> -->
 			<!-- 积分抵扣 -->

@@ -244,7 +244,8 @@
 				navIndex: 0,
 				showAgree: false,
 				superior: '',
-				isLoading: false
+				isLoading: false,
+				All: 0
 			}
 		},
 		components: {
@@ -509,7 +510,7 @@
 		background: linear-gradient(0deg, #000000 0%, #27273C 100%);
 
 		.scroll-view-item_H {
-			width: 316rpx;
+			width: 188rpx;
 			display: inline-block;
 			text-align: center;
 			background: linear-gradient(0deg, #000000 0%, #27273C 100%);
@@ -521,7 +522,7 @@
 		.activite {
 			background: linear-gradient(0deg, #0A0A0F 0%, #C6836B 100%);
 			border-radius: 10px 0px 0px 0px;
-			width: 316rpx;
+			width: 188rpx;
 		}
 	}
 </style>
