@@ -278,6 +278,7 @@
 			this.getseckilltime()
 			this.getPageData();
 			this.getPass();
+
 		},
 
 		watch: {

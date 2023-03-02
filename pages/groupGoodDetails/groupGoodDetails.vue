@@ -2,14 +2,15 @@
 	<view style="background: #FFFFFF;padding-bottom: 160upx;">
 		<!-- <nav-head title="商品详情"></nav-head> -->
 		<!-- <seckill-nav title="商品详情" backGround="rage(0,0,0,1)" :fontSize="30" backL="transparent" color="#000000"></seckill-nav> -->
-		<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" class="productBanner" v-if="info.goods_images&&info.goods_images.length>0">
+		<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" class="productBanner"
+			v-if="info.goods_images&&info.goods_images.length>0">
 			<swiper-item class="productBannerItem" v-for="(item,index) in info.goods_images">
 				<image :src="item.preview_url"></image>
 			</swiper-item>
 		</swiper>
 		<view class="collageMsg">
 			<view class="collageMsgB">
-				
+
 				<view class="collageMsgBL">
 					<view class="collageMsgT">
 						<image src="../../static/home/icon_pt.png" mode=""></image>
@@ -30,10 +31,10 @@
 			<view class="goodsImage">
 				<button class="share-btn dis-flex" open-type="share">
 					<image src="../../static/icon/icon_share.png" mode=""></image>
-				  <text class="f-24">分享</text>
+					<text class="f-24">分享</text>
 				</button>
 			</view>
-			<!-- #endif -->	
+			<!-- #endif -->
 			<!-- <view>快递：包邮</view> -->
 		</view>
 		<view class="collageUser">
@@ -88,18 +89,18 @@
 				<text>——</text>
 				<text>商品详情</text>
 				<text>——</text>
-				</view>
+			</view>
 			<view class="productDetailsCon" v-html="info.content"></view>
 			<view class="productDetailsCon" v-html="info.category.content"></view>
 		</view>
-		
+
 		<view class="operaBtn">
 			<view class="operaBtnL">
 				<view class="operaBtnLItem" @click="toHome">
 					<image src="../../static/home/collageHome.png" mode="heightFix"></image>
 					<text>首页</text>
 				</view>
-				
+
 				<!-- <button open-type="share" class="coustomer">
 					<view class="operaBtnLItem">
 						<image src="../../static/home/collageShare.png" mode="heightFix"></image>
@@ -113,7 +114,7 @@
 						<text>客服</text>
 					</view>
 				</button>
-				<!-- #endif -->	
+				<!-- #endif -->
 			</view>
 			<view class="operaBtnR" @click="toPayment">我要参团</view>
 		</view>
@@ -142,12 +143,12 @@
 			<view class="close_icon" @click="hideMark">
 				<image src="../../static/home/close_icon.png"></image>
 			</view>
-			
+
 		</view>
-		<u-popup v-model="showAgree" mode="bottom"  @close="close" @open="open">
+		<u-popup v-model="showAgree" mode="bottom" @close="close" @open="open">
 			<view style="max-height: 700upx;">
 				<view v-html="info.category.content" style="padding: 30upx;box-sizing: border-box;">
-					
+
 				</view>
 			</view>
 		</u-popup>
@@ -168,18 +169,21 @@
 					navH: 0,
 					paddingTop: 0
 				},
-				showAgree:false,
-				info:{},
-				proId:"",
-				timerArr:[],
-				groupList:[],
-				collageMoreFlag:false,
-				collageMoreList:[],
-				showFlag:false,
-				reqFlag:true
+				showAgree: false,
+				info: {},
+				proId: "",
+				timerArr: [],
+				groupList: [],
+				collageMoreFlag: false,
+				collageMoreList: [],
+				showFlag: false,
+				reqFlag: true
 			}
 		},
-		components:{seckillNav,navHead},
+		components: {
+			seckillNav,
+			navHead
+		},
 		onLoad(options) {
 			// 当前页面参数
 			// this.options = options;
@@ -196,7 +200,7 @@
 			this.getDetails();
 		},
 		onShow() {
-			if(this.proId){
+			if (this.proId) {
 				this.getDetails();
 			}
 		},
@@ -217,34 +221,34 @@
 		},
 		onShareAppMessage() {
 			return {
-				title:this.info.goods_name,
-				path:"/pages/groupGoodDetails/groupGoodDetails?proid="+this.proId,
-				imageUrl:App.$vm.globalData.setting.GroupShareImageId.preview_url
+				title: this.info.goods_name,
+				path: "/pages/groupGoodDetails/groupGoodDetails?proid=" + this.proId,
+				imageUrl: App.$vm.globalData.setting.GroupShareImageId.preview_url
 			}
 		},
 		onShareTimeline() {
 			return {
 				title: this.info.goods_name,
 				query: {
-					proid:this.proId
+					proid: this.proId
 				},
-				imageUrl:App.$vm.globalData.setting.GroupShareImageId.preview_url
+				imageUrl: App.$vm.globalData.setting.GroupShareImageId.preview_url
 			}
 		},
 		methods: {
-			toHome(){
+			toHome() {
 				uni.switchTab({
-					url:"/pages/index/index"
+					url: "/pages/index/index"
 				})
 			},
-			hideMark(){
+			hideMark() {
 				this.reqFlag = true;
 				this.showFlag = false;
 				this.collageMoreList = [];
 				this.collagePage = 1;
 			},
-			loadMoreCollage(){
-				if(!this.reqFlag){
+			loadMoreCollage() {
+				if (!this.reqFlag) {
 					return false;
 				}
 				this.reqFlag = false;
@@ -252,97 +256,109 @@
 				let obj = {};
 				obj.category_id = this.info.category.id;
 				obj.page = this.collagePage;
-				collageApi.taskListAll(obj).then(res=>{
-					if(this.collagePage == 1){
-						this.collageMoreList = res.data.list.data.map(cur=>{
+				collageApi.taskListAll(obj).then(res => {
+					if (this.collagePage == 1) {
+						this.collageMoreList = res.data.list.data.map(cur => {
 							cur.surplusNum = cur.num - cur.current_num;
 							return cur;
 						});
-					}else{
-						this.collageMoreList = this.collageMoreList.concat(res.data.list.data.map(cur=>{
+					} else {
+						this.collageMoreList = this.collageMoreList.concat(res.data.list.data.map(cur => {
 							cur.surplusNum = cur.num - cur.current_num;
 							return cur;
 						}));
 					}
-					if(this.collagePage < res.data.list.last_page){
+					if (this.collagePage < res.data.list.last_page) {
 						this.collageMoreFlag = true;
-					}else{
+					} else {
 						this.collageMoreFlag = false;
 					}
 					this.reqFlag = true;
-				}).catch(err=>{
+				}).catch(err => {
 					this.reqFlag = true;
 				})
 			},
-			toJoinCollageByAll(e){
+			toJoinCollageByAll(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
-				
+
 				uni.navigateTo({
-					url:"/pages/collageDetail/collageDetail?groupid="+this.collageMoreList[index].id
+					url: "/pages/collageDetail/collageDetail?groupid=" + this.collageMoreList[index].id
 				})
 			},
-			toJoinCollage(e){
+			toJoinCollage(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
-				
+
 				uni.navigateTo({
-					url:"/pages/collageDetail/collageDetail?groupid="+this.groupList[index].id
+					url: "/pages/collageDetail/collageDetail?groupid=" + this.groupList[index].id
 				})
 			},
-			toPayment(){
+			toPayment() {
 				// App.$vm.globalData.goodsData = this.info;
 				let obj = {};
 				obj.goods_id = this.info.id;
 				obj.group_task_id = 0;
-				collageApi.add(obj).then(res=>{
-					console.log(res)
-					if(res.data&&res.data.order_no){
-						uni.navigateTo({
-							url:"/pages/sureOrder/sureOrder?orderid="+res.data.order_no
-						})
-					}else{
-						this.$toast("系统繁忙，请稍后再试");
+				uni.showModal({
+					title: '拼团须知',
+					content: '各位会员，拼团产品不支持取消订单及退换货，拼中产品48小时内发货，请在天天赚首页右上角查看完规则或者找推荐人了解清楚规则在下单。',
+					success(res) {
+						if (res.confirm) {
+							collageApi.add(obj).then(res => {
+								console.log(res)
+								if (res.data && res.data.order_no) {
+									uni.navigateTo({
+										url: "/pages/sureOrder/sureOrder?orderid=" + res.data
+											.order_no
+									})
+								} else {
+									this.$toast("系统繁忙，请稍后再试");
+								}
+
+							})
+						}
 					}
-					
 				})
-				
+
+
 			},
-			getDetails(){
+			getDetails() {
 				let obj = {};
 				obj.goodsId = this.proId;
-				collageApi.goodsDetails(obj).then(res=>{
+				collageApi.goodsDetails(obj).then(res => {
 					console.log(res)
-					res.data.detail.content = res.data.detail.content.replace(/<img /g,'<img style="width: 100%;"')
-					res.data.detail.category.content = res.data.detail.category.content.replace(/<img/g,"<img style='width: 100%;'");
+					res.data.detail.content = res.data.detail.content.replace(/<img /g,
+						'<img style="width: 100%;"')
+					res.data.detail.category.content = res.data.detail.category.content.replace(/<img/g,
+						"<img style='width: 100%;'");
 					this.info = res.data.detail;
-					this.groupList = res.data.group_task_list.map(cur=>{
-						cur.surplusTime = cur.expire_time*1000 - new Date().getTime();
+					this.groupList = res.data.group_task_list.map(cur => {
+						cur.surplusTime = cur.expire_time * 1000 - new Date().getTime();
 						cur.surplusNum = cur.num - cur.current_num;
-						let Timer = setInterval(()=>{
-							cur.surplusTime = cur.expire_time*1000 - new Date().getTime();
-							if(cur.surplusTime<=0){
+						let Timer = setInterval(() => {
+							cur.surplusTime = cur.expire_time * 1000 - new Date().getTime();
+							if (cur.surplusTime <= 0) {
 								clearInterval(Timer);
 								let j = null;
-								for(let i=0;i<this.groupList.length;i++){
-									if(this.groupList[i].id == cur.id){
+								for (let i = 0; i < this.groupList.length; i++) {
+									if (this.groupList[i].id == cur.id) {
 										j = i;
 									}
 								}
-								if(j!==null){
-									this.groupList.splice(j,1);
+								if (j !== null) {
+									this.groupList.splice(j, 1);
 								}
 							}
-						},1000)
+						}, 1000)
 						return cur;
 					});
 				})
 			},
-			close(e){
+			close(e) {
 				console.log("close")
 			},
-			open(e){
+			open(e) {
 				console.log("open")
 			},
-			checkCollage(){
+			checkCollage() {
 				this.showAgree = true;
 			},
 		}
@@ -350,7 +366,7 @@
 </script>
 
 <style scoped>
-	.collageMoreMark{
+	.collageMoreMark {
 		width: 100%;
 		height: 100%;
 		position: fixed;
@@ -359,31 +375,35 @@
 		right: 0;
 		bottom: 0;
 		z-index: 99;
-		background: rgba(0,0,0,.5);
+		background: rgba(0, 0, 0, .5);
 	}
-	.collageMore{
+
+	.collageMore {
 		width: 550upx;
 		position: fixed;
 		left: 50%;
 		top: 50%;
-		transform: translate(-50%,-50%);
+		transform: translate(-50%, -50%);
 		z-index: 100;
 	}
-	.collageMoreCon{
+
+	.collageMoreCon {
 		width: 550upx;
 		box-sizing: border-box;
 		background: #fee7e9;
 		border-radius: 20upx;
 		padding: 50upx 30upx;
 	}
-	.collageMoreConHead{
+
+	.collageMoreConHead {
 		font-size: 34upx;
 		line-height: 34upx;
 		color: #595757;
 		margin-bottom: 40upx;
 		text-align: center;
 	}
-	.collageMoreItem{
+
+	.collageMoreItem {
 		width: 490upx;
 		box-sizing: border-box;
 		padding: 12upx 16upx;
@@ -394,13 +414,15 @@
 		display: flex;
 		align-items: center;
 	}
-	.collageMoreItemL{
+
+	.collageMoreItemL {
 		width: 54upx;
 		height: 54upx;
 		border-radius: 50%;
 		margin-right: 20upx;
 	}
-	.collageMoreItemC{
+
+	.collageMoreItemC {
 		width: calc(100% - 236upx);
 		height: 54upx;
 		display: flex;
@@ -408,22 +430,26 @@
 		justify-content: space-between;
 		margin-right: 20upx;
 	}
-	.collageMoreItemCT{
+
+	.collageMoreItemCT {
 		font-size: 24upx;
 		line-height: 24upx;
 		color: #595757;
 	}
-	.collageMoreItemCB{
+
+	.collageMoreItemCB {
 		font-size: 20upx;
 		line-height: 20upx;
 		color: #595757;
 	}
-	.collageMoreItemCB>text{
+
+	.collageMoreItemCB>text {
 		color: #FE5960;
 		font-size: 20upx;
 		line-height: 20upx;
 	}
-	.collageMoreItemR{
+
+	.collageMoreItemR {
 		width: 142upx;
 		height: 38upx;
 		border-radius: 20upx;
@@ -431,7 +457,8 @@
 		padding: 2upx;
 		box-sizing: border-box;
 	}
-	.collageMoreItemRCon{
+
+	.collageMoreItemRCon {
 		width: 138upx;
 		height: 34upx;
 		border-radius: 18upx;
@@ -440,29 +467,33 @@
 		align-items: center;
 		justify-content: center;
 	}
-	.collageMoreItemRCon>text{
+
+	.collageMoreItemRCon>text {
 		font-size: 24upx;
 		line-height: 34upx;
 		color: #FF5F60;
 		margin-right: 8upx;
 	}
-	.collageMoreItemRCon>image{
+
+	.collageMoreItemRCon>image {
 		width: 10upx;
 		height: 20upx;
 	}
-	.close_icon{
+
+	.close_icon {
 		margin-top: 90upx;
 		display: flex;
 		justify-content: center;
 	}
-	.close_icon>image{
+
+	.close_icon>image {
 		width: 50upx;
 		height: 50upx;
 	}
-	
-	
-	
-	.operaBtn{
+
+
+
+	.operaBtn {
 		width: 100%;
 		/* height: 98upx; */
 		background: white;
@@ -480,21 +511,25 @@
 		padding-bottom: constant(safe-area-inset-bottom);
 		padding-bottom: env(safe-area-inset-bottom);
 	}
-	.operaBtnL{
+
+	.operaBtnL {
 		display: flex;
 		align-items: center;
 	}
-	.operaBtnLItem{
+
+	.operaBtnLItem {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		margin-right: 50upx;
 		flex-direction: column;
 	}
-	.operaBtnLItem>image{
+
+	.operaBtnLItem>image {
 		height: 40upx;
 	}
-	.operaBtnLItem>text{
+
+	.operaBtnLItem>text {
 		margin-top: 6upx;
 		width: 100%;
 		text-align: center;
@@ -502,7 +537,8 @@
 		line-height: 26upx;
 		color: #999999;
 	}
-	.operaBtnR{
+
+	.operaBtnR {
 		width: 472upx;
 		height: 80upx;
 		text-align: center;
@@ -515,17 +551,17 @@
 		margin-left: 40upx;
 		margin-bottom: 8rpx;
 	}
-	
-	
-	.coustomer{
+
+
+	.coustomer {
 		padding: 0;
 		margin: 0;
 		line-height: 0;
 		background: transparent;
 	}
-	
-	
-	.productDetails{
+
+
+	.productDetails {
 		width: 100%;
 		padding: 24upx 0;
 		background: #FFFFFF;
@@ -533,7 +569,8 @@
 		border-radius: 12upx;
 		margin: 30upx auto 0;
 	}
-	.productDetailsHead{
+
+	.productDetailsHead {
 		font-size: 28upx;
 		color: #595656;
 		font-weight: bold;
@@ -542,20 +579,23 @@
 		padding: 26rpx 30rpx;
 		text-align: center;
 	}
+
 	.productDetailsHead text:nth-child(1) {
 		color: #EFEFEF;
 	}
+
 	.productDetailsHead text:nth-child(2) {
 		font-size: 30upx;
 		color: #333333;
 		font-weight: bold;
 		margin: 0 20upx;
 	}
+
 	.productDetailsHead text:nth-child(3) {
 		color: #EFEFEF;
 	}
-	
-	.collageKnow{
+
+	.collageKnow {
 		width: 718upx;
 		padding: 24upx 28upx;
 		background: #FFFFFF;
@@ -566,54 +606,62 @@
 		justify-content: space-between;
 		margin: 30upx auto 0;
 	}
-	.collageKnowL{
+
+	.collageKnowL {
 		font-size: 28upx;
 		color: #595656;
 		font-weight: bold;
 	}
-	.collageKnowR{
+
+	.collageKnowR {
 		display: flex;
 		align-items: center;
 	}
-	.collageKnowR>text{
+
+	.collageKnowR>text {
 		font-size: 28upx;
 		line-height: 28upx;
 		color: #999999;
 		margin-right: 10upx;
 	}
-	.collageKnowR>image{
+
+	.collageKnowR>image {
 		width: 12upx;
 		height: 20upx;
 	}
-	
-	
-	
-	.collageWay{
+
+
+
+	.collageWay {
 		padding: 20upx 0;
 		display: flex;
 		align-items: center;
 		justify-content: space-around;
 	}
-	.collageWayItem{
+
+	.collageWayItem {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 	}
-	.collageWayItem>view{
+
+	.collageWayItem>view {
 		font-size: 24upx;
 		line-height: 24upx;
 		color: #575759;
 	}
-	.collageWayItem>view:nth-child(1){
+
+	.collageWayItem>view:nth-child(1) {
 		margin-bottom: 10upx;
 	}
-	.collageWayImg{
+
+	.collageWayImg {
 		width: 14upx;
 		height: 26upx;
 	}
-	
-	
-	.collageUser{
+
+
+	.collageUser {
 		width: 718upx;
 		margin: 30upx auto 0;
 		border-radius: 12upx;
@@ -623,48 +671,57 @@
 		box-sizing: border-box;
 		background: linear-gradient(180deg, #FFF2E3 0%, #FFE8D5 100%);
 	}
-	.collageUserHead{
+
+	.collageUserHead {
 		padding: 20upx 0 10upx;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		border-bottom: 2upx solid rgba(153, 153, 153, .5);
 	}
-	.collageUserHeadL{
+
+	.collageUserHeadL {
 		font-size: 28upx;
 		color: #595656;
 		font-weight: bold;
 	}
-	.collageUserHeadR{
+
+	.collageUserHeadR {
 		display: flex;
 		align-items: center;
 	}
-	.collageUserHeadR>text{
+
+	.collageUserHeadR>text {
 		font-size: 22upx;
 		color: #999999;
 		margin-right: 10upx;
 	}
-	.collageUserHeadR>image{
+
+	.collageUserHeadR>image {
 		width: 10upx;
 		height: 18upx;
 	}
-	.collageUserCon{
+
+	.collageUserCon {
 		padding: 20upx 0 20upx;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
-	.collageUserConL{
+
+	.collageUserConL {
 		display: flex;
 		align-items: center;
 	}
-	.collageUserConL>image{
+
+	.collageUserConL>image {
 		width: 80upx;
 		height: 80upx;
 		border-radius: 50%;
 		margin-right: 18upx;
 	}
-	.collageUserConL>view{
+
+	.collageUserConL>view {
 		font-size: 28upx;
 		font-weight: bold;
 		color: #333333;
@@ -673,36 +730,42 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	.collageUserConR{
+
+	.collageUserConR {
 		display: flex;
 		align-items: center;
 		width: 54%;
 		justify-content: space-between;
 	}
-	.collageUserConRL{
+
+	.collageUserConRL {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: flex-end;
 	}
-	.collageUserConRLT{
+
+	.collageUserConRLT {
 		font-size: 24upx;
 		line-height: 24upx;
 		color: #333333;
 		margin-bottom: 4upx;
 	}
-	.collageUserConRLT>text{
+
+	.collageUserConRLT>text {
 		font-size: 24upx;
 		line-height: 24upx;
 		color: #FE5960;
 	}
-	.collageUserConRLB{
+
+	.collageUserConRLB {
 		font-size: 24upx;
 		line-height: 24upx;
 		color: #333333;
 		margin-top: 14upx;
 	}
-	.collageUserConRR{
+
+	.collageUserConRR {
 		width: 160upx;
 		height: 64upx;
 		line-height: 64upx;
@@ -714,18 +777,21 @@
 		justify-content: center;
 		margin-left: 18upx;
 	}
-	.collageUserConRR>view{
+
+	.collageUserConRR>view {
 		font-size: 26upx;
 		color: white;
 		line-height: 64upx;
 		height: 64upx;
 		margin-right: 6upx;
 	}
-	.collageUserConRR>image{
+
+	.collageUserConRR>image {
 		width: 8upx;
 		height: 16upx;
 	}
-	.productName{
+
+	.productName {
 		width: 100%;
 		line-height: 40upx;
 		margin: 32upx auto 0;
@@ -741,7 +807,8 @@
 		font-weight: bold;
 		color: #333333;
 	}
-	.productTiem{
+
+	.productTiem {
 		width: 74%;
 		text-overflow: -o-ellipsis-lastline;
 		overflow: hidden;
@@ -751,29 +818,32 @@
 		line-clamp: 2;
 		-webkit-box-orient: vertical;
 	}
-	.goodsImage{
-	  position: relative;
-	  border-radius: 30upx 0 0 30upx;
-	  height: 64rpx;
-	  padding: 12upx 0;
-	  background-color: #F8F8F8;
+
+	.goodsImage {
+		position: relative;
+		border-radius: 30upx 0 0 30upx;
+		height: 64rpx;
+		padding: 12upx 0;
+		background-color: #F8F8F8;
 	}
-	.goodsImage image{
-		  width: 40upx;
-		  height: 40upx;
-		  vertical-align: top;
+
+	.goodsImage image {
+		width: 40upx;
+		height: 40upx;
+		vertical-align: top;
 	}
-	.goodsImage text{
-	  font-size: 26upx;
-	  color: #333333;
-	  font-weight: 500;
-	  line-height: 40upx;
-	  margin-left: 6upx;
-	  opacity: 0.7;
+
+	.goodsImage text {
+		font-size: 26upx;
+		color: #333333;
+		font-weight: 500;
+		line-height: 40upx;
+		margin-left: 6upx;
+		opacity: 0.7;
 	}
-	
-	
-	.collageMsg{
+
+
+	.collageMsg {
 		width: 100%;
 		padding: 16upx 24upx;
 		box-sizing: border-box;
@@ -781,26 +851,31 @@
 		background-size: 100% 100%;
 		background-position: 0 0;
 	}
-	.collageMsgT{
+
+	.collageMsgT {
 		width: 158upx;
 		height: 72upx;
-		
+
 	}
-	.collageMsgT image{
+
+	.collageMsgT image {
 		width: 100%;
 		height: 100%;
 		vertical-align: top;
 	}
-	.collageMsgB{
+
+	.collageMsgB {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
-	.collageMsgBL{
+
+	.collageMsgBL {
 		display: flex;
 		align-items: center;
 	}
-	.collageMsgBLPrice{
+
+	.collageMsgBLPrice {
 		display: flex;
 		align-items: flex-end;
 		font-size: 34upx;
@@ -809,12 +884,14 @@
 		margin-left: 16upx;
 		line-height: 34upx;
 	}
-	.collageMsgBLPrice>text{
+
+	.collageMsgBLPrice>text {
 		font-size: 26upx;
 		line-height: 26upx;
 		color: #FFFFFF;
 	}
-	.collageMsgBLOldPrice{
+
+	.collageMsgBLOldPrice {
 		line-height: 28upx;
 		font-size: 28upx;
 		font-family: PingFang;
@@ -822,7 +899,8 @@
 		text-decoration: line-through;
 		color: #FFFFFF;
 	}
-	.collageMsgBR{
+
+	.collageMsgBR {
 		line-height: 26upx;
 		font-size: 28upx;
 		font-family: PingFang;
@@ -834,17 +912,19 @@
 		padding: 0 24upx;
 		border-radius: 32upx;
 	}
-	
-	
-	.productBanner{
+
+
+	.productBanner {
 		width: 100%;
 		height: 750upx;
 	}
-	.productBannerItem{
+
+	.productBannerItem {
 		width: 100%;
 		height: 100%;
 	}
-	.productBannerItem>image{
+
+	.productBannerItem>image {
 		width: 100%;
 		height: 100%;
 	}

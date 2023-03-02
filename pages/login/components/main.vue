@@ -4,42 +4,28 @@
 		<!-- 页面头部 -->
 		<view class="header">
 			<view class="title">
-
-				<template v-if="!ForgetpasswordFlage&&!registerFlag">
-					<view @click="loginFlag=false" class="tab-item" :class="!loginFlag?'selTabItem':''">
-						账号登录
-					</view>
-					<view @click="loginFlag=true" class="tab-item" :class="loginFlag?'selTabItem':''">
-						短信登录
-					</view>
-				</template>
-				<template v-if="ForgetpasswordFlage||registerFlag">
-					<view @click="loginFlag=false" class="tab-item" :class="!loginFlag?'selTabItem':''">
-						{{registerFlag?'注册账号':"忘记密码"}}
-					</view>
-					<view @click="ForgetpasswordFlage=false;registerFlag=false" class="tab-item"
-						:class="loginFlag?'selTabItem':''">
-						返回登录
-					</view>
-				</template>
-
+				<text>手机号登录</text>
+			</view>
+			<view class="sub-title">
+				<text>未注册的手机号登录后将自动注册</text>
 			</view>
 		</view>
 		<!-- 表单 -->
 		<view class="login-form">
+			<!-- #ifdef APP-PLUS -->
+			<!-- 			<view class="form-item" v-if="registerFlag">
+				<input class="form-item--input" type="text" v-model="nick_name" placeholder="请输入用户名" />
+			</view> -->
+			<!-- #endif -->
+			<!-- 手机号 -->
 			<view class="form-item">
-				<view class="laber">
-					账号
-				</view>
-				<input class="form-item--input" type="number" v-model="mobile" maxlength="11" placeholder-class="pcs"
-					placeholder="请输入手机号码" />
+				<input class="form-item--input" type="number" v-model="mobile" maxlength="11" placeholder="请输入手机号码" />
 			</view>
+
+			<!-- #ifdef APP-PLUS -->
 			<!-- 图形验证码 -->
-			<view class="form-item" v-if="registerFlag || loginFlag||ForgetpasswordFlage">
-				<view style="padding-right: 10rpx;" class="laber">
-					图形验证码
-				</view>
-				<input class="form-item--input" type="text" v-model="captchaCode" placeholder-class="pcs" maxlength="5"
+			<view class="form-item" v-if="registerFlag || loginFlag">
+				<input class="form-item--input" type="text" v-model="captchaCode" maxlength="5"
 					placeholder="请输入图形验证码" />
 				<view class="form-item--parts">
 					<view class="captcha" @click="getCaptcha()">
@@ -47,29 +33,15 @@
 					</view>
 				</view>
 			</view>
-			<view class="form-item" v-if="registerFlag || !loginFlag||ForgetpasswordFlage">
-				<view class="laber">
-					{{ForgetpasswordFlage?'重置密码':"密码"}}
-				</view>
-				<input class="form-item--input" :type="isPassword" v-model="pass1" placeholder-class="pcs"
-					placeholder="请输入密码" />
-				<view class="Forgetpassword">
-					<image style="width: 48rpx;height: 48rpx;" v-if="!isnewPwd" @click="showPwd()"
-						src="../../../static/icon_mm_kj.png" mode=""></image>
-					<image style="width: 48rpx;height: 48rpx;" v-else @click="showPwd()"
-						src="../../../static/icon_mm_yc.png" mode=""></image>
-					<text v-if='!registerFlag&&!ForgetpasswordFlage'
-						@click="ForgetpasswordFlage=true;registerFlag=false"
-						style="margin-left: 18rpx;color: #999999;font-size: 24rpx;">忘记密码</text>
-				</view>
+			<view class="form-item" v-if="registerFlag || !loginFlag">
+				<input class="form-item--input" type="password" v-model="pass1" placeholder="请输入密码" />
+			</view>
+			<view class="form-item" v-if="registerFlag">
+				<input class="form-item--input" type="password" v-model="pass2" placeholder="请再次输入密码" />
 			</view>
 			<!-- 短信验证码 -->
-			<view class="form-item" v-if="registerFlag || loginFlag || ForgetpasswordFlage">
-				<view class="laber">
-					短信验证码
-				</view>
-				<input class="form-item--input" type="number" v-model="smsCode" maxlength="6" placeholder-class="pcs"
-					placeholder="请输入短信验证码" />
+			<view class="form-item" v-if="registerFlag || loginFlag">
+				<input class="form-item--input" type="number" v-model="smsCode" maxlength="6" placeholder="请输入短信验证码" />
 				<view class="form-item--parts">
 					<view class="captcha-sms" @click="handelSmsCaptcha()">
 						<text v-if="!smsState" class="activate">获取验证码</text>
@@ -77,40 +49,52 @@
 					</view>
 				</view>
 			</view>
-			<!-- 			<view class="form-item" v-show="registerFlag">
-				<view class="laber">
-					邀请人手机号
+			<!-- #endif -->
+			<!-- #ifdef MP-WEIXIN -->
+			<!-- 图形验证码 -->
+			<view class="form-item">
+				<input class="form-item--input" type="text" v-model="captchaCode" maxlength="5"
+					placeholder="请输入图形验证码" />
+				<view class="form-item--parts">
+					<view class="captcha" @click="getCaptcha()">
+						<image class="image" :src="captcha.base64"></image>
+					</view>
 				</view>
-				<input class="form-item--input" type="number" v-model="pass2" placeholder="请输入邀请人手机号(选填)" />
-			</view> -->
-
+			</view>
+			<view class="form-item">
+				<input class="form-item--input" type="password" v-model="pass1" placeholder="请输入密码" />
+			</view>
+			<view class="form-item">
+				<input class="form-item--input" type="password" v-model="pass2" placeholder="请再次输入密码" />
+			</view>
+			<view class="form-item">
+				<input class="form-item--input" type="number" v-model="smsCode" maxlength="6" placeholder="请输入短信验证码" />
+				<view class="form-item--parts">
+					<view class="captcha-sms" @click="handelSmsCaptcha()">
+						<text v-if="!smsState" class="activate">获取验证码</text>
+						<text v-else class="un-activate">重新发送({{ times }})秒</text>
+					</view>
+				</view>
+			</view>
+			<!-- #endif -->
 			<!-- 登录按钮 -->
 			<view class="login-button" @click="handleLogin">
-				<text v-if="registerFlag">注册</text>
-				<text v-if="!registerFlag || ForgetpasswordFlage">登录</text>
-				<!-- <text v-if="ForgetpasswordFlage">登录</text> -->
+				<text>登录</text>
 			</view>
 
-			<view class="agreement">
-				<label class="all-radio">
-					<radio class="radio" :checked="agreementState" @click="radiochange" color="#F97112" />
-					<text>已阅读并同意</text>
-				</label>
-				<view class="agreementText" @click="goRichtext">
-					《服务协议》
+			<!-- #ifdef APP-PLUS -->
+			<view v-if="!registerFlag"
+				style="text-align: center;color: #333333;margin-top: 30upx;display: flex;justify-content: space-between;box-sizing: border-box;padding: 0 30upx;">
+				<view @click="changeLogin">
+					{{loginFlag?'密码登录':'验证码登录'}}
 				</view>
-				<view class="">
-					与
-				</view>
-				<view class="agreementText" @click="goPrivacyAgreement">
-					《隐私协议》
+				<view @click="changeRegister">
+					<text>立即注册</text>
 				</view>
 			</view>
-			<view class="newRegister"
-				style="transform: translateX(-20rpx); color: #333333;margin-top: 30upx;display: flex;box-sizing: border-box;padding: 0 30upx;"
-				v-if="!registerFlag">
-				还没有账号？<text @click="changeRegister" style="color: #F97112;">立即注册</text>
-			</view>
+			<view v-if="registerFlag" style="text-align: center;color: #333333;margin-top: 30upx;" @click="backLogin">
+				返回登录</view>
+			<!-- #endif -->
 		</view>
 	</view>
 </template>
@@ -119,10 +103,6 @@
 	import store from '@/store'
 	import * as LoginApi from '@/api/login'
 	import * as commonApi from "@/api/home/rotation.js"
-	import {
-		edit_password,
-		check_edit_password
-	} from "@/api/user.js"
 	import {
 		throttle,
 		debounce
@@ -136,7 +116,7 @@
 	// 表单验证场景
 	const GET_CAPTCHA = 10
 	const SUBMIT_LOGIN = 20
-	let handelSmsCaptcha = false
+
 	export default {
 		props: {
 			// 是否存在第三方用户信息
@@ -171,15 +151,8 @@
 				pass2: '',
 				loginFlag: false,
 				registerFlag: false,
-				infos: {},
-				ForgetpasswordFlage: false,
-				agreementState: false,
-				isPassword: 'password',
-				isnewPwd: false,
+				infos: {}
 			}
-		},
-		onShow() {
-			this.agreementState = uni.getStorageInfoSync('agreementState')
 		},
 
 		/**
@@ -192,30 +165,6 @@
 		},
 
 		methods: {
-			showPwd() {
-				console.log(this.isnewPwd, 'this.isnewPwd');
-				if (this.isnewPwd) {
-					this.isPassword = 'password';
-					this.isnewPwd = false;
-				} else {
-					this.isPassword = 'text';
-					this.isnewPwd = true;
-				}
-			},
-			goRichtext() {
-				uni.navigateTo({
-					url: '/pageHome/setup/serviceAgreement'
-				})
-			},
-			radiochange(e) {
-				this.agreementState = !this.agreementState;
-				uni.setStorageSync('agreementState', this.agreementState)
-			},
-			goPrivacyAgreement() {
-				uni.navigateTo({
-					url: '/pageHome/setup/privacyAgreement'
-				})
-			},
 			getInfo() {
 				commonApi.info()
 					.then(res => {
@@ -228,9 +177,6 @@
 			},
 			changeRegister() {
 				this.registerFlag = true;
-				this.loginFlag = false;
-				handelSmsCaptcha = false;
-				this.ForgetpasswordFlage = false;
 			},
 			changeLogin() {
 				this.loginFlag = !this.loginFlag;
@@ -244,17 +190,10 @@
 
 			// 点击发送短信验证码
 			handelSmsCaptcha() {
-				console.log('handelSmsCaptcha', handelSmsCaptcha);
-				if (handelSmsCaptcha) return;
-				handelSmsCaptcha = true;
-				const app = this;
-				console.log(!app.isLoading, '!app.isLoading', !app.smsState, '!app.smsState', app.formValidation(
-					GET_CAPTCHA), 'app.formValidation(GET_CAPTCHA)');
+				const app = this
 				if (!app.isLoading && !app.smsState && app.formValidation(GET_CAPTCHA)) {
 					app.sendSmsCaptcha()
 					// app.getCaptcha()
-				} else {
-					handelSmsCaptcha = false;
 				}
 			},
 
@@ -265,16 +204,12 @@
 				if (scene === GET_CAPTCHA) {
 					if (!app.validteMobile(app.mobile) || !app.validteCaptchaCode(app.captchaCode)) {
 						return false
-					} else {
-						return true
 					}
 				}
 				// 验证提交登录
 				if (scene === SUBMIT_LOGIN) {
 					if (!app.validteMobile(app.mobile) || !app.validteSmsCode(app.smsCode)) {
 						return false
-					} else {
-						return true
 					}
 				}
 				return true
@@ -326,20 +261,11 @@
 					})
 					.then(result => {
 						// 显示发送成功
-						app.$toast(result.message);
-
+						app.$toast(result.message)
 						// 执行定时器
 						app.timer()
-					}).catch(err => {
-						uni.showToast({
-							icon: 'error',
-							title: '验证码发送失败'
-						})
 					})
-					.finally(() => {
-						handelSmsCaptcha = false;
-						app.isLoading = false;
-					})
+					.finally(() => app.isLoading = false)
 			},
 
 			// 执行定时器
@@ -373,7 +299,8 @@
 				const app = this
 				app.isLoading = true
 				let obj = {};
-				if (app.registerFlag || app.loginFlag) {
+				obj.nick_name = "";
+				if (app.registerFlag) {
 					obj.type = 1;
 				} else if (app.loginFlag) {
 					obj.type = 1;
@@ -383,14 +310,12 @@
 				// #ifdef MP-WEIXIN
 				obj.type = 1;
 				// #endif
-				console.log(obj.type, 'obj.type');
 				if (obj.type == 1) {
-					console.log('obj.type == 1');
 					obj.smsCode = app.smsCode;
 					obj.mobile = app.mobile;
 					obj.isParty = app.isParty;
 					obj.partyData = app.partyData;
-					console.log(app.pass2.trim(), 'app.pass2.trim()');
+
 					if (app.registerFlag) {
 						// #ifdef APP-PLUS
 						if (!app.pass1.trim()) {
@@ -401,52 +326,48 @@
 							})
 							return false;
 						}
-
-						// if (!app.pass2.trim()) {
-						// 	uni.showToast({
-						// 		icon: 'none',
-						// 		title: '请输入邀请人手机号',
-						// 		duration: 2000
-						// 	})
-						// 	return false;
-						// }
+						if (app.pass1.trim() != app.pass2.trim()) {
+							uni.showToast({
+								icon: 'none',
+								title: '两次输入的密码不一致',
+								duration: 2000
+							})
+							return false;
+						}
 						obj.password = app.pass1.trim();
-						obj.superior_user_phone = app.pass2.trim()
 						// #endif
 					}
 
 				} else if (obj.type == 2) {
-					console.log('obj.type == 2');
 					obj.mobile = app.mobile;
 					obj.isParty = app.isParty;
 					obj.partyData = app.partyData;
-
 					if (!app.pass1.trim()) {
 						uni.showToast({
 							icon: 'none',
-							title: app.ForgetpasswordFlage ? '请输入重置密码' : '请输入密码',
+							title: '请输入密码',
 							duration: 2000
 						})
 						return false;
 					}
 					if (app.registerFlag) {
-						if (!app.pass2.trim()) {
+						if (app.pass1.trim() != app.pass2.trim()) {
 							uni.showToast({
 								icon: 'none',
-								title: '请输入邀请人手机号',
+								title: '两次输入的密码不一致',
 								duration: 2000
 							})
 							return false;
 						}
-
 					}
 					obj.password = app.pass1.trim();
 				}
+				console.log(APP.globalData.shareId)
 				if (APP.globalData.shareId) {
 					obj.superior_user_id = APP.globalData.shareId;
 				}
-				// // #ifdef APP-PLUS
-				// if(app.registerFlag){
+				// #ifdef APP-PLUS
+				// if (app.registerFlag) {
 				// 	if (!app.nick_name) {
 				// 		uni.showToast({
 				// 			icon: 'none',
@@ -457,89 +378,26 @@
 				// 	}
 				// 	obj.nick_name = app.nick_name;
 				// }
-				// // #endif
+				// #endif
 
-				if (!app.agreementState) {
-					uni.showToast({
-						icon: 'none',
-						title: '请勾选同意后再进行下一步操作',
-						duration: 2000
+				store.dispatch('Login', obj)
+					.then(result => {
+						// 显示登录成功
+						app.$toast(result.message)
+						// 跳转回原页面
+						setTimeout(() => {
+							app.onNavigateBack(1)
+						}, 2000)
 					})
-					return false;
-				}
-				console.log(obj, 'obj');
-				if (app.ForgetpasswordFlage) {
-					if (!this.pass1.trim()) {
-						uni.showToast({
-							icon: 'none',
-							title: "请输入密码"
-						})
-						return false;
-					}
-					// if(!this.pass2.trim()){
-					// 	uni.showToast({
-					// 		icon:'none',
-					// 		title:"请输入新密码"
-					// 	})
-					// 	return false;
-					// }
-					let obj = {};
-					obj.smsCode = app.smsCode;
-					obj.mobile = app.mobile;
-					obj.password = this.pass1;
-					// obj.password1 = this.pass1;
-					console.log(obj, 'objobjobj')
-					check_edit_password(obj)
-						.then(res => {
-							uni.showToast({
-								icon: 'none',
-								title: "修改成功，请您重新登录",
-								duration: 2000
-							})
-							setTimeout(() => {
-								uni.removeStorageSync('AccessToken');
-								uni.removeStorageSync('AccessToken_expiry');
-								this.$store.state.token = '';
-								this.$store.state.user.token = '';
-								this.$store.state.user.userId = '';
-								uni.navigateBack({
-									delta: 2
-								})
-							}, 1500)
-						})
-						.catch(err => {
-							uni.showToast({
-								icon: 'none',
-								title: err.message,
-								duration: 2000
-							})
-						})
-					return
-				}
-
-				console.log(this.loginFlag || this.registerFlag, 'this.loginFlag||this.registerFlag');
-				if (!this.loginFlag || !this.registerFlag) {
-					store.dispatch('Login', obj)
-						.then(result => {
-							console.log(result, 'result');
-							// 显示登录成功
-							app.$toast(result.message)
+					.catch(err => {
+						if (err.result.data.isBack) {
 							// 跳转回原页面
 							setTimeout(() => {
 								app.onNavigateBack(1)
 							}, 2000)
-						})
-						.catch(err => {
-							if (err.result.data.isBack) {
-								// 跳转回原页面
-								setTimeout(() => {
-									app.onNavigateBack(1)
-								}, 2000)
-							}
-						})
-						.finally(() => app.isLoading = false)
-				}
-
+						}
+					})
+					.finally(() => app.isLoading = false)
 			},
 
 			/**
@@ -557,7 +415,7 @@
 
 <style lang="scss" scoped>
 	.container {
-		padding: 100rpx 40rpx;
+		padding: 100rpx 60rpx;
 		height: 100vh;
 		background-color: #fff;
 		// background-image: url(../../../static/background/cardVoucher1.png);
@@ -565,55 +423,13 @@
 		background-position: 0 0;
 	}
 
-	.login-form {
-		display: flex;
-		align-items: center;
-		flex-direction: column;
-
-	}
-
 	// 页面头部
 	.header {
-		margin-bottom: 144rpx;
+		margin-bottom: 50rpx;
 
 		.title {
 			color: #191919;
-			font-size: 28rpx;
-			display: flex;
-			width: 100%;
-			align-items: center;
-			justify-content: center;
-
-			// margin-top: 144rpx;
-			.tab-item {
-				font-family: 'PingFang SC';
-				font-style: normal;
-				font-weight: 700;
-				font-size: 28rpx;
-				color: #CCCCCC;
-				margin: 0 30rpx;
-			}
-
-			.tab-item.selTabItem {
-				font-family: 'PingFang SC';
-				font-style: normal;
-				font-weight: 700;
-				font-size: 18px;
-				color: #333333;
-				position: relative;
-
-				&::after {
-					content: '';
-					position: absolute;
-					bottom: -16rpx;
-					left: 0;
-					margin-left: calc(50% - 20rpx);
-					width: 40rpx;
-					height: 8rpx;
-					background: #F97112;
-					border-radius: 4rpx;
-				}
-			}
+			font-size: 50rpx;
 		}
 
 		.sub-title {
@@ -626,31 +442,10 @@
 	// 输入框元素
 	.form-item {
 		display: flex;
-		// padding: 10rpx;
-		margin-bottom: 40rpx;
-		background: #F9F9F9;
-		border-radius: 25px;
-		width: 335px;
-		height: 50px;
-
-		.laber {
-			padding: 30rpx 30rpx;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-family: 'PingFang SC';
-			font-style: normal;
-			font-weight: 700;
-			font-size: 28rpx;
-			color: #333333;
-		}
-
-		.Forgetpassword {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			padding: 0 40rpx;
-		}
+		padding: 18rpx;
+		border-bottom: 1rpx solid #f3f1f2;
+		margin-bottom: 25rpx;
+		height: 96rpx;
 
 		&--input {
 			font-size: 26rpx;
@@ -677,7 +472,7 @@
 
 		// 短信验证码
 		.captcha-sms {
-			font-size: 28rpx;
+			font-size: 22rpx;
 			line-height: 50rpx;
 			padding-right: 20rpx;
 
@@ -696,17 +491,13 @@
 	.login-button {
 		width: 100%;
 		height: 86rpx;
-		margin-top: 120rpx;
+		margin-top: 70rpx;
 		// background: #cea26a;
-		background: #F97112;
-		border-radius: 50rpx;
-		font-family: 'PingFang SC';
-		font-style: normal;
-		font-weight: 700;
-		font-size: 32rpx;
+		background: linear-gradient(to right, #ecb53c, #ff9211);
 		text-align: center;
 		line-height: 86rpx;
 		color: #fff;
+		border-radius: 80rpx;
 		box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.1);
 		letter-spacing: 5rpx;
 	}
@@ -726,84 +517,6 @@
 		.title {
 			font-size: 28rpx;
 			color: #666666;
-
-		}
-	}
-
-	/* #ifdef APP-PLUS */
-	.agreement {
-		display: flex;
-		font-size: 22upx;
-		align-items: center;
-		margin-top: 60rpx;
-		text-align: left;
-		// transform: translateX(-40rpx);
-		// margin-left: -20rpx;
-	}
-
-	.all-radio {
-		/* width: 232upx; */
-		display: flex;
-		align-items: center;
-		margin-left: 38upx;
-	}
-
-	.all-radio text:nth-child(1) {
-		font-size: 22upx;
-		color: #5B5B5B;
-	}
-
-	.radio {
-		margin-bottom: -4upx;
-		transform: scale(0.76)
-	}
-
-	.all-radio text {
-		font-size: 22upx;
-	}
-
-	.agreementText {
-		font-size: 22upx;
-		color: #F97112;
-		line-height: 54upx;
-
-	}
-
-	.newRegister {
-		font-family: 'PingFang SC';
-		font-style: normal;
-		font-weight: 400;
-		font-size: 24rpx;
-		color: #999999;
-	}
-
-	/* #endif */
-	.pcs {
-		font-family: 'PingFang SC';
-		font-style: normal;
-		font-weight: 400;
-		font-size: 28rpx;
-		color: #CCCCCC;
-	}
-
-	.form-item--parts {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.logoWrap {
-		width: 120rpx;
-		height: 120rpx;
-		background: #F97112;
-		border-radius: 10px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-
-		image {
-			width: 92rpx;
-			height: 70rpx;
 		}
 	}
 </style>

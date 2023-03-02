@@ -1,5 +1,8 @@
 <script>
-	import * as Rapi from "@/api/home/rotation"
+	import * as Rapi from "@/api/home/rotation";
+	import {
+		fCheckVersion
+	} from '@/utils/update.js'
 	export default {
 
 		/**
@@ -16,7 +19,6 @@
 		 * 初始化完成时触发
 		 */
 		onLaunch(options) {
-
 			//console.log(options, 'options');
 			// #ifdef MP
 			if (options.query.scene) {
@@ -32,9 +34,15 @@
 			this.getInfo();
 			this.getSystemInfo();
 			// 小程序主动更新
+			// #ifdef APP-PLUS
+			fCheckVersion()
+			// #endif
+			// #ifdef MP
 			this.updateManager()
+			// #endif
 		},
 		onShow() {
+
 			// #ifdef APP-PLUS
 			var args = plus.runtime.arguments;
 			if (args) {
@@ -42,7 +50,9 @@
 				var arr = args.split('shareId=');
 				this.globalData.shareId = arr[1];
 			}
-			// #endif
+
+
+			//#endif   
 		},
 		methods: {
 			getInfo() {
