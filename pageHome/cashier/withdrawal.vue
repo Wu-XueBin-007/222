@@ -46,7 +46,7 @@
 					{{successTxt=='成功'?'提现申请提交成功':'提现申请提交失败'}}
 				</view>
 				<view class="successConB">
-					<view class="successConBT">{{successTxt=='成功'?'预计3个工作日内到账':'失败原因：提现申请提交失败'}}</view>
+					<view class="successConBT">{{successTxt=='成功'?'预计T+1工作日内到账':'失败原因：提现申请提交失败'}}</view>
 					<view class="successConBB">{{successTxt=='成功'?'实际到账时间以{微信}为准':'请稍后再试'}}</view>
 				</view>
 			</view>

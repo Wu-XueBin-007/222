@@ -57,6 +57,24 @@
 				</view>
 
 			</view>
+
+			<view class="sendWay">
+				<radio-group class="radioGroup sendWayL" @change="radioChange">
+					<view class="">
+						拼团退款路径：
+					</view>
+					<view class="labelBox">
+						<label class="uni-list-cell uni-list-cell-pd" v-for="(item, index) in items" :key="item.value">
+							<view>
+								<radio color='#EF343D' :value="item.value" :checked="index === current" />
+							</view>
+							<view>{{item.name}}</view>
+						</label>
+					</view>
+
+				</radio-group>
+			</view>
+
 		</view>
 		<view class="payWay">
 			<view class="payWayItem" @click="changeNav" data-index="0">
@@ -99,6 +117,7 @@
 	import * as addressApi from "@/api/address.js";
 	import * as collageApi from "@/api/collage/collage.js";
 	import * as UserApi from "@/api/user.js";
+	import * as UserCouponApi from "@/api/user/coupon.js"
 	import {
 		wxPayment,
 		zfbPayment
@@ -113,7 +132,19 @@
 				groupid: 0,
 				orderid: 0,
 				reqFlag: true,
-				userInfo: {}
+				userInfo: {},
+				formType: '',
+				items: [{
+						value: '2',
+						name: '余额',
+						checked: 'true'
+					},
+					{
+						value: '1',
+						name: '原路返回'
+					}
+				],
+				current: 0
 			}
 		},
 		components: {
@@ -127,10 +158,14 @@
 			} else {
 				this.info = App.$vm.globalData.goodsData;
 			}
+			if (options.type) {
+				this.formType = options.type
+			}
 			this.getUserInfo();
 		},
 		onShow() {
 			this.getAddress();
+			// this.getUserCoupon()
 		},
 		methods: {
 			// 获取会员信息
@@ -139,6 +174,26 @@
 					.then(result => {
 						this.userInfo = result.data.userInfo;
 					})
+			},
+			getUserCoupon() {
+				/*
+				refund_way 微信参团退款方式 1原路返回 2余额返回
+				*/
+				UserCouponApi.change_refund_way({
+					refund_way: this.items[this.current].value
+				}).then(res => {
+					console.log(res);
+				})
+			},
+			radioChange: function(evt) {
+
+				for (let i = 0; i < this.items.length; i++) {
+					if (this.items[i].value === evt.detail.value) {
+						this.current = i;
+						this.getUserCoupon()
+						break;
+					}
+				}
 			},
 			getDetail() {
 				collageApi.info({
@@ -584,5 +639,26 @@
 	.addressWrapR {
 		width: 10upx;
 		height: 18upx;
+	}
+
+	.radioGroup {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.labelBox {
+		display: flex;
+		flex: 1;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.radioGroup label {
+		margin-right: 30rpx;
+		text-align: center;
+		display: flex;
+		transform: scale(0.7);
+		align-items: center;
 	}
 </style>

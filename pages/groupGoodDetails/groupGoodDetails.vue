@@ -305,10 +305,26 @@
 							collageApi.add(obj).then(res => {
 								console.log(res)
 								if (res.data && res.data.order_no) {
+									// #ifdef MP
+									wx.requestSubscribeMessage({
+										tmplIds: ['rGq6tjBiDTifbJiFVDaJmoip2022JyCrGmnO5m5voA0'],
+										success(Messageres) {
+											console.log(Messageres);
+											uni.navigateTo({
+												url: "/pages/sureOrder/sureOrder?orderid=" +
+													res.data.order_no +
+													'&type=groupGoodDetails'
+											})
+										}
+									})
+									// #endif
+									// #ifndef MP
 									uni.navigateTo({
-										url: "/pages/sureOrder/sureOrder?orderid=" + res.data
+										url: "/pages/sureOrder/sureOrder?orderid=" +
+											res.data
 											.order_no
 									})
+									// #endif
 								} else {
 									this.$toast("系统繁忙，请稍后再试");
 								}
