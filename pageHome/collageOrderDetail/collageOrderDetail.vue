@@ -124,6 +124,9 @@
 			<!-- <view class="orderItem" v-if="info.order&&info.order.pay_type==10">余额支付：{{info.order.pay_price}}</view>
 			<view class="orderItem" v-if="info.order&&info.order.pay_type==20">微信支付：{{info.order.pay_price}}</view> -->
 			<view class="orderItem">支付时间：<text>{{info.order?info.order.pay_time:'---'}}</text> </view>
+			<view class="orderItem">
+				付款方式：<text>{{info.order.pay_type?PayTypeEnum[info.order.pay_type].name:'---'}}</text>
+			</view>
 		</view>
 		<view class=""
 			style="position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: #F8F8F8;z-index: -1;">
@@ -135,6 +138,9 @@
 <script>
 	import seckillNav from "@/components/seckillNav.vue";
 	import * as collageApi from "@/api/collage/collage.js";
+	import {
+		PayTypeEnum,
+	} from '@/common/enum/order'
 	const app = getApp();
 	export default {
 		data() {
@@ -148,7 +154,8 @@
 				// 正在加载
 				isLoading: true,
 				// 物流信息
-				express: {}
+				express: {},
+				PayTypeEnum
 			}
 		},
 		components: {
@@ -159,7 +166,7 @@
 			this.orderid = options.orderid;
 			this.orderId = options.orderId;
 			this.type = options.type;
-
+			console.log(this.PayTypeEnum);
 			this.getDetail();
 
 		},

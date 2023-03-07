@@ -97,7 +97,14 @@
 		<view class="operaBtn">
 			<view class="operaBtnL">
 				<view class="operaBtnLItem" @click="toHome">
+					<!-- #ifdef MP-QQ -->
+					<image style="width: 40rpx;
+					height: 40rpx;" src="../../static/home/collageHome.png" mode="heightFix"></image>
+					<!-- #endif -->
+					<!-- #ifndef MP-QQ -->
 					<image src="../../static/home/collageHome.png" mode="heightFix"></image>
+					<!-- #endif -->
+
 					<text>首页</text>
 				</view>
 
@@ -107,10 +114,17 @@
 						<text>分享</text>
 					</view>
 				</button> -->
-				<!-- #ifdef MP-WEIXIN -->
-				<button open-type="contact" class="coustomer">
+				<!-- #ifdef MP -->
+				<button open-type="contact" :contact="onEnterContact" class="coustomer">
 					<view class="operaBtnLItem" style="margin-right: 0;">
+						<!-- #ifdef MP-QQ -->
+						<image style="width: 40rpx;
+						height: 40rpx;" src="../../static/home/collageCoustomer.png" mode="heightFix"></image>
+						<!-- #endif -->
+						<!-- #ifndef MP-QQ -->
 						<image src="../../static/home/collageCoustomer.png" mode="heightFix"></image>
+						<!-- #endif -->
+
 						<text>客服</text>
 					</view>
 				</button>
@@ -305,20 +319,20 @@
 							collageApi.add(obj).then(res => {
 								console.log(res)
 								if (res.data && res.data.order_no) {
-									// #ifdef MP
-									wx.requestSubscribeMessage({
-										tmplIds: ['rGq6tjBiDTifbJiFVDaJmoip2022JyCrGmnO5m5voA0'],
-										success(Messageres) {
-											console.log(Messageres);
-											uni.navigateTo({
-												url: "/pages/sureOrder/sureOrder?orderid=" +
-													res.data.order_no +
-													'&type=groupGoodDetails'
-											})
-										}
+									// #ifdef MP-WEIXIN
+									// wx.requestSubscribeMessage({
+									// 	tmplIds: ['rGq6tjBiDTifbJiFVDaJmoip2022JyCrGmnO5m5voA0'],
+									// 	success(Messageres) {
+									// console.log(Messageres);
+									uni.navigateTo({
+										url: "/pages/sureOrder/sureOrder?orderid=" +
+											res.data.order_no +
+											'&type=groupGoodDetails'
 									})
+									// 	}
+									// })
 									// #endif
-									// #ifndef MP
+									// #ifndef MP-WEIXIN
 									uni.navigateTo({
 										url: "/pages/sureOrder/sureOrder?orderid=" +
 											res.data

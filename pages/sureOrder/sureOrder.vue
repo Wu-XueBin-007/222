@@ -71,7 +71,6 @@
 							<view>{{item.name}}</view>
 						</label>
 					</view>
-
 				</radio-group>
 			</view>
 
@@ -136,7 +135,7 @@
 				formType: '',
 				items: [{
 						value: '2',
-						name: '余额',
+						name: '我的钱包',
 						checked: 'true'
 					},
 					{
@@ -165,6 +164,7 @@
 		},
 		onShow() {
 			this.getAddress();
+			this.get_refund_way()
 			// this.getUserCoupon()
 		},
 		methods: {
@@ -175,6 +175,24 @@
 						this.userInfo = result.data.userInfo;
 					})
 			},
+			get_refund_way() {
+				UserCouponApi.get_refund_way().then(res => {
+					console.log(res);
+					let refund_way = res.data.refund_way;
+					try {
+						let filterItem = this.items.findIndex(item => item.value == refund_way);
+						this.current = filterItem;
+					} catch (e) {
+						console.log(e);
+						uni.showToast({
+							icon: "error",
+							title: '拼团退款路径获取失败'
+						})
+						//TODO handle the exception
+					}
+
+				})
+			},
 			getUserCoupon() {
 				/*
 				refund_way 微信参团退款方式 1原路返回 2余额返回
@@ -183,6 +201,10 @@
 					refund_way: this.items[this.current].value
 				}).then(res => {
 					console.log(res);
+					uni.showToast({
+						icon: "none",
+						title: res.message
+					})
 				})
 			},
 			radioChange: function(evt) {

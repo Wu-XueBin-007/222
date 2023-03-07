@@ -67,7 +67,8 @@
 							<view class="msgItemLRT" v-if="item.scene==20||item.scene==40||item.scene==200">商城</view>
 							<view class="msgItemLRT" v-if="item.scene==500">团队收益</view>
 							<view class="msgItemLRT" v-if="item.scene==70||item.scene==80||item.scene==75">话费</view> -->
-								<view class="msgItemLRT">{{item.describe}}</view>
+								<view class="msgItemLRT">{{item.describe.split("：")[0]}}</view>
+								<view class="msgItemLRT">{{item.describe.split("：")[1]}}</view>
 								<view class="msgItemLRB">{{item.create_time}}</view>
 							</view>
 						</view>
@@ -237,8 +238,8 @@
 									cur.money = cur.money.substring(1);
 									cur.addFlag = false;
 								}
-								cur.describe = cur.describe.indexOf("：") != -1 ? cur.describe.split("：")[0] :
-									cur.describe;
+								// cur.describe = cur.describe.indexOf("：") != -1 ? cur.describe.split("：")[0] :
+								// 	cur.describe;
 								return cur;
 							});
 						} else {
@@ -249,8 +250,8 @@
 									cur.money = cur.money.substring(1);
 									cur.addFlag = false;
 								}
-								cur.describe = cur.describe.indexOf("：") != -1 ? cur.describe.split("：")[
-									0] : cur.describe;
+								// cur.describe = cur.describe.indexOf("：") != -1 ? cur.describe.split("：")[
+								// 	0] : cur.describe;
 								return cur;
 							}));
 						}
@@ -434,7 +435,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 0 20rpx;
+		padding: 60rpx 20rpx;
 	}
 
 	.msgItem:nth-child(1) {

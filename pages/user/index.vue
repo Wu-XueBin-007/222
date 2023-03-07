@@ -22,8 +22,15 @@
 					</view>
 					<view class="" v-if="isLogin" style="display: flex;">
 						<view class="" style="margin-right: 24upx;">
+							<!-- #ifdef MP-QQ -->
+							<image class="userIdentityImg" mode="widthFix" style="width: 84rpx;"
+								:src="userInfo.teamLevel.preview_url">
+							</image>
+							<!-- #endif -->
+							<!-- #ifndef MP-QQ -->
 							<image class="userIdentityImg" :src="userInfo.teamLevel.preview_url" mode="heightFix">
 							</image>
+							<!-- #endif -->
 						</view>
 						<view class="">
 							<view class="userInfoB">
