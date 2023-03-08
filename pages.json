@@ -256,12 +256,13 @@
 		}, {
 			"path": "pages/collageDetail/collageDetail",
 			"style": {
+				"navigationBarTitleText": "拼团详情",
+				"enablePullDownRefresh": false,
 				"navigationStyle": "custom",
 				"app-plus": {
 					"titleNView": false
 				},
-				"navigationBarTextStyle": "black",
-				"enablePullDownRefresh": true
+				"navigationBarTextStyle": "white"
 			}
 
 		},

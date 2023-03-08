@@ -1,6 +1,8 @@
 <template>
-	<view>
-		<seckill-nav title="拼团详情" backGround="#FFFFFF" backL="transparent" color="#333333"></seckill-nav>
+	<view class="distribution">
+		<!-- <seckill-nav title="拼团详情" backGround="#FFFFFF" backL="transparent" color="#333333"></seckill-nav> -->
+		<head-nav title="拼团详情" color="white" backGround="#F23A3A" backType="other" :fontSize="36">
+		</head-nav>
 		<view class="" style="width: 750upx;background-color: #F23A3A;padding: 24upx;">
 			<view class="prizeWrap">
 
@@ -127,6 +129,9 @@
 			<view class="orderItem">
 				付款方式：<text>{{info.order.pay_type?PayTypeEnum[info.order.pay_type].name:'---'}}</text>
 			</view>
+			<view v-if="info.order.refund_way!=0" class="orderItem">
+				拼团退款路径：<text>{{info.order.refund_way==1?'原路返回':'我的钱包'}}</text>
+			</view>
 		</view>
 		<view class=""
 			style="position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: #F8F8F8;z-index: -1;">
@@ -136,7 +141,7 @@
 </template>
 
 <script>
-	import seckillNav from "@/components/seckillNav.vue";
+	import headNav from '@/components/seckillNav.vue'
 	import * as collageApi from "@/api/collage/collage.js";
 	import {
 		PayTypeEnum,
@@ -148,18 +153,25 @@
 				orderid: 0,
 				orderId: 0,
 				info: {
-					surplusTime: 0
+					surplusTime: 0,
+					record: [],
+					order: {
+						pay_type: '',
+						region: {
+							province: ''
+						}
+					}
 				},
 				showFlag: true,
 				// 正在加载
 				isLoading: true,
 				// 物流信息
 				express: {},
-				PayTypeEnum
+				PayTypeEnum,
 			}
 		},
 		components: {
-			seckillNav
+			headNav
 		},
 		onLoad(options) {
 			console.log(options)
@@ -211,6 +223,9 @@
 				uni.setClipboardData({
 					data: this.info.order.order_no.toString()
 				})
+			},
+			onSelectAddress() {
+
 			},
 			endTime() {
 				this.showFlag = false;

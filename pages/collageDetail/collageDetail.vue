@@ -1,7 +1,7 @@
 <template>
 	<view style="padding-bottom: 98upx;">
-		<!-- <nav-head title="拼团详情"></nav-head> -->
-		<seckill-nav title="拼团详情" backGround="#FFFFFF" backL="transparent" color="#333333"></seckill-nav>
+		<head-nav title="拼团详情" :backFlag="true" color="white" backGround="#F23A3A" backType="other" :fontSize="36">
+		</head-nav>
 		<view class="" style="width: 750upx;background-color: #F23A3A;padding: 24upx;">
 			<view class="collageUser">
 				<view class="userInfo">
@@ -63,19 +63,12 @@
 		<view class="submit" @click="submit" v-if="!isJoin&&(info.record.length<info.num)">{{endFlag?'拼团已过期':'立即参团'}}
 		</view>
 		<view class="submit" @click="toHome" v-if="info.record.length==info.num">回到幸运拼团</view>
-		<u-popup v-model="showAgree" mode="bottom" @close="close" @open="open">
-			<view style="max-height: 700upx;">
-				<view v-html="info.category.content" style="padding: 30upx;box-sizing: border-box;">
 
-				</view>
-			</view>
-		</u-popup>
 	</view>
 </template>
 
 <script>
-	import navHead from "@/components/navHead.vue";
-	import seckillNav from "@/components/seckillNav.vue";
+	import headNav from '@/components/seckillNav.vue'
 	import * as collageApi from "@/api/collage/collage.js";
 	const App = getApp();
 	export default {
@@ -85,7 +78,9 @@
 				selectIndex: 0,
 				moreFlag: false,
 				groupid: 0,
-				info: {},
+				info: {
+					record: []
+				},
 				page: 1,
 				goodsList: [],
 				showAgree: false,
@@ -95,8 +90,7 @@
 			}
 		},
 		components: {
-			seckillNav,
-			navHead
+			headNav
 		},
 		onReachBottom() {
 			console.log("bottom")
