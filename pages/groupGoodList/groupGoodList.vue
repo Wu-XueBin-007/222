@@ -61,7 +61,7 @@
 									<view class="collageUserConRLB">剩余{{item.surplusTime | dateFormat}}</view>
 								</view>
 								<view class="collageUserConRR" @click="toJoinCollage" :data-index="index">
-									<view class="collageUserConRRL">立即参团</view>
+									<view class="collageUserConRRL">立即查看</view>
 									<!-- <image src="../../static/icon/more_white.png"></image> -->
 								</view>
 							</view>
@@ -415,6 +415,7 @@
 							cur.surplusTime = cur.expire_time * 1000 - new Date().getTime();
 							if (cur.surplusTime <= 0) {
 								clearInterval(this.Timer);
+								return;
 								let j = null;
 								for (let i = 0; i < this.groupList.length; i++) {
 									if (this.groupList[i].id == cur.id) {

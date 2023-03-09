@@ -49,7 +49,7 @@
 						<view class="collageUserConRLB">剩余{{item.surplusTime | dateFormat}}</view>
 					</view>
 					<view class="collageUserConRR" @click="toJoinCollage" :data-index="index">
-						<view class="collageUserConRRL">立即参团</view>
+						<view class="collageUserConRRL">立即查看</view>
 						<!-- <image src="../../static/icon/more_white.png"></image> -->
 					</view>
 				</view>
@@ -130,7 +130,7 @@
 				</button>
 				<!-- #endif -->
 			</view>
-			<view class="operaBtnR" @click="toPayment">我要参团</view>
+			<view class="operaBtnR" @click="toPayment">我要开团</view>
 		</view>
 		<view class="collageMoreMark" @click="hideMark" v-if="showFlag"></view>
 		<view class="collageMore" v-if="showFlag">

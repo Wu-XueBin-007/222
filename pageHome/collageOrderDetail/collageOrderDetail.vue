@@ -1,5 +1,5 @@
 <template>
-	<view class="distribution">
+	<view v-if='!isLoading' class="distribution">
 		<!-- <seckill-nav title="拼团详情" backGround="#FFFFFF" backL="transparent" color="#333333"></seckill-nav> -->
 		<head-nav title="拼团详情" color="white" backGround="#F23A3A" backType="other" :fontSize="36">
 		</head-nav>
@@ -234,8 +234,10 @@
 				console.log(app.$vm)
 				let obj = {};
 				obj.task_record_id = this.orderid;
+
 				collageApi.orderInfo(obj).then(res => {
 					console.log(res)
+					this.isLoading = false
 					res.data.detail.prize_money = (Math.round(Number(res.data.detail.goods
 						.goods_price) * Number(
 						res.data.detail.prize_ratio)) / 100).toFixed(2)

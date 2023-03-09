@@ -133,6 +133,9 @@
 			obj.paddingTop = App.globalData.paddingTop;
 			console.log(obj)
 			this.navInfo = obj;
+
+		},
+		onShow() {
 			this.getList();
 		},
 		// onReachBottom() {
