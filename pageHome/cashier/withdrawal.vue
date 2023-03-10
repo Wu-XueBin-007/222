@@ -26,8 +26,19 @@
 					<text class="withdrawalConBRC">微信</text>
 					<image src="../../static/icon/more_gray.png" class="withdrawalConBRR"></image>
 				</view>
+
+			</view>
+			<view class="withdrawalInfoB">
+				<view class="withdrawalInfoBL">收款二维码：</view>
+				<view class="withdrawalInfoBR" @click="uplaodImg"
+					:style="{'border':imgInfo.preview_url?'none':'2upx solid #CCCCCC'}">
+					<image :src="imgInfo.preview_url?imgInfo.preview_url:'../../static/user/uploadImg.png'"
+						:style="{'width':imgInfo.preview_url?'100%':'38upx','height':imgInfo.preview_url?'100%':'38upx'}">
+					</image>
+				</view>
 			</view>
 		</view>
+
 		<view class="submit" @click="btn_drawal">立即提现</view>
 		<!-- <view style="box-sizing: border-box;padding: 0 30upx;margin-top: 30upx;color: #999999;">1、单次提现金额最高为200元；</view>
 		<view style="box-sizing: border-box;padding: 0 30upx;margin-top: 10upx;color: #999999;">2、提现平台将收取千分之{{msg.service_charge}}手续费；</view>
@@ -55,6 +66,8 @@
 		<view
 			style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: #F1F1F1;z-index: -1;"
 			catchtouchmove="true"></view>
+		<!-- <rc-upload-img ref="rcUploadImg" :money="money"></rc-upload-img> -->
+
 	</view>
 </template>
 
@@ -82,11 +95,12 @@
 				account_number: "",
 				payType: 1,
 				msg: {},
-				commonL: {}
+				commonL: {},
+				photoList: []
 			}
 		},
 		components: {
-			headNav
+			headNav,
 		},
 		onLoad(options) {
 			this.type = options.type;
@@ -127,6 +141,9 @@
 					// 							"<img style='width:100%'");
 					// 						this.commonL = res.data.detail
 				}).catch(err => {})
+			},
+			getImgList(e) {
+				this.photoList = e
 			},
 			hideSuccess() {
 				this.successFlag = false;
@@ -209,6 +226,8 @@
 			},
 			btn_drawal() {
 
+				// this.$refs.rcUploadImg.showAgree = true;
+				// return;
 				if (Number(this.money) > Number(this.msg.most_withdraw_money)) {
 					uni.showToast({
 						icon: 'none',
@@ -240,29 +259,28 @@
 						//console.log(res)
 						if (res.confirm) {
 							let flag = false;
-
-							// if(_this.account_number || _this.imgInfo.file_id){
-							// 	flag = true;
-							// }
-							// if(!flag){
-							// 	uni.showToast({
-							// 		icon: 'none',
-							// 		title: "收款二维码必须上传"
-							// 	})
-							// 	return false;
-							// }
+							if (_this.account_number || _this.imgInfo.file_id) {
+								flag = true;
+							}
+							if (!flag) {
+								uni.showToast({
+									icon: 'none',
+									title: "收款二维码必须上传"
+								})
+								return false;
+							}
 							let obj = {};
 							obj.form = {};
 							obj.form.data = {};
 							obj.form.data.price = _this.money;
-							// obj.form.data.if_commission = _this.type == 1 ? 2 : 1;
-							// if(_this.type == 10){
-							// 	obj.form.data.if_commission = 3;
-							// }
-							// obj.form.image = {};
-							// obj.form.image.account_number = _this.account_number;
-							// obj.form.image.image = _this.imgInfo.file_id;
-							// obj.form.image.type = _this.payType;
+							obj.form.data.if_commission = _this.type == 1 ? 2 : 1;
+							if (_this.type == 10) {
+								obj.form.data.if_commission = 3;
+							}
+							obj.form.image = {};
+							obj.form.image.account_number = _this.account_number;
+							obj.form.image.image = _this.imgInfo.file_id;
+							obj.form.image.type = _this.payType;
 							UserApi.withdrawalAdd(obj)
 								.then(res => {
 									//console.log(res)
@@ -585,6 +603,7 @@
 		width: 100%;
 		display: flex;
 		margin-top: 30upx;
+		align-items: center
 	}
 
 	.withdrawalInfoBR {
@@ -604,6 +623,28 @@
 		height: 38upx;
 	}
 
+	.withdrawalInfoB {
+		width: 100%;
+		display: flex;
+		margin-top: 30upx;
+	}
+
+	.withdrawalInfoBR {
+		width: 120upx;
+		height: 120upx;
+		box-sizing: border-box;
+		border: 2upx solid #CCCCCC;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 6upx;
+		background: white;
+	}
+
+	.withdrawalInfoBR>image {
+		width: 38upx;
+		height: 38upx;
+	}
 
 	.withdrawal {
 		width: 100%;

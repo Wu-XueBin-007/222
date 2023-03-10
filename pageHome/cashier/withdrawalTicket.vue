@@ -16,7 +16,8 @@
 				<view class="withdrawalPayTypeL">收款方式</view>
 				<radio-group v-model="payType" class="withdrawalPayTypeR">
 					<label>
-						<radio :value="1" class="withdrawalPayWay" color="#ff5060" v-if="payType==1" checked /><radio v-else :value="1" class="withdrawalPayWay" color="#ff5060" /><text>微信</text>
+						<radio :value="1" class="withdrawalPayWay" color="#ff5060" v-if="payType==1" checked />
+						<radio v-else :value="1" class="withdrawalPayWay" color="#ff5060" /><text>微信</text>
 					</label>
 					<!-- <label style="margin-left: 50upx;">
 						<radio :value="2" class="withdrawalPayWay" color="#ff5060" v-if="payType==2" checked /><radio v-else :value="2" class="withdrawalPayWay" color="#ff5060" /><text>支付宝</text>
@@ -35,10 +36,13 @@
 			</view> -->
 		</view>
 		<!-- <view style="box-sizing: border-box;padding: 0 30upx;margin-top: 30upx;color: #999999;">*收款二维码必须上传</view> -->
-		<view style="box-sizing: border-box;padding: 0 30upx;margin-top: 10upx;color: #999999;">*最低提现{{msg.least_withdraw_money}}元</view>
-		<view style="box-sizing: border-box;padding: 0 30upx;margin-top: 10upx;color: #999999;">*{{msg.withdraw_date}}天内只能提现一次</view>
+		<view style="box-sizing: border-box;padding: 0 30upx;margin-top: 10upx;color: #999999;">
+			*最低提现{{msg.least_withdraw_money}}元</view>
+		<view style="box-sizing: border-box;padding: 0 30upx;margin-top: 10upx;color: #999999;">
+			*{{msg.withdraw_date}}天内只能提现一次</view>
 		<view style="box-sizing: border-box;padding: 0 30upx;margin-top: 30upx;color: #999999;">*提现金额将在1-3个工作日内到账</view>
-		<view style="box-sizing: border-box;padding: 0 30upx;margin-top: 10upx;color: #999999;">*提现手续费为千分之{{msg.service_charge}}</view>
+		<view style="box-sizing: border-box;padding: 0 30upx;margin-top: 10upx;color: #999999;">
+			*提现手续费为千分之{{msg.service_charge}}</view>
 		<view class="withdrawal-footer" @click="btn_drawal">确定提现</view>
 		<view
 			style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: #F1F1F1;z-index: -1;"
@@ -48,7 +52,9 @@
 
 <script>
 	import * as UserApi from '@/api/user';
-	import {detail} from "@/api/common.js";
+	import {
+		detail
+	} from "@/api/common.js";
 	const App = getApp();
 	export default {
 		data() {
@@ -59,11 +65,11 @@
 				test_money: 0,
 				ausermomey: 0,
 				userInfo: {},
-				type:1,//1为退款余额提现，2位佣金提现
-				imgInfo:{},
-				account_number:"",
-				payType:1,
-				msg:{}
+				type: 1, //1为退款余额提现，2位佣金提现
+				imgInfo: {},
+				account_number: "",
+				payType: 1,
+				msg: {}
 			}
 		},
 		onLoad(options) {
@@ -84,7 +90,7 @@
 				path: "/pages/index/index"
 			}
 		},
-		
+
 		/**
 		 * 分享到朋友圈
 		 * 本接口为 Beta 版本，暂只在 Android 平台支持，详见分享到朋友圈 (Beta)
@@ -101,25 +107,25 @@
 			}
 		},
 		methods: {
-			getDetail(){
+			getDetail() {
 				detail()
-					.then(res=>{
+					.then(res => {
 						//console.log(res)
 						this.msg = res.data.detail;
 					})
 			},
-			uplaodImg(){
+			uplaodImg() {
 				let _this = this;
 				uni.chooseImage({
-					count:1,
-					success:res=>{
+					count: 1,
+					success: res => {
 						uni.uploadFile({
-							url:App.globalData.uploadBaseUrl + "api/upload/image",
-							filePath:res.tempFilePaths[0],
-							header:{
-								'Access-Token':_this.$store.getters.token
+							url: App.globalData.uploadBaseUrl + "api/upload/image",
+							filePath: res.tempFilePaths[0],
+							header: {
+								'Access-Token': _this.$store.getters.token
 							},
-							name:"file",
+							name: "file",
 							success: (rep) => {
 								//console.log(rep);
 								let data = JSON.parse(rep.data);
@@ -170,23 +176,24 @@
 					})
 					return false;
 				}
-				if(Number(this.money) < Number(this.msg.least_withdraw_money)){
+				if (Number(this.money) < Number(this.msg.least_withdraw_money)) {
 					uni.showToast({
 						icon: 'none',
-						title: "提现金额最低为"+this.msg.least_withdraw_money+"元"
+						title: "提现金额最低为" + this.msg.least_withdraw_money + "元"
 					})
 					return false;
 				}
-				
+
 				let money = this.money;
-				let ssfMoney = (Number(this.money)*Number(this.msg.service_charge)/1000).toFixed(2);
+				let ssfMoney = (Number(this.money) * Number(this.msg.service_charge) / 1000).toFixed(2);
 				let _this = this;
 				uni.showModal({
-					content:"本次提现" + money + "元，需支付手续费" + ssfMoney + "元，实际到账" + (Number(money) - Number(ssfMoney)) + "元",
-					title:"提现说明",
+					content: "本次提现" + money + "元，需支付手续费" + ssfMoney + "元，实际到账" + (Number(money) - Number(
+						ssfMoney)) + "元",
+					title: "提现说明",
 					success(res) {
 						//console.log(res)
-						if(res.confirm){
+						if (res.confirm) {
 							let flag = false;
 							// if(_this.account_number || _this.imgInfo.file_id){
 							// 	flag = true;
@@ -208,22 +215,22 @@
 							// obj.form.image.image = _this.imgInfo.file_id;
 							// obj.form.image.type = _this.payType;
 							UserApi.withdrawalAdd(obj)
-								.then(res=>{
+								.then(res => {
 									//console.log(res)
 									uni.showToast({
 										icon: 'none',
 										title: res.message
 									})
-									setTimeout(()=>{
+									setTimeout(() => {
 										let url = "/pageHome/distribution/withdrawal/index?type=";
 										let query = _this.type == 1 ? 2 : 1
 										url = url + query;
 										uni.redirectTo({
 											url
 										})
-									},1500)
+									}, 1500)
 								})
-								.catch(err=>{
+								.catch(err => {
 									uni.showToast({
 										icon: 'none',
 										title: res.message
@@ -238,21 +245,24 @@
 </script>
 
 <style scoped>
-	.withdrawalPayType{
+	.withdrawalPayType {
 		display: flex;
 		align-items: center;
 		margin-bottom: 30upx;
 	}
-	.withdrawalPayType>view:nth-child(1){
+
+	.withdrawalPayType>view:nth-child(1) {
 		width: 180upx;
 		font-size: 28upx;
 		line-height: 28upx;
 		color: #333333;
 	}
-	.withdrawalPayWay{
+
+	.withdrawalPayWay {
 		transform: scale(.7);
 	}
-	.withdrawalInfo{
+
+	.withdrawalInfo {
 		width: 690upx;
 		margin: 30upx auto 0;
 		box-sizing: border-box;
@@ -260,19 +270,23 @@
 		background: white;
 		padding: 30upx;
 	}
-	.withdrawalInfoT{
+
+	.withdrawalInfoT {
 		width: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
-	.withdrawalInfoT>view:nth-child(1),.withdrawalInfoB>view:nth-child(1){
+
+	.withdrawalInfoT>view:nth-child(1),
+	.withdrawalInfoB>view:nth-child(1) {
 		width: 180upx;
 		font-size: 28upx;
 		line-height: 28upx;
 		color: #333333;
 	}
-	.withdrawalInfoT>input{
+
+	.withdrawalInfoT>input {
 		width: calc(100% - 180upx);
 		height: 60upx;
 		box-sizing: border-box;
@@ -283,12 +297,14 @@
 		padding: 0 16upx;
 		outline: none;
 	}
-	.withdrawalInfoB{
+
+	.withdrawalInfoB {
 		width: 100%;
 		display: flex;
 		margin-top: 30upx;
 	}
-	.withdrawalInfoBR{
+
+	.withdrawalInfoBR {
 		width: 120upx;
 		height: 120upx;
 		box-sizing: border-box;
@@ -299,12 +315,13 @@
 		border-radius: 6upx;
 		background: white;
 	}
-	.withdrawalInfoBR>image{
+
+	.withdrawalInfoBR>image {
 		width: 38upx;
 		height: 38upx;
 	}
-	
-	
+
+
 	.withdrawal {
 		width: 100%;
 		background-color: #F1F1F1;

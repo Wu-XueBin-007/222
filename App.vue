@@ -3,6 +3,28 @@
 	import {
 		fCheckVersion
 	} from '@/utils/update.js'
+	let uploadBaseUrl = ''
+	try {
+		let version = __wxConfig.envVersion;
+		switch (version) {
+			// 开发版
+			case 'develop':
+				uploadBaseUrl = 'https://dev.gzrhhj.com/'
+				break
+				// 体验版
+			case 'trial':
+				uploadBaseUrl = 'https://dev.gzrhhj.com/'
+				break
+				// 正式版
+			case 'release':
+				uploadBaseUrl = 'https://shop.gzrhhj.com/'
+				break
+			default:
+				uploadBaseUrl = 'https://shop.gzrhhj.com/'
+		}
+	} catch (e) {
+		uploadBaseUrl = 'https://shop.gzrhhj.com/'
+	}
 	export default {
 
 		/**
@@ -10,7 +32,7 @@
 		 */
 		globalData: {
 			// uploadBaseUrl: "https://3013.zhouyangjun.com/"
-			uploadBaseUrl: "https://shop.gzrhhj.com/",
+			uploadBaseUrl: uploadBaseUrl,
 			goodsData: {},
 			setting: {}
 		},
