@@ -29,11 +29,19 @@
 
 			</view>
 			<view class="withdrawalInfoB">
-				<view class="withdrawalInfoBL">收款二维码：</view>
+				<view class="withdrawalInfoBL">收款人信息：</view>
 				<view class="withdrawalInfoBR" @click="uplaodImg"
 					:style="{'border':imgInfo.preview_url?'none':'2upx solid #CCCCCC'}">
 					<image :src="imgInfo.preview_url?imgInfo.preview_url:'../../static/user/uploadImg.png'"
 						:style="{'width':imgInfo.preview_url?'100%':'38upx','height':imgInfo.preview_url?'100%':'38upx'}">
+					</image>
+				</view>
+			</view>
+			<view class="withdrawalInfoB">
+				<view style="width: 250rpx;" class="withdrawalInfoBL">收款人信息示例：</view>
+				<view class="withdrawalInfoBR" @click="previewImg" style="border:none">
+					<image src="https://oss.gzrhhj.com/10001/20230313/c547dae400bc6eb28987312ac4a94ada.png"
+						style="width: 100%;height: 100%;">
 					</image>
 				</view>
 			</view>
@@ -163,6 +171,20 @@
 							"<img style='width:100%'");
 						this.commonL = res.data.detail
 					})
+			},
+			previewImg() {
+				uni.previewImage({
+					urls: 'https://oss.gzrhhj.com/10001/20230313/c547dae400bc6eb28987312ac4a94ada.png',
+					longPressActions: {
+						itemList: ['发送给朋友', '保存图片', '收藏'],
+						success: function(data) {
+							console.log('选中了第' + (data.tapIndex + 1) + '个按钮,第' + (data.index + 1) + '张图片');
+						},
+						fail: function(err) {
+							console.log(err.errMsg);
+						}
+					}
+				});
 			},
 			uplaodImg() {
 				let _this = this;

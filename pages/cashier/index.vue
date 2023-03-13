@@ -37,9 +37,8 @@
 						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.WECHAT.value"></checkbox>
 					</view>
 				</view>
-
-				<!-- 				<view v-if='order.is_big_vip&&loading&&is_free==0' class="caShier-item-list"
-					@click="btn_payTa(PayTypeEnum.BALANCE.value)">
+				<!-- v-if='order.is_big_vip&&loading&&is_free==0' -->
+				<view class="caShier-item-list" @click="btn_payTa(PayTypeEnum.BALANCE.value)">
 					<view class="caShier-item-icon" style="display: flex;align-items: center;">
 						<image src="../../static/icon/icon_ye.png" mode="widthFix"></image>
 						<text>{{PayTypeEnum.BALANCE.name}}（可用余额：{{userInfo.balance ? userInfo.balance : 0}}）</text>
@@ -47,7 +46,7 @@
 					<view class="coupons-item-chbox">
 						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.BALANCE.value"></checkbox>
 					</view>
-				</view> -->
+				</view>
 				<!-- 团长或者创客 并且选中权益额度兑换显示 -->
 				<!-- <view v-if='(userInfo.team_level == 2||userInfo.team_level == 3)&&loading&&is_free==3'
 					class="caShier-item-list" @click="btn_payTa(PayTypeEnum.ConsumptionQuota.value)">
@@ -229,6 +228,7 @@
 				if (app.type == 1) {
 					OrderApi.detail(app.order_id)
 						.then(result => {
+							console.log(result, 'result');
 							app.order = result.data.order
 							app.setting = result.data.setting
 							result.data.order.create_time = result.data.order.create_time.replace(/-/g, "/");
