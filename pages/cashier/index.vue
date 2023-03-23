@@ -132,10 +132,10 @@
 		onShow() {
 			let type = 0;
 			// #ifdef APP-PLUS
-			type = 1
+			type = 2
 			// #endif
 			// #ifdef MP-WEIXIN
-			type = 2
+			type = 1
 			// #endif
 			// #ifdef MP-QQ
 			type = 3
