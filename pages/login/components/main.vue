@@ -264,8 +264,14 @@
 						app.$toast(result.message)
 						// 执行定时器
 						app.timer()
+					}).catch(err => {
+						console.log(err)
+						// this.getCaptcha()
 					})
-					.finally(() => app.isLoading = false)
+					.finally(() => {
+						app.isLoading = false;
+
+					})
 			},
 
 			// 执行定时器

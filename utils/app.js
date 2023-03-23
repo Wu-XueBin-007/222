@@ -178,7 +178,6 @@ export const wxPayment = (option) => {
 		...option
 	}
 	return new Promise((resolve, reject) => {
-		console.log(options)
 		let obj = {
 			"appid": options.appid,
 			"noncestr": options.nonceStr,
@@ -186,9 +185,8 @@ export const wxPayment = (option) => {
 			"package": "Sign=WXPay",
 			"partnerid": options.partnerid,
 			"timestamp": Number(options.timeStamp),
-			"sign": options.paySign
+			"sign": options.paySign,
 		}
-		console.log(obj)
 		// #ifdef APP-PLUS
 		uni.requestPayment({
 			provider: 'wxpay',
@@ -203,7 +201,7 @@ export const wxPayment = (option) => {
 			timeStamp: options.timeStamp,
 			nonceStr: options.nonceStr,
 			'package': `prepay_id=${options.prepay_id}`,
-			signType: 'MD5',
+			signType: options.signType ? options.signType : 'MD5',
 			paySign: options.paySign,
 			success: res => resolve(res),
 			fail: res => reject(res)

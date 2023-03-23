@@ -23,7 +23,11 @@
 		data() {
 			return {
 				imgsrc: "",
-				infos: {},
+				infos: {
+					shareImage: {
+						preview_url: ''
+					}
+				},
 				userInfo: {},
 				widthH: 0,
 				heightH: 0
@@ -73,7 +77,12 @@
 					itemList: ['保存到相册'],
 					success(res) {
 						//console.log(res)
+						// #ifdef MP
 						_this.getImgInfo(_this.infos.shareImage.preview_url)
+						// #endif
+						// #ifdef APP-PLUS
+						_this.saveImgFile()
+						// #endif
 					}
 				})
 			},
@@ -254,6 +263,41 @@
 					});
 				})
 
+			},
+			saveImgFile() {
+				let base64 = this.imgsrc;
+				const bitmap = new plus.nativeObj.Bitmap("test");
+				bitmap.loadBase64Data(base64, function() {
+					const url = "_doc/" + new Date().getTime() + ".png"; // url为时间戳命名方式
+					console.log('saveHeadImgFile', url)
+					bitmap.save(url, {
+						overwrite: true, // 是否覆盖
+						// quality: 'quality'  // 图片清晰度
+					}, (i) => {
+						uni.saveImageToPhotosAlbum({
+							filePath: url,
+							success: function() {
+								uni.showToast({
+									title: '图片保存成功',
+									icon: 'none'
+								})
+								bitmap.clear()
+							}
+						});
+					}, (e) => {
+						uni.showToast({
+							title: '图片保存失败',
+							icon: 'none'
+						})
+						bitmap.clear()
+					});
+				}, (e) => {
+					uni.showToast({
+						title: '图片保存失败',
+						icon: 'none'
+					})
+					bitmap.clear()
+				});
 			},
 			saveImg() {
 				var that = this;

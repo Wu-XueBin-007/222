@@ -4,8 +4,9 @@
 		fCheckVersion
 	} from '@/utils/update.js'
 	let uploadBaseUrl = ''
+	let version = ''
 	try {
-		let version = __wxConfig.envVersion;
+		version = __wxConfig.envVersion;
 		switch (version) {
 			// 开发版
 			case 'develop':
@@ -25,6 +26,7 @@
 	} catch (e) {
 		uploadBaseUrl = 'https://shop.gzrhhj.com/'
 	}
+	// let version = __wxConfig.envVersion
 	export default {
 
 		/**
@@ -34,7 +36,8 @@
 			// uploadBaseUrl: "https://3013.zhouyangjun.com/"
 			uploadBaseUrl: uploadBaseUrl,
 			goodsData: {},
-			setting: {}
+			setting: {},
+			version: version
 		},
 
 		/**

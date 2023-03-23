@@ -16,29 +16,20 @@
 				</view>
 			</view>
 			<view class="caShier-item">
-				<!-- #ifdef APP-PLUS -->
-				<!-- <view class="caShier-item-list caShier-color" @click="btn_payTa(PayTypeEnum.ZHIFUBAO.value)">
-					<view class="caShier-item-icon">
-						<image src="../../static/icon/icon_zfbzf.png" mode=""></image>
-						<text>{{PayTypeEnum.ZHIFUBAO.name}}</text>
-					</view>
-					<view class="coupons-item-chbox">
-						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.ZHIFUBAO.value"></checkbox>
-					</view>
 
-				</view> -->
-				<!-- #endif -->
-				<view class="caShier-item-list caShier-color" @click="btn_payTa(PayTypeEnum.WECHAT.value)">
+				<view class="caShier-item-list caShier-color" v-for="item in payDataList"
+					@click="btn_payTa(item.value)">
 					<view class="caShier-item-icon">
-						<image src="../../static/icon/icon_wxzf.png" mode=""></image>
-						<text>{{PayTypeEnum.WECHAT.name}}</text>
+						<image :src="item.image_url" mode=""></image>
+						<text>{{item.name}}</text>
 					</view>
 					<view class="coupons-item-chbox">
-						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.WECHAT.value"></checkbox>
+						<checkbox class="checks1-h5" :checked="paymentType==item.value"></checkbox>
 					</view>
 				</view>
-				<!-- v-if='order.is_big_vip&&loading&&is_free==0' -->
-				<view class="caShier-item-list" @click="btn_payTa(PayTypeEnum.BALANCE.value)">
+				<!-- order.is_big_vip&&loading&&is_free==0&& -->
+				<!-- 				<view v-if='order.is_big_vip&&loading&&is_free==0' class="caShier-item-list"
+					@click="btn_payTa(PayTypeEnum.BALANCE.value)">
 					<view class="caShier-item-icon" style="display: flex;align-items: center;">
 						<image src="../../static/icon/icon_ye.png" mode="widthFix"></image>
 						<text>{{PayTypeEnum.BALANCE.name}}（可用余额：{{userInfo.balance ? userInfo.balance : 0}}）</text>
@@ -46,7 +37,7 @@
 					<view class="coupons-item-chbox">
 						<checkbox class="checks1-h5" :checked="paymentType==PayTypeEnum.BALANCE.value"></checkbox>
 					</view>
-				</view>
+				</view> -->
 				<!-- 团长或者创客 并且选中权益额度兑换显示 -->
 				<!-- <view v-if='(userInfo.team_level == 2||userInfo.team_level == 3)&&loading&&is_free==3'
 					class="caShier-item-list" @click="btn_payTa(PayTypeEnum.ConsumptionQuota.value)">
@@ -70,11 +61,12 @@
 		<view
 			style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;background: #F3F3F3;z-index: -1;">
 		</view>
+
 	</view>
 </template>
 
 <script>
-	// let timer = null;
+	let app = getApp();
 	import {
 		DeliveryStatusEnum,
 		DeliveryTypeEnum,
@@ -85,6 +77,7 @@
 	} from '@/common/enum/order'
 	import * as OrderApi from '@/api/order'
 	import * as UserApi from "@/api/user.js";
+	import * as payTypeApi from "@/api/paytype/paytype.js"
 	import {
 		detail
 	} from '@/api/order/comment.js'
@@ -113,17 +106,11 @@
 				type: 1,
 				loading: false,
 				is_free: 0,
-				// test2:"",
-				// test3:"",
-				// test4:"",
-				// test5:"",
-				// test6:""
+				packerState: 0,
+				payDataList: []
 			}
 		},
 		onLoad(options) {
-			// this.test5 = options.order_id;
-			// this.test6 = 1234;
-			console.log(options)
 			if (options.order_on) {
 				this.order_id = options.order_on;
 				this.type = 2;
@@ -143,7 +130,28 @@
 			this.getUserInfo();
 		},
 		onShow() {
+			let type = 0;
+			// #ifdef APP-PLUS
+			type = 1
+			// #endif
+			// #ifdef MP-WEIXIN
+			type = 2
+			// #endif
+			// #ifdef MP-QQ
+			type = 3
+			// #endif
+			payTypeApi.payType({
+				type
+			}).then(res => {
+				if (res.data.list.data && res.data.list.data.length > 0) {
+					this.payDataList = res.data.list.data;
+					// 默认值
+					this.paymentType = res.data.list.data[0].value;
+				} else {
+					this.payDataList = [];
+				}
 
+			})
 		},
 		// onBackPress(options) {
 		// 	uni.showModal({
@@ -221,6 +229,8 @@
 					})
 			},
 
+
+
 			getOrderDetail() {
 				const app = this
 				app.isLoading = true
@@ -228,7 +238,6 @@
 				if (app.type == 1) {
 					OrderApi.detail(app.order_id)
 						.then(result => {
-							console.log(result, 'result');
 							app.order = result.data.order
 							app.setting = result.data.setting
 							result.data.order.create_time = result.data.order.create_time.replace(/-/g, "/");
@@ -399,6 +408,7 @@
 									OrderApi.mergePay(app.order_id, paymentType).then(result => app
 										.onSubmitCallback(result))
 								} else {
+
 									OrderApi.pay(app.order_id, paymentType)
 										.then(result => app.onSubmitCallback(result))
 								}
@@ -406,6 +416,7 @@
 						}
 					})
 				} else {
+
 					if (this.type == 2) {
 						OrderApi.mergePay(app.order_id, paymentType)
 							.then(result => app.onSubmitCallback(result))
@@ -417,10 +428,11 @@
 			},
 			// 订单提交成功后回调
 			onSubmitCallback(result) {
-				//console.log(result)
+
 				const app = this
 				// 发起微信支付
-				if (result.data.pay_type == PayTypeEnum.WECHAT.value || result.data.pay_type == 40) {
+				if (result.data.pay_type == PayTypeEnum.WECHAT.value || result.data.pay_type == 40 || result.data
+					.pay_type == 220) {
 					console.log('result', result)
 					wxPayment(result.data.payment)
 						.then(() => {
@@ -430,7 +442,7 @@
 							}, 1500)
 						})
 						.catch(err => {
-							//console.log(err)
+							console.log(err)
 							app.$error('订单未支付')
 						})
 						.finally(() => {

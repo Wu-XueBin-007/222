@@ -197,16 +197,26 @@
 						</view>
 						<text>收货地址</text>
 					</view>
-					<button open-type="contact" class="btn-normal">
-						<view class="orderItem">
+					<!-- #ifdef MP -->
+					<button open-type="contact" class="btn-normal orderItem">
+						<view style="width: 100%;margin-bottom: 0;" class="orderItem">
 							<view>
 								<image src="../../static/mine/kefu.png" style="width: 72rpx;height: 72rpx;"></image>
 							</view>
-							<text>在线客服</text>
+							<text>客服</text>
 						</view>
 					</button>
+					<!-- #endif -->
+					<view class="orderItem" @click="toUrls" data-path="/pages/address/index">
+						<view>
+							<image src="https://oss.gzrhhj.com/10001/20230313/427072ad293e32d1bbb00df0f944a1cf.png"
+								style="width: 72rpx;height: 72rpx;"></image>
+						</view>
+						<text>银行卡</text>
+					</view>
 
-					<view class="orderItem" @click="toUrls" data-path="">
+
+					<!-- 					<view class="orderItem" @click="toUrls" data-path="">
 						<view>
 							<image src="../../static/mine/wenti.png" style="width: 72rpx;height: 72rpx;"></image>
 						</view>
@@ -217,7 +227,7 @@
 							<image src="../../static/mine/shoucang.png" style="width: 72rpx;height: 72rpx;"></image>
 						</view>
 						<text>我的收藏</text>
-					</view>
+					</view> -->
 				</view>
 			</view>
 		</view>
@@ -998,8 +1008,9 @@
 	.orderWrapCon2 {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+		/* justify-content: space-between; */
 		margin-top: 30rpx;
+		flex-wrap: wrap
 	}
 
 	.orderItem {
@@ -1007,6 +1018,10 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+		width: 20%;
+		/* margin-right: 20rpx; */
+		/* flex: 0.25; */
+
 	}
 
 	.orderWrapCon>.orderItem:nth-child(1)>view>image {

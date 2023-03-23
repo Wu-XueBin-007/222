@@ -22,14 +22,16 @@
 			<view class="withdrawalConB">
 				<view class="withdrawalConBL">提现至</view>
 				<view class="withdrawalConBR">
-					<image src="../../static/home/wx_icon.png" class="withdrawalConBRL"></image>
-					<text class="withdrawalConBRC">微信</text>
+					<!-- <image src="../../static/home/wx_icon.png" class="withdrawalConBRL"></image> -->
+					<image src="https://oss.gzrhhj.com/10001/20230313/427072ad293e32d1bbb00df0f944a1cf.png"
+						class="withdrawalConBRL"></image>
+					<text class="withdrawalConBRC">银行卡</text>
 					<image src="../../static/icon/more_gray.png" class="withdrawalConBRR"></image>
 				</view>
 
 			</view>
 			<view class="withdrawalInfoB">
-				<view class="withdrawalInfoBL">收款人信息：</view>
+				<view style="width: 250rpx;" class="withdrawalInfoBL">收款人信息照片：</view>
 				<view class="withdrawalInfoBR" @click="uplaodImg"
 					:style="{'border':imgInfo.preview_url?'none':'2upx solid #CCCCCC'}">
 					<image :src="imgInfo.preview_url?imgInfo.preview_url:'../../static/user/uploadImg.png'"
@@ -38,7 +40,7 @@
 				</view>
 			</view>
 			<view class="withdrawalInfoB">
-				<view style="width: 250rpx;" class="withdrawalInfoBL">收款人信息示例：</view>
+				<view style="width: 500rpx;" class="withdrawalInfoBL">收款人信息照片示例:(点击图片可以预览)</view>
 				<view class="withdrawalInfoBR" @click="previewImg" style="border:none">
 					<image src="https://oss.gzrhhj.com/10001/20230313/c547dae400bc6eb28987312ac4a94ada.png"
 						style="width: 100%;height: 100%;">
@@ -174,7 +176,7 @@
 			},
 			previewImg() {
 				uni.previewImage({
-					urls: 'https://oss.gzrhhj.com/10001/20230313/c547dae400bc6eb28987312ac4a94ada.png',
+					urls: ['https://oss.gzrhhj.com/10001/20230313/c547dae400bc6eb28987312ac4a94ada.png'],
 					longPressActions: {
 						itemList: ['发送给朋友', '保存图片', '收藏'],
 						success: function(data) {

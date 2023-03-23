@@ -28,7 +28,7 @@ export default class request {
 
 	// post请求
 	post(url = '', data = {}, options = {}) {
-		console.log(url, data, 666)
+		// console.log(url, data, 666)
 		return this.request({
 			method: "POST",
 			data: data,
