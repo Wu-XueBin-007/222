@@ -58,7 +58,7 @@
 
 			</view>
 
-			<view class="sendWay">
+			<!-- <view class="sendWay">
 				<radio-group class="radioGroup sendWayL" @change="radioChange">
 					<view class="">
 						拼团退款路径：
@@ -72,7 +72,7 @@
 						</label>
 					</view>
 				</radio-group>
-			</view>
+			</view> -->
 
 		</view>
 		<view class="payWay">
@@ -315,7 +315,8 @@
 							setTimeout(() => {
 								this.navToMyOrder()
 							}, 1500)
-						} else if (res.data.pay_type == 40 || res.data.pay_type == 20) {
+						} else if (res.data.pay_type == 40 || res.data.pay_type == 20 || res.data.pay_type ==
+							220) {
 							res.data.payment.timeStamp = res.data.payment.timeStamp.toString();
 							console.log(res.data.payment, 'res.data.payment')
 							wxPayment(res.data.payment)
