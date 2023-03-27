@@ -176,7 +176,7 @@
 				<view class="productWrapHead">
 					<view :class="['productWrapHeadItem',index==collageIndex?'active':'']" :data-index="index"
 						:key="index" @click="taggleCollage" v-for="(item,index) in list" v-if="index<3">
-						<view class="" style="z-index: 99;">
+						<view class="" style="z-index: 1;">
 							{{item.name}}
 						</view>
 						<image src="../../static/icon/icon_bjleft.png" mode="" v-if="index==0&&index==collageIndex">
@@ -233,6 +233,11 @@
 			</view>
 
 		</view>
+		<view v-if="showTurntable" style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;margin: auto;display: flex;
+    align-items: center;
+    justify-content: center;background: rgba(0, 0, 0, 0.4);z-index: 100;">
+			<q-turntable ref="turntable" @start="turntableStart" @success="turntableSuccess"></q-turntable>
+		</view>
 	</view>
 </template>
 
@@ -242,6 +247,7 @@
 	import navHead from "@/components/navHead.vue";
 	import seckillNav from "@/components/seckillNav.vue";
 	const App = getApp();
+	let time = null
 	export default {
 		data() {
 			return {
@@ -262,12 +268,34 @@
 				showTo: false,
 				showStaic: true,
 				windowHeight: [],
+				award: 1,
+				tapIndex: 0,
 				navInfo: {
 					leftDistance: 0,
 					lineHeight: 0,
 					navH: 0,
 					paddingTop: 0
 				},
+				showTurntable: false,
+				awardList: [{
+						title: '特等奖'
+					},
+					{
+						title: '一等奖'
+					},
+					{
+						title: '二等奖'
+					},
+					{
+						title: '三等奖'
+					},
+					{
+						title: '四等奖'
+					},
+					{
+						title: '啥也没有'
+					}
+				]
 			}
 		},
 		components: {
@@ -281,7 +309,9 @@
 			obj.navH = App.globalData.navH;
 			obj.paddingTop = App.globalData.paddingTop;
 			this.navInfo = obj;
+
 		},
+
 		onPageScroll(e) {
 			// 获取页面高度
 			uni.getSystemInfo({
@@ -303,6 +333,7 @@
 		},
 		onShow() {
 			this.getList();
+			this.isReach()
 		},
 		onPullDownRefresh() {
 			this.page = 1;
@@ -351,6 +382,59 @@
 				this.showFlag = false;
 				this.collageMoreList = [];
 				this.collagePage = 1;
+			},
+			isReach() {
+				let _this = this
+				goodsApi.isReach().then(res => {
+					console.log(res)
+					if (res.data.isReach > 0) {
+						uni.showActionSheet({
+							itemList: ['第一个', '第二个'],
+							success: function(res) {
+								if (res.tapIndex == 0) {
+									_this.showTurntable = true;
+
+								} else {
+									_this.getList();
+								}
+								_this.tapIndex = res.tapIndex
+								console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
+							},
+							fail: function(res) {
+								console.log(res.errMsg);
+							}
+						});
+						clearInterval(time)
+					}
+				})
+			},
+			turntableStart() {
+				let index = Math.floor(Math.random() * 6 + 1) //前端随机数，这里应该后台返回中奖结果
+				this.award = index
+				this.$refs.turntable.begin(this.award);
+			},
+
+			// 抽奖完成后操作
+			turntableSuccess() {
+				const index = this.award - 1;
+				let _this = this
+				console.log('bind:success', this.awardList[index]);
+				uni.showToast({
+					title: `恭喜你获得${this.awardList[index].title}`,
+					icon: 'none',
+					success() {
+						goodsApi.pickPartakeType({
+							type: _this.tapIndex + 1
+						}, {
+							load: false
+						}).then(res1 => {
+							setTimeout(function() {
+								_this.showTurntable = false
+							}, 1500)
+							console.log(res1);
+						})
+					}
+				});
 			},
 			loadMoreCollage() {
 				if (!this.reqFlag) {

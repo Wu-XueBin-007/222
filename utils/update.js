@@ -131,7 +131,6 @@ var fCheckVersion = (cb) => {
 		OrderCommentApi.getapp({
 			key: 'app'
 		}).then(res => {
-
 			// console.log('################')
 			let data = res.data.values;
 			if (data.edition_number != inf.versionCode) {

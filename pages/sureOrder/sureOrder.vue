@@ -303,7 +303,7 @@
 						obj.pay_type = 40;
 						// #endif
 						// #ifdef MP-WEIXIN
-						obj.pay_type = 20;
+						obj.pay_type = 220 //20;
 						// #endif
 					} else if (this.payIndex == 1) {
 						obj.pay_type = 10;

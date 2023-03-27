@@ -219,7 +219,10 @@
 				<view v-else class="packer-btn packer-btn-pos" @click="openPacker">開</view>
 			</view>
 		</view> -->
+
+		<!-- #ifdef APP-PLUS -->
 		<upgrade ref="upgrade"></upgrade>
+		<!-- #endif -->
 	</view>
 </template>
 
@@ -305,7 +308,53 @@
 			this.getseckilltime()
 			this.getPageData();
 			this.getPass();
-			// this.$refs.upgrade.display = true
+			// #ifdef APP-PLUS
+			this.$refs.upgrade.display = true
+			// #endif
+			let order = {
+				"version": "10",
+				"mer_no": "6888806119809",
+				"mer_order_no": "pay_20230325521024913291",
+				"create_time": "20230327200910",
+				"expire_time": "20230327203910",
+				"order_amt": "0.01",
+				"notify_url": "http:\/\/localhost.gzrhhj.com\/api\/notify\/sandapppay",
+				"return_url": "https:\/\/www.baidu.com",
+				"create_ip": "127_0_0_1",
+				"goods_name": "\u6d4b\u8bd5",
+				"store_id": "000000",
+				"product_code": "02010005",
+				"clear_cycle": "3",
+				"pay_extra": "{\"wx_app_id\":\"wxf6e53452d7dc1b06\",\"gh_ori_id\":\"gh_3031981eafd6\",\"path_url\":\"pages\\\/zf\\\/index?\",\"miniProgramType\":\"0\"}",
+				"accsplit_flag": "NO",
+				"jump_scheme": "",
+				"activity_no": "",
+				"benefit_amount": "123",
+				"limit_pay": "5",
+				"meta_option": "[{\"s\":\"Android\",\"n\":\"wxDemo\",\"id\":\"com.pay.paytypetest\",\"sc\":\"com.pay.paytypetest\"}]",
+				"sign_type": "RSA",
+				"sign": "gevky5qKv1FBXJlyboE2aYQMEWaUjldp7p0W5djtE0X2v9XwabJB6IdxzzGcRZ07KWV3Je9aIoFqjdmBwM6xS+yLR6FtHN3ySyZwLJlQRJwu9VLlQrf5glGFu\/6ikNMskL8VNCZSKnvOCx3JvrvYkJXOMVtBtezLiU1l45y8Qg5ZVN\/DAf04n+\/UjD1i+W2RK4nvTmVrG8sKNidZEM5eUdzVakKWB3GE5Az+oh55vOYzPIjWFwDST+efrrJbwPatWqvpGYLKg+Vkf5kGdpk1sIeWcyfItoPEA6Yt1QgR\/IsSZnR\/5VUB8OrVzr5YCdtJB9coJbririW0pAsOwb1xZg=="
+			}
+			// #ifdef APP-PLUS
+			module.cashierPaySingle(order, ret => {
+				console.log(ret, 'ret');
+				if (ret.payType == '1') {
+					this.wxPay(ret.tokenId)
+				} else {
+					this.endLoading()
+					if (ret.resultCode == '0000') {
+						console.log("支付方式:" + ret.payType)
+					}
+					console.log("支付结果:" + ret.resultCode)
+					console.log("错误信息:" + ret.failReason)
+					console.log("action:" + ret.action)
+				}
+			})
+			// #endif
+
+
+
+
 			// console.log(verifyBankCardNumber('6214832097118918'))
 		},
 

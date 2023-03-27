@@ -14,7 +14,9 @@ const api = {
 	groupList: 'group.goods/group_task_list',
 	taskList: 'group.category/task_list',
 	taskListAll: 'group.category/task_list_all',
-	express: 'group.my_order/express'
+	express: 'group.my_order/express',
+	isReach: "group.user_info/isReach",
+	pickPartakeType: "group.user_info/pickPartakeType"
 }
 
 // 拼团分组列表
@@ -82,4 +84,15 @@ export function express(orderId, param) {
 		orderId,
 		...param
 	})
+}
+
+// 用户是否达成显示
+export const isReach = (data, options) => {
+	return request.post(api.isReach, data, options)
+}
+
+
+// 选择参与类型
+export const pickPartakeType = (data, options) => {
+	return request.post(api.pickPartakeType, data, options)
 }

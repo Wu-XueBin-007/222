@@ -207,13 +207,13 @@
 						</view>
 					</button>
 					<!-- #endif -->
-					<view class="orderItem" @click="toUrls" data-path="/pages/address/index">
+					<!-- 					<view class="orderItem" @click="toUrls" data-path="/pages/address/index">
 						<view>
 							<image src="https://oss.gzrhhj.com/10001/20230313/427072ad293e32d1bbb00df0f944a1cf.png"
 								style="width: 72rpx;height: 72rpx;"></image>
 						</view>
 						<text>银行卡</text>
-					</view>
+					</view> -->
 
 
 					<!-- 					<view class="orderItem" @click="toUrls" data-path="">
