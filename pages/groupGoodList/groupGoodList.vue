@@ -453,9 +453,10 @@
 						}).catch(err => {
 							console.log(err)
 						}).finally(() => {
-							setTimeout(function() {
-								_this.showTurntable = false
-							}, 2500)
+							_this.showTurntable = false
+							// setTimeout(function() {
+
+							// }, 2500)
 						})
 					}
 				})
