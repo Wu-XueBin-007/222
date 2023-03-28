@@ -3,11 +3,44 @@ import * as util from './util'
 import {
 	paginate
 } from '@/common/constant'
+// #ifdef APP-PLUS
+const module = uni.requireNativePlugin('SandPayTypeModule')
+// #endif
+
 
 /**
  * 获取当前运行的终端(App H5 小程序)
  * https://uniapp.dcloud.io/platform
  */
+// #ifdef APP-PLUS
+function wxPay(ret) {
+	plus.share.getServices(shareList => {
+		let sweixin = shareList.find(val => val.id == 'weixin')
+		let pay_extra = JSON.parse(ret.pay_extra)
+		if (sweixin) {
+			sweixin.launchMiniProgram({
+				id: pay_extra.gh_ori_id, //小程序原始id
+				path: 'pages/cashier/index?token_id=' + pay_extra.wx_app_id,
+				type: 0
+			})
+			this.endLoading()
+		} else {
+			uni.showToast({
+				icon: 'none',
+				title: "未安装微信,无法打开对应小程序"
+			})
+		}
+	}, e => {
+		uni.showToast({
+			icon: 'none',
+			title: "获取微信服务列表失败:" + JSON.stringify(e)
+		})
+	})
+
+}
+// #endif
+
+
 export const getPlatform = () => {
 	// #ifdef APP-PLUS
 	const platform = 'App'
@@ -188,11 +221,25 @@ export const wxPayment = (option) => {
 			"sign": options.paySign,
 		}
 		// #ifdef APP-PLUS
-		uni.requestPayment({
-			provider: 'wxpay',
-			orderInfo: JSON.stringify(obj),
-			success: res => resolve(res),
-			fail: res => reject(res)
+		// uni.requestPayment({
+		// 	provider: 'wxpay',
+		// 	orderInfo: JSON.stringify(obj),
+		// 	success: res => resolve(res),
+		// 	fail: res => reject(res)
+		// })
+		console.log(option, 'option')
+		module.cashierPaySingle(options, ret => {
+			console.log(ret, 'ret');
+			if (ret.payType == '1') {
+				wxPay(ret)
+			} else {
+				if (ret.resultCode == '0000') {
+					console.log("支付方式:" + ret.payType)
+				}
+				console.log("支付结果:" + ret.resultCode)
+				console.log("错误信息:" + ret.failReason)
+				console.log("action:" + ret.action)
+			}
 		})
 		// #endif
 		// #ifdef MP-WEIXIN

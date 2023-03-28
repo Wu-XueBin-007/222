@@ -22,7 +22,8 @@
         /* 模块配置 */
         "modules" : {
             "OAuth" : {},
-            "Payment" : {}
+            "Payment" : {},
+            "Share" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -76,7 +77,12 @@
                         "UniversalLinks" : "https://www.gzrhhj.com/"
                     }
                 },
-                "share" : {},
+                "share" : {
+                    "weixin" : {
+                        "appid" : "wxb45dcb8afcaf490a",
+                        "UniversalLinks" : "https://www.gzrhhj.com/"
+                    }
+                },
                 "oauth" : {
                     "weixin" : {
                         "appid" : "wxb45dcb8afcaf490a",

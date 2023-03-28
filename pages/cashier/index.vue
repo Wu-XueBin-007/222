@@ -81,6 +81,8 @@
 	import {
 		detail
 	} from '@/api/order/comment.js'
+
+
 	import {
 		wxPayment,
 		zfbPayment
@@ -364,6 +366,7 @@
 			btn_payTa(type) {
 				this.paymentType = type;
 			},
+
 			btn_backTran() {
 				const app = this
 				if (app.paymentType == null) {
@@ -416,10 +419,10 @@
 						}
 					})
 				} else {
-
 					if (this.type == 2) {
+						console.log(888);
 						OrderApi.mergePay(app.order_id, paymentType)
-							.then(result => app.onSubmitCallback(result))
+							.then(result => app.onSubmitCallback(result)).catch(err => console.log(err))
 					} else {
 						OrderApi.pay(app.order_id, paymentType)
 							.then(result => app.onSubmitCallback(result))
@@ -428,11 +431,11 @@
 			},
 			// 订单提交成功后回调
 			onSubmitCallback(result) {
-
+				console.log(result, 'result');
 				const app = this
 				// 发起微信支付
-				if (result.data.pay_type == PayTypeEnum.WECHAT.value || result.data.pay_type == 40 || result.data
-					.pay_type == 220) {
+				let pay_typeArr = [20, 40, 220, 230]
+				if (pay_typeArr.includes(result.data.pay_type)) {
 					console.log('result', result)
 					wxPayment(result.data.payment)
 						.then(() => {

@@ -63,10 +63,7 @@
 				this.isStart = true;
 				let endAddAngle = 0;
 				endAddAngle = 360 - ((awardNumer - 1) * singleAngle + singleAngle / 2); // 中奖角度
-
-
 				const rangeAngle = (Math.floor(Math.random() * 4) + 4) * 360; // 随机旋转几圈再停止
-
 				console.log(endAddAngle);
 				let cAngle;
 				deg = 0;
@@ -108,8 +105,8 @@
 
 	.turntable_wp .turntable_pointer {
 		position: absolute;
-		width: 224rpx;
-		height: 224rpx;
+		width: 204rpx;
+		height: 204rpx;
 		top: 50%;
 		left: 50%;
 		margin: -125rpx 0 0 -112rpx;

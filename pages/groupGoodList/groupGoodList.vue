@@ -236,7 +236,21 @@
 		<view v-if="showTurntable" style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;margin: auto;display: flex;
     align-items: center;
     justify-content: center;background: rgba(0, 0, 0, 0.4);z-index: 100;">
-			<q-turntable ref="turntable" @start="turntableStart" @success="turntableSuccess"></q-turntable>
+			<q-turntable :areaNumber='6' :speed='16' ref="turntable" @start="turntableStart"
+				@success="turntableSuccess">
+			</q-turntable>
+		</view>
+		<view v-if="showLottery" class="module">
+			<view class="title">
+				提示
+			</view>
+			<text class="txt">
+				恭喜达成！
+			</text>
+			<view class="btnGRop">
+				<button @click="closeBtn(1)" class="btn onebtn">参与抽奖</button>
+				<button @click="closeBtn(2)" class="btn twobtn">参与活动分红</button>
+			</view>
 		</view>
 	</view>
 </template>
@@ -270,6 +284,7 @@
 				windowHeight: [],
 				award: 1,
 				tapIndex: 0,
+				showLottery: false,
 				navInfo: {
 					leftDistance: 0,
 					lineHeight: 0,
@@ -309,7 +324,6 @@
 			obj.navH = App.globalData.navH;
 			obj.paddingTop = App.globalData.paddingTop;
 			this.navInfo = obj;
-
 		},
 
 		onPageScroll(e) {
@@ -383,28 +397,47 @@
 				this.collageMoreList = [];
 				this.collagePage = 1;
 			},
+			closeBtn(index) {
+
+				if (index == 1) {
+					this.showLottery = false;
+					this.showTurntable = true
+				} else {
+					this.showLottery = false;
+					goodsApi.pickPartakeType({
+						type: index
+					}, {
+						load: false
+					}).then(res1 => {
+
+						console.log(res1);
+					})
+					this.getList()
+				}
+			},
 			isReach() {
 				let _this = this
 				goodsApi.isReach().then(res => {
 					console.log(res)
 					if (res.data.isReach > 0) {
-						uni.showActionSheet({
-							itemList: ['第一个', '第二个'],
-							success: function(res) {
-								if (res.tapIndex == 0) {
-									_this.showTurntable = true;
+						this.showLottery = true
+						// 	uni.showActionSheet({
+						// 		itemList: ['第一个', '第二个'],
+						// 		success: function(res) {
+						// 			if (res.tapIndex == 0) {
+						// 				_this.showTurntable = true;
 
-								} else {
-									_this.getList();
-								}
-								_this.tapIndex = res.tapIndex
-								console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
-							},
-							fail: function(res) {
-								console.log(res.errMsg);
-							}
-						});
-						clearInterval(time)
+						// 			} else {
+						// 				_this.getList();
+						// 			}
+						// 			_this.tapIndex = res.tapIndex
+						// 			console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
+						// 		},
+						// 		fail: function(res) {
+						// 			console.log(res.errMsg);
+						// 		}
+						// 	});
+						// 	clearInterval(time)
 					}
 				})
 			},
@@ -413,6 +446,7 @@
 				this.award = index
 				this.$refs.turntable.begin(this.award);
 			},
+
 
 			// 抽奖完成后操作
 			turntableSuccess() {
@@ -1364,6 +1398,73 @@
 		.bannerImg {
 			width: 702rpx;
 			height: 292rpx;
+		}
+	}
+
+	.module {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: #ffffff;
+		border-radius: 20rpx;
+		// padding: 40rpx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		z-index: 100;
+		width: 608rpx;
+		box-sizing: border-box;
+
+		.txt {
+			box-sizing: 58rpx;
+			font-weight: 600
+		}
+
+		.title {
+			font-size: 40rpx;
+			// background: #303133;
+			padding: 35rpx 0;
+			// color: #b0ee04;
+			width: 100%;
+			text-align: center;
+			border-radius: 20rpx;
+			margin-bottom: 32rpx;
+		}
+
+		.btnGRop {
+			display: flex;
+			// flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			margin-top: 50rpx;
+			margin-bottom: 70rpx;
+
+			.btn {
+				width: 224rpx;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin: 20rpx;
+				padding: 0;
+				border: 0;
+				padding: 0;
+				font-size: 24rpx;
+				border-radius: 40rpx;
+
+
+			}
+
+			.onebtn {
+				background: royalblue;
+				color: white;
+			}
+
+			.twobtn {
+				border: 2rpx solid royalblue;
+				background: transparent;
+				color: #000000;
+			}
 		}
 	}
 </style>
