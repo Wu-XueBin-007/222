@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="turntable_wp sol-class">
-			<image src="https://oss.gzrhhj.com/10001/20230327/59baf4801b82d79f9eabcc988071c267.png"
+			<image src="https://oss.gzrhhj.com/10001/20230328/15c88e65cf0caac6c21c070a9d30765a.png"
 				:style="'-webkit-transform:rotate(' + deg + 'deg) translateZ(0);transform:rotate(' + deg + 'deg) translateZ(0)'">
 			</image>
 			<view class="turntable_pointer" @tap="start">
@@ -105,10 +105,10 @@
 
 	.turntable_wp .turntable_pointer {
 		position: absolute;
-		width: 204rpx;
-		height: 204rpx;
+		width: 150rpx;
+		height: 150rpx;
 		top: 50%;
 		left: 50%;
-		margin: -125rpx 0 0 -112rpx;
+		transform: translate(-50%, -50%);
 	}
 </style>

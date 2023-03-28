@@ -236,8 +236,8 @@
 		<view v-if="showTurntable" style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;margin: auto;display: flex;
     align-items: center;
     justify-content: center;background: rgba(0, 0, 0, 0.4);z-index: 100;">
-			<q-turntable :areaNumber='6' :speed='16' ref="turntable" @start="turntableStart"
-				@success="turntableSuccess">
+			<q-turntable :class="showTurntable?'showTurntable':'Turntable'" :areaNumber='4' :speed='16' ref="turntable"
+				@start="turntableStart" @success="turntableSuccess">
 			</q-turntable>
 		</view>
 		<view v-if="showLottery" class="module">
@@ -285,6 +285,7 @@
 				award: 1,
 				tapIndex: 0,
 				showLottery: false,
+				draw_id: 0,
 				navInfo: {
 					leftDistance: 0,
 					lineHeight: 0,
@@ -293,22 +294,16 @@
 				},
 				showTurntable: false,
 				awardList: [{
-						title: '特等奖'
+						title: '价值200元权益积分'
 					},
 					{
-						title: '一等奖'
+						title: '价值100元权益积分'
 					},
 					{
-						title: '二等奖'
+						title: '价值50元权益积分'
 					},
 					{
-						title: '三等奖'
-					},
-					{
-						title: '四等奖'
-					},
-					{
-						title: '啥也没有'
+						title: '价值30元权益积分'
 					}
 				]
 			}
@@ -403,17 +398,22 @@
 					this.showLottery = false;
 					this.showTurntable = true
 				} else {
-					this.showLottery = false;
-					goodsApi.pickPartakeType({
-						type: index
-					}, {
-						load: false
-					}).then(res1 => {
-
-						console.log(res1);
-					})
 					this.getList()
 				}
+				this.showLottery = false;
+				goodsApi.pickPartakeType({
+					type: index
+				}, {
+					load: false
+				}).then(res => {
+					console.log(res.data)
+					if (Object.getOwnPropertyNames(res.data).length !== 0) {
+						this.award = res.data.key + 1
+						this.draw_id = res.data.draw_id
+						console.log(this.draw_id);
+					}
+					console.log(res);
+				})
 			},
 			isReach() {
 				let _this = this
@@ -421,54 +421,65 @@
 					console.log(res)
 					if (res.data.isReach > 0) {
 						this.showLottery = true
-						// 	uni.showActionSheet({
-						// 		itemList: ['第一个', '第二个'],
-						// 		success: function(res) {
-						// 			if (res.tapIndex == 0) {
-						// 				_this.showTurntable = true;
-
-						// 			} else {
-						// 				_this.getList();
-						// 			}
-						// 			_this.tapIndex = res.tapIndex
-						// 			console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
-						// 		},
-						// 		fail: function(res) {
-						// 			console.log(res.errMsg);
-						// 		}
-						// 	});
-						// 	clearInterval(time)
 					}
 				})
 			},
 			turntableStart() {
-				let index = Math.floor(Math.random() * 6 + 1) //前端随机数，这里应该后台返回中奖结果
-				this.award = index
+				// let index = Math.floor(Math.random() * 4 + 1) //前端随机数，这里应该后台返回中奖结果
+				// console.log(index, 'index')
+				// this.award = index
 				this.$refs.turntable.begin(this.award);
 			},
-
-
 			// 抽奖完成后操作
 			turntableSuccess() {
 				const index = this.award - 1;
 				let _this = this
-				console.log('bind:success', this.awardList[index]);
-				uni.showToast({
-					title: `恭喜你获得${this.awardList[index].title}`,
-					icon: 'none',
+				console.log('bind:success', _this.awardList[index]);
+				uni.showModal({
+					title: `恭喜你获得${_this.awardList[index].title}`,
 					success() {
-						goodsApi.pickPartakeType({
-							type: _this.tapIndex + 1
+						goodsApi.drawSync({
+							key: _this.award - 1,
+							draw_id: _this.draw_id
 						}, {
 							load: false
-						}).then(res1 => {
+						}).then(res => {
+							console.log(res);
+							uni.showToast({
+								title: res.message,
+								icon: 'none',
+								duration: 2000,
+							})
+						}).catch(err => {
+							console.log(err)
+						}).finally(() => {
 							setTimeout(function() {
 								_this.showTurntable = false
-							}, 1500)
-							console.log(res1);
+							}, 2500)
 						})
 					}
-				});
+				})
+				// uni.showToast({
+				// 	title: `恭喜你获得${_this.awardList[index].title}`,
+				// 	icon: 'none',
+				// 	duration: 4000,
+				// 	success() {
+				// 		goodsApi.drawSync({
+				// 			key: _this.award - 1,
+				// 			draw_id: _this.draw_id
+				// 		}, {
+				// 			load: false
+				// 		}).then(res => {
+				// 			console.log(res);
+				// 		}).catch(err => {
+				// 			console.log(err)
+				// 		}).finally(() => {
+				// 			setTimeout(function() {
+				// 				_this.showTurntable = false
+				// 			}, 4500)
+				// 		})
+				// 	}
+				// });
 			},
 			loadMoreCollage() {
 				if (!this.reqFlag) {
@@ -1465,6 +1476,35 @@
 				background: transparent;
 				color: #000000;
 			}
+		}
+	}
+
+	.Turntable {
+		display: none;
+		opacity: 0;
+	}
+
+	.showTurntable {
+		display: block;
+		opacity: 1;
+		animation: showTurntable 1s;
+	}
+
+	@keyframes showTurntable {
+
+		0% {
+			-webkit-transform: scaleX(1);
+			transform: scaleX(1)
+		}
+
+		50% {
+			-webkit-transform: scale3d(1.05, 1.05, 1.05);
+			transform: scale3d(1.05, 1.05, 1.05)
+		}
+
+		to {
+			-webkit-transform: scaleX(1);
+			transform: scaleX(1)
 		}
 	}
 </style>

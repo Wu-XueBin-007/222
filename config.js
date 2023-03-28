@@ -22,7 +22,7 @@ try {
 } catch (e) {
 	apiUrl = 'https://shop.gzrhhj.com/index.php?s=/api/'
 }
-apiUrl = 'https://dev.gzrhhj.com/index.php?s=/api/'
+// apiUrl = 'https://dev.gzrhhj.com/index.php?s=/api/'
 // apiUrl = 'https://shop.gzrhhj.com/index.php?s=/api/'
 
 module.exports = {
