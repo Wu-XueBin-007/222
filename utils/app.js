@@ -14,14 +14,26 @@ const module = uni.requireNativePlugin('SandPayTypeModule')
  */
 // #ifdef APP-PLUS
 function wxPay(ret) {
+	console.log(ret, 'ret');
 	plus.share.getServices(shareList => {
+		console.log(shareList, 'shareList');
 		let sweixin = shareList.find(val => val.id == 'weixin')
-		let pay_extra = JSON.parse(ret.pay_extra)
+		// let pay_extra = JSON.parse(ret.pay_extra)
+		console.log(sweixin, 'sweixin');
 		if (sweixin) {
 			sweixin.launchMiniProgram({
-				id: pay_extra.gh_ori_id, //小程序原始id
-				path: 'pages/cashier/index?token_id=' + pay_extra.wx_app_id,
-				type: 0
+				id: 'gh_3031981eafd6', //小程序原始id
+				path: 'pages/cashier/index?is_free=1&token_id=wxf6e53452d7dc1b06&order_on=' + ret
+					.mer_order_no,
+				type: 0,
+				envVersion: 'trial',
+				success(res) {
+					console.log(res, 'res')
+					// 打开成功
+				},
+				fail(err) {
+					console.log(err);
+				}
 			})
 			this.endLoading()
 		} else {

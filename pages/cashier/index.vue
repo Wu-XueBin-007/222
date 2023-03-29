@@ -148,7 +148,10 @@
 				if (res.data.list.data && res.data.list.data.length > 0) {
 					this.payDataList = res.data.list.data;
 					// 默认值
-					this.paymentType = res.data.list.data[0].value;
+					if (!this.paymentType) {
+						this.paymentType = res.data.list.data[0].value;
+					}
+
 				} else {
 					this.payDataList = [];
 				}
@@ -434,7 +437,7 @@
 				console.log(result, 'result');
 				const app = this
 				// 发起微信支付
-				let pay_typeArr = [20, 40, 220, 230]
+				let pay_typeArr = [20, 40, 220, 240]
 				if (pay_typeArr.includes(result.data.pay_type)) {
 					console.log('result', result)
 					wxPayment(result.data.payment)

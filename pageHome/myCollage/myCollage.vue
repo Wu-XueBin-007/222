@@ -80,9 +80,13 @@
 								</view>
 								<view class="collageBtn">
 									<!-- <image src="../../static/home/prize_icon_no.png" class="prize" v-if="item.have_prize==0&&headIndex!=3&&headIndex!=4"></image> -->
+									<view class="conItemBRBCheckDetail2" v-if="headIndex==1&&item.delivery_status==10"
+										:data-index="index" @click="handleExchange(item.order_no,item.exchange_status)">
+										{{item.exchange_status==0?'立即兑换':'已兑换'}}
+									</view>
 									<view class="conItemBRBCheckDetail2"
-										v-if="item.have_prize==1&&headIndex!=3&&headIndex!=4" :data-index="index"
-										@click="handleTargetExpress(item.order_id)">查看物流</view>
+										v-if="item.have_prize==1&&headIndex!=3&&headIndex!=4&&item.exchange_status!=1"
+										:data-index="index" @click="handleTargetExpress(item.order_id)">查看物流</view>
 									<view class="conItemBRBCheckDetail"
 										v-if="item.have_prize==-1||headIndex==3||headIndex==4" :data-index="index"
 										@click="toDetail">查看详情</view>
@@ -204,6 +208,21 @@
 				console.log(orderId)
 				this.$navTo('pageHome/express/express', {
 					orderId: orderId
+				})
+			},
+			handleExchange(id, exchange_status) {
+				let _this = this
+				if (exchange_status > 0) return;
+				collageApi.exchange({
+					order_no: id
+				}).then(res => {
+					console.log(res);
+					uni.showToast({
+						title: res.data.text,
+						success() {
+							_this.getList()
+						}
+					})
 				})
 			},
 			changeNav(e) {

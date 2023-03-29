@@ -196,6 +196,7 @@
 					res.data.detail.surplusUser = res.data.detail.num - res.data.detail.current_num;
 					res.data.detail.category.content = res.data.detail.category.content.replace(/<img/g,
 						"<img style='width: 100%;'");
+					console.log(this.info, 'this.info');
 					this.info = res.data.detail;
 					this.getProductList();
 				})

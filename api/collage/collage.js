@@ -17,7 +17,8 @@ const api = {
 	express: 'group.my_order/express',
 	isReach: "group.user_info/isReach",
 	pickPartakeType: "group.user_info/pickPartakeType",
-	drawSync: 'group.user_info/drawSync'
+	drawSync: 'group.user_info/drawSync',
+	exchange: 'group.exchange/order '
 }
 
 // 拼团分组列表
@@ -102,4 +103,8 @@ export const pickPartakeType = (data, options) => {
 // 选择参与类型
 export const drawSync = (data, options) => {
 	return request.post(api.drawSync, data, options)
+}
+//立即兑换
+export const exchange = (data, options) => {
+	return request.post(api.exchange, data, options)
 }
