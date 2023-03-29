@@ -213,20 +213,26 @@
 			handleExchange(id, exchange_status) {
 				let _this = this
 				if (exchange_status > 0) return;
-				collageApi.exchange({
-					order_no: id
-				}, {
-					load: false
-				}).then(res => {
-					console.log(res);
-					uni.showToast({
-						title: res.data.text,
-						icon: 'none',
-						success() {
-							_this.getList()
-						}
-					})
+				uni.showModal({
+					content:'是否确定兑换',
+					success() {
+						collageApi.exchange({
+							order_no: id
+						}, {
+							load: false
+						}).then(res => {
+							console.log(res);
+							uni.showToast({
+								title: res.data.text,
+								icon: 'none',
+								success() {
+									_this.getList()
+								}
+							})
+						})
+					}
 				})
+				
 			},
 			changeNav(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
