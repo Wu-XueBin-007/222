@@ -52,8 +52,8 @@ export const pay = (data) => {
 }
 
 // 我的拼团列表
-export const orderList = (data) => {
-	return request.get(api.orderList, data)
+export const orderList = (data, options) => {
+	return request.get(api.orderList, data, options)
 }
 
 // 我的拼团详情

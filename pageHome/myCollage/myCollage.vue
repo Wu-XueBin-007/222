@@ -221,6 +221,7 @@
 					console.log(res);
 					uni.showToast({
 						title: res.data.text,
+						icon: 'none',
 						success() {
 							_this.getList()
 						}
@@ -239,7 +240,9 @@
 				obj.page = this.page;
 				if (falg) return;
 				falg = true
-				collageApi.orderList(obj).then(res => {
+				collageApi.orderList(obj, {
+					load: false
+				}).then(res => {
 					falg = false
 					console.log(res)
 					if (this.page == 1) {
