@@ -81,13 +81,16 @@
 	import {
 		detail
 	} from '@/api/order/comment.js'
-
+	import {
+		urlEncode
+	} from '@/utils/util.js'
 
 	import {
 		wxPayment,
 		zfbPayment
 	} from '@/utils/app'
 	import * as GoodsApi from '@/api/goods'
+	const App = getApp();
 	export default {
 		data() {
 			return {
@@ -109,10 +112,13 @@
 				loading: false,
 				is_free: 0,
 				packerState: 0,
-				payDataList: []
+				payDataList: [],
+				options: {}
 			}
 		},
-		onLoad(options) {
+		async onLoad(options) {
+			console.log(options, 'options')
+			this.options = options
 			if (options.order_on) {
 				this.order_id = options.order_on;
 				this.type = 2;
@@ -123,15 +129,13 @@
 			if (options.is_free) {
 				this.is_free = options.is_free
 			}
-			// this.test4 = this.order_id;
-			detail().then(res => {
-				//console.log(res)
-				this.settings = res.data.values;
-				this.getOrderDetail()
-			})
-			this.getUserInfo();
+			let detailRes = await detail()
+			this.settings = detailRes.data.values;
+			await this.getOrderDetail()
+
+
 		},
-		onShow() {
+		async onShow() {
 			let type = 0;
 			// #ifdef APP-PLUS
 			type = 2
@@ -142,21 +146,30 @@
 			// #ifdef MP-QQ
 			type = 3
 			// #endif
-			payTypeApi.payType({
+			let opt = wx.getLaunchOptionsSync();
+			// await this.getUserInfo();
+			let payType = await payTypeApi.payType({
 				type
-			}).then(res => {
-				if (res.data.list.data && res.data.list.data.length > 0) {
-					this.payDataList = res.data.list.data;
-					// 默认值
-					if (!this.paymentType) {
-						this.paymentType = res.data.list.data[0].value;
-					}
+			})
 
-				} else {
-					this.payDataList = [];
+			if (payType.data.list.data && payType.data.list.data.length > 0) {
+				this.payDataList = payType.data.list.data;
+				console.log(payType.data.list, 'payType.data.list')
+				// 默认值
+				if (!this.paymentType) {
+					this.paymentType = payType.data.list.data[0].value;
+				}
+				console.log(opt.scene, 'scene')
+				if (opt.scene == 1069) {
+
+					this.$nextTick(this.btn_backTran)
 				}
 
-			})
+			} else {
+				this.payDataList = [];
+			}
+
+
 		},
 		// onBackPress(options) {
 		// 	uni.showModal({
@@ -228,149 +241,160 @@
 		methods: {
 			// 获取会员信息
 			getUserInfo() {
-				UserApi.info()
-					.then(result => {
-						this.userInfo = result.data.userInfo;
-					})
+				return new Promise((resolve, reject) => {
+					UserApi.info()
+						.then(result => {
+							this.userInfo = result.data.userInfo;
+						})
+					resolve()
+				})
+
 			},
-
-
-
 			getOrderDetail() {
 				const app = this
 				app.isLoading = true
-
-				if (app.type == 1) {
-					OrderApi.detail(app.order_id)
-						.then(result => {
-							app.order = result.data.order
-							app.setting = result.data.setting
-							result.data.order.create_time = result.data.order.create_time.replace(/-/g, "/");
-							app.loading = true
-							let times = 0;
-							if (result.data.order.order_source == 20) {
-								times = new Date(result.data.order.create_time).getTime() + Number(app.settings.order
-									.seckill_close_time) * 60 * 1000 - new Date().getTime();
-							} else {
-								times = new Date(result.data.order.create_time).getTime() + Number(app.settings.order
-									.close_days) * 24 * 60 * 60 * 1000 - new Date().getTime();
-							}
-							// app.test1 = times;
-							if (times > 0) {
-								this.beOverdueTime = times;
-								let sTime = times;
-								this.timer = setInterval(() => {
-									sTime = sTime - 1000;
-									if (sTime > 0) {
-										this.beOverdueTime = sTime;
-									} else {
-										this.beOverdueTime = 0;
-										clearInterval(this.timer)
-										uni.showModal({
-											title: '提示',
-											content: '订单已过期！即将跳转订单列表!',
-											// cancelText: "放弃支付",
-											showCancel: false,
-											confirmText: "立即跳转",
-											success: function(res) {
-												if (res.confirm) {
-													uni.redirectTo({
-														url: "/pageHome/order/index?dataType=all"
-													})
+				return new Promise((resolve, reject) => {
+					if (app.type == 1) {
+						OrderApi.detail(app.order_id)
+							.then(result => {
+								app.order = result.data.order
+								app.setting = result.data.setting
+								result.data.order.create_time = result.data.order.create_time.replace(/-/g,
+									"/");
+								app.loading = true
+								let times = 0;
+								if (result.data.order.order_source == 20) {
+									times = new Date(result.data.order.create_time).getTime() + Number(app
+										.settings.order
+										.seckill_close_time) * 60 * 1000 - new Date().getTime();
+								} else {
+									times = new Date(result.data.order.create_time).getTime() + Number(app
+										.settings.order
+										.close_days) * 24 * 60 * 60 * 1000 - new Date().getTime();
+								}
+								// app.test1 = times;
+								if (times > 0) {
+									this.beOverdueTime = times;
+									let sTime = times;
+									this.timer = setInterval(() => {
+										sTime = sTime - 1000;
+										if (sTime > 0) {
+											this.beOverdueTime = sTime;
+										} else {
+											this.beOverdueTime = 0;
+											clearInterval(this.timer)
+											uni.showModal({
+												title: '提示',
+												content: '订单已过期！即将跳转订单列表!',
+												// cancelText: "放弃支付",
+												showCancel: false,
+												confirmText: "立即跳转",
+												success: function(res) {
+													if (res.confirm) {
+														uni.redirectTo({
+															url: "/pageHome/order/index?dataType=all"
+														})
+													}
 												}
-											}
-										});
-									}
-								}, 1000)
-							} else {
-								uni.showModal({
-									title: '提示',
-									content: '订单已过期！即将跳转订单列表!',
-									// cancelText: "放弃支付",
-									showCancel: false,
-									confirmText: "立即跳转",
-									success: function(res) {
-										if (res.confirm) {
-											uni.redirectTo({
-												url: "/pageHome/order/index?dataType=all"
-											})
+											});
 										}
-									}
-								});
-							}
+									}, 1000)
+								} else {
+									uni.showModal({
+										title: '提示',
+										content: '订单已过期！即将跳转订单列表!',
+										// cancelText: "放弃支付",
+										showCancel: false,
+										confirmText: "立即跳转",
+										success: function(res) {
+											if (res.confirm) {
+												uni.redirectTo({
+													url: "/pageHome/order/index?dataType=all"
+												})
+											}
+										}
+									});
+								}
 
-							app.isLoading = false
-						})
-				} else {
-					OrderApi.merge_detail(app.order_id)
-						.then(result => {
-							app.order = result.data.order
-							app.setting = result.data.setting
-							app.loading = true
-							result.data.order.create_time = result.data.order.create_time.replace(/-/g, "/");
-							// app.test = result.data.order.create_time;
-							console.log(app.settings)
-							let times = 0;
-							if (result.data.order.order_source == 20) {
-								times = new Date(result.data.order.create_time).getTime() + Number(app.settings.order
-									.seckill_close_time) * 60 * 1000 - new Date().getTime();
-							} else {
-								times = new Date(result.data.order.create_time).getTime() + Number(app.settings.order
-									.close_days) * 24 * 60 * 60 * 1000 - new Date().getTime();
-							}
-							// app.test1 = times;
-							if (times > 0) {
-								this.beOverdueTime = times;
-								let sTime = times;
-								this.timer = setInterval(() => {
-									sTime = sTime - 1000;
-									if (sTime > 0) {
-										this.beOverdueTime = sTime;
-									} else {
-										this.beOverdueTime = 0;
-										clearInterval(this.timer)
-										uni.showModal({
-											title: '提示',
-											content: '订单已过期！即将跳转订单列表!',
-											// cancelText: "放弃支付",
-											showCancel: false,
-											confirmText: "立即跳转",
-											success: function(res) {
-												if (res.confirm) {
-													uni.redirectTo({
-														url: "/pageHome/order/index?dataType=all"
-													})
+								app.isLoading = false
+							})
+					} else {
+						OrderApi.merge_detail(app.order_id)
+							.then(result => {
+								app.order = result.data.order
+								app.setting = result.data.setting
+								app.loading = true
+								result.data.order.create_time = result.data.order.create_time.replace(/-/g,
+									"/");
+								// app.test = result.data.order.create_time;
+								console.log(app.settings)
+								let times = 0;
+								if (result.data.order.order_source == 20) {
+									times = new Date(result.data.order.create_time).getTime() + Number(app
+										.settings.order
+										.seckill_close_time) * 60 * 1000 - new Date().getTime();
+								} else {
+									times = new Date(result.data.order.create_time).getTime() + Number(app
+										.settings.order
+										.close_days) * 24 * 60 * 60 * 1000 - new Date().getTime();
+								}
+								// app.test1 = times;
+								if (times > 0) {
+									this.beOverdueTime = times;
+									let sTime = times;
+									this.timer = setInterval(() => {
+										sTime = sTime - 1000;
+										if (sTime > 0) {
+											this.beOverdueTime = sTime;
+										} else {
+											this.beOverdueTime = 0;
+											clearInterval(this.timer)
+											uni.showModal({
+												title: '提示',
+												content: '订单已过期！即将跳转订单列表!',
+												// cancelText: "放弃支付",
+												showCancel: false,
+												confirmText: "立即跳转",
+												success: function(res) {
+													if (res.confirm) {
+														uni.redirectTo({
+															url: "/pageHome/order/index?dataType=all"
+														})
+													}
 												}
-											}
-										});
-									}
-								}, 1000)
-							} else {
-								uni.showModal({
-									title: '提示',
-									content: '订单已过期！即将跳转订单列表!',
-									// cancelText: "放弃支付",
-									showCancel: false,
-									confirmText: "立即跳转",
-									success: function(res) {
-										if (res.confirm) {
-											uni.redirectTo({
-												url: "/pageHome/order/index?dataType=all"
-											})
+											});
 										}
-									}
-								});
-							}
+									}, 1000)
+								} else {
+									uni.showModal({
+										title: '提示',
+										content: '订单已过期！即将跳转订单列表!',
+										// cancelText: "放弃支付",
+										showCancel: false,
+										confirmText: "立即跳转",
+										success: function(res) {
+											if (res.confirm) {
+												uni.redirectTo({
+													url: "/pageHome/order/index?dataType=all"
+												})
+											}
+										}
+									});
+								}
 
-							app.isLoading = false
-						})
-				}
+								app.isLoading = false
+							})
+					}
+					resolve()
+				})
+
 			},
 			btn_payTa(type) {
 				this.paymentType = type;
 			},
 
 			btn_backTran() {
+				console.log('btn_backTran');
 				const app = this
 				if (app.paymentType == null) {
 					uni.showToast({
@@ -384,6 +408,41 @@
 				if (paymentType == 20) {
 					paymentType = 40;
 				}
+				plus.share.getServices(shareList => {
+					console.log(shareList, 'shareList');
+					let sweixin = shareList.find(val => val.id == 'weixin')
+					// let pay_extra = JSON.parse(ret.pay_extra)
+					console.log(sweixin, 'sweixin');
+					// let opt = wx.getLaunchOptionsSync();
+					console.log('pages/cashier/index?' + urlEncode(this.options))
+					if (sweixin) {
+						sweixin.launchMiniProgram({
+							id: 'gh_3031981eafd6', //小程序原始id
+							path: 'pages/cashier/index?' + urlEncode(this.options),
+							type: App.globalData.version == 'release' ? 0 : 2,
+							envVersion: 'trial',
+							success(res) {
+								console.log(res, 'res')
+								// 打开成功
+							},
+							fail(err) {
+								console.log(err);
+							}
+						})
+						this.endLoading()
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: "未安装微信,无法打开对应小程序"
+						})
+					}
+				}, e => {
+					uni.showToast({
+						icon: 'none',
+						title: "获取微信服务列表失败:" + JSON.stringify(e)
+					})
+				})
+				return
 				// #endif
 				if (paymentType == PayTypeEnum.BALANCE.value || paymentType == PayTypeEnum.ConsumptionQuota.value) {
 					uni.showModal({
@@ -414,7 +473,6 @@
 									OrderApi.mergePay(app.order_id, paymentType).then(result => app
 										.onSubmitCallback(result))
 								} else {
-
 									OrderApi.pay(app.order_id, paymentType)
 										.then(result => app.onSubmitCallback(result))
 								}
@@ -437,10 +495,11 @@
 				console.log(result, 'result');
 				const app = this
 				// 发起微信支付
-				let pay_typeArr = [20, 40, 220, 240]
+				let pay_typeArr = [20, 40, 220, 240];
+				let opt = wx.getLaunchOptionsSync();
 				if (pay_typeArr.includes(result.data.pay_type)) {
 					console.log('result', result)
-					wxPayment(result.data.payment)
+					wxPayment(result.data.payment, opt)
 						.then(() => {
 							app.$success('支付成功')
 							setTimeout(() => {

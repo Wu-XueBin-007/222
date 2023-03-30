@@ -76,6 +76,7 @@
 
 		</view>
 		<view class="payWay">
+			<!-- #ifndef APP-PLUS -->
 			<view class="payWayItem" @click="changeNav" data-index="0">
 				<view class="payWayItemL">
 					<image src="../../static/home/wx_icon.png" mode="widthFix"></image>
@@ -84,6 +85,8 @@
 				<image src="../../static/home/select_act.png" class="payWayItemR" v-if="payIndex==0"></image>
 				<image src="../../static/home/select.png" class="payWayItemR" v-else></image>
 			</view>
+			<!-- #endif -->
+
 			<view class="payWayItem" @click="changeNav" data-index="1">
 				<view class="payWayItemL">
 					<image src="../../static/home/wallet_icon.png" mode="widthFix"></image>

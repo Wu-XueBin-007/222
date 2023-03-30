@@ -1,5 +1,5 @@
 <template>
-	<view @click="closeModule" v-if="display" class="upgradeBox">
+	<view @click.self="closeModule" v-if="display" class="upgradeBox">
 		<view class="imgModule">
 			<image src="https://oss.gzrhhj.com/10001/20230323/fb52800c1934da649b890a7b68800189.png" mode="widthFix">
 			</image>
@@ -10,9 +10,11 @@
 				据问题;
 				2、优化了模块管理添加和制除卡顿问题
 			</text>
-			<button @click="upBtn()" class="upgradeBtn">立即升级</button>
+			<button v-if="progress==0" @click="upBtn()" class="upgradeBtn">立即升级</button>
+			<u-line-progress style="margin: 40rpx auto;" v-else active-color="#2979ff" :percent="progress">
+			</u-line-progress>
 			<view class="close">
-				<image @click="closeModule" class="closeImg" style="width: 40rpx;height: 40rpx;"
+				<image @click.stop="closeModule" class="closeImg" style="width: 40rpx;height: 40rpx;"
 					src="../../static/home/close_icon.png" mode="widthFix">
 				</image>
 			</view>
@@ -26,7 +28,8 @@
 		name: "upgrade",
 		data() {
 			return {
-				display: false
+				display: false,
+				progress: 0
 			};
 		},
 
@@ -35,6 +38,7 @@
 				OrderCommentApi.getapp({
 					key: 'app'
 				}).then(res => {
+					console.log(res, 'res');
 					if (data.edition_number != inf.versionCode) {
 						this.display = true;
 						this.url = url
@@ -71,7 +75,11 @@
 			closeModule() {
 				this.display = false
 			},
+			showModule() {
+				this.display = true
+			},
 			upBtn(url) {
+				let _this = this
 				const downloadTask = uni.downloadFile({
 					url,
 					success: res => {
@@ -112,7 +120,8 @@
 				//监听下载进度
 				downloadTask.onProgressUpdate(res => {
 					// state.percent = res.progress;
-					waiting.setTitle("正在下载" + res.progress + "%");
+					_this.progress = res.progress || 0
+					// waiting.setTitle("正在下载" + res.progress + "%");
 					// console.log('下载进度百分比:' + res.progress); // 下载进度百分比
 					// console.log('已经下载的数据长度:' + res.totalBytesWritten); // 已经下载的数据长度，单位 Bytes
 					// console.log('预期需要下载的数据总长度:' + res.totalBytesExpectedToWrite); // 预期需要下载的数据总长度，单位 Bytes

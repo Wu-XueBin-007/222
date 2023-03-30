@@ -223,6 +223,8 @@
 		<!-- #ifdef APP-PLUS -->
 		<upgrade ref="upgrade"></upgrade>
 		<!-- #endif -->
+
+
 	</view>
 </template>
 
@@ -308,13 +310,6 @@
 			this.getseckilltime()
 			this.getPageData();
 			this.getPass();
-			// #ifdef APP-PLUS
-			this.$refs.upgrade.display = true
-			// #endif
-
-
-
-
 
 			// console.log(verifyBankCardNumber('6214832097118918'))
 		},
@@ -369,6 +364,11 @@
 			} else {
 				this.back = false;
 			}
+		},
+		mounted() {
+			// #ifdef APP-PLUS
+			// this.$refs.upgrade.showModule()
+			// #endif
 		},
 		methods: {
 			btn_seckill() {

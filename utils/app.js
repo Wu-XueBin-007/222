@@ -6,26 +6,28 @@ import {
 // #ifdef APP-PLUS
 const module = uni.requireNativePlugin('SandPayTypeModule')
 // #endif
-
+import {
+	urlEncode
+} from '@/utils/util.js'
 
 /**
  * 获取当前运行的终端(App H5 小程序)
  * https://uniapp.dcloud.io/platform
  */
 // #ifdef APP-PLUS
-function wxPay(ret) {
+function wxPay(ret, opt) {
 	console.log(ret, 'ret');
 	plus.share.getServices(shareList => {
 		console.log(shareList, 'shareList');
 		let sweixin = shareList.find(val => val.id == 'weixin')
 		// let pay_extra = JSON.parse(ret.pay_extra)
 		console.log(sweixin, 'sweixin');
+		console.log('pages/cashier/index?' + urlEncode(opt.query))
 		if (sweixin) {
 			sweixin.launchMiniProgram({
 				id: 'gh_3031981eafd6', //小程序原始id
-				path: 'pages/cashier/index?is_free=1&token_id=wxf6e53452d7dc1b06&order_on=' + ret
-					.mer_order_no,
-				type: 0,
+				path: 'pages/cashier/index?' + urlEncode(opt.query),
+				type: 2,
 				envVersion: 'trial',
 				success(res) {
 					console.log(res, 'res')
@@ -214,7 +216,7 @@ export const checkLogin = () => {
  * 发起支付请求
  * @param {Object} 参数
  */
-export const wxPayment = (option) => {
+export const wxPayment = (option, opt) => {
 	const options = {
 		timeStamp: '',
 		nonceStr: '',
@@ -240,10 +242,11 @@ export const wxPayment = (option) => {
 		// 	fail: res => reject(res)
 		// })
 		console.log(option, 'option')
+		console.log(opt, 'opt')
 		module.cashierPaySingle(options, ret => {
 			console.log(ret, 'ret');
 			if (ret.payType == '1') {
-				wxPay(ret)
+				wxPay(option, opt)
 			} else {
 				if (ret.resultCode == '0000') {
 					console.log("支付方式:" + ret.payType)
