@@ -28,7 +28,6 @@
 	}
 	// let version = __wxConfig.envVersion
 	export default {
-
 		/**
 		 * 全局变量
 		 */

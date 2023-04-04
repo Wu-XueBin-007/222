@@ -24,176 +24,43 @@
 			</seckill-nav>
 			<view class="banner">
 				<image class="bannerImg"
-					src="https://oss.gzrhhj.com/10001/20230224/951200f333b821609d18eb6ea204a7b4.png">
+					src="https://oss.gzrhhj.com/10001/20230404/8a05de8e11e0dbe98a6474421c3fdedd.jpg">
 				</image>
 				<view class="rightfix">
 					<navigator url='/pageHome/IncomeDetail/IncomeDetail' class="income ct">
-						收益明细
+						兑换记录
 					</navigator>
-					<navigator url='/pageHome/make/make' class="income make ct">
-						成员列表
-					</navigator>
+
 					<navigator url='/pageHome/ruleDetails/ruleDetails' class="rule ct">
 						规则详情
 					</navigator>
 				</view>
 			</view>
-			<!-- 			<view class="searchWrap">
-				<image src="/static/icon/search_gray.png" class="searchIcon"></image>
-				<input type="text" v-model="keyword" placeholder="融汇生活" class="searchInp" />
-				<view class="searchBtn" @click="searchVal">搜索</view>
-			</view> -->
-			<view class="collageUser" v-if="collageList.length>0">
-				<!-- <view class="collageUserHead">
-						<view class="collageUserHeadL">正在拼团</view>
-					</view> -->
-				<swiper :indicator-dots="false" :autoplay="true" :interval="2000" :duration="1000" :circular="true"
-					:vertical="true" style="height: 120upx;">
-					<swiper-item v-for="(item,index) in collageList" :key="index">
-						<view class="collageUserCon">
-							<view class="collageUserConL">
-								<image :src="item.user.avatar_url"></image>
-								<view>{{item.user.nick_name}}</view>
-							</view>
-							<view class="collageUserConR">
-								<view class="collageUserConRL">
-									<view class="collageUserConRLT">还差<text>{{item.surplusNum}}人</text>拼成</view>
-									<view class="collageUserConRLB">剩余{{item.surplusTime | dateFormat}}</view>
-								</view>
-								<view class="collageUserConRR" @click="toJoinCollage" :data-index="index">
-									<view class="collageUserConRRL">立即查看</view>
-									<!-- <image src="../../static/icon/more_white.png"></image> -->
-								</view>
-							</view>
-						</view>
-					</swiper-item>
-				</swiper>
 
-			</view>
-			<view class="collageUser" v-else>
-				<swiper :indicator-dots="false" :autoplay="true" :interval="2000" :duration="1000" :circular="true"
-					:vertical="true" style="height: 120upx;">
-					<swiper-item>
-						<view class="collageUserCon">
-							<view class="collageUserConL">
-								<view class="openData" style="border-radius: 50%;">
-									<open-data type="userAvatarUrl"></open-data>
-								</view>
 
-								<view class="">
-									<!-- <open-data type="userNickName"></open-data> -->
-									<view class="NotInvolved">当前您未参与拼团</view>
-								</view>
-							</view>
-							<view class="collageUserConR">
-								<view class="collageUserConRL">
-									<view class="collageUserConRLT"></view>
-									<view class="collageUserConRLB"></view>
-								</view>
-								<navigator class="collageUserConRR" url="/pageHome/myCollage/myCollage"
-									:data-index="index">
-									<view class="collageUserConRRL">我的抢购</view>
-									<!-- <image src="../../static/icon/more_white.png"></image> -->
-								</navigator>
-							</view>
-						</view>
-					</swiper-item>
-				</swiper>
-
-			</view>
-
-			<view class="collageMoreMark" @click="hideMark" v-if="showFlag"></view>
-			<view class="collageMore" v-if="showFlag">
-				<view class="collageMoreCon">
-					<view class="collageMoreConHead">可参与的拼团</view>
-					<scroll-view scroll-y="true" style="max-height: 548upx;">
-						<view class="collageMoreItem" v-for="(item,index) in collageMoreList" :key="index">
-							<image :src="item.user.avatar_url" class="collageMoreItemL"></image>
-							<view class="collageMoreItemC">
-								<view class="collageMoreItemCT">{{item.user.nick_name}}</view>
-								<view class="collageMoreItemCB">
-									还差<text>{{item.surplusNum}}</text>人
-								</view>
-							</view>
-							<view class="collageMoreItemR">
-								<view class="collageMoreItemRCon" :data-index="index" @click="toJoinCollageByAll">
-									<text>去参团</text>
-									<image src="../../static/home/more_pink.png"></image>
-								</view>
-							</view>
-						</view>
-					</scroll-view>
-				</view>
-				<view class="close_icon" @click="hideMark">
-					<image src="../../static/home/close_icon.png"></image>
-				</view>
-
-			</view>
 		</view>
 
-		<!-- <u-popup v-model="showAgree" mode="bottom"  @close="close" @open="open">
-			<view style="max-height: 700upx;">
-				<view v-html="list[collageIndex].content" style="padding: 30upx;box-sizing: border-box;">
-					
-				</view>
-			</view>
-			
-		</u-popup> -->
+
 		<view class="toTop" v-if="showTo" @click="toTop">
 			<image src="../../static/home/icon_top.png"></image>
 			<!-- <view>返回顶部</view> -->
 		</view>
 		<view style="background-color: #F8F8F8;border-radius: 20upx 20upx 0 0;">
-			<!-- <view class="collageUser">
-					<view class="collageUserHead">
-						<view class="collageUserHeadL">拼团流程</view>
-					</view>
-					<view class="collageWay">
-						<view class="collageWayItem">
-							<view>参与拼团</view>
-							<view>{{list[collageIndex].num}}人成团</view>
-						</view>
-						<image src="../../static/icon/more_gray.png" class="collageWayImg"></image>
-						<view class="collageWayItem">
-							<view>拼中发货</view>
-							<view>未中退款</view>
-						</view>
-						<image src="../../static/icon/more_gray.png" class="collageWayImg"></image>
-						<view class="collageWayItem">
-							<view>拼中得商品</view>
-							<view>未拼中得现金红包</view>
-						</view>
-					</view>
-				</view>
-				<view class="collageKnow">
-					<view class="collageKnowL">拼团须知</view>
-					<view class="collageKnowR" @click="checkCollage">
-						<text>查看</text>
-						<image src="/static/icon/more_gray.png"></image>
-					</view>
-				</view> -->
 			<view class="productWrap">
 				<view class="productWrapHead">
-					<view :class="['productWrapHeadItem',index==collageIndex?'active':'']" :data-index="index"
-						:key="index" @click="taggleCollage" v-for="(item,index) in list" v-if="index<3">
+					<view class="productWrapHeadItem active">
 						<view class="" style="z-index: 1;">
-							{{item.name}}
+							兑换专区
 						</view>
-						<image src="../../static/icon/icon_bjleft.png" mode="" v-if="index==0&&index==collageIndex">
-						</image>
-						<image src="../../static/icon/icon_bjcont.png" mode="" v-if="index==1&&index==collageIndex">
-						</image>
-						<image src="../../static/icon/icon_bjright.png" mode="" v-if="index==2&&index==collageIndex">
+						<image src="../../../static/icon/icon_bjleft.png" mode="">
 						</image>
 					</view>
-
 				</view>
 				<view class="productWrapCon">
 					<view class="productWrapConBox" v-if="productList.length>0">
 						<view class="productWrapConItem" v-for="(item,index) in productList" :key="index"
 							:data-index="index" @click="toDetail">
 							<view class="productWrapConItemT">
-								<!-- <view class="productWrapConItemTT">幸运拼团</view> -->
 								<view class="productWrapConItemTImg"
 									:style="{'background-image': 'url('+item.goods_image+')'}"></view>
 							</view>
@@ -201,26 +68,24 @@
 								<view class="productWrapConItemBT">{{item.goods_name}}</view>
 								<view class="spell">
 									{{item.sale_num}}人已拼成
+									<u-line-progress style="flex: 1;margin-left: 26rpx;" active-color="#FF9700"
+										:percent="progress">
+									</u-line-progress>
 								</view>
 								<view class="productWrapConItemBB">
 									<view class="productWrapConItemBBL">
-										<!-- <view class="productWrapConItemBBLTxt">参团价</view> -->
 										<view class="productWrapConItemBBLPrice ct">
 											<image
 												src="https://oss.gzrhhj.com/10001/20230209/895c6338f18ddc72060c11bede37ff2b.png"
 												mode=""></image>
-											<text>{{item.num}}人拼￥：</text><text
-												style="font-size: 40rpx;">{{item.goods_price}}</text>
+											<text>￥</text>
+											<text style="font-size: 40rpx;">{{item.goods_price}}</text>
 										</view>
 									</view>
 									<view class="productWrapConItemBBR ct">
 										<view class="productWrapConItemBBRL">
-											<text>马上抢</text>
-											<!-- <image src="../../static/icon/icon_right.png"></image> -->
+											<text>立即兑换</text>
 										</view>
-										<!-- <view class="productWrapConItemBBRR">
-											{{item.num}}人成团
-										</view> -->
 									</view>
 								</view>
 							</view>
@@ -233,25 +98,8 @@
 			</view>
 
 		</view>
-		<view v-if="showTurntable" style="position: fixed;top: 0;left: 0;right: 0;bottom: 0;margin: auto;display: flex;
-    align-items: center;
-    justify-content: center;background: rgba(0, 0, 0, 0.4);z-index: 100;">
-			<q-turntable :class="showTurntable?'showTurntable':'Turntable'" :areaNumber='4' :speed='16' ref="turntable"
-				@start="turntableStart" @success="turntableSuccess">
-			</q-turntable>
-		</view>
-		<view v-if="showLottery" class="module">
-			<view class="title">
-				提示
-			</view>
-			<text class="txt">
-				恭喜达成！
-			</text>
-			<view class="btnGRop">
-				<button @click="closeBtn(1)" class="btn onebtn">参与抽奖</button>
-				<button @click="closeBtn(2)" class="btn twobtn">参与活动分红</button>
-			</view>
-		</view>
+
+
 	</view>
 </template>
 
@@ -284,7 +132,6 @@
 				windowHeight: [],
 				award: 1,
 				tapIndex: 0,
-				showLottery: false,
 				draw_id: 0,
 				navInfo: {
 					leftDistance: 0,
@@ -293,6 +140,7 @@
 					paddingTop: 0
 				},
 				showTurntable: false,
+				progress: 30,
 				awardList: [{
 						title: '价值200元权益积分'
 					},
@@ -392,29 +240,7 @@
 				this.collageMoreList = [];
 				this.collagePage = 1;
 			},
-			closeBtn(index) {
 
-				if (index == 1) {
-					this.showLottery = false;
-					this.showTurntable = true
-				} else {
-					this.getList()
-				}
-				this.showLottery = false;
-				goodsApi.pickPartakeType({
-					type: index
-				}, {
-					load: false
-				}).then(res => {
-					console.log(res.data)
-					if (Object.getOwnPropertyNames(res.data).length !== 0) {
-						this.award = res.data.key + 1
-						this.draw_id = res.data.draw_id
-						console.log(this.draw_id);
-					}
-					console.log(res);
-				})
-			},
 			isReach() {
 				let _this = this
 				goodsApi.isReach().then(res => {
@@ -424,109 +250,9 @@
 					}
 				})
 			},
-			turntableStart() {
-				// let index = Math.floor(Math.random() * 4 + 1) //前端随机数，这里应该后台返回中奖结果
-				// console.log(index, 'index')
-				// this.award = index
-				this.$refs.turntable.begin(this.award);
-			},
-			// 抽奖完成后操作
-			turntableSuccess() {
-				const index = this.award - 1;
-				let _this = this
-				console.log('bind:success', _this.awardList[index]);
-				uni.showModal({
-					title: `恭喜你获得${_this.awardList[index].title}`,
-					showCancel: false,
-					success() {
-						goodsApi.drawSync({
-							key: _this.award - 1,
-							draw_id: _this.draw_id
-						}, {
-							load: false
-						}).then(res => {
-							console.log(res);
-							uni.showToast({
-								title: res.message,
-								icon: 'none',
-								duration: 2000,
-							})
-						}).catch(err => {
-							console.log(err)
-						}).finally(() => {
-							_this.showTurntable = false
-							// setTimeout(function() {
 
-							// }, 2500)
-						})
-					}
-				})
-				// uni.showToast({
-				// 	title: `恭喜你获得${_this.awardList[index].title}`,
-				// 	icon: 'none',
-				// 	duration: 4000,
-				// 	success() {
-				// 		goodsApi.drawSync({
-				// 			key: _this.award - 1,
-				// 			draw_id: _this.draw_id
-				// 		}, {
-				// 			load: false
-				// 		}).then(res => {
-				// 			console.log(res);
-				// 		}).catch(err => {
-				// 			console.log(err)
-				// 		}).finally(() => {
-				// 			setTimeout(function() {
-				// 				_this.showTurntable = false
-				// 			}, 4500)
-				// 		})
-				// 	}
-				// });
-			},
-			loadMoreCollage() {
-				if (!this.reqFlag) {
-					return false;
-				}
-				this.reqFlag = false;
-				this.showFlag = true;
-				let obj = {};
-				obj.category_id = this.list[this.collageIndex].id;
-				obj.page = this.collagePage;
-				goodsApi.taskListAll(obj).then(res => {
-					if (this.collagePage == 1) {
-						this.collageMoreList = res.data.list.data.map(cur => {
-							cur.surplusNum = cur.num - cur.current_num;
-							return cur;
-						});
-					} else {
-						this.collageMoreList = this.collageMoreList.concat(res.data.list.data.map(cur => {
-							cur.surplusNum = cur.num - cur.current_num;
-							return cur;
-						}));
-					}
-					if (this.collagePage < res.data.list.last_page) {
-						this.collageMoreFlag = true;
-					} else {
-						this.collageMoreFlag = false;
-					}
-					this.reqFlag = true;
-				}).catch(err => {
-					this.reqFlag = true;
-				})
-			},
-			toJoinCollage(e) {
-				let index = e.target.dataset.index || e.currentTarget.dataset.index;
-				if (this.collageList.length > 0) {
-					uni.navigateTo({
-						url: "/pages/collageDetail/collageDetail?groupid=" + this.collageList[index].id
-					})
-				} else {
-					// uni.navigateTo({
-					// 	url: "/pages/collageDetail/collageDetail"
-					// })
-				}
 
-			},
+
 			toJoinCollageByAll(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
 
@@ -562,50 +288,13 @@
 					});
 				})
 			},
-			toDetail(e) {
-				let index = e.target.dataset.index || e.currentTarget.dataset.index;
-				uni.navigateTo({
-					url: "/pages/groupGoodDetails/groupGoodDetails?proid=" + this.productList[index].id
-				})
-			},
-			searchVal() {
-				this.page = 1;
-				this.getList();
-			},
-			close(e) {
-				console.log("close")
-			},
-			open(e) {
-				console.log("open")
-			},
+
 			toTop() {
 				uni.pageScrollTo({
 					scrollTop: 0
 				})
 			},
-			checkCollage() {
-				this.showAgree = true;
-			},
-			taggleCollage(e) {
-				let index = e.target.dataset.index || e.currentTarget.dataset.index;
-				this.collageIndex = index;
-				this.page = 1;
-				this.getProductList();
-				this.getCollageList();
-			},
-			back() {
-				let page = getCurrentPages();
-				console.log(page);
-				if (page.length == 1) {
-					uni.switchTab({
-						url: "/pages/index/index"
-					})
-				} else {
-					uni.navigateBack({
-						delta: 1
-					})
-				}
-			},
+
 			getList() {
 				goodsApi.list().then(res => {
 					console.log(res)
@@ -624,6 +313,7 @@
 					obj.keyword = this.keyword;
 				}
 				obj.category_id = this.list[this.collageIndex].id;
+				// exchangeList
 				goodsApi.goodsList(obj).then(res => {
 						console.log(res)
 						uni.stopPullDownRefresh();
@@ -821,6 +511,8 @@
 		font-style: normal;
 		font-weight: 400;
 		font-size: 24rpx;
+		display: flex;
+
 	}
 
 	.productWrapConItemBT {
@@ -870,7 +562,7 @@
 		color: #FFFFFF;
 		font-weight: bold;
 		position: relative;
-		width: 286rpx;
+		width: 224rpx;
 		height: 68rpx;
 		z-index: 2;
 		// background: #F23A3A;
@@ -885,7 +577,7 @@
 	}
 
 	.productWrapConItemBBLPrice>image {
-		width: 286rpx;
+		width: 224rpx;
 		height: 68rpx;
 		position: absolute;
 		top: 0;
@@ -893,7 +585,7 @@
 	}
 
 	.productWrapConItemBBR {
-		width: 164upx;
+		width: 203rpx;
 		height: 75upx;
 		font-family: 'PingFang SC';
 		font-style: normal;
@@ -907,7 +599,7 @@
 		align-items: center;
 		justify-content: center;
 		height: 30upx;
-		margin-top: 4upx;
+		// margin-top: 4upx;
 	}
 
 	.productWrapConItemBBRL>text {
@@ -1390,8 +1082,7 @@
 				backdrop-filter: blur(10rpx);
 				/* Note: backdrop-filter has minimal browser support */
 				border-radius: 30rpx 0px 0px 30rpx;
-				margin-bottom: 16rpx;
-
+				margin-bottom: 48rpx;
 			}
 
 			.make {

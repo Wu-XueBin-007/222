@@ -957,8 +957,18 @@
 						"navigationBarTitleText": "",
 						"enablePullDownRefresh": true
 					}
-				}
+				}, {
+					"path": "pages/exchange/exchange",
+					"style": {
+						"navigationStyle": "custom",
+						"app-plus": {
+							"titleNView": false
+						},
+						"navigationBarTextStyle": "white",
+						"enablePullDownRefresh": false
+					}
 
+				}
 
 			]
 		},

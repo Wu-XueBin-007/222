@@ -117,7 +117,7 @@
 			}
 		},
 		async onLoad(options) {
-			console.log(options, 'options')
+			console.log(options, 'optionsoptions')
 			this.options = options
 			if (options.order_on) {
 				this.order_id = options.order_on;
@@ -130,12 +130,12 @@
 				this.is_free = options.is_free
 			}
 			let detailRes = await detail()
+			console.log(detailRes, 'detailRes');
 			this.settings = detailRes.data.values;
+			let opt = wx.getLaunchOptionsSync();
+			// if (opt.scene != 1069) {
+			console.log('onLoadonLoadonLoad')
 			await this.getOrderDetail()
-
-
-		},
-		async onShow() {
 			let type = 0;
 			// #ifdef APP-PLUS
 			type = 2
@@ -146,12 +146,11 @@
 			// #ifdef MP-QQ
 			type = 3
 			// #endif
-			let opt = wx.getLaunchOptionsSync();
+
 			// await this.getUserInfo();
 			let payType = await payTypeApi.payType({
 				type
 			})
-
 			if (payType.data.list.data && payType.data.list.data.length > 0) {
 				this.payDataList = payType.data.list.data;
 				console.log(payType.data.list, 'payType.data.list')
@@ -161,7 +160,6 @@
 				}
 				console.log(opt.scene, 'scene')
 				if (opt.scene == 1069) {
-
 					this.$nextTick(this.btn_backTran)
 				}
 
@@ -169,7 +167,10 @@
 				this.payDataList = [];
 			}
 
-
+			// }
+		},
+		async onShow() {
+			console.log('onShowonShowonShow')
 		},
 		// onBackPress(options) {
 		// 	uni.showModal({
@@ -257,6 +258,7 @@
 					if (app.type == 1) {
 						OrderApi.detail(app.order_id)
 							.then(result => {
+								console.log('OrderApi.detail');
 								app.order = result.data.order
 								app.setting = result.data.setting
 								result.data.order.create_time = result.data.order.create_time.replace(/-/g,
@@ -321,6 +323,7 @@
 					} else {
 						OrderApi.merge_detail(app.order_id)
 							.then(result => {
+								console.log('OrderApi.merge_detail')
 								app.order = result.data.order
 								app.setting = result.data.setting
 								app.loading = true
@@ -408,41 +411,43 @@
 				if (paymentType == 20) {
 					paymentType = 40;
 				}
-				plus.share.getServices(shareList => {
-					console.log(shareList, 'shareList');
-					let sweixin = shareList.find(val => val.id == 'weixin')
-					// let pay_extra = JSON.parse(ret.pay_extra)
-					console.log(sweixin, 'sweixin');
-					// let opt = wx.getLaunchOptionsSync();
-					console.log('pages/cashier/index?' + urlEncode(this.options))
-					if (sweixin) {
-						sweixin.launchMiniProgram({
-							id: 'gh_3031981eafd6', //小程序原始id
-							path: 'pages/cashier/index?' + urlEncode(this.options),
-							type: App.globalData.version == 'release' ? 0 : 2,
-							envVersion: 'trial',
-							success(res) {
-								console.log(res, 'res')
-								// 打开成功
-							},
-							fail(err) {
-								console.log(err);
-							}
-						})
-						this.endLoading()
-					} else {
+				if (app.paymentType == 240) {
+					plus.share.getServices(shareList => {
+						console.log(shareList, 'shareList');
+						let sweixin = shareList.find(val => val.id == 'weixin')
+						console.log(sweixin, 'sweixin');
+						console.log('pages/cashier/index?' + urlEncode(this.options))
+						console.log(App.globalData.version == 'release' ? 0 : 2)
+						if (sweixin) {
+							sweixin.launchMiniProgram({
+								id: 'gh_3031981eafd6', //小程序原始id
+								path: 'pages/cashier/index?' + urlEncode(this.options),
+								type: 0,
+								envVersion: 'trial',
+								success(res) {
+									console.log(res, 'res')
+									// 打开成功
+								},
+								fail(err) {
+									console.log(err);
+								}
+							})
+							this.endLoading()
+						} else {
+							uni.showToast({
+								icon: 'none',
+								title: "未安装微信,无法打开对应小程序"
+							})
+						}
+					}, e => {
 						uni.showToast({
 							icon: 'none',
-							title: "未安装微信,无法打开对应小程序"
+							title: "获取微信服务列表失败:" + JSON.stringify(e)
 						})
-					}
-				}, e => {
-					uni.showToast({
-						icon: 'none',
-						title: "获取微信服务列表失败:" + JSON.stringify(e)
 					})
-				})
-				return
+					return
+				}
+
 				// #endif
 				if (paymentType == PayTypeEnum.BALANCE.value || paymentType == PayTypeEnum.ConsumptionQuota.value) {
 					uni.showModal({

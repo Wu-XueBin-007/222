@@ -313,7 +313,7 @@
 				obj.group_task_id = 0;
 				uni.showModal({
 					title: '拼团须知',
-					content: '各位会员，拼团产品不支持取消订单及退换货，拼中产品48小时内发货，请在天天赚首页右上角查看完规则或者找推荐人了解清楚规则在下单。',
+					content: '各位会员，拼团产品不支持取消订单及退换货，拼中产品72小时内发货，请在天天赚首页右上角查看完规则或者找推荐人了解清楚规则在下单。',
 					success(res) {
 						if (res.confirm) {
 							collageApi.add(obj).then(res => {

@@ -18,7 +18,8 @@ const api = {
 	isReach: "group.user_info/isReach",
 	pickPartakeType: "group.user_info/pickPartakeType",
 	drawSync: 'group.user_info/drawSync',
-	exchange: 'group.exchange/order '
+	exchange: 'group.exchange/order ',
+	exchangeList: 'exchange.goods/list'
 }
 
 // 拼团分组列表
@@ -29,6 +30,11 @@ export const list = (data) => {
 // 拼团商品列表
 export const goodsList = (data) => {
 	return request.get(api.goodsList, data)
+}
+
+// 兑换专区商品列表
+export const exchangeList = (data) => {
+	return request.get(api.exchangeList, data)
 }
 
 // 拼团商品详情
