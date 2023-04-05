@@ -19,7 +19,10 @@ const api = {
 	pickPartakeType: "group.user_info/pickPartakeType",
 	drawSync: 'group.user_info/drawSync',
 	exchange: 'group.exchange/order ',
-	exchangeList: 'exchange.goods/list'
+	exchangeList: 'exchange.goods/list',
+	exchangeorder: 'exchange.order/exchange',
+	exchangeinfo: 'exchange.info/list',
+	exchangeinforecords: 'exchange.info/records'
 }
 
 // 拼团分组列表
@@ -33,8 +36,8 @@ export const goodsList = (data) => {
 }
 
 // 兑换专区商品列表
-export const exchangeList = (data) => {
-	return request.get(api.exchangeList, data)
+export const exchangeList = (data, options) => {
+	return request.get(api.exchangeList, data, options)
 }
 
 // 拼团商品详情
@@ -113,4 +116,17 @@ export const drawSync = (data, options) => {
 //立即兑换
 export const exchange = (data, options) => {
 	return request.post(api.exchange, data, options)
+}
+
+
+export const exchangeorder = (data, options) => {
+	return request.post(api.exchangeorder, data, options)
+}
+
+export const exchangeinfo = (data, options) => {
+	return request.post(api.exchangeinfo, data, options)
+}
+
+export const exchangeinforecords = (data, options) => {
+	return request.post(api.exchangeinforecords, data, options)
 }

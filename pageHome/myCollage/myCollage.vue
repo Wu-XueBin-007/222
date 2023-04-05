@@ -81,7 +81,7 @@
 								<view class="collageBtn">
 									<!-- <image src="../../static/home/prize_icon_no.png" class="prize" v-if="item.have_prize==0&&headIndex!=3&&headIndex!=4"></image> -->
 									<view class="conItemBRBCheckDetail2" v-if="headIndex==1&&item.delivery_status==10"
-										:data-index="index" @click="handleExchange(item.order_no,item.exchange_status)">
+										:data-index="index" @click="handleExchange(item)">
 										{{item.exchange_status==0?'立即兑换':'已兑换'}}
 									</view>
 									<view class="conItemBRBCheckDetail2"
@@ -210,30 +210,13 @@
 					orderId: orderId
 				})
 			},
-			handleExchange(id, exchange_status) {
-				let _this = this
-				if (exchange_status > 0) return;
-				uni.showModal({
-					content: '是否确定兑换',
-					success(res) {
-						if (res.confirm) {
-							collageApi.exchange({
-								order_no: id
-							}, {
-								load: false
-							}).then(res => {
-								console.log(res);
-								uni.showToast({
-									title: res.data.text,
-									icon: 'none',
-									success() {
-										_this.getList()
-									}
-								})
-							})
-						}
-
-					}
+			handleExchange(item) {
+				console.log(item)
+				let order_id = item.order_id;
+				let order_no = item.order_no;
+				uni.navigateTo({
+					url: '/pageGive/pages/exchange/exchange?order_id=' + order_id +
+						'&order_no=' + order_no
 				})
 
 			},

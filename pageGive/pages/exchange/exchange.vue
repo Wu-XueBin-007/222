@@ -27,11 +27,11 @@
 					src="https://oss.gzrhhj.com/10001/20230404/8a05de8e11e0dbe98a6474421c3fdedd.jpg">
 				</image>
 				<view class="rightfix">
-					<navigator url='/pageHome/IncomeDetail/IncomeDetail' class="income ct">
+					<navigator url='/pageGive/pages/exchangeRecord/exchangeRecord' class="income ct">
 						兑换记录
 					</navigator>
 
-					<navigator url='/pageHome/ruleDetails/ruleDetails' class="rule ct">
+					<navigator url='/pageGive/pages/exchangeRules/exchangeRules' class="rule ct">
 						规则详情
 					</navigator>
 				</view>
@@ -67,9 +67,9 @@
 							<view class="productWrapConItemB">
 								<view class="productWrapConItemBT">{{item.goods_name}}</view>
 								<view class="spell">
-									{{item.sale_num}}人已拼成
+									兑换进度
 									<u-line-progress style="flex: 1;margin-left: 26rpx;" active-color="#FF9700"
-										:percent="progress">
+										:percent="item.progress">
 									</u-line-progress>
 								</view>
 								<view class="productWrapConItemBB">
@@ -83,7 +83,7 @@
 										</view>
 									</view>
 									<view class="productWrapConItemBBR ct">
-										<view class="productWrapConItemBBRL">
+										<view @click="exchange(item)" class="productWrapConItemBBRL">
 											<text>立即兑换</text>
 										</view>
 									</view>
@@ -132,6 +132,7 @@
 				windowHeight: [],
 				award: 1,
 				tapIndex: 0,
+				option: {},
 				draw_id: 0,
 				navInfo: {
 					leftDistance: 0,
@@ -160,8 +161,10 @@
 			navHead,
 			seckillNav
 		},
-		onLoad() {
+		onLoad(option) {
 			let obj = {};
+			console.log(option)
+			this.option = option
 			obj.leftDistance = App.globalData.leftDistance;
 			obj.lineHeight = App.globalData.lineHeight;
 			obj.navH = App.globalData.navH;
@@ -207,21 +210,7 @@
 				title: "幸运拼团"
 			}
 		},
-		filters: {
-			dateFormat: function(value) {
-				var date = new Date(value);
-				// var sdate = Math.floor(value / 1000 / 60 / 60 / 24);
-				var hour = Math.floor(value / 1000 / 60 / 60);
-				var minute = Math.floor((value - hour * 1000 * 60 * 60) / 1000 / 60);
-				var second = Math.floor((value - hour * 1000 * 60 * 60 - minute * 1000 * 60) / 1000);
-				// sdate = sdate < 10 ? "0" + sdate : sdate;
-				hour = hour < 10 ? "0" + hour : hour;
-				minute = minute < 10 ? "0" + minute : minute;
-				second = second < 10 ? "0" + second : second;
-				var result = hour + ":" + minute + ":" + second;
-				return result;
-			}
-		},
+
 		onReachBottom() {
 			if (!this.moreFlag) {
 				return false;
@@ -248,6 +237,36 @@
 					if (res.data.isReach > 0) {
 						this.showLottery = true
 					}
+				})
+			},
+
+			exchange(item) {
+				console.log(item, 'item');
+				let _this = this
+				uni.showModal({
+					content: `尊敬的会员：
+兑换商品选定后，如非质量问题，不支持退换货，请在兑换专区首页右上角查看完规则或者向推荐人了解清楚规则再兑换。`,
+					success(resp) {
+						if (resp.confirm) {
+							let good_id = item.id;
+							let order_no = _this.option.order_no;
+							goodsApi.exchangeorder({
+								good_id,
+								order_no
+							}).then(res => {
+								uni.showToast({
+									title: res.message,
+									success() {
+
+										_this.getProductList()
+									}
+								})
+								console.log(res, 'res');
+							})
+						}
+
+					}
+
 				})
 			},
 
@@ -306,16 +325,28 @@
 					this.getCollageList();
 				})
 			},
+			toDetail(e) {
+				let index = e.target.dataset.index || e.currentTarget.dataset.index;
+				uni.navigateTo({
+					url: "/pages/groupGoodDetails/groupGoodDetails?type=exchange&proid=" + this.productList[index]
+						.id
+				})
+			},
 			getProductList() {
 				let obj = {};
 				obj.page = this.page;
 				if (this.keyword.trim()) {
 					obj.keyword = this.keyword;
 				}
+				let _this = this
 				obj.category_id = this.list[this.collageIndex].id;
 				// exchangeList
-				goodsApi.goodsList(obj).then(res => {
+				goodsApi.exchangeList(obj, {
+						load: false
+					}).then(res => {
 						console.log(res)
+
+
 						uni.stopPullDownRefresh();
 						if (this.page == 1) {
 							this.productList = res.data.list.data.map(cur => {
@@ -335,6 +366,20 @@
 						} else {
 							this.moreFlag = false;
 						}
+						goodsApi.exchangeinfo({}).then(resp => {
+							let data = resp.data.list.data;
+							_this.productList.forEach((item, index) => {
+								data.forEach((it, id) => {
+									if (item.id == it.goods_id) {
+										_this.$set(item, "progress", (it.real_amount /
+											item
+											.goods_price) * 100);
+									}
+								})
+
+
+							})
+						})
 					})
 					.catch(err => {
 						uni.stopPullDownRefresh();

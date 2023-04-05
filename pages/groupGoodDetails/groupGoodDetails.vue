@@ -130,7 +130,7 @@
 				</button>
 				<!-- #endif -->
 			</view>
-			<view class="operaBtnR" @click="toPayment">我要开团</view>
+			<view class="operaBtnR" @click="toPayment">{{options.type=='exchange'?'我要兑换':'我要开团'}}</view>
 		</view>
 		<view class="collageMoreMark" @click="hideMark" v-if="showFlag"></view>
 		<view class="collageMore" v-if="showFlag">
@@ -147,7 +147,7 @@
 						</view>
 						<view class="collageMoreItemR">
 							<view class="collageMoreItemRCon" :data-index="index" @click="toJoinCollageByAll">
-								<text>去参团</text>
+								<text>{{options.type=='exchange'?'去兑换':'去参团'}}</text>
 								<image src="../../static/home/more_pink.png"></image>
 							</view>
 						</view>
@@ -191,7 +191,8 @@
 				collageMoreFlag: false,
 				collageMoreList: [],
 				showFlag: false,
-				reqFlag: true
+				reqFlag: true,
+				options: {}
 			}
 		},
 		components: {
@@ -200,7 +201,7 @@
 		},
 		onLoad(options) {
 			// 当前页面参数
-			// this.options = options;
+			this.options = options;
 			// this.Imgurl=app.globalData.Imgurl;
 			// 加载页面数据
 			this.proId = options.proid;
@@ -311,42 +312,69 @@
 				let obj = {};
 				obj.goods_id = this.info.id;
 				obj.group_task_id = 0;
-				uni.showModal({
-					title: '拼团须知',
-					content: '各位会员，拼团产品不支持取消订单及退换货，拼中产品72小时内发货，请在天天赚首页右上角查看完规则或者找推荐人了解清楚规则在下单。',
-					success(res) {
-						if (res.confirm) {
-							collageApi.add(obj).then(res => {
-								console.log(res)
-								if (res.data && res.data.order_no) {
-									// #ifdef MP-WEIXIN
-									// wx.requestSubscribeMessage({
-									// 	tmplIds: ['rGq6tjBiDTifbJiFVDaJmoip2022JyCrGmnO5m5voA0'],
-									// 	success(Messageres) {
-									// console.log(Messageres);
-									uni.navigateTo({
-										url: "/pages/sureOrder/sureOrder?orderid=" +
-											res.data.order_no +
-											'&type=groupGoodDetails'
-									})
-									// 	}
-									// })
-									// #endif
-									// #ifndef MP-WEIXIN
-									uni.navigateTo({
-										url: "/pages/sureOrder/sureOrder?orderid=" +
-											res.data
-											.order_no
-									})
-									// #endif
-								} else {
-									this.$toast("系统繁忙，请稍后再试");
-								}
+				if (this.options.type == 'exchange') {
 
-							})
+					console.log(item, 'item');
+					let _this = this
+					uni.showModal({
+						content: `尊敬的会员：
+兑换商品选定后，如非质量问题，不支持退换货，请在兑换专区首页右上角查看完规则或者向推荐人了解清楚规则再兑换。`,
+						success(resp) {
+							if (resp.confirm) {
+								let good_id = this.info.id;
+								let order_no = _this.option.order_no;
+								goodsApi.exchangeorder({
+									good_id,
+									order_no
+								}).then(res => {
+									uni.showToast({
+										title: res.message,
+										success() {
+
+											_this.getProductList()
+										}
+									})
+									console.log(res, 'res');
+								})
+							}
+
 						}
-					}
-				})
+
+					})
+
+				} else {
+					uni.showModal({
+						title: '拼团须知',
+						content: '各位会员，拼团产品不支持取消订单及退换货，拼中产品72小时内发货，请在天天赚首页右上角查看完规则或者找推荐人了解清楚规则在下单。',
+						success(res) {
+							if (res.confirm) {
+								collageApi.add(obj).then(res => {
+									console.log(res)
+									if (res.data && res.data.order_no) {
+										// #ifdef MP-WEIXIN
+										uni.navigateTo({
+											url: "/pages/sureOrder/sureOrder?orderid=" +
+												res.data.order_no +
+												'&type=groupGoodDetails'
+										})
+										// #endif
+										// #ifndef MP-WEIXIN
+										uni.navigateTo({
+											url: "/pages/sureOrder/sureOrder?orderid=" +
+												res.data
+												.order_no
+										})
+										// #endif
+									} else {
+										this.$toast("系统繁忙，请稍后再试");
+									}
+
+								})
+							}
+						}
+					})
+				}
+
 
 
 			},

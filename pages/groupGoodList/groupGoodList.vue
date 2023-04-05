@@ -240,7 +240,7 @@
 				@start="turntableStart" @success="turntableSuccess">
 			</q-turntable>
 		</view>
-		<view v-if="showLottery" class="module">
+		<!-- 		<view v-if="showLottery" class="module">
 			<view class="title">
 				提示
 			</view>
@@ -251,7 +251,7 @@
 				<button @click="closeBtn(1)" class="btn onebtn">参与抽奖</button>
 				<button @click="closeBtn(2)" class="btn twobtn">参与活动分红</button>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -420,7 +420,23 @@
 				goodsApi.isReach().then(res => {
 					console.log(res)
 					if (res.data.isReach > 0) {
-						this.showLottery = true
+						// this.showLottery = true
+						uni.showModal({
+							title: '提示',
+							content: '恭喜达成！',
+							cancelText: '参与抽奖',
+							cancelColor: '#f9ae3d',
+							confirmText: '#3c9cff',
+							confirmText: '参与活动分红',
+							success(resp) {
+								if (resp.cancel) {
+									_this.closeBtn(1)
+								}
+								if (resp.confirm) {
+									_this.closeBtn(2)
+								}
+							}
+						})
 					}
 				})
 			},
@@ -565,7 +581,8 @@
 			toDetail(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
 				uni.navigateTo({
-					url: "/pages/groupGoodDetails/groupGoodDetails?proid=" + this.productList[index].id
+					url: "/pages/groupGoodDetails/groupGoodDetails?type=groupGoodList&proid=" + this.productList[
+						index].id
 				})
 			},
 			searchVal() {

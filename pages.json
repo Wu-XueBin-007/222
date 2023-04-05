@@ -970,6 +970,21 @@
 
 				}
 
+				, {
+					"path": "pages/exchangeRecord/exchangeRecord",
+					"style": {
+						"navigationBarTitleText": "兑换列表",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "pages/exchangeRules/exchangeRules",
+					"style": {
+						"navigationBarTitleText": "兑换规则",
+						"enablePullDownRefresh": false
+					}
+
+				}
 			]
 		},
 		{
