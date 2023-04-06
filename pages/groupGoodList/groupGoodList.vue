@@ -240,7 +240,7 @@
 				@start="turntableStart" @success="turntableSuccess">
 			</q-turntable>
 		</view>
-		<view v-if="showLottery" class="module">
+		<!-- <view v-if="showLottery" class="module">
 			<view class="title">
 				提示
 			</view>
@@ -251,7 +251,7 @@
 				<button @click="closeBtn(1)" class="btn onebtn">参与抽奖</button>
 				<button @click="closeBtn(2)" class="btn twobtn">参与活动分红</button>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -395,25 +395,30 @@
 			},
 			closeBtn(index) {
 
-				if (index == 1) {
-					this.showLottery = false;
-					this.showTurntable = true
-				} else {
-					this.getList()
-				}
-				this.showLottery = false;
+				let _this = this
 				goodsApi.pickPartakeType({
 					type: index
 				}, {
 					load: false
 				}).then(res => {
-					console.log(res.data)
+					console.log(res)
+					// 参与抽奖
 					if (Object.getOwnPropertyNames(res.data).length !== 0) {
 						this.award = res.data.key + 1
 						this.draw_id = res.data.draw_id
-						console.log(this.draw_id);
 					}
-					console.log(res);
+					if (index == 1) {
+						_this.showTurntable = true
+					} else {
+						// 活动分红
+						uni.showModal({
+							title: res.message,
+							showCancel: false,
+							success() {
+								_this.getList()
+							}
+						})
+					}
 				})
 			},
 			isReach() {
@@ -421,8 +426,6 @@
 				goodsApi.isReach().then(res => {
 					console.log(res, 'isReach')
 					if (res.data.isReach > 0) {
-						console.log(1111);
-						// _this.showLottery = true
 						uni.showModal({
 							title: '提示',
 							content: '恭喜达成！',

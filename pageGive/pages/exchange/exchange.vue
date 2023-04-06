@@ -105,6 +105,7 @@
 
 <script>
 	import * as goodsApi from "@/api/collage/collage.js";
+
 	import store from '@/store'
 	import navHead from "@/components/navHead.vue";
 	import seckillNav from "@/components/seckillNav.vue";
@@ -299,9 +300,10 @@
 			},
 			toDetail(e) {
 				let index = e.target.dataset.index || e.currentTarget.dataset.index;
+				let order_no = this.option.order_no || ''
 				uni.navigateTo({
 					url: "/pages/groupGoodDetails/groupGoodDetails?type=exchange&proid=" + this.productList[index]
-						.id
+						.id + '&order_no=' + order_no
 				})
 			},
 			getProductList() {

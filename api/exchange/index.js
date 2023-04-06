@@ -3,15 +3,22 @@ import request from '@/utils/request'
 // api地址
 const api = {
 	rule: 'exchange.info/rule',
-	my: 'team/my',
+	detail: 'exchange.goods/detail',
+	exchangeorder: 'exchange.order/exchange',
 }
 
-// 分销订单
-export function list() {
-	return request.post(api.list, {})
+// 兑换商品详情
+export function detail(params) {
+	return request.get(api.detail, params)
 }
+
 
 // 兑换规则
 export function rule() {
 	return request.get(api.rule, {})
+}
+
+
+export const exchangeorder = (data, options) => {
+	return request.post(api.exchangeorder, data, options)
 }
