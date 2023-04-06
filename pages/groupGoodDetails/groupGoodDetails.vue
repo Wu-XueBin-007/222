@@ -94,7 +94,7 @@
 			<view class="productDetailsCon" v-html="info.category.content"></view>
 		</view>
 
-		<view class="operaBtn">
+		<view v-if="options.type=='groupGoodList'||options.order_no" class="operaBtn">
 			<view class="operaBtnL">
 				<view class="operaBtnLItem" @click="toHome">
 					<!-- #ifdef MP-QQ -->
@@ -174,6 +174,7 @@
 	import navHead from "@/components/navHead.vue";
 	import seckillNav from "@/components/seckillNav.vue";
 	import * as collageApi from "@/api/collage/collage.js";
+	import * as exchangeApi from '@/api/exchange'
 	export default {
 		data() {
 			return {
@@ -313,25 +314,29 @@
 				obj.goods_id = this.info.id;
 				obj.group_task_id = 0;
 				if (this.options.type == 'exchange') {
-
-					console.log(item, 'item');
 					let _this = this
 					uni.showModal({
 						content: `尊敬的会员：
 兑换商品选定后，如非质量问题，不支持退换货，请在兑换专区首页右上角查看完规则或者向推荐人了解清楚规则再兑换。`,
 						success(resp) {
 							if (resp.confirm) {
-								let good_id = this.info.id;
-								let order_no = _this.option.order_no;
-								goodsApi.exchangeorder({
+								let good_id = _this.info.id;
+								let order_no = '';
+								if (_this.options && _this.options.order_no) {
+									order_no = _this.options.order_no
+								}
+
+								exchangeApi.exchangeorder({
 									good_id,
 									order_no
 								}).then(res => {
 									uni.showToast({
 										title: res.message,
 										success() {
-
-											_this.getProductList()
+											// _this.getProductList()
+											uni.navigateTo({
+												url: '/pageGive/pages/exchangeRecord/exchangeRecord'
+											})
 										}
 									})
 									console.log(res, 'res');
@@ -378,37 +383,53 @@
 
 
 			},
-			getDetails() {
+			async getDetails() {
 				let obj = {};
 				obj.goodsId = this.proId;
-				collageApi.goodsDetails(obj).then(res => {
+				let res = null
+				try {
+					if (this.options.type == 'exchange') {
+						//兑换
+						res = await exchangeApi.detail(obj)
+					} else {
+						//天天赚
+						res = await collageApi.goodsDetails(obj)
+					}
 					console.log(res)
 					res.data.detail.content = res.data.detail.content.replace(/<img /g,
 						'<img style="width: 100%;"')
-					res.data.detail.category.content = res.data.detail.category.content.replace(/<img/g,
-						"<img style='width: 100%;'");
 					this.info = res.data.detail;
-					this.groupList = res.data.group_task_list.map(cur => {
-						cur.surplusTime = cur.expire_time * 1000 - new Date().getTime();
-						cur.surplusNum = cur.num - cur.current_num;
-						let Timer = setInterval(() => {
+					if (this.options.type !== 'exchange') {
+						//天天赚
+						res.data.detail.category.content = res.data.detail.category.content.replace(/<img/g,
+							"<img style='width: 100%;'");
+						this.groupList = res.data.group_task_list.map(cur => {
 							cur.surplusTime = cur.expire_time * 1000 - new Date().getTime();
-							if (cur.surplusTime <= 0) {
-								clearInterval(Timer);
-								let j = null;
-								for (let i = 0; i < this.groupList.length; i++) {
-									if (this.groupList[i].id == cur.id) {
-										j = i;
+							cur.surplusNum = cur.num - cur.current_num;
+							let Timer = setInterval(() => {
+								cur.surplusTime = cur.expire_time * 1000 - new Date().getTime();
+								if (cur.surplusTime <= 0) {
+									clearInterval(Timer);
+									let j = null;
+									for (let i = 0; i < this.groupList.length; i++) {
+										if (this.groupList[i].id == cur.id) {
+											j = i;
+										}
+									}
+									if (j !== null) {
+										this.groupList.splice(j, 1);
 									}
 								}
-								if (j !== null) {
-									this.groupList.splice(j, 1);
-								}
-							}
-						}, 1000)
-						return cur;
-					});
-				})
+							}, 1000)
+							return cur;
+						})
+					}
+				} catch (e) {
+					console.log(e);
+					//TODO handle the exception
+				}
+
+
 			},
 			close(e) {
 				console.log("close")
