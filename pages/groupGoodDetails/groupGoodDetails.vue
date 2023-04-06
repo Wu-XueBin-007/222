@@ -380,8 +380,6 @@
 					})
 				}
 
-
-
 			},
 			async getDetails() {
 				let obj = {};
