@@ -13,7 +13,9 @@
 
 				<view class="collageMsgBL">
 					<view class="collageMsgT">
-						<image src="../../static/home/icon_pt.png" mode=""></image>
+						<image
+							:src="options.type=='exchange'?'https://oss.gzrhhj.com/10001/20230406/4bae1a3deb1c3bc82ab0d46e63c0c3f8.png':'../../static/home/icon_pt.png'"
+							mode=""></image>
 					</view>
 					<view class="collageMsgBLPrice">
 						<text>￥</text>{{info.goods_price?info.goods_price:0}}
@@ -891,8 +893,8 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		display: -webkit-box;
-		-webkit-line-clamp: 2; //行数需设置
-		line-clamp: 2;
+		-webkit-line-clamp: 3; //行数需设置
+		line-clamp: 3;
 		-webkit-box-orient: vertical;
 	}
 

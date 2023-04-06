@@ -396,6 +396,10 @@
 			closeBtn(index) {
 
 				let _this = this
+				if (index == 1) {
+					_this.showTurntable = true
+					return
+				}
 				goodsApi.pickPartakeType({
 					type: index
 				}, {
@@ -407,18 +411,15 @@
 						this.award = res.data.key + 1
 						this.draw_id = res.data.draw_id
 					}
-					if (index == 1) {
-						_this.showTurntable = true
-					} else {
-						// 活动分红
-						uni.showModal({
-							title: res.message,
-							showCancel: false,
-							success() {
-								_this.getList()
-							}
-						})
-					}
+					// 活动分红
+					uni.showModal({
+						title: res.message,
+						showCancel: false,
+						success() {
+							_this.getList()
+						}
+					})
+
 				})
 			},
 			isReach() {
@@ -451,42 +452,50 @@
 				})
 			},
 			turntableStart() {
-				// let index = Math.floor(Math.random() * 4 + 1) //前端随机数，这里应该后台返回中奖结果
-				// console.log(index, 'index')
-				// this.award = index
-				this.$refs.turntable.begin(this.award);
+				let _this = this;
+				goodsApi.pickPartakeType({
+					type: 1 //1是抽奖 2是分红
+				}, {
+					load: false
+				}).then(res => {
+					console.log(res)
+					// 参与抽奖
+					if (Object.getOwnPropertyNames(res.data).length !== 0) {
+						_this.award = res.data.key + 1
+						_this.draw_id = res.data.draw_id
+						_this.$refs.turntable.begin(_this.award);
+					}
+
+				})
 			},
 			// 抽奖完成后操作
 			turntableSuccess() {
 				const index = this.award - 1;
 				let _this = this
 				console.log('bind:success', _this.awardList[index]);
-				uni.showModal({
-					title: `恭喜你获得${_this.awardList[index].title}`,
-					showCancel: false,
-					success() {
-						goodsApi.drawSync({
-							key: _this.award - 1,
-							draw_id: _this.draw_id
-						}, {
-							load: false
-						}).then(res => {
-							console.log(res);
-							uni.showToast({
-								title: res.message,
-								icon: 'none',
-								duration: 2000,
-							})
-						}).catch(err => {
-							console.log(err)
-						}).finally(() => {
-							_this.showTurntable = false
-							// setTimeout(function() {
+				goodsApi.drawSync({
+					key: _this.award - 1,
+					draw_id: _this.draw_id
+				}, {
+					load: false
+				}).then(res => {
+					console.log(res);
+					uni.showModal({
+						title: `恭喜你获得${_this.awardList[index].title}`,
+						showCancel: false,
+						success() {
 
-							// }, 2500)
-						})
-					}
+						}
+					})
+				}).catch(err => {
+					console.log(err)
+				}).finally(() => {
+					_this.showTurntable = false
+					// setTimeout(function() {
+
+					// }, 2500)
 				})
+
 				// uni.showToast({
 				// 	title: `恭喜你获得${_this.awardList[index].title}`,
 				// 	icon: 'none',
