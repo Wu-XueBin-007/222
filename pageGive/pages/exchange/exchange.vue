@@ -240,35 +240,7 @@
 				})
 			},
 
-			exchange(item) {
-				console.log(item, 'item');
-				let _this = this
-				uni.showModal({
-					content: `尊敬的会员：
-兑换商品选定后，如非质量问题，不支持退换货，请在兑换专区首页右上角查看完规则或者向推荐人了解清楚规则再兑换。`,
-					success(resp) {
-						if (resp.confirm) {
-							let good_id = item.id;
-							let order_no = _this.option.order_no;
-							goodsApi.exchangeorder({
-								good_id,
-								order_no
-							}).then(res => {
-								uni.showToast({
-									title: res.message,
-									success() {
-
-										_this.getProductList()
-									}
-								})
-								console.log(res, 'res');
-							})
-						}
-
-					}
-
-				})
-			},
+			exchange(item) {},
 
 
 

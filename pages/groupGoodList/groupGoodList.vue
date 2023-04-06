@@ -240,7 +240,7 @@
 				@start="turntableStart" @success="turntableSuccess">
 			</q-turntable>
 		</view>
-		<!-- 		<view v-if="showLottery" class="module">
+		<view v-if="showLottery" class="module">
 			<view class="title">
 				提示
 			</view>
@@ -251,7 +251,7 @@
 				<button @click="closeBtn(1)" class="btn onebtn">参与抽奖</button>
 				<button @click="closeBtn(2)" class="btn twobtn">参与活动分红</button>
 			</view>
-		</view> -->
+		</view>
 	</view>
 </template>
 
@@ -341,6 +341,7 @@
 			}
 		},
 		onShow() {
+
 			this.getList();
 			this.isReach()
 		},
@@ -418,16 +419,17 @@
 			isReach() {
 				let _this = this
 				goodsApi.isReach().then(res => {
-					console.log(res)
+					console.log(res, 'isReach')
 					if (res.data.isReach > 0) {
-						// this.showLottery = true
+						console.log(1111);
+						// _this.showLottery = true
 						uni.showModal({
 							title: '提示',
 							content: '恭喜达成！',
 							cancelText: '参与抽奖',
-							cancelColor: '#f9ae3d',
-							confirmText: '#3c9cff',
-							confirmText: '参与活动分红',
+							// cancelColor: '#f9ae3d',
+							confirmText: '活动分红',
+							// confirmColor: '#00aaff',
 							success(resp) {
 								if (resp.cancel) {
 									_this.closeBtn(1)
@@ -435,8 +437,13 @@
 								if (resp.confirm) {
 									_this.closeBtn(2)
 								}
+							},
+							fail(err) {
+								console.log(err)
 							}
 						})
+					} else {
+						console.log(8888);
 					}
 				})
 			},
